@@ -147,6 +147,7 @@ class Application extends LaravelApplication
             Timeline::class,
             CommitteeRole::class,
             SpeakerRole::class,
+            StaticPage::class,
             Sponsor::class,
             Committee::class,
             Announcement::class,
