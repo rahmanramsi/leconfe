@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Panel\Conference\Resources\SubmissionResource\Pages;
+namespace App\Panel\Series\Resources\SubmissionResource\Pages;
 
 use App\Models\Enums\SubmissionStatus;
 use App\Models\Enums\UserRole;
 use App\Panel\Conference\Livewire\Workflows\Classes\StageManager;
-use App\Panel\Conference\Pages\Settings\Workflow;
-use App\Panel\Conference\Resources\SubmissionResource;
+use App\Panel\Series\Pages\Workflow;
+use App\Panel\Series\Resources\SubmissionResource;
 use Awcodes\Shout\Components\ShoutEntry;
 use Filament\Actions\Action;
 use Filament\Infolists\Infolist;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Panel\Conference\Resources\SubmissionResource\Pages;
+namespace App\Panel\Series\Resources\SubmissionResource\Pages;
 
 use App\Constants\ReviewerStatus;
 use App\Constants\SubmissionStatusRecommendation;
@@ -10,7 +10,7 @@ use App\Models\Review;
 use App\Models\Submission;
 use App\Models\User;
 use App\Panel\Conference\Livewire\Workflows\Concerns\InteractWithTenant;
-use App\Panel\Conference\Resources\SubmissionResource;
+use App\Panel\Series\Resources\SubmissionResource;
 use Awcodes\Shout\Components\ShoutEntry;
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;

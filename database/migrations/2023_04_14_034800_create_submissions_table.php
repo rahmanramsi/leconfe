@@ -21,8 +21,8 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(User::class)->constrained();
             $table->foreignIdFor(Conference::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(Proceeding::class)->nullable();
             $table->foreignIdFor(Serie::class)->nullable();
+            $table->foreignIdFor(Proceeding::class)->nullable();
             $table->integer('proceeding_order_column')->nullable();
             $table->boolean('revision_required')->default(false);
             $table->boolean('skipped_review')->default(false);

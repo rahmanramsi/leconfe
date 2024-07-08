@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Panel\Conference\Pages\Settings;
+namespace App\Panel\Series\Pages;
 
 use App\Infolists\Components\LivewireEntry;
 use App\Infolists\Components\VerticalTabs\Tab;
@@ -35,7 +35,7 @@ class Workflow extends Page implements HasForms, HasInfolists
     protected static ?string $navigationGroup = 'Settings';
 
     public function mount()
-    {
+    {   
         //
     }
 

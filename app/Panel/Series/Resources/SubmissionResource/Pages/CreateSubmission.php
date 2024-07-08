@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Panel\Conference\Resources\SubmissionResource\Pages;
+namespace App\Panel\Series\Resources\SubmissionResource\Pages;
 
 use App\Actions\Submissions\SubmissionCreateAction;
 use App\Panel\Conference\Livewire\Workflows\Classes\StageManager;
-use App\Panel\Conference\Resources\SubmissionResource;
+use App\Panel\Series\Resources\SubmissionResource;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;

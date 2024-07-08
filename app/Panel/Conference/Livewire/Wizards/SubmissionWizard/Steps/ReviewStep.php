@@ -8,7 +8,7 @@ use App\Models\Submission;
 use App\Models\User;
 use App\Notifications\NewSubmission;
 use App\Panel\Conference\Livewire\Wizards\SubmissionWizard\Contracts\HasWizardStep;
-use App\Panel\Conference\Resources\SubmissionResource;
+use App\Panel\Series\Resources\SubmissionResource;
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;

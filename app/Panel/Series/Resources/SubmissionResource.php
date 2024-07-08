@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Panel\Conference\Resources;
+namespace App\Panel\Series\Resources;
 
 use App\Constants\ReviewerStatus;
 use App\Models\Enums\SubmissionStage;
 use App\Models\Enums\SubmissionStatus;
 use App\Models\Enums\UserRole;
 use App\Models\Submission;
-use App\Panel\Conference\Resources\SubmissionResource\Pages;
+use App\Panel\Series\Resources\SubmissionResource\Pages;
 use Filament\GlobalSearch\GlobalSearchResult;
 use Filament\Resources\Resource;
 use Filament\Tables;

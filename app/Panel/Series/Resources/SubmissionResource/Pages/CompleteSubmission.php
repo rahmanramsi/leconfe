@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Panel\Conference\Resources\SubmissionResource\Pages;
+namespace App\Panel\Series\Resources\SubmissionResource\Pages;
 
 use App\Models\Enums\SubmissionStatus;
 use App\Models\Submission;
-use App\Panel\Conference\Resources\SubmissionResource;
+use App\Panel\Series\Resources\SubmissionResource;
 use Filament\Resources\Pages\Page;
 
 class CompleteSubmission extends Page

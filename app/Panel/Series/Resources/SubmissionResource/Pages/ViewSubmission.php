@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Panel\Conference\Resources\SubmissionResource\Pages;
+namespace App\Panel\Series\Resources\SubmissionResource\Pages;
 
 use App\Classes\Log;
 use App\Models\User;
@@ -48,7 +48,7 @@ use App\Actions\Submissions\CancelWithdrawalAction;
 use App\Actions\Submissions\RequestWithdrawalAction;
 use App\Infolists\Components\VerticalTabs\Tab as Tab;
 use App\Panel\Conference\Livewire\Submissions\Editing;
-use App\Panel\Conference\Resources\SubmissionResource;
+use App\Panel\Series\Resources\SubmissionResource;
 use App\Infolists\Components\VerticalTabs\Tabs as Tabs;
 use App\Models\Enums\PresenterStatus;
 use Filament\Infolists\Concerns\InteractsWithInfolists;

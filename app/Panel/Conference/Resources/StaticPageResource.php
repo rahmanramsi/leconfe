@@ -2,28 +2,17 @@
 
 namespace App\Panel\Conference\Resources;
 
-use App\Actions\StaticPages\StaticPageCreateAction;
 use App\Actions\StaticPages\StaticPageUpdateAction;
-use App\Forms\Components\TagSuggestions;
-use App\Models\Enums\ContentType;
 use App\Models\StaticPage;
-use App\Models\StaticPageTag;
 use App\Panel\Conference\Resources\StaticPageResource\Pages;
-use Filament\Forms\Components\CheckboxList;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Components\SpatieTagsInput;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\HtmlString;
-use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Unique;
 use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 
@@ -33,7 +22,7 @@ class StaticPageResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-credit-card';
 
-    protected static ?string $navigationGroup = 'Conferences';
+    protected static ?string $navigationGroup = 'Website Management';
 
     public static function getEloquentQuery(): Builder
     {
