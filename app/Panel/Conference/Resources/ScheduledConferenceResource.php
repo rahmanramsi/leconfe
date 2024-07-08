@@ -2,11 +2,11 @@
 
 namespace App\Panel\Conference\Resources;
 
-use App\Actions\Series\SerieUpdateAction;
+use App\Actions\ScheduledConferences\ScheduledConferenceUpdateAction;
 use App\Facades\Setting;
 use App\Models\Enums\SerieState;
-use App\Models\Enums\SerieType;
-use App\Models\Serie;
+use App\Models\Enums\ScheduledConferenceType;
+use App\Models\ScheduledConference;
 use App\Panel\Conference\Resources\SerieResource\Pages;
 use App\Tables\Columns\IndexColumn;
 use Filament\Forms\Components\Checkbox;
@@ -25,9 +25,9 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 
-class SerieResource extends Resource
+class ScheduledConferenceResource extends Resource
 {
-    protected static ?string $model = Serie::class;
+    protected static ?string $model = ScheduledConference::class;
 
     protected static ?int $navigationSort = 3;
 
@@ -78,20 +78,20 @@ class SerieResource extends Resource
                     ]),
                 Select::make('type')
                     ->required()
-                    ->options(SerieType::array()),
+                    ->options(ScheduledConferenceType::array()),
             ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
-            ->recordUrl(fn (Serie $record) => route('filament.series.pages.dashboard', ['serie' => $record]))
+            ->recordUrl(fn (ScheduledConference $record) => route('filament.series.pages.dashboard', ['serie' => $record]))
             ->modifyQueryUsing(fn (Builder $query) => $query->latest())
             ->columns([
                 IndexColumn::make('no'),
                 TextColumn::make('title')
                     ->searchable()
-                    ->description(fn (Serie $record) => $record->current ? 'Current' : null)
+                    ->description(fn (ScheduledConference $record) => $record->current ? 'Current' : null)
                     ->sortable()
                     ->wrap()
                     ->wrapHeader(),
@@ -115,8 +115,8 @@ class SerieResource extends Resource
                             Checkbox::make('set_as_current')
                                 ->label('Set as current serie'),
                         ])
-                        ->hidden(fn (Serie $record) => $record->isArchived() || $record->isCurrent() || $record->isPublished() || $record->trashed())
-                        ->action(function (Serie $record, array $data, Tables\Actions\Action $action) {
+                        ->hidden(fn (ScheduledConference $record) => $record->isArchived() || $record->isCurrent() || $record->isPublished() || $record->trashed())
+                        ->action(function (ScheduledConference $record, array $data, Tables\Actions\Action $action) {
                             $data['set_as_current'] ? $record->update(['state' => SerieState::Current]) : $record->update(['state' => SerieState::Published]);
 
                             return $action->success();
@@ -126,17 +126,17 @@ class SerieResource extends Resource
                         ->requiresConfirmation()
                         ->icon('heroicon-o-check-circle')
                         ->color('success')
-                        ->hidden(fn (Serie $record) => $record->isArchived() || $record->isCurrent() || $record->isDraft() || $record->trashed())
-                        ->action(fn (Serie $record, Tables\Actions\Action $action) => $record->update(['state' => SerieState::Current]) && $action->success())
-                        ->successNotificationTitle(fn (Serie $serie) => $serie->title . ' is set as current'),
+                        ->hidden(fn (ScheduledConference $record) => $record->isArchived() || $record->isCurrent() || $record->isDraft() || $record->trashed())
+                        ->action(fn (ScheduledConference $record, Tables\Actions\Action $action) => $record->update(['state' => SerieState::Current]) && $action->success())
+                        ->successNotificationTitle(fn (ScheduledConference $scheduledConference) => $scheduledConference->title . ' is set as current'),
                     Tables\Actions\EditAction::make()
-                        ->hidden(fn (Serie $record) => $record->isArchived() || $record->trashed())
-                        ->mutateRecordDataUsing(function (Serie $record, array $data) {
+                        ->hidden(fn (ScheduledConference $record) => $record->isArchived() || $record->trashed())
+                        ->mutateRecordDataUsing(function (ScheduledConference $record, array $data) {
                             $data['meta'] = $record->getAllMeta()->toArray();
     
                             return $data;
                         })
-                        ->using(fn (Serie $record, array $data) => SerieUpdateAction::run($record, $data)),
+                        ->using(fn (ScheduledConference $record, array $data) => ScheduledConferenceUpdateAction::run($record, $data)),
                     // Tables\Actions\DeleteAction::make()
                     //     ->label('Move To Trash')
                     //     ->modalHeading('Move To Trash')

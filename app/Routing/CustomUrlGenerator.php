@@ -29,8 +29,8 @@ class CustomUrlGenerator extends UrlGenerator
                 $parameters['conference'] ??= $conference->path;
             }
             
-            if(Str::contains($route->uri(), '{serie}') && $serie = app()->getCurrentSerie()) {
-                $parameters['serie'] ??= $serie->path;
+            if(Str::contains($route->uri(), '{serie}') && $scheduledConference = app()->getCurrentScheduledConference()) {
+                $parameters['serie'] ??= $scheduledConference->path;
             }
         }
 

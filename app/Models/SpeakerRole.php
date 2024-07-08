@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Concerns\BelongsToSerie;
+use App\Models\Concerns\BelongsToScheduledConference;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -15,12 +15,12 @@ use Spatie\Sluggable\SlugOptions;
 
 class SpeakerRole extends Model implements Sortable
 {
-    use BelongsToSerie, Cachable, HasFactory, SortableTrait;
+    use BelongsToScheduledConference, Cachable, HasFactory, SortableTrait;
 
     protected $table = 'speaker_roles';
 
     protected $fillable = [
-        'serie_id',
+        'scheduled_conference_id',
         'name',
     ];
 
@@ -34,9 +34,9 @@ class SpeakerRole extends Model implements Sortable
         $query->where('type', $type);
     }
 
-    public function scopeByActiveSeries($query, $seriesId)
+    public function scopeByActiveSeries($query, $scheduledConferencesId)
     {
-        return $query->where('serie_id', $seriesId)
+        return $query->where('scheduled_conference_id', $scheduledConferencesId)
             ->whereHas('speakers')
             ->with(['speakers' => ['media', 'meta']]);
     }

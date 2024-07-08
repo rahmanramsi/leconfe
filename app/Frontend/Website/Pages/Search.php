@@ -9,7 +9,7 @@ use Livewire\Attributes\Url;
 use Livewire\WithPagination;
 use Livewire\Attributes\Title;
 use App\Models\Scopes\ConferenceScope;
-use App\Models\Serie;
+use App\Models\ScheduledConference;
 use Illuminate\Database\Eloquent\Builder;
 use Rahmanramsi\LivewirePageGroup\Pages\Page;
 
@@ -36,7 +36,7 @@ class Search extends Page
             'topics' => Topic::withoutGlobalScope(ConferenceScope::class)
                 ->distinct()
                 ->get(),
-            'searchResults' => Serie::query()
+            'searchResults' => ScheduledConference::query()
                 ->withoutGlobalScopes()
                 ->whereNot('state', SerieState::Draft)
                 ->when($this->query, fn (Builder $query) => $query->where('title', 'like', "%{$this->query}%"))

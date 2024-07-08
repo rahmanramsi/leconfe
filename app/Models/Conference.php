@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Models\Enums\SerieState;
-use App\Models\Enums\SerieType;
+use App\Models\Enums\ScheduledConferenceType;
 use App\Models\Meta\ConferenceMeta;
 use Filament\Models\Contracts\HasAvatar;
 use Filament\Models\Contracts\HasName;
@@ -88,12 +88,12 @@ class Conference extends Model implements HasAvatar, HasMedia, HasName
 
     public function series(): HasMany
     {
-        return $this->hasMany(Serie::class);
+        return $this->hasMany(ScheduledConference::class);
     }
 
     public function currentSerie() : HasOne
     {
-        return $this->hasOne(Serie::class)->where('state', SerieState::Current);
+        return $this->hasOne(ScheduledConference::class)->where('state', SerieState::Current);
     }
 
     public function roles(): HasMany

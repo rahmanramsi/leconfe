@@ -24,7 +24,7 @@ class SerieSetting extends Page
 
     public function mount(): void
     {
-        $this->authorize('update', App::getCurrentSerie());
+        $this->authorize('update', App::getCurrentScheduledConference());
     }
 
     public static function shouldRegisterNavigation(): bool

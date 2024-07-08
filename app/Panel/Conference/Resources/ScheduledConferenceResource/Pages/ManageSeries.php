@@ -2,9 +2,9 @@
 
 namespace App\Panel\Conference\Resources\SerieResource\Pages;
 
-use App\Actions\Series\SerieCreateAction;
+use App\Actions\ScheduledConferences\ScheduledConferenceCreateAction;
 use App\Models\Enums\SerieState;
-use App\Panel\Conference\Resources\SerieResource;
+use App\Panel\Conference\Resources\ScheduledConferenceResource;
 use Filament\Actions;
 use Filament\Resources\Components\Tab;
 use Filament\Resources\Pages\ManageRecords;
@@ -12,13 +12,13 @@ use Illuminate\Database\Eloquent\Builder;
 
 class ManageSeries extends ManageRecords
 {
-    protected static string $resource = SerieResource::class;
+    protected static string $resource = ScheduledConferenceResource::class;
 
     protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make()
-                ->using(fn(array $data) => SerieCreateAction::run($data)),
+                ->using(fn(array $data) => ScheduledConferenceCreateAction::run($data)),
         ];
     }
 

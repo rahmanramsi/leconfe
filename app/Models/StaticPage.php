@@ -4,13 +4,13 @@ namespace App\Models;
 
 use App\Frontend\Conference\Pages\StaticPage as PagesStaticPage;
 use App\Models\Concerns\BelongsToConference;
-use App\Models\Concerns\BelongsToSerie;
+use App\Models\Concerns\BelongsToScheduledConference;
 use Illuminate\Database\Eloquent\Model;
 use Plank\Metable\Metable;
 
 class StaticPage extends Model
 {
-    use BelongsToConference, BelongsToSerie, Metable;
+    use BelongsToConference, BelongsToScheduledConference, Metable;
 
     protected $fillable = [
         'title',
@@ -24,7 +24,7 @@ class StaticPage extends Model
 
     public function getUrl(): string
     {
-        $routeName = app()->getCurrentSerieId() ? PagesStaticPage::getRouteName('series') : PagesStaticPage::getRouteName('conference');
+        $routeName = app()->getCurrentScheduledConferenceId() ? PagesStaticPage::getRouteName('series') : PagesStaticPage::getRouteName('conference');
 
         return route($routeName, [
             'staticPage' => $this->slug,
@@ -35,8 +35,8 @@ class StaticPage extends Model
     {
         $query = $this->resolveRouteBindingQuery($this, $value, $field);
 
-        if(!app()->getCurrentSerieId()){
-            $query->where('serie_id', 0);
+        if(!app()->getCurrentScheduledConferenceId()){
+            $query->where('scheduled_conference_id', 0);
         }
         
         return $query->firstOrFail();

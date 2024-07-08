@@ -100,7 +100,7 @@ class CommitteeResource extends Resource
         return $form
             ->schema([
                 static::selectCommitteeField($form),
-                ...ContributorForm::generalFormField(app()->getCurrentSerie()),
+                ...ContributorForm::generalFormField(app()->getCurrentScheduledConference()),
                 Forms\Components\Select::make('committee_role_id')
                     ->label('Role')
                     ->required()

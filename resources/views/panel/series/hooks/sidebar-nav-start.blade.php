@@ -1,7 +1,7 @@
-@use('\App\Models\Serie')
+@use('\App\Models\ScheduledConference')
 
 @php
-    $currentSerie = app()->getCurrentSerie();
+    $currentScheduledConference = app()->getCurrentScheduledConference();
     $currentConference = app()->getCurrentConference();
 @endphp
 
@@ -9,7 +9,7 @@
     placement="bottom-start"
     teleport
     class="-mx-2"
-    id="switch-series"
+    id="switch-scheduled-conference"
 >
     <x-slot name="trigger">
         <button
@@ -19,7 +19,7 @@
                     tooltip = $store.sidebar.isOpen
                         ? false
                         : {
-                              content: @js($currentSerie->title),
+                              content: @js($currentScheduledConference->title),
                               placement: document.dir === 'rtl' ? 'left' : 'right',
                               theme: $store.theme,
                           }
@@ -36,10 +36,10 @@
                 class="flex flex-wrap items-center justify-between text-start truncate grow"
             >
                 <span class="text-gray-950 dark:text-white">
-                    {{ $currentSerie->title }}
+                    {{ $currentScheduledConference->title }}
                 </span>
 
-                @if($currentSerie->current)
+                @if($currentScheduledConference->current)
                 <x-filament::badge size="sm" class="" color="primary">
                     Current
                 </x-filament::badge>
@@ -56,7 +56,7 @@
 
     <x-filament::dropdown.list>
         <div class="flex w-full items-center gap-2 whitespace-nowrap p-2 text-sm transition-colors duration-75 outline-none font-medium border-b">
-            Switch Series
+            Switch Scheduled Conference
         </div>
         
         @can('Administration:view')
@@ -77,15 +77,15 @@
             Back to Conference
         </x-filament::dropdown.list.item>
         <div class="max-h-64 overflow-y-scroll border-t">
-            @foreach (Serie::where('path', '!=', $currentSerie->path)->latest()->get() as $serie)
+            @foreach (ScheduledConference::where('path', '!=', $currentScheduledConference->path)->latest()->get() as $scheduledConference)
                 <x-filament::dropdown.list.item
-                    :href="$serie->getPanelUrl()"
-                    :icon="filament()->getTenantAvatarUrl($serie)"
+                    :href="$scheduledConference->getPanelUrl()"
+                    :icon="filament()->getTenantAvatarUrl($scheduledConference)"
                     tag="a"
                     badge-color="primary"
                 >
-                    {{ $serie->title }}
-                    @if($serie->current)
+                    {{ $scheduledConference->title }}
+                    @if($scheduledConference->current)
                     <x-slot name="badge">
                         Current
                     </x-slot>

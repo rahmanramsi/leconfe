@@ -15,8 +15,8 @@ use App\Models\NavigationMenu;
 use App\Models\PaymentItem;
 use App\Models\Proceeding;
 use App\Models\Scopes\ConferenceScope;
-use App\Models\Scopes\SerieScope;
-use App\Models\Serie;
+use App\Models\Scopes\ScheduledConferenceScope;
+use App\Models\ScheduledConference;
 use App\Models\Setting;
 use App\Models\Site;
 use App\Models\SpeakerRole;
@@ -45,9 +45,9 @@ class Application extends LaravelApplication
 
     protected string $currentConferencePath;
 
-    protected ?int $currentSerieId = null;
+    protected ?int $currentScheduledConferenceId = null;
 
-    protected ?Serie $currentSerie = null;
+    protected ?ScheduledConference $currentScheduledConference = null;
 
     public function isInstalled()
     {
@@ -102,23 +102,23 @@ class Application extends LaravelApplication
         $this->currentConferenceId = $conferenceId;
     }
 
-    public function getCurrentSerieId(): ?int
+    public function getCurrentScheduledConferenceId(): ?int
     {
-        return $this->currentSerieId;
+        return $this->currentScheduledConferenceId;
     }
 
-    public function setCurrentSerieId(int $serieId)
+    public function setCurrentScheduledConferenceId(int $scheduledConferenceId)
     {
-        $this->currentSerieId = $serieId;
+        $this->currentScheduledConferenceId = $scheduledConferenceId;
     }
 
-    public function getCurrentSerie(): ?Serie
+    public function getCurrentScheduledConference(): ?ScheduledConference
     {
-        if ($this->currentSerieId && !$this->currentSerie) {
-            $this->currentSerie = Serie::find($this->getCurrentSerieId());
+        if ($this->currentScheduledConferenceId && !$this->currentScheduledConference) {
+            $this->currentScheduledConference = ScheduledConference::find($this->getCurrentScheduledConferenceId());
         }
 
-        return $this->currentSerie;
+        return $this->currentScheduledConference;
     }
 
     public function scopeCurrentConference(): void
@@ -130,7 +130,7 @@ class Application extends LaravelApplication
             AuthorRole::class,
             StaticPage::class,
             PaymentItem::class,
-            Serie::class,
+            ScheduledConference::class,
             Proceeding::class,
             MailTemplate::class,
         ];
@@ -140,7 +140,7 @@ class Application extends LaravelApplication
         }
     }
 
-    public function scopeCurrentSerie(): void
+    public function scopeCurrentScheduledConference(): void
     {
         $models = [
             Venue::class,
@@ -154,7 +154,7 @@ class Application extends LaravelApplication
         ];
 
         foreach ($models as $model) {
-            $model::addGlobalScope(new SerieScope);
+            $model::addGlobalScope(new ScheduledConferenceScope);
         }
     }
 

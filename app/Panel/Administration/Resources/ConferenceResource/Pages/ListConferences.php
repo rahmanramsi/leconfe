@@ -5,7 +5,7 @@ namespace App\Panel\Administration\Resources\ConferenceResource\Pages;
 use Filament\Actions;
 use Illuminate\Support\Str;
 use Filament\Support\Enums\MaxWidth;
-use App\Actions\Series\SerieCreateAction;
+use App\Actions\ScheduledConferences\ScheduledConferenceCreateAction;
 use Filament\Resources\Pages\ListRecords;
 use App\Actions\Conferences\ConferenceCreateAction;
 use App\Models\Enums\SerieState;

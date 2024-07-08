@@ -4,8 +4,8 @@ namespace App\Panel\Series\Livewire;
 
 
 use App\Actions\Conferences\ConferenceUpdateAction;
-use App\Actions\Series\SerieUpdateAction;
-use App\Models\Enums\SerieType;
+use App\Actions\ScheduledConferences\ScheduledConferenceUpdateAction;
+use App\Models\Enums\ScheduledConferenceType;
 use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\DatePicker;
@@ -33,8 +33,8 @@ class InformationSetting extends Component implements HasForms
     public function mount(): void
     {
         $this->form->fill([
-            ...app()->getCurrentSerie()->attributesToArray(),
-            'meta' => app()->getCurrentSerie()->getAllMeta(),
+            ...app()->getCurrentScheduledConference()->attributesToArray(),
+            'meta' => app()->getCurrentScheduledConference()->getAllMeta(),
         ]);
     }
 
@@ -46,7 +46,7 @@ class InformationSetting extends Component implements HasForms
     public function form(Form $form): Form
     {
         return $form
-            ->model(app()->getCurrentSerie())
+            ->model(app()->getCurrentScheduledConference())
             ->schema([
                 Section::make()
                     ->columns(1)
@@ -89,7 +89,7 @@ class InformationSetting extends Component implements HasForms
                             ]),
                         Select::make('type')
                             ->required()
-                            ->options(SerieType::array()),
+                            ->options(ScheduledConferenceType::array()),
                         TinyEditor::make('meta.about')
                             ->label('About Serie')
                             ->minHeight(300),
@@ -104,7 +104,7 @@ class InformationSetting extends Component implements HasForms
                         ->action(function (Action $action) {
                             $formData = $this->form->getState();
                             try {
-                                SerieUpdateAction::run(app()->getCurrentSerie(), $formData);
+                                ScheduledConferenceUpdateAction::run(app()->getCurrentScheduledConference(), $formData);
                                 $action->sendSuccessNotification();
                             } catch (\Throwable $th) {
                                 $action->sendFailureNotification();

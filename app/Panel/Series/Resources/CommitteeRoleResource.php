@@ -42,7 +42,7 @@ class CommitteeRoleResource extends Resource
                     ->required()
                     ->unique(modifyRuleUsing: function (Unique $rule) {
                         return $rule
-                            ->where('serie_id', app()->getCurrentSerie()->getKey());
+                            ->where('scheduled_conference_id', app()->getCurrentScheduledConference()->getKey());
                     }),
             ]);
     }

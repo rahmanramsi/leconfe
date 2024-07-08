@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Concerns\BelongsToSerie;
+use App\Models\Concerns\BelongsToScheduledConference;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,12 +14,12 @@ use Spatie\Sluggable\SlugOptions;
 
 class CommitteeRole extends Model implements Sortable
 {
-    use BelongsToSerie, HasFactory, SortableTrait;
+    use BelongsToScheduledConference, HasFactory, SortableTrait;
 
     protected $table = 'committee_roles';
 
     protected $fillable = [
-        'serie_id',
+        'scheduled_conference_id',
         'parent_id',
         'name',
     ];
@@ -34,9 +34,9 @@ class CommitteeRole extends Model implements Sortable
         $query->where('type', $type);
     }
 
-    public function scopeByActiveSeries($query, $seriesId)
+    public function scopeByActiveSeries($query, $scheduledConferencesId)
     {
-        return $query->where('serie_id', $seriesId)
+        return $query->where('scheduled_conference_id', $scheduledConferencesId)
             ->whereHas('committees')
             ->with(['committees' => ['media', 'meta']]);
     }

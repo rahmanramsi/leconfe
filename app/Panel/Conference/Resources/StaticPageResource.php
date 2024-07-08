@@ -28,8 +28,8 @@ class StaticPageResource extends Resource
     {
         $query = static::getModel()::query();
 
-        if(!app()->getCurrentSerieId()){
-            $query->where('serie_id', 0);
+        if(!app()->getCurrentScheduledConferenceId()){
+            $query->where('scheduled_conference_id', 0);
         }
 
         return $query;
@@ -45,7 +45,7 @@ class StaticPageResource extends Resource
                     ->unique(ignoreRecord: true, modifyRuleUsing: function (Unique $rule) {
                         return $rule
                             ->where('conference_id', app()->getCurrentConference()->getKey())
-                            ->where('serie_id', app()->getCurrentSerie()?->getKey() ?? 0);
+                            ->where('scheduled_conference_id', app()->getCurrentScheduledConference()?->getKey() ?? 0);
                     }),
                 TextInput::make('title')
                     ->required(),

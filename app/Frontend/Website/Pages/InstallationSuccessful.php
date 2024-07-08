@@ -7,7 +7,7 @@ use App\Facades\MetaTag;
 use App\Facades\SidebarFacade;
 use App\Models\Conference;
 use App\Models\Enums\SerieState;
-use App\Models\Serie;
+use App\Models\ScheduledConference;
 use App\Models\Sponsor;
 use App\Models\Topic;
 use Illuminate\Support\Facades\Route;

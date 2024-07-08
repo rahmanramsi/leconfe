@@ -47,8 +47,8 @@
             <div class="conference-current space-y-4" x-show="tab === 'current'">
                 @if($currentSeries->isNotEmpty())
                     <div class="grid lg:grid-cols-2 gap-6">
-                        @foreach ($currentSeries as $serie)
-                            <x-website::serie-summary :serie="$serie" />
+                        @foreach ($currentSeries as $scheduledConference)
+                            <x-website::scheduled-conference-summary :scheduledConference="$scheduledConference" />
                         @endforeach
                     </div>
                     @if($currentSeries->hasPages())
@@ -63,8 +63,8 @@
             <div class="conference-upcoming space-y-4" x-show="tab === 'upcoming'">
                 @if($upcomingSeries->isNotEmpty())
                     <div class="grid lg:grid-cols-2 gap-6">
-                        @foreach ($upcomingSeries as $serie)
-                            <x-website::serie-summary :serie="$serie" />
+                        @foreach ($upcomingSeries as $scheduledConference)
+                            <x-website::scheduled-conference-summary :scheduledConference="$scheduledConference" />
                         @endforeach
                     </div>
                     @if($upcomingSeries->hasPages())
@@ -79,8 +79,8 @@
             <div class="conference-all space-y-4" x-show="tab === 'allconferences'">
                 @if($allSeries->isNotEmpty())
                     <div class="grid lg:grid-cols-2 gap-6">
-                        @foreach ($allSeries as $serie)
-                            <x-website::serie-summary :serie="$serie" />
+                        @foreach ($allSeries as $scheduledConference)
+                            <x-website::scheduled-conference-summary :scheduledConference="$scheduledConference" />
                         @endforeach
                     </div>
                     @if($allSeries->hasPages())

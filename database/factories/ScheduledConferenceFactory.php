@@ -2,15 +2,15 @@
 
 namespace Database\Factories;
 
-use App\Models\Serie;
+use App\Models\ScheduledConference;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Serie>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ScheduledConference>
  */
-class SerieFactory extends Factory
+class ScheduledConferenceFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -23,7 +23,6 @@ class SerieFactory extends Factory
         return [
             'title' => $date->year,
             'path' => Str::slug($date->year),
-            'issn' => fake()->isbn13(),
             'date_start' => $date,
             'date_end' => $date->copy()->addDays(3),
         ];
@@ -31,8 +30,8 @@ class SerieFactory extends Factory
 
     public function configure(): static
     {
-        return $this->afterCreating(function (Serie $serie) {
-            $serie->setManyMeta([
+        return $this->afterCreating(function (ScheduledConference $scheduledConference) {
+            $scheduledConference->setManyMeta([
                 'description' => fake()->paragraphs(3, true),
             ]);
         });

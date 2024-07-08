@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\Conference;
-use App\Models\Serie;
+use App\Models\ScheduledConference;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('sponsors', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Serie::class)->constrained();
+            $table->foreignIdFor(ScheduledConference::class)->constrained();
             $table->string('name');
             $table->unsignedInteger('order_column')->nullable();
             $table->timestamps();

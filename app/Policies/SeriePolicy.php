@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\Models\Serie;
+use App\Models\ScheduledConference;
 use App\Models\User;
 
 class SeriePolicy
@@ -20,7 +20,7 @@ class SeriePolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Serie $serie)
+    public function view(User $user, ScheduledConference $scheduledConference)
     {
         if ($user->can('Serie:view')) {
             return true;
@@ -40,7 +40,7 @@ class SeriePolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Serie $serie)
+    public function update(User $user, ScheduledConference $scheduledConference)
     {
         if ($user->can('Serie:update')) {
             return true;
@@ -50,7 +50,7 @@ class SeriePolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Serie $serie)
+    public function delete(User $user, ScheduledConference $scheduledConference)
     {
         if ($user->can('Serie:delete')) {
             return true;

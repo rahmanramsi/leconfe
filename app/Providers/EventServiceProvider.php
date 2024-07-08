@@ -6,7 +6,7 @@ use App\Events\PluginInstalled;
 use App\Listeners\LogSentEmail;
 use App\Listeners\RegisterPluginVersion;
 use App\Models\Conference;
-use App\Models\Serie;
+use App\Models\ScheduledConference;
 use App\Models\Site;
 use App\Models\User;
 use App\Observers\ConferenceObserver;
@@ -40,7 +40,7 @@ class EventServiceProvider extends ServiceProvider
     protected $observers = [
         User::class => [UserObserver::class],
         Conference::class => [ConferenceObserver::class],
-        Serie::class => [SerieObserver::class],
+        ScheduledConference::class => [SerieObserver::class],
         Site::class => [SiteObserver::class],
     ];
 

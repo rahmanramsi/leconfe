@@ -1,25 +1,25 @@
 <?php
 
-namespace App\Actions\Series;
+namespace App\Actions\ScheduledConferences;
 
 use App\Models\Conference;
-use App\Models\Serie;
+use App\Models\ScheduledConference;
 use Illuminate\Support\Facades\DB;
 use Lorisleiva\Actions\Concerns\AsAction;
 
-class SerieCreateAction
+class ScheduledConferenceCreateAction
 {
     use AsAction;
 
-    public function handle(array $data): Serie
+    public function handle(array $data): ScheduledConference
     {
         try {
             DB::beginTransaction();
 
-            $serie = Serie::create($data);
+            $scheduledConference = ScheduledConference::create($data);
             
             if (data_get($data, 'meta')) {
-                $serie->setManyMeta($data['meta']);
+                $scheduledConference->setManyMeta($data['meta']);
             }
 
             DB::commit();
@@ -28,6 +28,6 @@ class SerieCreateAction
             throw $th;
         }
 
-        return $serie;
+        return $scheduledConference;
     }
 }

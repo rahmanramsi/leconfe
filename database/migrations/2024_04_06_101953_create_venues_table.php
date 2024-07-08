@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Serie;
+use App\Models\ScheduledConference;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('venues', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Serie::class)->constrained();
+            $table->foreignIdFor(ScheduledConference::class)->constrained();
             $table->string('name');
             $table->string('location');
             $table->text('description')->nullable();

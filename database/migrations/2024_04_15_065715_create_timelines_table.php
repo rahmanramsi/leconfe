@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Serie;
+use App\Models\ScheduledConference;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('subtitle')->nullable();
             $table->date('date')->nullable();
             $table->text('roles')->nullable();
-            $table->foreignIdFor(Serie::class)->constrained();
+            $table->foreignIdFor(ScheduledConference::class)->constrained();
             $table->timestamps();
         });
     }

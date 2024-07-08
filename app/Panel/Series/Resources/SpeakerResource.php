@@ -101,7 +101,7 @@ class SpeakerResource extends Resource
         return $form
             ->schema([
                 static::selectSpeakerField($form),
-                ...ContributorForm::generalFormField(app()->getCurrentSerie()),
+                ...ContributorForm::generalFormField(app()->getCurrentScheduledConference()),
                 Forms\Components\Select::make('speaker_role_id')
                     ->label('Role')
                     ->required()

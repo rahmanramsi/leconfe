@@ -6,7 +6,7 @@ use App\Facades\Block as BlockFacade;
 use App\Facades\SidebarFacade;
 use App\Models\Conference;
 use App\Models\Enums\SerieState;
-use App\Models\Serie;
+use App\Models\ScheduledConference;
 use App\Models\Sponsor;
 use App\Models\Topic;
 use Illuminate\Support\Facades\Route;
@@ -24,19 +24,19 @@ class Home extends Page
 
     protected function getViewData(): array
     {
-        $serieQuery = Serie::query()
+        $scheduledConferenceQuery = ScheduledConference::query()
             ->withoutGlobalScopes()
             ->with(['conference', 'media', 'meta']);
         
-        $currentSeries = (clone $serieQuery)
+        $currentSeries = (clone $scheduledConferenceQuery)
             ->state(SerieState::Current)
             ->paginate(6, pageName: 'currentSeriesPage');
 
-        $upcomingSeries = (clone $serieQuery)
+        $upcomingSeries = (clone $scheduledConferenceQuery)
             ->state(SerieState::Published)
             ->paginate(6, pageName: 'upcomingSeriesPage');
 
-        $allSeries = (clone $serieQuery)
+        $allSeries = (clone $scheduledConferenceQuery)
             ->whereNot('state', SerieState::Draft)
             ->paginate(6, pageName: 'allSeriesPage');
 

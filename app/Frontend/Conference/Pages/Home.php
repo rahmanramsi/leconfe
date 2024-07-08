@@ -40,7 +40,7 @@ class Home extends Page
             ->current()
             ->first();
 
-        $currentSerie = app()->getCurrentSerie();
+        $currentSerie = app()->getCurrentScheduledConference();
         $currentSerie?->load([
             'speakerRoles.speakers' => ['meta'],
         ]);

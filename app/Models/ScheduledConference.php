@@ -10,7 +10,7 @@ use Filament\Models\Contracts\HasAvatar;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use App\Models\Concerns\BelongsToConference;
 use App\Models\Enums\SerieState;
-use App\Models\Enums\SerieType;
+use App\Models\Enums\ScheduledConferenceType;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Vite;
 use Kra8\Snowflake\HasShortflakePrimary;
 
-class Serie extends Model implements HasMedia, HasAvatar, HasName
+class ScheduledConference extends Model implements HasMedia, HasAvatar, HasName
 {
     use Cachable, BelongsToConference, HasFactory, InteractsWithMedia, Metable, SoftDeletes, HasShortflakePrimary;
 
@@ -27,7 +27,6 @@ class Serie extends Model implements HasMedia, HasAvatar, HasName
         'conference_id',
         'path',
         'title',
-        'issn',
         'date_start',
         'date_end',
         'state',
@@ -40,7 +39,7 @@ class Serie extends Model implements HasMedia, HasAvatar, HasName
         'current' => 'boolean',
         'date_start' => 'date',
         'date_end' => 'date',
-        'type' => SerieType::class,
+        'type' => ScheduledConferenceType::class,
         'state' => SerieState::class,
     ];
 
@@ -49,12 +48,12 @@ class Serie extends Model implements HasMedia, HasAvatar, HasName
      */
     protected static function booted(): void
     {
-        static::updating(function (Serie $serie) {
-            if ($serie->isDirty('state') && $serie->state == SerieState::Current) {
+        static::updating(function (ScheduledConference $scheduledConference) {
+            if ($scheduledConference->isDirty('state') && $scheduledConference->state == SerieState::Current) {
                 static::query()
-                    ->where('conference_id', $serie->conference_id)
+                    ->where('conference_id', $scheduledConference->conference_id)
                     ->where('state', SerieState::Current->value)
-                    ->where('id', '!=', $serie->id)
+                    ->where('id', '!=', $scheduledConference->id)
                     ->update(['state' => SerieState::Archived]);
             }
         });
@@ -147,7 +146,7 @@ class Serie extends Model implements HasMedia, HasAvatar, HasName
         return $this->state == SerieState::Archived;
     }
 
-    public function scopeType($query, SerieType $type)
+    public function scopeType($query, ScheduledConferenceType $type)
     {
         return $query->where('type', $type);
     }
