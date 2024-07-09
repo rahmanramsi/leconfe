@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('sponsors', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(ScheduledConference::class)->constrained();
+            $table->foreignIdFor(ScheduledConference::class)->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->unsignedInteger('order_column')->nullable();
             $table->timestamps();

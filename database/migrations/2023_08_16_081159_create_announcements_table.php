@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('announcements', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(ScheduledConference::class);
+            $table->foreignIdFor(ScheduledConference::class)->constrained()->cascadeOnDelete();
             $table->string('title');
             $table->date('expires_at')->nullable();
             $table->timestamps();

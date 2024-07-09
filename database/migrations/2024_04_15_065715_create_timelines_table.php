@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('subtitle')->nullable();
             $table->date('date')->nullable();
             $table->text('roles')->nullable();
-            $table->foreignIdFor(ScheduledConference::class)->constrained();
+            $table->foreignIdFor(ScheduledConference::class)->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

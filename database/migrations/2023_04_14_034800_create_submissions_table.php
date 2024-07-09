@@ -21,7 +21,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(User::class)->constrained();
             $table->foreignIdFor(Conference::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(ScheduledConference::class)->nullable();
+            $table->foreignIdFor(ScheduledConference::class)->nullable()->default(0);
             $table->foreignIdFor(Proceeding::class)->nullable();
             $table->integer('proceeding_order_column')->nullable();
             $table->boolean('revision_required')->default(false);
