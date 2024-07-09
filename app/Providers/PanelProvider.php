@@ -138,7 +138,6 @@ class PanelProvider extends ServiceProvider
     public function setupPanel(Panel $panel): Panel
     {
         return $panel
-            ->sidebarCollapsibleOnDesktop()
             ->maxContentWidth('full')
             ->renderHook(
                 'panels::scripts.before',
