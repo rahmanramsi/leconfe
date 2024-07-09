@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Panel\Conference\Resources\Conferences;
+namespace App\Panel\Series\Resources;
 
 use App\Models\Topic;
-use App\Panel\Conference\Resources\Conferences\TopicResource\Pages;
+use App\Panel\Series\Resources\TopicResource\Pages;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -17,8 +18,8 @@ use Filament\Tables\Table;
 
 class TopicResource extends Resource
 {
-    protected static ?string $navigationGroup = 'Conferences';
-
+    protected static ?string $navigationGroup = 'Conference';
+    
     protected static ?string $model = Topic::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-left';

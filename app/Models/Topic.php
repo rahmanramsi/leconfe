@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Concerns\BelongsToConference;
+use App\Models\Concerns\BelongsToScheduledConference;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,30 +12,10 @@ use Spatie\Sluggable\SlugOptions;
 
 class Topic extends Model
 {
-    use BelongsToConference, Cachable, HasFactory, HasSlug;
+    use BelongsToConference, BelongsToScheduledConference, Cachable, HasFactory;
 
-    protected $fillable = ['name', 'slug', 'conference_id'];
-
-    /**
-     * Get the options for generating the slug.
-     */
-    public function getSlugOptions(): SlugOptions
-    {
-        return SlugOptions::create()
-            ->generateSlugsFrom('name')
-            ->saveSlugsTo('slug');
-    }
-
-    /**
-     * Get the route key for the model.
-     *
-     * @return string
-     */
-    public function getRouteKeyName()
-    {
-        return 'slug';
-    }
-
+    protected $fillable = ['name', 'conference_id'];
+    
     public function submissions()
     {
         return $this->morphedByMany(Submission::class, 'topicable');

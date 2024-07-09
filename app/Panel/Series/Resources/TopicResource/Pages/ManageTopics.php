@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Panel\Conference\Resources\Conferences\TopicResource\Pages;
+namespace App\Panel\Series\Resources\TopicResource\Pages;
 
-use App\Panel\Conference\Resources\Conferences\TopicResource;
+use App\Panel\Series\Resources\TopicResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ManageRecords;
 
