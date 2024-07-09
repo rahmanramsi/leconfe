@@ -5,14 +5,14 @@ namespace App\Policies;
 use App\Models\ScheduledConference;
 use App\Models\User;
 
-class SeriePolicy
+class ScheduledConferencePolicy
 {
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user)
     {
-        if ($user->can('Serie:viewAny')) {
+        if ($user->can('ScheduledConference:viewAny')) {
             return true;
         }
     }
@@ -22,7 +22,7 @@ class SeriePolicy
      */
     public function view(User $user, ScheduledConference $scheduledConference)
     {
-        if ($user->can('Serie:view')) {
+        if ($user->can('ScheduledConference:view')) {
             return true;
         }
     }
@@ -32,7 +32,7 @@ class SeriePolicy
      */
     public function create(User $user)
     {
-        if ($user->can('Serie:create')) {
+        if ($user->can('ScheduledConference:create')) {
             return true;
         }
     }
@@ -42,7 +42,7 @@ class SeriePolicy
      */
     public function update(User $user, ScheduledConference $scheduledConference)
     {
-        if ($user->can('Serie:update')) {
+        if ($user->can('ScheduledConference:update')) {
             return true;
         }
     }
@@ -52,7 +52,7 @@ class SeriePolicy
      */
     public function delete(User $user, ScheduledConference $scheduledConference)
     {
-        if ($user->can('Serie:delete')) {
+        if ($user->can('ScheduledConference:delete')) {
             return true;
         }
     }
