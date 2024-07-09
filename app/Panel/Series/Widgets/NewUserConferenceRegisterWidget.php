@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Panel\Conference\Widgets;
+namespace App\Panel\Series\Widgets;
 
 use App\Models\Announcement;
 use Filament\Widgets\Widget;
