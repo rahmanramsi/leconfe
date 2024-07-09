@@ -125,9 +125,9 @@ class Application extends LaravelApplication
     {
         $models = [
             Submission::class,
-            Topic::class,
             NavigationMenu::class,
             AuthorRole::class,
+            Topic::class,
             StaticPage::class,
             PaymentItem::class,
             ScheduledConference::class,
@@ -151,6 +151,7 @@ class Application extends LaravelApplication
             Sponsor::class,
             Committee::class,
             Announcement::class,
+            Topic::class,
         ];
 
         foreach ($models as $model) {
