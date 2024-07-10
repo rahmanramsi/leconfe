@@ -95,17 +95,13 @@ class ConferenceSetting extends Page implements HasForms, HasInfolists
                                             ->icon('heroicon-o-adjustments-horizontal')
                                             ->schema([
                                                 LivewireEntry::make('setup-setting')
-                                                    ->livewire(SetupSetting::class, [
-                                                        'conference' => App::getCurrentConference(),
-                                                    ]),
+                                                    ->livewire(SetupSetting::class),
                                             ]),
                                         InfolistsVerticalTabs\Tab::make('Sidebar')
                                             ->icon('heroicon-o-view-columns')
                                             ->schema([
                                                 LivewireEntry::make('sidebar-setting')
-                                                    ->livewire(SidebarSetting::class, [
-                                                        'conference' => App::getCurrentConference(),
-                                                    ]),
+                                                    ->livewire(SidebarSetting::class),
                                             ]),
                                         InfolistsVerticalTabs\Tab::make('Navigation Menu')
                                             ->icon('heroicon-o-list-bullet')

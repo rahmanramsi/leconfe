@@ -9,7 +9,10 @@ use Illuminate\Support\Facades\Auth;
 use Filament\Infolists\Components\Tabs;
 use App\Infolists\Components\VerticalTabs as InfolistsVerticalTabs;
 use App\Infolists\Components\LivewireEntry;
+use App\Panel\Administration\Livewire\SidebarSetting;
+use App\Panel\Conference\Livewire\NavigationMenuSetting;
 use App\Panel\Series\Livewire\InformationSetting;
+use App\Panel\Series\Livewire\SetupSetting;
 use App\Panel\Series\Livewire\SponsorSetting;
 
 
@@ -37,20 +40,52 @@ class ScheduledConferenceSetting extends Page
     {
         return $infolist
             ->schema([
-                InfolistsVerticalTabs\Tabs::make()
-                    ->schema([
-                        InfolistsVerticalTabs\Tab::make('Information')
-                            ->icon('heroicon-o-information-circle')
+                Tabs::make('website_settings')
+                    ->contained(false)
+                    ->tabs([
+                        Tabs\Tab::make('About')
                             ->schema([
-                                LivewireEntry::make('information-setting')
-                                    ->livewire(InformationSetting::class)
+                                InfolistsVerticalTabs\Tabs::make()
+                                    ->schema([
+                                        InfolistsVerticalTabs\Tab::make('Information')
+                                            ->icon('heroicon-o-information-circle')
+                                            ->schema([
+                                                LivewireEntry::make('information-setting')
+                                                    ->livewire(InformationSetting::class)
+                                            ]),
+                                        InfolistsVerticalTabs\Tab::make('Sponsors')
+                                            ->icon("lineawesome-users-solid")
+                                            ->schema([
+                                                LivewireEntry::make('sponsors-setting')
+                                                    ->livewire(SponsorSetting::class),
+                                            ])
+                                    ]),
                             ]),
-                        InfolistsVerticalTabs\Tab::make('Sponsors')
-                            ->icon("lineawesome-users-solid")
+
+                        Tabs\Tab::make('Appearance')
                             ->schema([
-                                LivewireEntry::make('sponsors-setting')
-                                    ->livewire(SponsorSetting::class),
-                            ])
+                                InfolistsVerticalTabs\Tabs::make()
+                                    ->schema([
+                                        InfolistsVerticalTabs\Tab::make('Setup')
+                                            ->icon('heroicon-o-adjustments-horizontal')
+                                            ->schema([
+                                                LivewireEntry::make('setup-setting')
+                                                    ->livewire(SetupSetting::class),
+                                            ]),
+                                        InfolistsVerticalTabs\Tab::make('Sidebar')
+                                            ->icon('heroicon-o-view-columns')
+                                            ->schema([
+                                                LivewireEntry::make('sidebar-setting')
+                                                    ->livewire(SidebarSetting::class),
+                                            ]),
+                                        InfolistsVerticalTabs\Tab::make('Navigation Menu')
+                                            ->icon('heroicon-o-list-bullet')
+                                            ->schema([
+                                                LivewireEntry::make('navigation-menu-setting')
+                                                    ->livewire(NavigationMenuSetting::class),
+                                            ]),
+                                    ]),
+                            ]),
                     ]),
             ]);
     }

@@ -52,14 +52,11 @@ class InformationSetting extends Component implements HasForms
                     ->columns(1)
                     ->schema([
                         TextInput::make('title')
-                            ->label('Serie Title')
+                            ->label('Scheduled  Conference Title')
                             ->autofocus()
                             ->autocomplete()
                             ->required()
                             ->placeholder('Enter the title of the serie'),
-                        TextInput::make('issn')
-                            ->label('ISSN')
-                            ->placeholder('Enter the ISSN of the serie'),
                         Grid::make([
                             'xl' => 2
                         ])

@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Panel\Conference\Livewire\Forms\Conferences;
+namespace App\Panel\Series\Livewire;
+
 
 use App\Actions\Conferences\ConferenceUpdateAction;
+use App\Actions\ScheduledConferences\ScheduledConferenceUpdateAction;
 use App\Forms\Components\CssFileUpload;
-use App\Models\Conference;
 use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\BaseFileUpload;
@@ -26,11 +27,11 @@ class SetupSetting extends Component implements HasForms
 
     public function mount(): void
     {
-        $conference = app()->getCurrentConference();
+        $scheduledConference = app()->getCurrentScheduledConference();
 
         $this->form->fill([
-            ...$conference->attributesToArray(),
-            'meta' => $conference->getAllMeta(),
+            ...$scheduledConference->attributesToArray(),
+            'meta' => $scheduledConference->getAllMeta(),
         ]);
     }
 
@@ -42,7 +43,7 @@ class SetupSetting extends Component implements HasForms
     public function form(Form $form): Form
     {
         return $form
-            ->model(app()->getCurrentConference())
+            ->model(app()->getCurrentScheduledConference())
             ->schema([
                 Section::make()
                     ->schema([
@@ -79,7 +80,7 @@ class SetupSetting extends Component implements HasForms
                         ->action(function (Action $action) {
                             $formData = $this->form->getState();
                             try {
-                                ConferenceUpdateAction::run(app()->getCurrentConference(), $formData);
+                                ScheduledConferenceUpdateAction::run(app()->getCurrentScheduledConference(), $formData);
                                 $action->sendSuccessNotification();
                             } catch (\Throwable $th) {
                                 $action->sendFailureNotification();

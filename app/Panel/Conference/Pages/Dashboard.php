@@ -12,18 +12,18 @@ class Dashboard extends PagesDashboard
 {
     public function mount()
     {
-        $user = Auth::user();
-        if($user->hasAnyRole(static::internalRoles())){
-            return;
-        }
+        // $user = Auth::user();
+        // if($user->hasAnyRole(static::internalRoles())){
+        //     return;
+        // }
 
-        if($user->hasRole('Author')){
-            return $this->redirect(SubmissionResource::getUrl());
-        }
+        // if($user->hasRole('Author')){
+        //     return $this->redirect(SubmissionResource::getUrl());
+        // }
 
-        if($user->hasRole(UserRole::Reader->value) || $user->role?->isEmpty()){
-            return $this->redirectRoute(Profile::getRouteName());
-        }
+        // if($user->hasRole(UserRole::Reader->value) || $user->role?->isEmpty()){
+        //     return $this->redirectRoute(Profile::getRouteName());
+        // }
 
     }
 
@@ -43,21 +43,4 @@ class Dashboard extends PagesDashboard
         ];
     }
 
-    public function getWidgetForNewConferenceUser()
-    {
-        $userConferenceRole = auth()->user()->roles->pluck('name')->toArray();
-
-        return !empty($userConferenceRole) ? [] : [
-            Widgets\NewUserConferenceRegisterWidget::class,
-        ];
-    }
-
-    public function getWidgets(): array
-    {
-        return [
-            ...$this->getWidgetForNewConferenceUser(),
-            Widgets\Overview::class,
-            Widgets\SubmissionsTableWidget::class,
-        ];
-    }
 }

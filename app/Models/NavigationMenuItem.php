@@ -28,7 +28,7 @@ class NavigationMenuItem extends Model implements Sortable
     protected static function booted(): void
     {
         static::deleting(function (Model $model) {
-            $model->descendants()->delete();
+            $model->children()->delete();
         });
     }
 

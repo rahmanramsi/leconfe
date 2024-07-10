@@ -152,6 +152,7 @@ class Application extends LaravelApplication
             Committee::class,
             Announcement::class,
             Topic::class,
+            NavigationMenu::class,
         ];
 
         foreach ($models as $model) {
