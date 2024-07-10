@@ -10,7 +10,7 @@ use App\Models\ScheduledConference;
 use App\Models\Site;
 use App\Models\User;
 use App\Observers\ConferenceObserver;
-use App\Observers\SerieObserver;
+use App\Observers\ScheduledConferenceObserver;
 use App\Observers\SiteObserver;
 use App\Observers\UserObserver;
 use Illuminate\Auth\Events\Registered;
@@ -40,7 +40,7 @@ class EventServiceProvider extends ServiceProvider
     protected $observers = [
         User::class => [UserObserver::class],
         Conference::class => [ConferenceObserver::class],
-        ScheduledConference::class => [SerieObserver::class],
+        ScheduledConference::class => [ScheduledConferenceObserver::class],
         Site::class => [SiteObserver::class],
     ];
 

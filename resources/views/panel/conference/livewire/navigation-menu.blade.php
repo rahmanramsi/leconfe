@@ -8,7 +8,6 @@
                 </div>
                 <div class="ml-auto flex flex-wrap items-center gap-2">
                     {{ ($this->editNavigationMenuAction)(['id' => $navigationMenu->id]) }}
-                    {{ ($this->deleteNavigationMenuAction)(['id' => $navigationMenu->id]) }}
                 </div>
             </div>
             <hr />
