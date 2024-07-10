@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Panel\Conference\Resources;
+namespace App\Panel\Series\Resources;
 
 use Filament\Tables;
 use App\Models\Timeline;
@@ -26,8 +26,9 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Mail\Templates\ApprovedPresenterMail;
 use App\Mail\Templates\RejectedPresenterMail;
 use App\Actions\Presenters\PresenterApprovedAction;
+use App\Actions\Presenters\PresenterRejectedAction;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
-use App\Panel\Conference\Resources\PresenterResource\Pages;
+use App\Panel\Series\Resources\PresenterResource\Pages;
 use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 
 class PresenterResource extends Resource

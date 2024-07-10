@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Panel\Conference\Resources\PresenterResource\Pages;
+namespace App\Panel\Series\Resources\PresenterResource\Pages;
 
-use App\Panel\Conference\Resources\PresenterResource;
+use App\Panel\Series\Resources\PresenterResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
