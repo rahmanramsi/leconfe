@@ -12,15 +12,16 @@ use App\Infolists\Components\LivewireEntry;
 use App\Panel\Series\Livewire\InformationSetting;
 use App\Panel\Series\Livewire\SponsorSetting;
 
-class SerieSetting extends Page
+
+class ScheduledConferenceSetting extends Page
 {
-    protected static string $view = 'panel.series.pages.serie-setting';
+    protected static string $view = 'panel.scheduledConference.pages.scheduled-conference-setting';
 
     protected static ?string $navigationGroup = 'Settings';
 
     protected static ?string $navigationIcon = 'heroicon-o-window';
 
-    protected static ?string $navigationLabel = 'Serie';
+    protected static ?string $navigationLabel = 'Scheduled Conference';
 
     public function mount(): void
     {
