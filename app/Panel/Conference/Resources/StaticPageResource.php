@@ -40,6 +40,8 @@ class StaticPageResource extends Resource
     {
         return $form
             ->schema([
+                TextInput::make('title')
+                    ->required(),
                 TextInput::make('slug')
                     ->alphaDash()
                     ->unique(ignoreRecord: true, modifyRuleUsing: function (Unique $rule) {
@@ -47,11 +49,9 @@ class StaticPageResource extends Resource
                             ->where('conference_id', app()->getCurrentConference()->getKey())
                             ->where('scheduled_conference_id', app()->getCurrentScheduledConference()?->getKey() ?? 0);
                     }),
-                TextInput::make('title')
-                    ->required(),
                 TinyEditor::make('meta.content')
                     ->label('Content')
-                    ->minHeight(600)
+                    ->minHeight(400)
                     ->columnSpanFull()
                     ->helperText('The complete page content.'),
             ]);
@@ -69,28 +69,17 @@ class StaticPageResource extends Resource
                     ->url(fn (StaticPage $staticPage) => $staticPage->getUrl())
                     ->openUrlInNewTab()
             ])
-            ->filters([
-                //
-            ])
-            ->headerActions([
-                //
-            ])
             ->actions([
                 EditAction::make()
+                    ->mutateRecordDataUsing(function (StaticPage $record, array $data) {
+                        $data['meta'] = $record->getAllMeta()->toArray();
+
+                        return $data;
+                    })
                     ->using(fn(StaticPage $record, array $data) => StaticPageUpdateAction::run($record, $data)),
                 DeleteAction::make(),
             ])
-            ->bulkActions([
-                // Tables\Actions\DeleteBulkAction::make(),
-            ])
             ->defaultSort('created_at', 'desc');
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
     }
 
     public static function getPages(): array

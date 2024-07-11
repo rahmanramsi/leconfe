@@ -19,6 +19,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Set;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\MaxWidth;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -38,19 +39,19 @@ class ScheduledConferenceResource extends Resource
         return $form
             ->columns(1)
             ->schema([
+                TextInput::make('title')
+                    ->label('Title')
+                    ->autofocus()
+                    ->autocomplete()
+                    ->required()
+                    ->placeholder('Enter the title of the serie'),
+                TextInput::make('path')
+                    ->prefix(fn () => route('livewirePageGroup.conference.pages.home', ['conference' => app()->getCurrentConference()->path]) . '/')
+                    ->label('Path')
+                    ->rule('alpha_dash')
+                    ->required(),
                 Grid::make()
                     ->schema([
-                        TextInput::make('title')
-                            ->label('Title')
-                            ->autofocus()
-                            ->autocomplete()
-                            ->required()
-                            ->placeholder('Enter the title of the serie'),
-                        TextInput::make('path')
-                            ->label('Path')
-                            ->rule('alpha_dash')
-                            ->required()
-                            ->placeholder('Enter the path of the serie'),
                         TextInput::make('meta.theme')
                             ->placeholder('e.g. Creating a better future with us')
                             ->columnSpanFull()
@@ -76,9 +77,6 @@ class ScheduledConferenceResource extends Resource
                             ->requiredWith('date_start')
                             ->placeholder('Enter the end date of the serie'),
                     ]),
-                Select::make('type')
-                    ->required()
-                    ->options(ScheduledConferenceType::array()),
             ]);
     }
 
@@ -117,7 +115,9 @@ class ScheduledConferenceResource extends Resource
                         ])
                         ->hidden(fn (ScheduledConference $record) => $record->isArchived() || $record->isCurrent() || $record->isPublished() || $record->trashed())
                         ->action(function (ScheduledConference $record, array $data, Tables\Actions\Action $action) {
-                            $data['set_as_current'] ? $record->update(['state' => SerieState::Current]) : $record->update(['state' => SerieState::Published]);
+                            $data['state'] = $data['set_as_current'] ? SerieState::Current : SerieState::Published;
+
+                            ScheduledConferenceUpdateAction::run($record, $data);
 
                             return $action->success();
                         }),
@@ -130,25 +130,20 @@ class ScheduledConferenceResource extends Resource
                         ->action(fn (ScheduledConference $record, Tables\Actions\Action $action) => $record->update(['state' => SerieState::Current]) && $action->success())
                         ->successNotificationTitle(fn (ScheduledConference $scheduledConference) => $scheduledConference->title . ' is set as current'),
                     Tables\Actions\EditAction::make()
+                        ->modalWidth(MaxWidth::ExtraLarge)
                         ->hidden(fn (ScheduledConference $record) => $record->isArchived() || $record->trashed())
                         ->mutateRecordDataUsing(function (ScheduledConference $record, array $data) {
                             $data['meta'] = $record->getAllMeta()->toArray();
-    
+
                             return $data;
                         })
                         ->using(fn (ScheduledConference $record, array $data) => ScheduledConferenceUpdateAction::run($record, $data)),
-                    // Tables\Actions\DeleteAction::make()
-                    //     ->label('Move To Trash')
-                    //     ->modalHeading('Move To Trash')
-                    //     ->hidden(fn (Serie $record) => $record->current || $record->trashed())
-                    //     ->successNotificationTitle('Serie moved to trash'),
+                    Tables\Actions\DeleteAction::make()
+                        ->label('Move To Trash')
+                        ->modalHeading('Move To Trash')
+                        ->hidden(fn (ScheduledConference $record) => $record->isCurrent() || $record->trashed())
+                        ->successNotificationTitle('Serie moved to trash'),
                 ]),
-                // Tables\Actions\RestoreAction::make(),
-            ])
-            ->bulkActions([
-                // Tables\Actions\BulkActionGroup::make([
-                //     Tables\Actions\DeleteBulkAction::make(),
-                // ]),
             ]);
     }
 

@@ -8,6 +8,7 @@ use App\Panel\Conference\Resources\ScheduledConferenceResource;
 use Filament\Actions;
 use Filament\Resources\Components\Tab;
 use Filament\Resources\Pages\ManageRecords;
+use Filament\Support\Enums\MaxWidth;
 use Illuminate\Database\Eloquent\Builder;
 
 class ManageSeries extends ManageRecords
@@ -18,6 +19,7 @@ class ManageSeries extends ManageRecords
     {
         return [
             Actions\CreateAction::make()
+                ->modalWidth(MaxWidth::ExtraLarge)
                 ->using(fn(array $data) => ScheduledConferenceCreateAction::run($data)),
         ];
     }
