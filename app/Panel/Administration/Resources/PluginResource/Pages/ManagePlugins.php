@@ -2,8 +2,8 @@
 
 namespace App\Panel\Administration\Resources\PluginResource\Pages;
 
-use App\Facades\Plugin;
-use App\Models\Plugin as ModelsPlugin;
+use App\Facades\Plugin as PluginFacade;
+use App\Models\Plugin as PluginModel;
 use App\Panel\Administration\Resources\PluginResource;
 use Filament\Actions;
 use Filament\Forms\Components\FileUpload;
@@ -11,6 +11,7 @@ use Filament\Notifications\Notification;
 use Filament\Resources\Components\Tab;
 use Filament\Resources\Pages\ManageRecords;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Log;
 
 class ManagePlugins extends ManageRecords
 {
@@ -28,10 +29,10 @@ class ManagePlugins extends ManageRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\Action::make('add-plugin')
-                ->label('Add new')
-                ->modalHeading('Add new Plugin')
-                ->disabled(fn () => ! auth()->user()->can('install', ModelsPlugin::class))
+            Actions\Action::make('upload-plugin')
+                ->label('Upload Plugin')
+                ->modalHeading('Upload Plugin')
+                ->visible(fn () => auth()->user()->can('install', PluginModel::class))
                 ->form([
                     FileUpload::make('file')
                         ->disk('plugins-tmp')
@@ -41,17 +42,17 @@ class ManagePlugins extends ManageRecords
                 ->action(function (array $data) {
 
                     try {
-                        Plugin::install(Plugin::getTempDisk()->path($data['file']));
+                        PluginFacade::install(PluginFacade::getTempDisk()->path($data['file']));
                     } catch (\Throwable $th) {
                         Notification::make('install-failed')
                             ->danger()
-                            ->title('Install failed')
-                            ->body($th->getMessage())
+                            ->title('Failed to install plugin')
                             ->send();
+                        Log::error($th);
 
                         return;
                     } finally {
-                        Plugin::getTempDisk()->delete($data['file']);
+                        PluginFacade::getTempDisk()->delete($data['file']);
                     }
 
                     Notification::make('install-success')
