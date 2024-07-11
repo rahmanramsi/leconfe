@@ -59,6 +59,10 @@ class PanelProvider extends ServiceProvider
             ], true)
             ->authMiddleware(static::getAuthMiddleware(), true);
 
+        Plugin::getPlugins()->each(function ($plugin) use ($panel) {
+            $plugin->onPanel($panel);
+        });
+
         return $panel;
     }
 
@@ -96,7 +100,7 @@ class PanelProvider extends ServiceProvider
             ->authMiddleware(static::getAuthMiddleware(), true);
 
         Plugin::getPlugins()->each(function ($plugin) use ($panel) {
-            $plugin->onConferencePanel($panel);
+            $plugin->onPanel($panel);
         });
 
         return $panel;
@@ -129,7 +133,7 @@ class PanelProvider extends ServiceProvider
             ->authMiddleware(static::getAuthMiddleware(), true);
 
         Plugin::getPlugins()->each(function ($plugin) use ($panel) {
-            $plugin->onAdministrationPanel($panel);
+            $plugin->onPanel($panel);
         });
 
         return $panel;

@@ -127,8 +127,6 @@ class ConferenceObserver
             ],
         ]);
 
-        Plugin::installDefaultPlugins($conference);
-
         RolePopulateConferenceAction::run($conference);
 
         MailTemplatePopulateDefaultData::run($conference);

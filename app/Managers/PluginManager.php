@@ -42,19 +42,9 @@ class PluginManager
         $this->bootPlugins();
     }
 
-    public function getDisk(?Conference $conference = null): FilesystemContract
+    public function getDisk(): FilesystemContract
     {
-        $conferenceId = $conference?->getKey() ?? app()->getCurrentConferenceId();
-        $pluginsPath = config('filesystems.disks.plugins.root') . DIRECTORY_SEPARATOR . $conferenceId;
-        if (!File::isDirectory($pluginsPath)) {
-            File::makeDirectory($pluginsPath, 0755, true);
-        }
-        return Storage::build([
-            'driver' => 'local',
-            'root' => $pluginsPath,
-            'throw' => false,
-            'visibility' => 'private',
-        ]);
+        return Storage::disk('plugins');
     }
 
     public function getTempDisk()
@@ -194,13 +184,26 @@ class PluginManager
         $this->enable($pluginPath, false);
     }
 
-    public function getSetting(string $plugin, mixed $key, $default = null): mixed
+    protected function getCacheKey($plugin, $key)
     {
         $conferenceId = App::getCurrentConferenceId();
+        $scheduledConferenceId = App::getCurrentScheduledConferenceId();
 
-        return Cache::rememberForever("plugin_setting_{$conferenceId}_{$plugin}_{$key}", function () use ($plugin, $key, $default, $conferenceId) {
+        return md5(implode('_', [
+            'plugin_setting',
+            $conferenceId,
+            $scheduledConferenceId,
+            $plugin,
+            $key,
+        ]));
+    }
+
+    public function getSetting(string $plugin, mixed $key, $default = null): mixed
+    {
+        return Cache::rememberForever($this->getCacheKey($plugin, $key), function () use ($plugin, $key, $default) {
             $setting = PluginSetting::query()
-                ->where('conference_id', $conferenceId)
+                ->where('conference_id', App::getCurrentConferenceId())
+                ->where('scheduled_conference_id', App::getCurrentScheduledConferenceId())
                 ->where('plugin', $plugin)
                 ->where('key', $key)
                 ->first();
@@ -212,8 +215,9 @@ class PluginManager
     public function updateSetting(string $plugin, $key, $value): mixed
     {
         $conferenceId = App::getCurrentConferenceId();
+        $scheduledConferenceId = App::getCurrentScheduledConferenceId();
 
-        Cache::forget("plugin_setting_{$conferenceId}_{$plugin}_{$key}");
+        Cache::forget($this->getCacheKey($plugin, $key));
 
         $type = $this->getType($value);
 
@@ -222,6 +226,7 @@ class PluginManager
                 [
                     'plugin' => $plugin,
                     'conference_id' => $conferenceId,
+                    'scheduled_conference_id' => $scheduledConferenceId,
                     'key' => $key,
                 ],
                 [
@@ -465,10 +470,10 @@ class PluginManager
         }
     }
 
-    public function installDefaultPlugins(Conference $conference)
+    public function installDefaultPlugins()
     {
         $defaultPluginsPath = base_path('stubs' . DIRECTORY_SEPARATOR . 'plugins');
-        $pluginsDisk = $this->getDisk($conference);
+        $pluginsDisk = $this->getDisk();
         foreach (File::directories($defaultPluginsPath) as $pluginPath) {
             $pluginName = basename($pluginPath);
             if ($pluginsDisk->exists($pluginName)) {

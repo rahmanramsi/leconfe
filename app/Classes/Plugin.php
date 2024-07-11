@@ -18,7 +18,7 @@ abstract class Plugin implements HasPlugin
     {
         $this->info = Yaml::parseFile($this->getPluginInformationPath());
 
-        View::addNamespace($this->getInfo('folder'), $this->getPluginPath().DIRECTORY_SEPARATOR.'views');
+        View::addNamespace($this->getInfo('folder'), $this->getPluginPath() . DIRECTORY_SEPARATOR . 'views');
     }
 
     public function getInfo(?string $key = null)
@@ -37,7 +37,7 @@ abstract class Plugin implements HasPlugin
 
     public function getPluginInformationPath()
     {
-        return $this->getPluginPath().DIRECTORY_SEPARATOR.'index.yaml';
+        return $this->getPluginPath() . DIRECTORY_SEPARATOR . 'index.yaml';
     }
 
     public function setPluginPath($path): void
@@ -55,14 +55,9 @@ abstract class Plugin implements HasPlugin
         return FacadesPlugin::updateSetting($this->getInfo('folder'), $key, $value);
     }
 
-    public function onConferencePanel(Panel $panel): void
+    public function onPanel(Panel $panel): void
     {
-        // Implement this method to add your plugin to the panel
-    }
-
-    public function onAdministrationPanel(Panel $panel): void
-    {
-        // Implement this method to add your plugin to the panel administration
+        // Implement this method to add your plugin to panel
     }
 
     public function getPluginPage(): ?string
