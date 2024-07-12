@@ -130,7 +130,6 @@ Admin:
     - 'Presenter:view'
     - 'Presenter:viewAny'
     - 'Presenter:processApproval'
-    - 'Publication:update'
     - 'Review:create'
     - 'Role:create'
     - 'Role:delete'
@@ -191,8 +190,6 @@ Admin:
     - 'Venue:viewAny'
     - 'Workflow:update'
 Editor:
-    - 'Conference:viewArchived'
-    - 'Conference:viewUpcoming'
     - 'Discussion:delete'
     - 'DiscussionTopic:create'
     - 'DiscussionTopic:delete'
@@ -203,7 +200,6 @@ Editor:
     - 'Presenter:view'
     - 'Presenter:viewAny'
     - 'Presenter:processApproval'
-    - 'Publication:update'
     - 'Submission:acceptAbstract'
     - 'Submission:acceptPaper'
     - 'Submission:assignParticipant'
@@ -228,11 +224,9 @@ Editor:
     - 'Submission:viewAny'
     - 'Submission:withdraw'
 Reviewer:
-    - 'Conference:viewArchived'
     - 'Submission:review'
     - 'Submission:viewAny'
 Author:
-    - 'Conference:viewArchived'
     - 'Presenter:processApproval'
     - 'Submission:create'
     - 'Submission:delete'
@@ -275,3 +269,4 @@ Author:
     - 'Submission:viewAny'
     - 'Submission:withdraw'
 Reader: {  }
+Presenter: {  }
