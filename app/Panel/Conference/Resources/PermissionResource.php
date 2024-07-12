@@ -43,11 +43,11 @@ class PermissionResource extends Resource
         return $form
             ->schema([
                 TextInput::make('context')
-                    // ->datalist(fn () => static::getEloquentQuery()->pluck('context')->unique()->sort()->values()->all())
                     ->dehydrateStateUsing(fn (string $state): string => Str::studly($state))
+                    ->alpha()
                     ->helperText('Context must be StudlyCase'),
                 TextInput::make('action')
-                    // ->datalist(fn () => static::getEloquentQuery()->pluck('action')->unique()->sort()->values()->all())
+                    ->alpha()
                     ->helperText('Action must be camelCase')
                     ->dehydrateStateUsing(fn (string $state): string => Str::camel($state)),
                 CheckboxList::make('roles')
