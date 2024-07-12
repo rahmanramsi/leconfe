@@ -31,9 +31,9 @@ class PaymentSetting extends WorkflowStage implements HasActions, HasForms
     {
         $this->form->fill([
             'payment' => [
-                'enabled' => $this->conference->getMeta('payment.enabled'),
-                'method' => $this->conference->getMeta('payment.method', 'manual'),
-                'supported_currencies' => $this->conference->getMeta('payment.supported_currencies', ['usd']),
+                'enabled' => $this->scheduledConference->getMeta('payment.enabled'),
+                'method' => $this->scheduledConference->getMeta('payment.method', 'manual'),
+                'supported_currencies' => $this->scheduledConference->getMeta('payment.supported_currencies', ['usd']),
             ],
             ...Payment::getAllDriverNames()->map(fn ($name, $key) => Payment::driver($key)?->getSettingFormFill() ?? [])->toArray(),
         ]);
@@ -53,11 +53,11 @@ class PaymentSetting extends WorkflowStage implements HasActions, HasForms
                     $data = $this->form->getState();
 
                     foreach ($data['payment'] as $key => $value) {
-                        $this->conference->setMeta('payment.'.$key, $value);
+                        $this->scheduledConference->setMeta('payment.'.$key, $value);
                     }
 
-                    Payment::driver($this->conference->getMeta('payment.method'))
-                        ->saveSetting(data_get($data, $this->conference->getMeta('payment.method'), []));
+                    Payment::driver($this->scheduledConference->getMeta('payment.method'))
+                        ->saveSetting(data_get($data, $this->scheduledConference->getMeta('payment.method'), []));
                 } catch (\Throwable $th) {
 
                     Log::error($th);

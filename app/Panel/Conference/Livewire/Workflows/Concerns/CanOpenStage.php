@@ -3,6 +3,7 @@
 namespace App\Panel\Conference\Livewire\Workflows\Concerns;
 
 use App\Models\Conference;
+use App\Models\ScheduledConference;
 use Carbon\Carbon;
 use Livewire\Attributes\On;
 
@@ -10,7 +11,7 @@ trait CanOpenStage
 {
     use CanModifySetting;
 
-    public Conference $conference;
+    public ScheduledConference $scheduledConference;
 
     protected bool $stageOpen = false;
 

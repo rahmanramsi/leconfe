@@ -21,8 +21,8 @@ class Guidelines extends \Livewire\Component implements HasForms
     public function mount(): void
     {
         $this->form->fill([
-            'reviewGuidelines' => $this->conference->getMeta('review_guidelines', ''),
-            'competingInterests' => $this->conference->getMeta('competing_interests', ''),
+            'reviewGuidelines' => $this->scheduledConference->getMeta('review_guidelines', ''),
+            'competingInterests' => $this->scheduledConference->getMeta('competing_interests', ''),
         ]);
     }
 
@@ -41,8 +41,8 @@ class Guidelines extends \Livewire\Component implements HasForms
     {
         $data = $this->form->getState();
 
-        $this->conference->setMeta('review_guidelines', Purify::clean($data['reviewGuidelines']));
-        $this->conference->setMeta('competing_interests', Purify::clean($data['competingInterests']));
+        $this->scheduledConference->setMeta('review_guidelines', Purify::clean($data['reviewGuidelines']));
+        $this->scheduledConference->setMeta('competing_interests', Purify::clean($data['competingInterests']));
 
         Notification::make()
             ->title('Success!')

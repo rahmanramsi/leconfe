@@ -8,11 +8,11 @@ trait CanModifySetting
 
     public function getSetting(string $key, mixed $default = false): mixed
     {
-        return $this->conference->getMeta("workflow.{$this->stage}.{$key}", $default);
+        return $this->scheduledConference->getMeta("workflow.{$this->stage}.{$key}", $default);
     }
 
     public function updateSetting(string $key, mixed $value): void
     {
-        $this->conference->setMeta("workflow.{$this->stage}.{$key}", $value);
+        $this->scheduledConference->setMeta("workflow.{$this->stage}.{$key}", $value);
     }
 }

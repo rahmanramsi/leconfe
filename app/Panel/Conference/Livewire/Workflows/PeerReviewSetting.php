@@ -74,7 +74,7 @@ class PeerReviewSetting extends WorkflowStage implements HasActions, HasForms
                          * 3. is the acceptedFileTypes is enough?
                          */
                         SpatieMediaLibraryFileUpload::make('settings.paper_templates')
-                            ->model($this->conference)
+                            ->model($this->scheduledConference)
                             ->previewable(false)
                             ->downloadable()
                             ->disk('private-files')

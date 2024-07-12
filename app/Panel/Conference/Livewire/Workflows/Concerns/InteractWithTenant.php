@@ -3,13 +3,14 @@
 namespace App\Panel\Conference\Livewire\Workflows\Concerns;
 
 use App\Models\Conference;
+use App\Models\ScheduledConference;
 
 trait InteractWithTenant
 {
-    public Conference $conference;
+    public ScheduledConference $scheduledConference;
 
     public function __construct()
     {
-        $this->conference = app()->getCurrentConference();
+        $this->scheduledConference = app()->getCurrentScheduledConference();
     }
 }
