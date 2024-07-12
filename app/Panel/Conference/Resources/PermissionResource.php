@@ -66,24 +66,14 @@ class PermissionResource extends Resource
                     ->badge()
                     ->searchable(),
                 TextColumn::make('context')
-                    ->sortable()
                     ->formatStateUsing(fn (string $state): string => Str::headline($state)),
                 TextColumn::make('action')
-                    ->sortable()
                     ->formatStateUsing(fn (string $state): string => Str::headline($state)),
                 TextColumn::make('roles_count')
                     ->label('Assigned Roles')
                     ->counts('roles')
                     ->badge()
                     ->color(fn (int $state) => $state > 0 ? 'primary' : 'gray'),
-            ])
-            ->groups([
-                Group::make('context'),
-                Group::make('action')
-                    ->getTitleFromRecordUsing(fn (Permission $permission): string => Str::headline($permission->action)),
-            ])
-            ->filters([
-                //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
