@@ -52,7 +52,8 @@ class UserResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return static::getModel()::query()
-            ->whereHas('roles')
+            ->whereHas('roles', fn ($query) => $query->where('name', '!=', UserRole::Admin))
+            ->where('id', '!=', auth()->id())
             ->with(['meta', 'media', 'bans']);
     }
 
@@ -222,13 +223,14 @@ class UserResource extends Resource
             ])
             ->filters([
                 SelectFilter::make('roles')
-                    ->relationship('roles', 'name')
+                    ->relationship('roles', 'name', modifyQueryUsing: fn ($query) => $query->where('name', '!=', UserRole::Admin))
                     ->multiple()
                     ->preload(),
             ])
             ->actions([
                 EditAction::make()
                     ->modalWidth('full')
+                    ->hidden(fn (User $record) => $record->hasRole(UserRole::Admin))
                     ->mutateRecordDataUsing(fn ($data, User $record) => array_merge($data, ['meta' => $record->getAllMeta()->toArray()]))
                     ->using(fn (array $data, User $record) => UserUpdateAction::run($data, $record)),
                 DeleteAction::make()
