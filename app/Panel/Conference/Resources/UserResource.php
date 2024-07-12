@@ -134,7 +134,7 @@ class UserResource extends Resource
                         Forms\Components\Section::make('User Roles')
                             ->schema([
                                 Forms\Components\CheckboxList::make('roles')
-                                    ->label('')
+                                    ->hiddenLabel()
                                     ->relationship(
                                         name: 'roles',
                                         titleAttribute: 'name',
@@ -142,6 +142,8 @@ class UserResource extends Resource
                                     )
                                     ->saveRelationshipsUsing(function (Forms\Components\CheckboxList $component, ?array $state) {
                                         $roles = $state ? Role::whereIn('id', $state)->pluck('name')->toArray() : [];
+
+                                        $roles = array_diff($roles, [UserRole::Admin->value]);
 
                                         $component->getModelInstance()->syncRoles($roles);
                                     }),
