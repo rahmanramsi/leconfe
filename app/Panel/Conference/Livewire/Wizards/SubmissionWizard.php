@@ -5,7 +5,6 @@ namespace App\Panel\Conference\Livewire\Wizards;
 use App\Models\Submission;
 use App\Panel\Conference\Livewire\Wizards\SubmissionWizard\Steps\ContributorsStep;
 use App\Panel\Conference\Livewire\Wizards\SubmissionWizard\Steps\DetailStep;
-use App\Panel\Conference\Livewire\Wizards\SubmissionWizard\Steps\PresentersStep;
 use App\Panel\Conference\Livewire\Wizards\SubmissionWizard\Steps\ReviewStep;
 use App\Panel\Conference\Livewire\Wizards\SubmissionWizard\Steps\UploadFilesStep;
 use Livewire\Component;
@@ -25,7 +24,6 @@ class SubmissionWizard extends Component
             'detail' => DetailStep::class,
             'upload-files' => UploadFilesStep::class,
             'authors' => ContributorsStep::class,
-            'presenters' => PresentersStep::class,
             'review' => ReviewStep::class,
         ];
     }

@@ -50,7 +50,6 @@ use App\Infolists\Components\VerticalTabs\Tab as Tab;
 use App\Panel\Conference\Livewire\Submissions\Editing;
 use App\Panel\Series\Resources\SubmissionResource;
 use App\Infolists\Components\VerticalTabs\Tabs as Tabs;
-use App\Models\Enums\PresenterStatus;
 use Filament\Infolists\Concerns\InteractsWithInfolists;
 use App\Panel\Conference\Livewire\Submissions\PeerReview;
 use Filament\Infolists\Components\Tabs as HorizontalTabs;
@@ -62,11 +61,9 @@ use App\Panel\Conference\Livewire\Submissions\Forms\References;
 use App\Panel\Conference\Livewire\Workflows\Classes\StageManager;
 use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 use App\Panel\Conference\Livewire\Submissions\Components\GalleyList;
-use App\Panel\Conference\Livewire\Submissions\Components\PresenterList;
 use App\Panel\Conference\Livewire\Workflows\Concerns\InteractWithTenant;
 use App\Panel\Conference\Livewire\Submissions\Components\ActivityLogList;
 use App\Panel\Conference\Livewire\Submissions\Components\ContributorList;
-use App\Panel\Conference\Livewire\Submissions\Components\Files\PresenterFiles;
 use App\Panel\Conference\Livewire\Submissions\Components\SubmissionProceeding;
 use Filament\Support\Enums\MaxWidth;
 
@@ -345,15 +342,6 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                                 ]),
                         ])
                         ->action(function (Action $action, array $data) {
-                            $checkedPresenters = $this->record->presenters()?->whereStatus(PresenterStatus::Unchecked)->exists();
-
-                            if ($checkedPresenters) {
-                                $action->failureNotificationTitle('There is still a presenter who has not been checked');
-                                $action->failure();
-
-                                return false;
-                            }
-
                             $this->record->state()->publish();
 
                             if (! $data['do-not-notify-author']) {
@@ -467,7 +455,6 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                 ->form([
                     Textarea::make('reason')
                         ->readonly()
-                        ->hint('Read Only')
                         ->placeholder('Reason for withdrawal')
                         ->label('Reason'),
                 ])
@@ -688,15 +675,6 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                                                         'viewOnly' => ! auth()->user()->can('editing', $this->record),
                                                     ]),
                                             ]),
-                                        Tab::make('Presenters')
-                                            ->icon('heroicon-o-user-group')
-                                            ->schema([
-                                                LivewireEntry::make('presenters')
-                                                    ->livewire(PresenterList::class, [
-                                                        'submission' => $this->record,
-                                                        'viewOnly' => ! auth()->user()->can('editing', $this->record),
-                                                    ]),
-                                            ]),
                                         Tab::make('Galleys')
                                             ->icon('heroicon-o-document-text')
                                             ->schema([
@@ -719,14 +697,6 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                                             ->schema([
                                                 LivewireEntry::make('references')
                                                     ->livewire(References::class, [
-                                                        'submission' => $this->record,
-                                                    ]),
-                                            ]),
-                                        Tab::make('Presenter Files')
-                                            ->icon('heroicon-o-document-text')
-                                            ->schema([
-                                                LivewireEntry::make('presenter')
-                                                    ->livewire(PresenterFiles::class, [
                                                         'submission' => $this->record,
                                                     ]),
                                             ]),

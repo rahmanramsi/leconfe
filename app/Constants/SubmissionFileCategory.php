@@ -20,7 +20,5 @@ final class SubmissionFileCategory
 
     public const EDITED_FILES = 'edited-files';
 
-    public const PRESENTER_FILES = 'presenter-files';
-
     public const GALLEY_FILES = 'galley-files';
 }

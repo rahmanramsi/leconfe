@@ -11,7 +11,7 @@ use Filament\Actions\Contracts\HasActions;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\SpatieTagsInput;
+use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -72,11 +72,9 @@ class DetailStep extends Component implements HasActions, HasForms, HasWizardSte
                             ->relationship('topics', 'name'),
                         TextInput::make('meta.title')
                             ->required(),
-                        SpatieTagsInput::make('meta.keywords')
+                        TagsInput::make('meta.keywords')
                             ->splitKeys([','])
-                            ->placeholder('')
-                            ->model($this->record)
-                            ->type('submissionKeywords'),
+                            ->placeholder(''),
                         TinyEditor::make('meta.abstract')
                             ->minHeight(300)
                             ->required()

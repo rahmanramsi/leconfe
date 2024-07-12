@@ -6,7 +6,7 @@ use App\Actions\Submissions\SubmissionUpdateAction;
 use App\Classes\Log;
 use App\Models\Submission;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\SpatieTagsInput;
+use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -48,10 +48,9 @@ class Detail extends \Livewire\Component implements HasForms
                     ->relationship('topics', 'name')
                     ->label('Topic')
                     ->searchable(),
-                SpatieTagsInput::make('meta.keywords')
+                TagsInput::make('meta.keywords')
                     ->splitKeys([','])
-                    ->placeholder('')
-                    ->type('submissionKeywords'),
+                    ->placeholder(''),
                 TinyEditor::make('meta.abstract')
                     ->required()
                     ->minHeight(300)

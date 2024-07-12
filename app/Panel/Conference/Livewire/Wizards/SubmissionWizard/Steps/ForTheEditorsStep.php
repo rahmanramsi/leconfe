@@ -8,7 +8,7 @@ use App\Panel\Conference\Livewire\Wizards\SubmissionWizard\Contracts\HasWizardSt
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Section;
-use Filament\Forms\Components\SpatieTagsInput;
+use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Livewire\Component;
@@ -48,17 +48,16 @@ class ForTheEditorsStep extends Component implements HasForms, HasWizardStep
     protected function getFormSchema(): array
     {
         return [
-            Card::make([
+            Section::make()
+                ->schema([
                 Section::make('For the Editors')
                     ->description('Please provide the following details in order to help our editorial team manage your submission.')
                     ->aside()
                     ->schema([
                         Hidden::make('submission_progress'),
-                        SpatieTagsInput::make('disiplines')
+                        TagsInput::make('meta.disiplines')
                             ->helperText('Disciplines refer to specific areas of study or branches of knowledge that are recognized by university faculties and learned societies.')
-                            ->placeholder('')
-                            ->model($this->record)
-                            ->type('submissionDisiplines'),
+                            ->placeholder(''),
                         TinyEditor::make('meta.comments_for_the_editor')
                             ->minHeight(300)
                             ->label('Comments for the Editor')

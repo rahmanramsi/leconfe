@@ -90,7 +90,7 @@ class SubmissionPaymentItemTable extends \Livewire\Component implements HasForms
                 CreateAction::make()
                     ->label('New Payment Item')
                     ->mountUsing(function (Form $form) {
-                        $fees = collect(App::getCurrentConference()->getMeta('payment.supported_currencies'))
+                        $fees = collect(App::getCurrentScheduledConference()->getMeta('payment.supported_currencies'))
                             ->map(fn ($currency) => [
                                 'currency_id' => $currency,
                                 'fee' => 0,

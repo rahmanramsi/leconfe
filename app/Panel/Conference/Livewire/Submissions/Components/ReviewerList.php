@@ -17,7 +17,7 @@ use App\Models\Role;
 use App\Models\Submission;
 use App\Models\SubmissionFile;
 use App\Models\User;
-use App\Panel\Conference\Resources\SubmissionResource;
+use App\Panel\Series\Resources\SubmissionResource;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Fieldset;

@@ -93,14 +93,6 @@
                             </div>
                             @livewire(App\Panel\Conference\Livewire\Submissions\Components\ContributorList::class, ['submission' => $record, 'viewOnly' => true, 'lazy' => true])
                         </div>
-                        <div class="space-y-4">
-                            <div class="flex ml-auto">
-                                <x-filament::button class="ml-auto" :outlined="true" size="sm"  x-on:click="step = 'presenters'">
-                                    Edit Presenters
-                                </x-filament::button>
-                            </div>
-                            @livewire(App\Panel\Conference\Livewire\Submissions\Components\PresenterList::class, ['submission' => $record, 'viewOnly' => true, 'lazy' => true])
-                        </div>
                     </div>
                 </div>
             </div>
