@@ -5,7 +5,7 @@ namespace App\Frontend\Website\Pages;
 use App\Facades\Block as BlockFacade;
 use App\Facades\SidebarFacade;
 use App\Models\Conference;
-use App\Models\Enums\SerieState;
+use App\Models\Enums\ScheduledConferenceState;
 use App\Models\ScheduledConference;
 use App\Models\Sponsor;
 use App\Models\Topic;
@@ -29,15 +29,15 @@ class Home extends Page
             ->with(['conference', 'media', 'meta']);
         
         $currentSeries = (clone $scheduledConferenceQuery)
-            ->state(SerieState::Current)
+            ->state(ScheduledConferenceState::Current)
             ->paginate(6, pageName: 'currentSeriesPage');
 
         $upcomingSeries = (clone $scheduledConferenceQuery)
-            ->state(SerieState::Published)
+            ->state(ScheduledConferenceState::Published)
             ->paginate(6, pageName: 'upcomingSeriesPage');
 
         $allSeries = (clone $scheduledConferenceQuery)
-            ->whereNot('state', SerieState::Draft)
+            ->whereNot('state', ScheduledConferenceState::Draft)
             ->paginate(6, pageName: 'allSeriesPage');
 
         return [

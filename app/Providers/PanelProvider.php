@@ -29,17 +29,17 @@ use Filament\Http\Responses\Auth\Contracts\LogoutResponse as LogoutResponseContr
 
 class PanelProvider extends ServiceProvider
 {
-    public function seriesPanel(Panel $panel): Panel
+    public function scheduledConference(Panel $panel): Panel
     {
         $this->setupPanel($panel)
-            ->id('series')
-            ->path('{conference:path}/series/{serie:path}/panel')
+            ->id('scheduledConference')
+            ->path('{conference:path}/scheduled-conference/{serie:path}/panel')
             ->bootUsing(fn () => static::setupFilamentComponent())
             ->homeUrl(fn () => app()->getCurrentScheduledConference()?->getHomeUrl())
-            ->discoverResources(in: app_path('Panel/Series/Resources'), for: 'App\\Panel\\Series\\Resources')
-            ->discoverPages(in: app_path('Panel/Series/Pages'), for: 'App\\Panel\\Series\\Pages')
-            ->discoverWidgets(in: app_path('Panel/Series/Widgets'), for: 'App\\Panel\\Series\\Widgets')
-            ->discoverLivewireComponents(in: app_path('Panel/Series/Livewire'), for: 'App\\Panel\\Series\\Livewire')
+            ->discoverResources(in: app_path('Panel/ScheduledConference/Resources'), for: 'App\\Panel\\ScheduledConference\\Resources')
+            ->discoverPages(in: app_path('Panel/ScheduledConference/Pages'), for: 'App\\Panel\\ScheduledConference\\Pages')
+            ->discoverWidgets(in: app_path('Panel/ScheduledConference/Widgets'), for: 'App\\Panel\\ScheduledConference\\Widgets')
+            ->discoverLivewireComponents(in: app_path('Panel/ScheduledConference/Livewire'), for: 'App\\Panel\\ScheduledConference\\Livewire')
             ->userMenuItems([
                 'logout' => MenuItem::make()
                     ->url(fn (): string => route('conference.logout')),
@@ -162,7 +162,7 @@ class PanelProvider extends ServiceProvider
     public function register(): void
     {
         Filament::registerPanel(
-            fn (): Panel => $this->seriesPanel(Panel::make()),
+            fn (): Panel => $this->scheduledConference(Panel::make()),
         );
 
         Filament::registerPanel(

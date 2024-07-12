@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Filament\Models\Contracts\HasAvatar;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use App\Models\Concerns\BelongsToConference;
-use App\Models\Enums\SerieState;
+use App\Models\Enums\ScheduledConferenceState;
 use App\Models\Enums\ScheduledConferenceType;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
@@ -40,7 +40,7 @@ class ScheduledConference extends Model implements HasMedia, HasAvatar, HasName
         'date_start' => 'date',
         'date_end' => 'date',
         'type' => ScheduledConferenceType::class,
-        'state' => SerieState::class,
+        'state' => ScheduledConferenceState::class,
     ];
 
     /**
@@ -49,12 +49,12 @@ class ScheduledConference extends Model implements HasMedia, HasAvatar, HasName
     protected static function booted(): void
     {
         static::updating(function (ScheduledConference $scheduledConference) {
-            if ($scheduledConference->isDirty('state') && $scheduledConference->state == SerieState::Current) {
+            if ($scheduledConference->isDirty('state') && $scheduledConference->state == ScheduledConferenceState::Current) {
                 static::query()
                     ->where('conference_id', $scheduledConference->conference_id)
-                    ->where('state', SerieState::Current->value)
+                    ->where('state', ScheduledConferenceState::Current->value)
                     ->where('id', '!=', $scheduledConference->id)
-                    ->update(['state' => SerieState::Archived]);
+                    ->update(['state' => ScheduledConferenceState::Archived]);
             }
         });
     }
@@ -91,7 +91,7 @@ class ScheduledConference extends Model implements HasMedia, HasAvatar, HasName
 
     public function getPanelUrl(): string
     {
-        return route('filament.series.pages.dashboard', ['serie' => $this->path]);
+        return route('filament.scheduledConference.pages.dashboard', ['serie' => $this->path]);
     }
 
     public function getFilamentAvatarUrl(): ?string
@@ -123,17 +123,17 @@ class ScheduledConference extends Model implements HasMedia, HasAvatar, HasName
 
     public function isCurrent(): bool
     {
-        return $this->state == SerieState::Current;
+        return $this->state == ScheduledConferenceState::Current;
     }
 
     public function isDraft(): bool
     {
-        return $this->state == SerieState::Draft;
+        return $this->state == ScheduledConferenceState::Draft;
     }
 
     public function isPublished(): bool
     {
-        return $this->state == SerieState::Published;
+        return $this->state == ScheduledConferenceState::Published;
     }
 
     public function isUpcoming(): bool
@@ -143,7 +143,7 @@ class ScheduledConference extends Model implements HasMedia, HasAvatar, HasName
 
     public function isArchived(): bool
     {
-        return $this->state == SerieState::Archived;
+        return $this->state == ScheduledConferenceState::Archived;
     }
 
     public function scopeType($query, ScheduledConferenceType $type)
@@ -151,7 +151,7 @@ class ScheduledConference extends Model implements HasMedia, HasAvatar, HasName
         return $query->where('type', $type);
     }
 
-    public function scopeState($query, SerieState $state)
+    public function scopeState($query, ScheduledConferenceState $state)
     {
         return $query->where('state', $state);
     }

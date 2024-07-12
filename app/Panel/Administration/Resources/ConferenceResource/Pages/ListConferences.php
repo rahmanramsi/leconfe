@@ -8,7 +8,7 @@ use Filament\Support\Enums\MaxWidth;
 use App\Actions\ScheduledConferences\ScheduledConferenceCreateAction;
 use Filament\Resources\Pages\ListRecords;
 use App\Actions\Conferences\ConferenceCreateAction;
-use App\Models\Enums\SerieState;
+use App\Models\Enums\ScheduledConferenceState;
 use App\Panel\Administration\Resources\ConferenceResource;
 
 class ListConferences extends ListRecords

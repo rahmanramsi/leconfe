@@ -4,7 +4,7 @@ namespace App\Panel\Conference\Resources;
 
 use App\Actions\ScheduledConferences\ScheduledConferenceUpdateAction;
 use App\Facades\Setting;
-use App\Models\Enums\SerieState;
+use App\Models\Enums\ScheduledConferenceState;
 use App\Models\Enums\ScheduledConferenceType;
 use App\Models\ScheduledConference;
 use App\Panel\Conference\Resources\SerieResource\Pages;
@@ -83,7 +83,7 @@ class ScheduledConferenceResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->recordUrl(fn (ScheduledConference $record) => route('filament.series.pages.dashboard', ['serie' => $record]))
+            ->recordUrl(fn (ScheduledConference $record) => route('filament.scheduledConference.pages.dashboard', ['serie' => $record]))
             ->modifyQueryUsing(fn (Builder $query) => $query->latest())
             ->columns([
                 IndexColumn::make('no'),
@@ -115,7 +115,7 @@ class ScheduledConferenceResource extends Resource
                         ])
                         ->hidden(fn (ScheduledConference $record) => $record->isArchived() || $record->isCurrent() || $record->isPublished() || $record->trashed())
                         ->action(function (ScheduledConference $record, array $data, Tables\Actions\Action $action) {
-                            $data['state'] = $data['set_as_current'] ? SerieState::Current : SerieState::Published;
+                            $data['state'] = $data['set_as_current'] ? ScheduledConferenceState::Current : ScheduledConferenceState::Published;
 
                             ScheduledConferenceUpdateAction::run($record, $data);
 
@@ -127,7 +127,7 @@ class ScheduledConferenceResource extends Resource
                         ->icon('heroicon-o-check-circle')
                         ->color('success')
                         ->hidden(fn (ScheduledConference $record) => $record->isArchived() || $record->isCurrent() || $record->isDraft() || $record->trashed())
-                        ->action(fn (ScheduledConference $record, Tables\Actions\Action $action) => $record->update(['state' => SerieState::Current]) && $action->success())
+                        ->action(fn (ScheduledConference $record, Tables\Actions\Action $action) => $record->update(['state' => ScheduledConferenceState::Current]) && $action->success())
                         ->successNotificationTitle(fn (ScheduledConference $scheduledConference) => $scheduledConference->title . ' is set as current'),
                     Tables\Actions\EditAction::make()
                         ->modalWidth(MaxWidth::ExtraLarge)

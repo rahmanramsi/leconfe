@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\Conference;
-use App\Models\Enums\SerieState;
+use App\Models\Enums\ScheduledConferenceState;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('title');
             $table->date('date_start')->nullable();
             $table->date('date_end')->nullable();
-            $table->enum('state', SerieState::array())->default(SerieState::Draft->value);
+            $table->enum('state', ScheduledConferenceState::array())->default(ScheduledConferenceState::Draft->value);
             $table->timestamps();
             $table->softDeletes();
         });

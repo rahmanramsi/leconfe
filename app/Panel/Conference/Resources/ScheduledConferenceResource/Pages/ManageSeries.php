@@ -3,7 +3,7 @@
 namespace App\Panel\Conference\Resources\SerieResource\Pages;
 
 use App\Actions\ScheduledConferences\ScheduledConferenceCreateAction;
-use App\Models\Enums\SerieState;
+use App\Models\Enums\ScheduledConferenceState;
 use App\Panel\Conference\Resources\ScheduledConferenceResource;
 use Filament\Actions;
 use Filament\Resources\Components\Tab;
@@ -28,13 +28,13 @@ class ManageSeries extends ManageRecords
     {
         return [
             'current' => Tab::make()
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('state', SerieState::Current)),
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('state', ScheduledConferenceState::Current)),
             'draft' => Tab::make()
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('state', SerieState::Draft)),
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('state', ScheduledConferenceState::Draft)),
             'upcoming' => Tab::make()
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('state', SerieState::Published)),
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('state', ScheduledConferenceState::Published)),
             'archived' => Tab::make()
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('state', SerieState::Archived)),
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('state', ScheduledConferenceState::Archived)),
         ];
     }
 }

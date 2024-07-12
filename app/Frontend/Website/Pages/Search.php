@@ -4,7 +4,7 @@ namespace App\Frontend\Website\Pages;
 
 use App\Models\Topic;
 use App\Models\Conference;
-use App\Models\Enums\SerieState;
+use App\Models\Enums\ScheduledConferenceState;
 use Livewire\Attributes\Url;
 use Livewire\WithPagination;
 use Livewire\Attributes\Title;
@@ -38,7 +38,7 @@ class Search extends Page
                 ->get(),
             'searchResults' => ScheduledConference::query()
                 ->withoutGlobalScopes()
-                ->whereNot('state', SerieState::Draft)
+                ->whereNot('state', ScheduledConferenceState::Draft)
                 ->when($this->query, fn (Builder $query) => $query->where('title', 'like', "%{$this->query}%"))
                 ->when(
                     $this->topic,
