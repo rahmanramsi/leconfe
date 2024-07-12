@@ -11,7 +11,7 @@ class Permission extends Model
     protected function context(): Attribute
     {
         [$context, $action] = explode(':', $this->name);
-        // dd($context);
+
         return Attribute::make(
             get: fn () => $context,
         );
@@ -34,5 +34,15 @@ class Permission extends Model
                 throw new \Exception('Permission cannot be deleted because it is currently assigned to a roles');
             }
         });
+    }
+
+    public static function getProtectedPermissionContexts()
+    {
+        return [
+            'Administration',
+            'Permission',
+            'Plugin',
+            'Role',
+        ];
     }
 }

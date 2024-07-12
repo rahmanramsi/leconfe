@@ -2,6 +2,7 @@
 
 namespace App\Actions\Roles;
 
+use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Support\Facades\DB;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -19,6 +20,12 @@ class RoleCreateAction
 
             $role = Role::create($data);
             if (isset($data['permissions'])) {
+                $protectedPermissionContexts = Permission::getProtectedPermissionContexts();
+                $data['permissions'] = collect($data['permissions'])
+                    ->filter(fn ($value, $permission) => !in_array(explode(':', $permission)[0], $protectedPermissionContexts))
+                    ->keys()
+                    ->toArray();
+                    
                 $role->syncPermissions($data['permissions']);
             }
 

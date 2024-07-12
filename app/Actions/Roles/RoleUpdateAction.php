@@ -2,6 +2,7 @@
 
 namespace App\Actions\Roles;
 
+use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Support\Facades\DB;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -18,6 +19,13 @@ class RoleUpdateAction
             $role->update($data);
 
             if (isset($data['permissions'])) {
+                // filter out protected permissions
+                $protectedPermissionContexts = Permission::getProtectedPermissionContexts();
+                $data['permissions'] = collect($data['permissions'])
+                    ->filter(fn ($value, $permission) => !in_array(explode(':', $permission)[0], $protectedPermissionContexts))
+                    ->keys()
+                    ->toArray();
+
                 $role->syncPermissions($data['permissions']);
             }
 

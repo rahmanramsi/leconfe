@@ -76,7 +76,13 @@ class PermissionResource extends Resource
                     ->color(fn (int $state) => $state > 0 ? 'primary' : 'gray'),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->mutateRecordDataUsing(function (Permission $record, array $data) {
+                        $data['context'] = $record->context;
+                        $data['action'] = $record->action;  
+
+                        return $data;
+                    }),
                 Tables\Actions\DeleteAction::make()
                     ->using(function (Permission $record, Tables\Actions\DeleteAction $action) {
                         try {
@@ -90,9 +96,6 @@ class PermissionResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ])
-            ->emptyStateActions([
-                Tables\Actions\CreateAction::make(),
             ]);
     }
 
