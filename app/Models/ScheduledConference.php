@@ -116,9 +116,7 @@ class ScheduledConference extends Model implements HasMedia, HasAvatar, HasName
 
     public function getHomeUrl(): string
     {
-        return $this->isCurrent()
-            ? route('livewirePageGroup.conference.pages.home', ['conference' => $this->conference])
-            : route('livewirePageGroup.series.pages.home', ['conference' => $this->conference, 'serie' => $this->path]);
+        return route('livewirePageGroup.series.pages.home', ['conference' => $this->conference, 'serie' => $this->path]);
     }
 
     public function isCurrent(): bool
