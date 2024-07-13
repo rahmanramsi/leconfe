@@ -8,8 +8,8 @@ use App\Http\Middleware\IdentifyConference;
 use App\Http\Middleware\IdentifySeries;
 use App\Http\Middleware\MustVerifyEmail;
 use App\Http\Middleware\PanelAuthenticate;
+use App\Panel\Administration\Pages\Profile;
 use App\Panel\Conference\Pages\Dashboard;
-use App\Panel\Conference\Pages\Profile;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
@@ -24,7 +24,6 @@ use Filament\View\PanelsRenderHook;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
-use Filament\Http\Responses\Auth\Contracts\LogoutResponse as LogoutResponseContract;
 
 
 class PanelProvider extends ServiceProvider
@@ -40,10 +39,6 @@ class PanelProvider extends ServiceProvider
             ->discoverPages(in: app_path('Panel/ScheduledConference/Pages'), for: 'App\\Panel\\ScheduledConference\\Pages')
             ->discoverWidgets(in: app_path('Panel/ScheduledConference/Widgets'), for: 'App\\Panel\\ScheduledConference\\Widgets')
             ->discoverLivewireComponents(in: app_path('Panel/ScheduledConference/Livewire'), for: 'App\\Panel\\ScheduledConference\\Livewire')
-            ->userMenuItems([
-                'logout' => MenuItem::make()
-                    ->url(fn (): string => route('conference.logout')),
-            ])
             ->renderHook(
                 PanelsRenderHook::TOPBAR_START,
                 fn () => view('panel.series.hooks.topbar'),
@@ -78,12 +73,8 @@ class PanelProvider extends ServiceProvider
             ->discoverPages(in: app_path('Panel/Conference/Pages'), for: 'App\\Panel\\Conference\\Pages')
             ->discoverWidgets(in: app_path('Panel/Conference/Widgets'), for: 'App\\Panel\\Conference\\Widgets')
             ->discoverLivewireComponents(in: app_path('Panel/Conference/Livewire'), for: 'App\\Panel\\Conference\\Livewire')
-            ->pages(static::getPages())
-            ->userMenuItems([
-                'logout' => MenuItem::make()
-                    ->url(fn (): string => route('conference.logout')),
-                'profile' => MenuItem::make()
-                    ->url(fn (): string => Profile::getUrl()),
+            ->pages([
+                Dashboard::class,
             ])
             ->renderHook(
                 PanelsRenderHook::TOPBAR_START,
@@ -123,12 +114,6 @@ class PanelProvider extends ServiceProvider
                 PanelsRenderHook::SIDEBAR_NAV_START,
                 fn () => view('panel.administration.hooks.sidebar-nav-start'),
             )
-            ->userMenuItems([
-                'logout' => MenuItem::make()
-                    ->url(fn (): string => route('logout')),
-                'profile' => MenuItem::make()
-                    ->url(fn (): string => Profile::getUrl(panel: 'administration')),
-            ])
             ->middleware(static::getMiddleware(), true)
             ->authMiddleware(static::getAuthMiddleware(), true);
 
@@ -153,6 +138,12 @@ class PanelProvider extends ServiceProvider
             ->viteTheme('resources/panel/css/panel.css')
             ->colors([
                 'primary' => Color::hex('#1c3569'),
+            ])
+            ->userMenuItems([
+                'logout' => MenuItem::make()
+                    ->url(fn (): string => route('logout')),
+                'profile' => MenuItem::make()
+                    ->url(fn (): string => Profile::getUrl()),
             ])
             ->darkMode(false)
             ->databaseNotifications()
@@ -184,18 +175,6 @@ class PanelProvider extends ServiceProvider
         Blade::anonymousComponentPath(resource_path('views/panel/conference/components'), 'panel');
         Blade::anonymousComponentPath(resource_path('views/panel/administration/components'), 'administration');
         Blade::anonymousComponentPath(resource_path('views/panel/series/components'), 'series');
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            Dashboard::class,
-        ];
-    }
-
-    public static function getWidgets(): array
-    {
-        return [];
     }
 
     public static function getMiddleware(): array

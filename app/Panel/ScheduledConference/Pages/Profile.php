@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Panel\Conference\Pages;
+namespace App\Panel\ScheduledConference\Pages;
 
 
 use App\Panel\Administration\Pages\Profile as ProfilePage;
