@@ -8,7 +8,7 @@ use Filament\Widgets\Widget;
 
 class SpeakerWidget extends Widget
 {
-    protected static string $view = 'panel.series.widgets.speaker-widget';
+    protected static string $view = 'panel.scheduledConference.widgets.speaker-widget';
 
     protected static ?int $sort = 2;
 

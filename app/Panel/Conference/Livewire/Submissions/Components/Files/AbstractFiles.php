@@ -3,7 +3,7 @@
 namespace App\Panel\Conference\Livewire\Submissions\Components\Files;
 
 use App\Constants\SubmissionFileCategory;
-use App\Panel\Conference\Livewire\Workflows\Classes\StageManager;
+use App\Panel\ScheduledConference\Livewire\Workflows\Classes\StageManager;
 
 class AbstractFiles extends SubmissionFilesTable
 {

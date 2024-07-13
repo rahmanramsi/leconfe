@@ -3,20 +3,18 @@
 namespace App\Panel\ScheduledConference\Pages;
 
 use App\Infolists\Components\LivewireEntry;
-use App\Infolists\Components\VerticalTabs\Tab;
-use App\Infolists\Components\VerticalTabs\Tabs;
-use App\Panel\Conference\Livewire\Tables\AuthorRoleTable;
-use App\Panel\Conference\Livewire\Workflows\AbstractSetting;
-use App\Panel\Conference\Livewire\Workflows\EditingSetting;
-use App\Panel\Conference\Livewire\Workflows\Payment\Tables\SubmissionPaymentItemTable;
-use App\Panel\Conference\Livewire\Workflows\PaymentSetting;
-use App\Panel\Conference\Livewire\Workflows\PeerReview\Forms\Guidelines;
-use App\Panel\Conference\Livewire\Workflows\PeerReviewSetting;
+use App\Infolists\Components\VerticalTabs as InfolistsVerticalTabs;
+use App\Panel\ScheduledConference\Livewire\AuthorRoleTable;
+use App\Panel\ScheduledConference\Livewire\Workflows\AbstractSetting;
+use App\Panel\ScheduledConference\Livewire\Workflows\EditingSetting;
+use App\Panel\ScheduledConference\Livewire\Workflows\Payment\Tables\SubmissionPaymentItemTable;
+use App\Panel\ScheduledConference\Livewire\Workflows\PaymentSetting;
+use App\Panel\ScheduledConference\Livewire\Workflows\PeerReview\Forms\Guidelines;
+use App\Panel\ScheduledConference\Livewire\Workflows\PeerReviewSetting;
 use Filament\Facades\Filament;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Infolists\Components\Tabs as HorizontalTabs;
-use Filament\Infolists\Components\Tabs\Tab as HorizontalTab;
+use Filament\Infolists\Components\Tabs;
 use Filament\Infolists\Concerns\InteractsWithInfolists;
 use Filament\Infolists\Contracts\HasInfolists;
 use Filament\Infolists\Infolist;
@@ -57,15 +55,14 @@ class Workflow extends Page implements HasForms, HasInfolists
     public function infolist(Infolist $infolist): Infolist
     {
         return $infolist->schema([
-            Tabs::make()
-                ->persistTabInQueryString()
+            InfolistsVerticalTabs\Tabs::make()
                 ->tabs([
-                    Tab::make('Call for Abstract')
+                    InfolistsVerticalTabs\Tab::make('Call for Abstract')
                         ->icon('iconpark-documentfolder-o')
                         ->schema([
-                            HorizontalTabs::make()
+                            Tabs::make()
                                 ->tabs([
-                                    HorizontalTab::make('General')
+                                    Tabs\Tab::make('General')
                                         ->icon('iconpark-documentfolder-o')
                                         ->schema([
                                             LivewireEntry::make('abstract-setting')
@@ -73,17 +70,17 @@ class Workflow extends Page implements HasForms, HasInfolists
                                         ]),
                                 ]),
                         ]),
-                    Tab::make('Payment')
+                    InfolistsVerticalTabs\Tab::make('Payment')
                         ->icon('heroicon-o-currency-dollar')
                         ->schema([
-                            HorizontalTabs::make()
+                            Tabs::make()
                                 ->tabs([
-                                    HorizontalTab::make('General')
+                                    Tabs\Tab::make('General')
                                         ->schema([
                                             LivewireEntry::make('payment-setting')
                                                 ->livewire(PaymentSetting::class),
                                         ]),
-                                    HorizontalTab::make('Submission Payment Items')
+                                    Tabs\Tab::make('Submission Payment Items')
                                         ->schema([
                                             LivewireEntry::make('payment-items')
                                                 ->livewire(SubmissionPaymentItemTable::class),
@@ -91,26 +88,26 @@ class Workflow extends Page implements HasForms, HasInfolists
                                 ]),
 
                         ]),
-                    Tab::make('Peer Review')
+                    InfolistsVerticalTabs\Tab::make('Peer Review')
                         ->icon('iconpark-search-o')
                         ->schema([
-                            HorizontalTabs::make()
+                            Tabs::make()
                                 ->tabs([
-                                    HorizontalTab::make('General')
+                                    Tabs\Tab::make('General')
                                         ->icon('iconpark-documentfolder-o')
                                         ->schema([
                                             LivewireEntry::make('peer-review-setting')
                                                 ->livewire(PeerReviewSetting::class)
                                                 ->lazy(),
                                         ]),
-                                    HorizontalTab::make('Reviewer Guidelines')
+                                    Tabs\Tab::make('Reviewer Guidelines')
                                         ->icon('iconpark-docsuccess-o')
                                         ->schema([
                                             LivewireEntry::make('peer-review-setting')
                                                 ->livewire(Guidelines::class)
                                                 ->lazy(),
                                         ]),
-                                    // HorizontalTab::make("Review Forms")
+                                    // Tabs\Tab::make("Review Forms")
                                     //     ->icon("iconpark-formone-o")
                                     //     ->schema([
                                     //         LivewireEntry::make('peer-review-form-templates')
@@ -119,12 +116,12 @@ class Workflow extends Page implements HasForms, HasInfolists
                                     //     ])
                                 ]),
                         ]),
-                    Tab::make('Editing')
+                    InfolistsVerticalTabs\Tab::make('Editing')
                         ->icon('iconpark-paperclip')
                         ->schema([
-                            HorizontalTabs::make()
+                            Tabs::make()
                                 ->tabs([
-                                    HorizontalTab::make('General')
+                                    Tabs\Tab::make('General')
                                         ->icon('iconpark-documentfolder-o')
                                         ->schema([
                                             LivewireEntry::make('editing-setting')
@@ -133,12 +130,12 @@ class Workflow extends Page implements HasForms, HasInfolists
                                         ]),
                                 ]),
                         ]),
-                    Tab::make('Advanced')
+                    InfolistsVerticalTabs\Tab::make('Advanced')
                         ->icon('heroicon-o-bookmark-square')
                         ->schema([
-                            HorizontalTabs::make()
+                            Tabs::make()
                                 ->tabs([
-                                    HorizontalTab::make('Author Roles')
+                                    Tabs\Tab::make('Author Roles')
                                         ->icon('heroicon-o-users')
                                         ->extraAttributes(['class' => '!p-0'])
                                         ->schema([

@@ -7,7 +7,6 @@ use Filament\Pages\Page;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Filament\Infolists\Components\Tabs;
-use App\Infolists\Components\VerticalTabs as InfolistsVerticalTabs;
 use App\Infolists\Components\LivewireEntry;
 use App\Panel\Administration\Livewire\SidebarSetting;
 use App\Panel\Conference\Livewire\NavigationMenuSetting;

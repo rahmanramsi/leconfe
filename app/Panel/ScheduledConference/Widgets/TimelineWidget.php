@@ -7,7 +7,7 @@ use Filament\Widgets\Widget;
 
 class TimelineWidget extends Widget
 {
-    protected static string $view = 'panel.series.widgets.timeline-widget';
+    protected static string $view = 'panel.scheduledConference.widgets.timeline-widget';
 
     protected static ?int $sort = 1;
 

@@ -10,7 +10,7 @@ use App\Models\Enums\SubmissionStage;
 use App\Models\Enums\SubmissionStatus;
 use App\Models\MailTemplate;
 use App\Models\Submission;
-use App\Panel\Conference\Livewire\Workflows\Classes\StageManager;
+use App\Panel\ScheduledConference\Livewire\Workflows\Classes\StageManager;
 use App\Panel\Conference\Resources\SubmissionResource;
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;

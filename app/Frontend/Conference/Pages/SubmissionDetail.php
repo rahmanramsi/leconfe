@@ -4,7 +4,7 @@ namespace App\Frontend\Conference\Pages;
 
 use App\Facades\MetaTag;
 use App\Models\Submission;
-use App\Panel\Conference\Livewire\Workflows\Classes\StageManager;
+use App\Panel\ScheduledConference\Livewire\Workflows\Classes\StageManager;
 use Illuminate\Contracts\Support\Htmlable;
 use Livewire\Attributes\Title;
 use Illuminate\Support\Facades\Route;

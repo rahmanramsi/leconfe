@@ -41,11 +41,11 @@ class PanelProvider extends ServiceProvider
             ->discoverLivewireComponents(in: app_path('Panel/ScheduledConference/Livewire'), for: 'App\\Panel\\ScheduledConference\\Livewire')
             ->renderHook(
                 PanelsRenderHook::TOPBAR_START,
-                fn () => view('panel.series.hooks.topbar'),
+                fn () => view('panel.scheduledConference.hooks.topbar'),
             )
             ->renderHook(
                 PanelsRenderHook::SIDEBAR_NAV_START,
-                fn () => view('panel.series.hooks.sidebar-nav-start'),
+                fn () => view('panel.scheduledConference.hooks.sidebar-nav-start'),
             )
             ->middleware([
                 IdentifyConference::class,

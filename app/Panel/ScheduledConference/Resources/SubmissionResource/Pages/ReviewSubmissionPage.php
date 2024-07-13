@@ -9,7 +9,7 @@ use App\Models\Enums\UserRole;
 use App\Models\Review;
 use App\Models\Submission;
 use App\Models\User;
-use App\Panel\Conference\Livewire\Workflows\Concerns\InteractWithTenant;
+use App\Panel\ScheduledConference\Livewire\Workflows\Concerns\InteractWithTenant;
 use App\Panel\ScheduledConference\Resources\SubmissionResource;
 use Awcodes\Shout\Components\ShoutEntry;
 use Filament\Actions\Action;

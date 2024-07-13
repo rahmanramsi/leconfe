@@ -7,7 +7,7 @@ use Filament\Widgets\Widget;
 
 class VenueWidget extends Widget
 {
-    protected static string $view = 'panel.series.widgets.venue-widget';
+    protected static string $view = 'panel.scheduledConference.widgets.venue-widget';
 
     protected static ?int $sort = 3;
 
