@@ -11,10 +11,12 @@ use App\Infolists\Components\VerticalTabs as InfolistsVerticalTabs;
 use App\Infolists\Components\LivewireEntry;
 use App\Panel\Administration\Livewire\SidebarSetting;
 use App\Panel\Conference\Livewire\NavigationMenuSetting;
+use App\Panel\ScheduledConference\Livewire\ContactSetting;
 use App\Panel\ScheduledConference\Livewire\InformationSetting;
+use App\Panel\ScheduledConference\Livewire\MastHeadSetting;
 use App\Panel\ScheduledConference\Livewire\SetupSetting;
 use App\Panel\ScheduledConference\Livewire\SponsorSetting;
-
+use App\Panel\ScheduledConference\Livewire\TopicTable;
 
 class ScheduledConferenceSetting extends Page
 {
@@ -33,59 +35,32 @@ class ScheduledConferenceSetting extends Page
 
     public static function shouldRegisterNavigation(): bool
     {
-        return Auth::user()->can('update', App::getCurrentConference());
+        return Auth::user()->can('update', App::getCurrentScheduledConference());
     }
 
     public function infolist(Infolist $infolist): Infolist
     {
         return $infolist
             ->schema([
-                Tabs::make('website_settings')
+                Tabs::make()
                     ->contained(false)
                     ->tabs([
-                        Tabs\Tab::make('About')
+                        Tabs\Tab::make('Masthead')
                             ->schema([
-                                InfolistsVerticalTabs\Tabs::make()
-                                    ->schema([
-                                        InfolistsVerticalTabs\Tab::make('Information')
-                                            ->icon('heroicon-o-information-circle')
-                                            ->schema([
-                                                LivewireEntry::make('information-setting')
-                                                    ->livewire(InformationSetting::class)
-                                            ]),
-                                        InfolistsVerticalTabs\Tab::make('Sponsors')
-                                            ->icon("lineawesome-users-solid")
-                                            ->schema([
-                                                LivewireEntry::make('sponsors-setting')
-                                                    ->livewire(SponsorSetting::class),
-                                            ])
-                                    ]),
+                                LivewireEntry::make('masthead')
+                                    ->livewire(MastHeadSetting::class),
                             ]),
-
-                        Tabs\Tab::make('Appearance')
+                        Tabs\Tab::make('Contact')
                             ->schema([
-                                InfolistsVerticalTabs\Tabs::make()
-                                    ->schema([
-                                        InfolistsVerticalTabs\Tab::make('Setup')
-                                            ->icon('heroicon-o-adjustments-horizontal')
-                                            ->schema([
-                                                LivewireEntry::make('setup-setting')
-                                                    ->livewire(SetupSetting::class),
-                                            ]),
-                                        InfolistsVerticalTabs\Tab::make('Sidebar')
-                                            ->icon('heroicon-o-view-columns')
-                                            ->schema([
-                                                LivewireEntry::make('sidebar-setting')
-                                                    ->livewire(SidebarSetting::class),
-                                            ]),
-                                        InfolistsVerticalTabs\Tab::make('Navigation Menu')
-                                            ->icon('heroicon-o-list-bullet')
-                                            ->schema([
-                                                LivewireEntry::make('navigation-menu-setting')
-                                                    ->livewire(NavigationMenuSetting::class),
-                                            ]),
-                                    ]),
+                                LivewireEntry::make('contact')
+                                    ->livewire(ContactSetting::class),
                             ]),
+                        Tabs\Tab::make('Topics')
+                            ->schema([
+                                LivewireEntry::make('topics')
+                                    ->livewire(TopicTable::class),
+                            ]),
+                        
                     ]),
             ]);
     }
