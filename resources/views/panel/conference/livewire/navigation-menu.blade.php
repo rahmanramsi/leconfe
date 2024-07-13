@@ -1,6 +1,6 @@
 <div class="navigation-menus space-y-4">
     @forelse ($navigationMenus as $navigationMenu)
-        <div class="navigation-menu bg-white rounded-lg border">
+        <div class="navigation-menu bg-white rounded-xl border">
             <div class="flex items-center flex-wrap p-4 gap-2">
                 <div>
                     <h2 class="text-base font-medium leading-none">{{ $navigationMenu->name }}</h2>
