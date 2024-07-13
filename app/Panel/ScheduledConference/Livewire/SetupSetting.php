@@ -18,6 +18,7 @@ use Filament\Forms\Form;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
+use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
 
 class SetupSetting extends Component implements HasForms
 {
@@ -37,7 +38,7 @@ class SetupSetting extends Component implements HasForms
 
     public function render()
     {
-        return view('panel.conference.livewire.form');
+        return view('forms.form');
     }
 
     public function form(Form $form): Form
@@ -47,29 +48,19 @@ class SetupSetting extends Component implements HasForms
             ->schema([
                 Section::make()
                     ->schema([
-                        SpatieMediaLibraryFileUpload::make('favicon')
-                            ->collection('favicon')
+                        SpatieMediaLibraryFileUpload::make('logo')
+                            ->collection('logo')
                             ->image()
                             ->imageResizeUpscale(false)
-                            ->conversion('thumb')
-                            ->columnSpan([
-                                'xl' => 1,
-                                'sm' => 2,
-                            ]),
-                        ColorPicker::make('meta.appearance_color')
-                            ->label('Appearance Color'),
-                        CssFileUpload::make('styleSheet')
-                            ->label('Custom Stylesheet')
-                            ->collection('styleSheet')
-                            ->getUploadedFileNameForStorageUsing(static function (BaseFileUpload $component, TemporaryUploadedFile $file) {
-                                return Str::random().'.css';
-                            })
-                            ->acceptedFileTypes(['text/css'])
-                            ->columnSpan([
-                                'xl' => 1,
-                                'sm' => 2,
-                            ]),
-
+                            ->conversion('thumb'),
+                        SpatieMediaLibraryFileUpload::make('thumbnail')
+                            ->label('Conference Thumbnail')
+                            ->collection('thumbnail')
+                            ->helperText('An image representation of the serie that will be used in the list of series.')
+                            ->image()
+                            ->conversion('thumb'),
+                        TinyEditor::make('meta.page_footer')
+                            ->minHeight(300),
                     ]),
 
                 Actions::make([

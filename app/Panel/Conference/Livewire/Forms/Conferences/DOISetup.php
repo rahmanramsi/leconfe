@@ -36,7 +36,7 @@ class DOISetup extends Component implements HasForms
 
     public function render()
     {
-        return view('panel.conference.livewire.form');
+        return view('forms.form');
     }
 
     public function form(Form $form): Form

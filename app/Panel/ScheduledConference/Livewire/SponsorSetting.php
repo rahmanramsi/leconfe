@@ -76,6 +76,6 @@ class SponsorSetting extends Component implements HasForms, HasTable
 
     public function render()
     {
-        return view('panel.conference.livewire.table');
+        return view('tables.table');
     }
 }

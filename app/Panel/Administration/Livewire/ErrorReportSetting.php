@@ -29,7 +29,7 @@ class ErrorReportSetting extends Component implements HasForms
 
     public function render()
     {
-        return view('panel.administration.livewire.form');
+        return view('forms.form');
     }
 
     public function form(Form $form): Form

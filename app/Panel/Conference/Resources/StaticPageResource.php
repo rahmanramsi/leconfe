@@ -22,7 +22,7 @@ class StaticPageResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-credit-card';
 
-    protected static ?string $navigationGroup = 'Website Management';
+    protected static ?string $navigationGroup = 'Settings';
 
     public static function getEloquentQuery(): Builder
     {

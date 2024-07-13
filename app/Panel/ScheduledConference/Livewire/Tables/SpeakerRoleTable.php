@@ -24,7 +24,7 @@ class SpeakerRoleTable extends Component implements HasForms, HasTable
 
     public function render()
     {
-        return view('panel.conference.livewire.tables.table');
+        return view('tables.table');
     }
 
     public function table(Table $table): Table

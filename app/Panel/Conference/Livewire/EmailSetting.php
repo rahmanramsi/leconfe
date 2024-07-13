@@ -54,7 +54,7 @@ class EmailSetting extends Component implements HasForms, HasInfolists, HasTable
 
     public function render()
     {
-        return view('panel.conference.livewire.infolist');
+        return view('infolists.infolist');
     }
 
     public function table(Table $table): Table

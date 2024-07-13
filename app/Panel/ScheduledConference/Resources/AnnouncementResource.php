@@ -44,14 +44,11 @@ class AnnouncementResource extends Resource
             ->schema([
                 TextInput::make('title')
                     ->required(),
-                SpatieMediaLibraryFileUpload::make('featured_image')
-                    ->collection('featured_image')
-                    ->image(),
                 Textarea::make('meta.summary')
-                    ->rows(5),
+                    ->autosize(),
                 TinyEditor::make('meta.content')
                     ->label('Announcement')
-                    ->minHeight(600)
+                    // ->minHeight(300)
                     ->helperText('The complete announcement content.'),
                 DatePicker::make('expires_at')
                     ->minDate(today()->addDay()),
