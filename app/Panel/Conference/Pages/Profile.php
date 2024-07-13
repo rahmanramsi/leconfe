@@ -47,10 +47,12 @@ class Profile extends Page implements HasForms
             ...$user->attributesToArray(),
             'meta' => $meta,
         ]);
+
         $this->rolesForm->fill([
-            'roles' => $user->roles->pluck('name')->toArray(),
+            'roles' => $user->roles->filter(fn($role) => in_array($role->name, UserRole::selfAssignedRoleValues()))->pluck('name')->toArray(),
             'meta' => $meta,
         ]);
+
         $this->notificationForm->fill([
             'meta' => $meta,
         ]);
@@ -146,12 +148,18 @@ class Profile extends Page implements HasForms
         $this->skipRender();
         try {
             $data = $this->rolesForm->getState();
-            
             $user = auth()->user();
             
             UserUpdateAction::run($user, $data);
 
-            $user->syncRoles($data['roles']);
+            foreach (UserRole::selfAssignedRoleValues() as $roleName) {
+                if($user->hasRole($roleName) && !in_array($roleName, $data['roles'])) {
+                    $user->removeRole($roleName);
+                } elseif(!$user->hasRole($roleName) && in_array($roleName, $data['roles'])) {
+                    $user->assignRole($roleName);
+                }
+            }
+            
             
             Notification::make()
                 ->success()
