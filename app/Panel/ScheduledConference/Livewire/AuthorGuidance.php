@@ -59,7 +59,8 @@ class AuthorGuidance extends Component implements HasForms
                         TinyEditor::make('meta.before_you_begin')
                             ->label('Before You Begin')
                             ->helperText('Provide a brief explanation of the submission process so that the author knows what to expect.')
-                            ->profile('basic'),
+                            ->toolbar('bold italic superscript subscript | link | blockquote bullist numlist')
+                            ->plugins('autoresize link wordcount lists'),
                         TinyEditor::make('meta.submission_checklist')
                             ->label('Submission Checklist')
                             ->helperText('Provide a brief explanation of the submission process so that the author knows what to expect.')
