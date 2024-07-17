@@ -20,7 +20,7 @@ use Filament\Forms\Form;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
-use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
+use App\Forms\Components\TinyEditor;
 use Squire\Models\Country;
 
 class MastHeadSetting extends Component implements HasForms

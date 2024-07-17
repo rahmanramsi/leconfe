@@ -27,7 +27,7 @@ use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\Page;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Mail;
-use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
+use App\Forms\Components\TinyEditor;
 
 class ReviewSubmissionPage extends Page implements HasActions, HasInfolists
 {

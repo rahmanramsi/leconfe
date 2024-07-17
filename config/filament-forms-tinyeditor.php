@@ -30,9 +30,9 @@ return [
             'upload_directory' => 'tinyeditor',
         ],
 
-        'template' => [
-            'plugins' => 'autoresize template',
-            'toolbar' => 'template',
+        'basic-without-image' => [
+            'plugins' => 'autoresize link wordcount code lists',
+            'toolbar' => 'bold italic superscript subscript | link | blockquote bullist numlist | code',
             'upload_directory' => 'tinyeditor',
         ],
         /*

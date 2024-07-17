@@ -15,7 +15,7 @@ use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Concerns\InteractsWithForms;
 use App\Actions\Conferences\ConferenceUpdateAction;
 use Filament\Forms\Components\Group;
-use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
+use App\Forms\Components\TinyEditor;
 
 class AdditionalInformationSetting extends Component implements HasForms
 {

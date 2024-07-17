@@ -18,7 +18,7 @@ use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
+use App\Forms\Components\TinyEditor;
 use App\Panel\ScheduledConference\Resources\AnnouncementResource\Pages;
 use App\Tables\Columns\IndexColumn;
 use Filament\Forms\Components\Textarea;

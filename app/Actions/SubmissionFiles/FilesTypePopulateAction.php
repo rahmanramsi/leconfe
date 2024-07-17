@@ -12,10 +12,14 @@ class FilesTypePopulateAction
     public function handle()
     {
         foreach ([
-            'Abstract',
-            'Full Paper',
-            'Pamflet',
-            'Poster',
+            'Research Instrument',
+            'Research Material',
+            'Research Result',
+            'Transcripts',
+            'Data Analysis',
+            'Data Set',
+            'Source Text',
+            'Other',
         ] as $type) {
             SubmissionFileType::firstOrCreate([
                 'name' => $type,

@@ -19,7 +19,7 @@ use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Illuminate\Support\HtmlString;
 use Livewire\Component;
-use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
+use App\Forms\Components\TinyEditor;
 
 class InformationSetting extends Component implements HasForms
 {

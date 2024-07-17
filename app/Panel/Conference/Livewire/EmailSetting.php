@@ -35,7 +35,7 @@ use Filament\Tables\Table;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Livewire\Component;
-use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
+use App\Forms\Components\TinyEditor;
 
 class EmailSetting extends Component implements HasForms, HasInfolists, HasTable
 {

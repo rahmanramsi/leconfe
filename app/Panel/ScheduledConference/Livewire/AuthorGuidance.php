@@ -24,7 +24,7 @@ use Illuminate\Support\HtmlString;
 use Livewire\Component;
 use App\Forms\Components\TinyEditor;
 
-class InformationSetting extends Component implements HasForms
+class AuthorGuidance extends Component implements HasForms
 {
     use InteractsWithForms;
 
@@ -51,47 +51,20 @@ class InformationSetting extends Component implements HasForms
                 Section::make()
                     ->columns(1)
                     ->schema([
-                        TextInput::make('title')
-                            ->label('Scheduled  Conference Title')
-                            ->autofocus()
-                            ->autocomplete()
-                            ->required()
-                            ->placeholder('Enter the title of the serie'),
-                        Grid::make([
-                            'xl' => 2
-                        ])
-                            ->schema([
-                                SpatieMediaLibraryFileUpload::make('thumbnail')
-                                    ->collection('thumbnail')
-                                    ->helperText('An image representation of the serie that will be used in the list of series.')
-                                    ->image()
-                                    ->conversion('thumb'),
-                                SpatieMediaLibraryFileUpload::make('cover')
-                                    ->collection('cover')
-                                    ->helperText('Cover image for the serie.')
-                                    ->image()
-                                    ->conversion('thumb'),
-                            ]),
-                        Grid::make()
-                            ->schema([
-                                DatePicker::make('date_start')
-                                    ->label('Start Date')
-                                    ->placeholder('Enter the start date of the serie')
-                                    ->requiredWith('date_end'),
-                                DatePicker::make('date_end')
-                                    ->label('End Date')
-                                    ->afterOrEqual('date_start')
-                                    ->requiredWith('date_start')
-                                    ->placeholder('Enter the end date of the serie'),
-                            ]),
-                        Select::make('type')
-                            ->required()
-                            ->options(ScheduledConferenceType::array()),
-                        TinyEditor::make('meta.about')
-                            ->label('About Serie')
-                            ->minHeight(300),
-                        TinyEditor::make('meta.additional_content')
-                            ->minHeight(300),
+                        TinyEditor::make('meta.author_guidelines')
+                            ->label('Author Guidelines')
+                            ->helperText('Provide guidance on anything authors might need to know, such as bibliographic and formatting standards, alongside examples of common citation formats to be used. You may also wish to provide details about the preferred format and subject matter of submissions.')
+                            ->toolbar('bold italic superscript subscript | link | blockquote bullist numlist')
+                            ->plugins('autoresize link wordcount lists'),
+                        TinyEditor::make('meta.before_you_begin')
+                            ->label('Before You Begin')
+                            ->helperText('Provide a brief explanation of the submission process so that the author knows what to expect.')
+                            ->profile('basic'),
+                        TinyEditor::make('meta.submission_checklist')
+                            ->label('Submission Checklist')
+                            ->helperText('Provide a brief explanation of the submission process so that the author knows what to expect.')
+                            ->toolbar('bold italic superscript subscript | link | blockquote bullist numlist')
+                            ->plugins('autoresize link wordcount lists'),
                     ]),
                 Actions::make([
                     Action::make('save')

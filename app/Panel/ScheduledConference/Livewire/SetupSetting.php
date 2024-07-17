@@ -18,7 +18,7 @@ use Filament\Forms\Form;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
-use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
+use App\Forms\Components\TinyEditor;
 
 class SetupSetting extends Component implements HasForms
 {

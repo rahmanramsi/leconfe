@@ -59,7 +59,7 @@ use Filament\Infolists\Components\Tabs\Tab as HorizontalTab;
 use App\Panel\Conference\Livewire\Submissions\CallforAbstract;
 use App\Panel\Conference\Livewire\Submissions\Forms\References;
 use App\Panel\ScheduledConference\Livewire\Workflows\Classes\StageManager;
-use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
+use App\Forms\Components\TinyEditor;
 use App\Panel\Conference\Livewire\Submissions\Components\GalleyList;
 use App\Panel\ScheduledConference\Livewire\Workflows\Concerns\InteractWithTenant;
 use App\Panel\Conference\Livewire\Submissions\Components\ActivityLogList;

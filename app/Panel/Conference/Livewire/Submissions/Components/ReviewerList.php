@@ -43,7 +43,7 @@ use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\HtmlString;
 use Livewire\Component;
-use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
+use App\Forms\Components\TinyEditor;
 use STS\FilamentImpersonate\Tables\Actions\Impersonate;
 
 class ReviewerList extends Component implements HasForms, HasTable

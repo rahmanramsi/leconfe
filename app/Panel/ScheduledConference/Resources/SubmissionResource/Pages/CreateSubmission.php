@@ -6,17 +6,21 @@ use App\Actions\Submissions\SubmissionCreateAction;
 use App\Panel\ScheduledConference\Livewire\Workflows\Classes\StageManager;
 use App\Panel\ScheduledConference\Resources\SubmissionResource;
 use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Resources\Pages\Page;
+use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\HtmlString;
 
 class CreateSubmission extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    protected static ?string $title = '';
+    protected static ?string $title = 'Make a Submission';
 
     protected static string $resource = SubmissionResource::class;
 
@@ -34,6 +38,12 @@ class CreateSubmission extends Page implements HasForms
         $this->form->fill([]);
     }
 
+    public function getHeading(): string | Htmlable
+    {
+        return '';
+    }
+
+
     protected function getViewData(): array
     {
         return [
@@ -44,6 +54,23 @@ class CreateSubmission extends Page implements HasForms
     protected function getFormSchema(): array
     {
         return [
+            Placeholder::make('before_you_begin')
+                ->label('Before you begin')
+                ->extraAttributes(['class' => 'prose prose-sm'])
+                ->visible(fn () => app()->getCurrentScheduledConference()->getMeta('before_you_begin') !== null)
+                ->content(fn () => new HtmlString(app()->getCurrentScheduledConference()->getMeta('before_you_begin'))),
+            Fieldset::make('Submission Checklist')
+                ->columns(1)
+                ->schema([
+                    Placeholder::make('submission_checklist')
+                        ->hiddenLabel()
+                        ->extraAttributes(['class' => 'prose prose-sm'])
+                        ->visible(fn () => app()->getCurrentScheduledConference()->getMeta('submission_checklist') !== null)
+                        ->content(fn () => new HtmlString(app()->getCurrentScheduledConference()->getMeta('submission_checklist'))),
+                    Checkbox::make('submissionRequirements')
+                        ->required()
+                        ->label('Yes, my submission meets all of these requirements.')
+                ]),
             TextInput::make('meta.title')
                 ->required(),
             Section::make('Privacy Consent')

@@ -36,7 +36,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
-use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
+use App\Forms\Components\TinyEditor;
 use STS\FilamentImpersonate\Tables\Actions\Impersonate;
 
 class ParticipantList extends Component implements HasForms, HasTable

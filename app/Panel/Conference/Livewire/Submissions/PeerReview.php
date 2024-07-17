@@ -24,7 +24,7 @@ use Filament\Forms\Form;
 use Filament\Support\Colors\Color;
 use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
-use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
+use App\Forms\Components\TinyEditor;
 
 class PeerReview extends Component implements HasActions, HasForms
 {
