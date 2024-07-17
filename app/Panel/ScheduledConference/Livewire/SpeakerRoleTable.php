@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Panel\ScheduledConference\Livewire\Tables;
+namespace App\Panel\ScheduledConference\Livewire;
 
 use App\Panel\ScheduledConference\Resources\SpeakerRoleResource;
 use Filament\Actions\CreateAction;
