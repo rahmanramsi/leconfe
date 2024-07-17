@@ -111,7 +111,8 @@ class SubmissionPaymentItemTable extends \Livewire\Component implements HasForms
             ->actions([
                 EditAction::make()
                     ->mutateRecordDataUsing(function ($data) {
-                        $supportedCurrencies = App::getCurrentConference()->getMeta('payment.supported_currencies') ?? [];
+                        $supportedCurrencies = App::getCurrentScheduledConference()->getMeta('payment.supported_currencies') ?? [];
+
                         $fees = collect($supportedCurrencies)
                             ->map(fn ($currency) => ['currency_id' => $currency, 'fee' => 0])
                             ->keyBy('currency_id')
