@@ -7,4 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Dashboard extends BaseDashboard
 {
+    /**
+     * @return array<class-string<Widget> | WidgetConfiguration>
+     */
+    public function getWidgets(): array
+    {
+        return [];
+    }
+
+
 }
