@@ -3,22 +3,9 @@
 namespace App\Panel\Conference\Pages;
 
 use App\Infolists\Components\LivewireEntry;
-use App\Infolists\Components\VerticalTabs as InfolistsVerticalTabs;
-use App\Panel\Conference\Livewire\EmailSetting;
-use App\Panel\Administration\Livewire\SidebarSetting;
-use App\Panel\Conference\Livewire\AccessSetting;
-use App\Panel\Conference\Livewire\DateAndTimeSetting;
-use App\Panel\Conference\Livewire\Forms\Conferences\AdditionalInformationSetting;
-use App\Panel\Conference\Livewire\Forms\Conferences\ContactSetting;
-use App\Panel\Conference\Livewire\Forms\Conferences\InformationSetting;
-use App\Panel\Conference\Livewire\Forms\Conferences\PrivacySetting;
-use App\Panel\Conference\Livewire\Forms\Conferences\SetupSetting;
 use App\Panel\Conference\Livewire\MastHeadSetting;
-use App\Panel\Conference\Livewire\NavigationMenuSetting;
-use Filament\Forms\Components\Livewire;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Infolists\Components\Tabs;
 use Filament\Infolists\Concerns\InteractsWithInfolists;
 use Filament\Infolists\Contracts\HasInfolists;
 use Filament\Infolists\Infolist;

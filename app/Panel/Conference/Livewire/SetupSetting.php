@@ -18,6 +18,7 @@ use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use App\Forms\Components\TinyEditor;
+use Stevebauman\Purify\Facades\Purify;
 
 class SetupSetting extends Component implements HasForms
 {
@@ -59,7 +60,9 @@ class SetupSetting extends Component implements HasForms
                             ->image()
                             ->conversion('thumb'),
                         TinyEditor::make('meta.page_footer')
-                            ->minHeight(300),
+                            ->profile('advanced')
+                            ->minHeight(300)
+                            ->dehydrateStateUsing(fn (?string $state) => Purify::clean($state)),
                     ]),
 
                 Actions::make([

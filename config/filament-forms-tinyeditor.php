@@ -30,11 +30,12 @@ return [
             'upload_directory' => 'tinyeditor',
         ],
 
-        'basic-without-image' => [
-            'plugins' => 'autoresize link wordcount code lists',
-            'toolbar' => 'bold italic superscript subscript | link | blockquote bullist numlist | code',
+        'advanced' => [
+            'plugins' => 'autoresize link wordcount image code lists',
+            'toolbar' => 'bold italic superscript subscript | link | blockquote bullist numlist | image | code',
             'upload_directory' => 'tinyeditor',
         ],
+
         /*
         |--------------------------------------------------------------------------
         | Custom Configs
