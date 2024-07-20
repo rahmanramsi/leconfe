@@ -113,7 +113,15 @@ class ScheduledConferenceResource extends Resource
                         ->color('success')
                         ->hidden(fn (ScheduledConference $record) => $record->isArchived() || $record->isCurrent() || $record->isDraft() || $record->trashed())
                         ->action(fn (ScheduledConference $record, Tables\Actions\Action $action) => $record->update(['state' => ScheduledConferenceState::Current]) && $action->success())
-                        ->successNotificationTitle(fn (ScheduledConference $scheduledConference) => $scheduledConference->title . ' is set as current'),
+                        ->successNotificationTitle(fn (ScheduledConference $scheduledConference) => $scheduledConference->title . ' is set as current'),    
+                    Tables\Actions\Action::make('move_to_archive')
+                        ->label('Move To Archive')
+                        ->requiresConfirmation()
+                        ->icon('heroicon-o-archive-box-arrow-down')
+                        ->color('warning')
+                        ->hidden(fn (ScheduledConference $record) => $record->isArchived() || $record->isDraft() || $record->trashed())
+                        ->action(fn (ScheduledConference $record, Tables\Actions\Action $action) => $record->update(['state' => ScheduledConferenceState::Archived]) && $action->success())
+                        ->successNotificationTitle(fn (ScheduledConference $scheduledConference) => $scheduledConference->title . ' is moved to archive'),
                     Tables\Actions\EditAction::make()
                         ->modalWidth(MaxWidth::ExtraLarge)
                         ->hidden(fn (ScheduledConference $record) => $record->isArchived() || $record->trashed())

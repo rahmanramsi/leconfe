@@ -15,7 +15,7 @@
                             </p>
                         </div>
                     </div>
-                        @livewire(App\Panel\Conference\Livewire\Submissions\Components\Files\AbstractFiles::class, ['submission' => $record])
+                        @livewire(App\Panel\ScheduledConference\Livewire\Submissions\Components\Files\AbstractFiles::class, ['submission' => $record])
                 </div>
             </div>
         </div>

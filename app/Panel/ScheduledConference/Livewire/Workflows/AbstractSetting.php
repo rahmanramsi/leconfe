@@ -2,7 +2,7 @@
 
 namespace App\Panel\ScheduledConference\Livewire\Workflows;
 
-use App\Panel\Conference\Livewire\Submissions\Components\Files\SubmissionFilesTable;
+use App\Panel\ScheduledConference\Livewire\Submissions\Components\Files\SubmissionFilesTable;
 use App\Panel\ScheduledConference\Livewire\Workflows\Base\WorkflowStage;
 use Awcodes\Shout\Components\Shout;
 use Filament\Actions\Action;

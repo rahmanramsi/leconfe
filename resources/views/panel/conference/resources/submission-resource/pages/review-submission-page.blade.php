@@ -17,10 +17,10 @@
     ">
     <div class="grid grid-cols-12 gap-4">
         <div class="col-span-8 space-y-4">
-            @livewire(App\Panel\Conference\Livewire\Submissions\Components\ReviewerAssignedFiles::class, ['record' => $review])
+            @livewire(App\Panel\ScheduledConference\Livewire\Submissions\Components\ReviewerAssignedFiles::class, ['record' => $review])
             {{ $this->reviewForm }}
-            @livewire(App\Panel\Conference\Livewire\Submissions\Components\Files\ReviewerFiles::class, ['submission' => $record, 'lazy' => true])
-            {{-- @livewire(App\Panel\Conference\Livewire\Submissions\SubmissionDetail\Discussions::class, ['record' => $record, 'lazy' => true]) --}}
+            @livewire(App\Panel\ScheduledConference\Livewire\Submissions\Components\Files\ReviewerFiles::class, ['submission' => $record, 'lazy' => true])
+            {{-- @livewire(App\Panel\ScheduledConference\Livewire\Submissions\SubmissionDetail\Discussions::class, ['record' => $record, 'lazy' => true]) --}}
         </div>
         <div class="col-span-4 space-y-4 self-start sticky top-20">
             {{ $this->infolist }}
@@ -40,15 +40,15 @@
         <div class="flex flex-col space-y-4">
             <div>
                 <h2 class="text-lg font-bold">
-                    Review Guidelienes
+                    Review Guidelines
                 </h2>
-                {!! $conference->getMeta('review_guidelines') !!}
+                {!! $scheduledConference->getMeta('review_guidelines') !!}
             </div>
             <div>
                 <h2 class="text-lg font-bold">
                     Competing Interests
                 </h2>
-                {!! $conference->getMeta('competing_interests') !!}
+                {!! $scheduledConference->getMeta('competing_interests') !!}
             </div>
 
             <div class="flex items-center mb-4">

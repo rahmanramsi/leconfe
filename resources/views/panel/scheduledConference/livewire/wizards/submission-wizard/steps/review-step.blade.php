@@ -83,7 +83,7 @@
                                     Edit Files
                                 </x-filament::button>
                             </div>
-                            @livewire(App\Panel\Conference\Livewire\Submissions\Components\Files\AbstractFiles::class, ['submission' => $record, 'viewOnly' => true])
+                            @livewire(App\Panel\ScheduledConference\Livewire\Submissions\Components\Files\AbstractFiles::class, ['submission' => $record, 'viewOnly' => true])
                         </div>
                         <div class="space-y-4">
                             <div class="flex ml-auto">
@@ -91,7 +91,7 @@
                                     Edit Contributors
                                 </x-filament::button>
                             </div>
-                            @livewire(App\Panel\Conference\Livewire\Submissions\Components\ContributorList::class, ['submission' => $record, 'viewOnly' => true, 'lazy' => true])
+                            @livewire(App\Panel\ScheduledConference\Livewire\Submissions\Components\ContributorList::class, ['submission' => $record, 'viewOnly' => true, 'lazy' => true])
                         </div>
                     </div>
                 </div>

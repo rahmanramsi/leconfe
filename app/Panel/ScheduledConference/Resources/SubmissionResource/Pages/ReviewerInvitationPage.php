@@ -11,7 +11,7 @@ use App\Models\Enums\UserRole;
 use App\Models\Review;
 use App\Models\Submission;
 use App\Models\User;
-use App\Panel\Conference\Livewire\Submissions\Components\Files\PaperFiles;
+use App\Panel\ScheduledConference\Livewire\Submissions\Components\Files\PaperFiles;
 use App\Panel\ScheduledConference\Resources\SubmissionResource;
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
