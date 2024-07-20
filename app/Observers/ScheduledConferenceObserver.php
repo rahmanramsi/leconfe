@@ -122,12 +122,12 @@ class ScheduledConferenceObserver
         ]);
 
         $scheduledConference->setManyMeta([
-            'before_you_begin', <<<HTML
+            'before_you_begin' =>  <<<HTML
             <p>Thank you for submitting to the $scheduledConference->title. You will be asked to upload files, identify co-authors, and provide information such as the title and abstract.</p>
             <p>Please read our Submission Guidelines if you have not done so already. When filling out the forms, provide as many details as possible in order to help our editors evaluate your work.</p>
             <p>Once you begin, you can save your submission and come back to it later. You will be able to review and correct any information before you submit.</p>
         HTML,
-            'submission_checklist', <<<HTML
+            'submission_checklist' => <<<HTML
             <p>All submissions must meet the following requirements.</p>
             <ul>
                 <li>The submission has not been previously published, nor is it before another journal for consideration (or an explanation has been provided in Comments to the Editor).</li>
