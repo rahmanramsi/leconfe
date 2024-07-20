@@ -4,6 +4,6 @@
         @if ($this->canPreview())
             <x-website::preview-alert />
         @endif
-        <x-conference::proceeding :proceeding="$proceeding" />
+        <x-scheduledConference::proceeding :proceeding="$proceeding" />
     </div>
 </x-website::layouts.main>

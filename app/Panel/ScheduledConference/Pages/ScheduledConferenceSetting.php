@@ -23,7 +23,7 @@ class ScheduledConferenceSetting extends Page
 
     protected static ?string $navigationGroup = 'Settings';
 
-    protected static ?string $navigationIcon = 'heroicon-o-window';
+    protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
 
     protected static ?string $navigationLabel = 'Scheduled Conference';
 

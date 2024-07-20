@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Frontend\Conference\Pages\StaticPage as PagesStaticPage;
+use App\Frontend\ScheduledConference\Pages\StaticPage as PagesStaticPage;
 use App\Models\Concerns\BelongsToConference;
 use App\Models\Concerns\BelongsToScheduledConference;
 use Illuminate\Database\Eloquent\Model;

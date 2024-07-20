@@ -25,14 +25,13 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use App\Forms\Components\TinyEditor;
 
-
 class PanelProvider extends ServiceProvider
 {
     public function scheduledConference(Panel $panel): Panel
     {
         $this->setupPanel($panel)
             ->id('scheduledConference')
-            ->path('{conference:path}/scheduled-conference/{serie:path}/panel')
+            ->path('{conference:path}/scheduled/{serie:path}/panel')
             ->bootUsing(fn () => static::setupFilamentComponent())
             ->homeUrl(fn () => app()->getCurrentScheduledConference()?->getHomeUrl())
             ->discoverResources(in: app_path('Panel/ScheduledConference/Resources'), for: 'App\\Panel\\ScheduledConference\\Resources')
@@ -139,12 +138,12 @@ class PanelProvider extends ServiceProvider
             ->colors([
                 'primary' => Color::hex('#1c3569'),
             ])
-            ->userMenuItems([
-                'logout' => MenuItem::make()
-                    ->url(fn (): string => route('logout')),
-                'profile' => MenuItem::make()
-                    ->url(fn (): string => Profile::getUrl()),
-            ])
+            // ->userMenuItems([
+            //     'logout' => MenuItem::make()
+            //         ->url(fn (): string => route('logout')),
+            //     'profile' => MenuItem::make()
+            //         ->url(fn (): string => Profile::getUrl()),
+            // ])
             ->darkMode(false)
             ->databaseNotifications()
             ->databaseNotificationsPolling(null);
@@ -163,8 +162,6 @@ class PanelProvider extends ServiceProvider
         Filament::registerPanel(
             fn (): Panel => $this->administrationPanel(Panel::make()),
         );
-
-        // $this->app->bind(LogoutResponseContract::class, LogoutResponse::class);
     }
 
     /**

@@ -48,31 +48,21 @@ class InformationSetting extends Component implements HasForms
                             ->model(app()->getSite())
                             ->image()
                             ->imageResizeUpscale(false)
-                            ->conversion('thumb')
-                            ->columnSpan([
-                                'sm' => 2,
-                            ]),
+                            ->conversion('thumb'),
                         Textarea::make('meta.description')
                             ->rows(3)
                             ->autosize()
-                            ->columnSpanFull()
                             ->hint('Recommended length: 50-160 characters')
                             ->helperText('A short description of the website. This will used to help search engines understand the website.'),
                         TinyEditor::make('meta.about')
                             ->label('About Site')
                             ->minHeight(300)
-                            ->dehydrateStateUsing(fn (?string $state) => Purify::clean($state))
-                            ->columnSpan([
-                                'sm' => 2,
-                            ]),
+                            ->dehydrateStateUsing(fn (?string $state) => Purify::clean($state)),
                         TinyEditor::make('meta.page_footer')
                             ->minHeight(300)
-                            ->dehydrateStateUsing(fn (?string $state) => Purify::clean($state))
-                            ->columnSpan([
-                                'sm' => 2,
-                            ]),
+                            ->dehydrateStateUsing(fn (?string $state) => Purify::clean($state)),
                     ])
-                    ->columns(2),
+                    ->columns(1),
                 Actions::make([
                     Action::make('save')
                         ->successNotificationTitle('Saved!')

@@ -32,7 +32,8 @@ class ScheduledConferenceFactory extends Factory
     {
         return $this->afterCreating(function (ScheduledConference $scheduledConference) {
             $scheduledConference->setManyMeta([
-                'description' => fake()->paragraphs(3, true),
+                'summary' => fake()->paragraphs(3, true),
+                'about' => fake()->paragraphs(3, true),
             ]);
         });
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Frontend\Conference\Pages;
+namespace App\Frontend\ScheduledConference\Pages;
 
 use App\Facades\MetaTag;
 use App\Models\Submission;
@@ -14,7 +14,7 @@ use Illuminate\Support\Str;
 
 class SubmissionDetail extends Page
 {
-    protected static string $view = 'frontend.conference.pages.submission-detail';
+    protected static string $view = 'frontend.scheduledConference.pages.submission-detail';
 
     public Submission $submission;
 

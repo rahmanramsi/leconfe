@@ -25,12 +25,12 @@ class InformationSetting extends Component implements HasForms
 {
     use InteractsWithForms;
 
-    public Conference $conference;
-
     public ?array $formData = [];
 
-    public function mount(Conference $conference): void
+    public function mount(): void
     {
+        $conference = app()->getCurrentConference();
+
         $this->form->fill([
             ...$conference->attributesToArray(),
             'meta' => $conference->getAllMeta(),
@@ -45,7 +45,7 @@ class InformationSetting extends Component implements HasForms
     public function form(Form $form): Form
     {
         return $form
-            ->model($this->conference)
+            ->model(app()->getCurrentConference())
             ->schema([
                 Section::make()
                     ->columns(1)
@@ -53,14 +53,15 @@ class InformationSetting extends Component implements HasForms
                         TextInput::make('name')
                             ->columnSpanFull()
                             ->required(),
-                        TextInput::make('meta.acronym')
-                            ->unique(column: 'path', ignorable: $this->conference)
-                            ->rule('alpha_dash')
-                            ->live(onBlur: true),
                         SpatieMediaLibraryFileUpload::make('logo')
                             ->collection('logo')
                             ->image()
                             ->imageResizeUpscale(false)
+                            ->conversion('thumb'),
+                        SpatieMediaLibraryFileUpload::make('thumbnail')
+                            ->label('Conference Thumbnail')
+                            ->collection('thumbnail')
+                            ->image()
                             ->conversion('thumb'),
                         TextInput::make('meta.theme')
                             ->placeholder('e.g. Creating a better future with us')
@@ -71,6 +72,9 @@ class InformationSetting extends Component implements HasForms
                             ->helperText('A short description of the conference. This will used to help search engines understand the conference.')
                             ->maxLength(255)
                             ->autosize(),
+                        TextInput::make('meta.issn')
+                            ->label('ISSN')
+                            ->helperText('The ISSN of the conference series'),
                         TinyEditor::make('meta.page_footer')
                             ->minHeight(300),
                     ]),

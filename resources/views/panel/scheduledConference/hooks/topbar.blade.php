@@ -1,4 +1,3 @@
-<div class="flex flex-col">
-    <a href="{{ app()->getCurrentConference()->getPanelUrl() }}" class="text-lg font-medium">{{ app()->getCurrentConference()->name }}</a>
-    <div class="text-sm text-gray-700">Series : <span class="font-medium">{{ app()->getCurrentScheduledConference()->title }}</span></div>
+<div class="hidden sm:flex flex-col">
+    <a href="{{ app()->getCurrentConference()->getPanelUrl() }}" class="text-lg font-medium">{{ app()->getCurrentScheduledConference()->title }}</a>
 </div>

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Frontend\Conference\Pages;
+namespace App\Frontend\ScheduledConference\Pages;
 
 use Livewire\Attributes\Title;
 use Illuminate\Contracts\Support\Htmlable;
@@ -8,7 +8,7 @@ use Rahmanramsi\LivewirePageGroup\Pages\Page;
 
 class About extends Page
 {
-    protected static string $view = 'frontend.conference.pages.about';
+    protected static string $view = 'frontend.scheduledConference.pages.about';
 
     public function mount()
     {

@@ -9,7 +9,7 @@
         </div>
         <div class="overflow-y-auto space-y-6">
             @forelse ($announcements as $announcement)
-                <x-conference::announcement-summary :announcement="$announcement" />
+                <x-scheduledConference::announcement-summary :announcement="$announcement" />
             @empty
                 <div>
                     No Announcements created yet.

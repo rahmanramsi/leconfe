@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Frontend\Conference\Pages;
+namespace App\Frontend\ScheduledConference\Pages;
 
 use Livewire\Attributes\Title;
 use Illuminate\Support\Facades\Route;
@@ -10,7 +10,7 @@ use Rahmanramsi\LivewirePageGroup\Pages\Page;
 
 class StaticPage extends Page
 {
-    protected static string $view = 'frontend.conference.pages.static-page';
+    protected static string $view = 'frontend.scheduledConference.pages.static-page';
 
     public StaticPageModel $staticPage;
 

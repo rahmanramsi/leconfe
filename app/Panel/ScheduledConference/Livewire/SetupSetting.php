@@ -54,7 +54,7 @@ class SetupSetting extends Component implements HasForms
                             ->imageResizeUpscale(false)
                             ->conversion('thumb'),
                         SpatieMediaLibraryFileUpload::make('thumbnail')
-                            ->label('Conference Thumbnail')
+                            ->label('Scheduled Conference Thumbnail')
                             ->collection('thumbnail')
                             ->helperText('An image representation of the serie that will be used in the list of series.')
                             ->image()

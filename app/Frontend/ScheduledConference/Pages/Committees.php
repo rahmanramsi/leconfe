@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Frontend\Conference\Pages;
+namespace App\Frontend\ScheduledConference\Pages;
 
 use App\Models\CommitteeRole;
 use Livewire\Attributes\Title;
@@ -8,7 +8,7 @@ use Rahmanramsi\LivewirePageGroup\Pages\Page;
 
 class Committees extends Page
 {
-    protected static string $view = 'frontend.conference.pages.committees';
+    protected static string $view = 'frontend.scheduledConference.pages.committees';
 
     public function mount()
     {

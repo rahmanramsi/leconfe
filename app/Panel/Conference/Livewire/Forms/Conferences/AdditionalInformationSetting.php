@@ -21,12 +21,12 @@ class AdditionalInformationSetting extends Component implements HasForms
 {
     use InteractsWithForms;
 
-    public Conference $conference;
-
     public ?array $formData = [];
 
-    public function mount(Conference $conference): void
+    public function mount(): void
     {
+        $conference = app()->getCurrentConference();
+
         $this->form->fill([
             'meta' => $conference->getAllMeta(),
         ]);
@@ -40,7 +40,7 @@ class AdditionalInformationSetting extends Component implements HasForms
     public function form(Form $form): Form
     {
         return $form
-            ->model($this->conference)
+            ->model(app()->getCurrentConference())
             ->schema([
                 Section::make('')
                     ->schema([

@@ -34,7 +34,7 @@
             </div>
         @endforeach
         <div class="flex justify-end w-full pt-1">
-            <a href="{{ route('livewirePageGroup.conference.pages.committees') }}" class="btn btn-primary btn-sm">
+            <a href="{{ route('livewirePageGroup.scheduledConference.pages.committees') }}" class="btn btn-primary btn-sm">
                 More
             </a>
         </div>

@@ -32,7 +32,7 @@ class ScheduledConferenceResource extends Resource
 
     protected static ?int $navigationSort = 3;
 
-    protected static ?string $navigationIcon = 'heroicon-o-server-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
 
     public static function form(Form $form): Form
     {
@@ -46,25 +46,10 @@ class ScheduledConferenceResource extends Resource
                     ->required()
                     ->placeholder('Enter the title of the serie'),
                 TextInput::make('path')
-                    ->prefix(fn () => route('livewirePageGroup.conference.pages.home', ['conference' => app()->getCurrentConference()->path]) . '/')
+                    ->prefix(fn () => route('livewirePageGroup.conference.pages.home', ['conference' => app()->getCurrentConference()->path]) . '/scheduled/')
                     ->label('Path')
                     ->rule('alpha_dash')
                     ->required(),
-                Grid::make()
-                    ->schema([
-                        TextInput::make('meta.theme')
-                            ->placeholder('e.g. Creating a better future with us')
-                            ->columnSpanFull()
-                            ->helperText("The theme of the conference. This will be used in the conference's branding."),
-                        TextInput::make('meta.publisher_name'),
-                        TextInput::make('meta.publisher_location'),
-                        Textarea::make('meta.description')
-                            ->hint('Recommended length: 50-160 characters')
-                            ->helperText('A short description of the conference. This will used to help search engines understand the conference.')
-                            ->maxLength(255)
-                            ->autosize()
-                            ->columnSpanFull(),
-                    ]),
                 Grid::make()
                     ->schema([
                         DatePicker::make('date_start')

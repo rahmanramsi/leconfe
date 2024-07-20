@@ -14,6 +14,4 @@ class Dashboard extends BaseDashboard
     {
         return [];
     }
-
-
 }

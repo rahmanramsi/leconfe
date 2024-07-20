@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Frontend\Conference\Pages;
+namespace App\Frontend\ScheduledConference\Pages;
 
 use Livewire\Attributes\Title;
 use Rahmanramsi\LivewirePageGroup\Pages\Page;
 
 class PrivacyStatement extends Page
 {
-    protected static string $view = 'frontend.conference.pages.privacy-statement';
+    protected static string $view = 'frontend.scheduledConference.pages.privacy-statement';
 
     public function mount()
     {

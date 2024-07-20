@@ -13,6 +13,14 @@ class LogoutController extends Controller
         session()->invalidate();
         session()->regenerateToken();
 
-        return app()->getCurrentConference() ? redirect()->route('livewirePageGroup.conference.pages.login') : redirect()->route('livewirePageGroup.website.pages.login');
+        if(app()->getCurrentScheduledConference()){
+            return redirect()->route('livewirePageGroup.scheduledConference.pages.login');
+        }
+
+        if(app()->getCurrentConference()){
+            return redirect()->route('livewirePageGroup.conference.pages.login');
+        }
+
+        return redirect()->route('livewirePageGroup.website.pages.login');
     }
 }

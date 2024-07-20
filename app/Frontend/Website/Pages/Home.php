@@ -24,26 +24,12 @@ class Home extends Page
 
     protected function getViewData(): array
     {
-        $scheduledConferenceQuery = ScheduledConference::query()
-            ->withoutGlobalScopes()
-            ->with(['conference', 'media', 'meta']);
-        
-        $currentSeries = (clone $scheduledConferenceQuery)
-            ->state(ScheduledConferenceState::Current)
-            ->paginate(6, pageName: 'currentSeriesPage');
-
-        $upcomingSeries = (clone $scheduledConferenceQuery)
-            ->state(ScheduledConferenceState::Published)
-            ->paginate(6, pageName: 'upcomingSeriesPage');
-
-        $allSeries = (clone $scheduledConferenceQuery)
-            ->whereNot('state', ScheduledConferenceState::Draft)
-            ->paginate(6, pageName: 'allSeriesPage');
+        $conferences = Conference::query()
+            ->with(['media', 'meta'])
+            ->get();
 
         return [
-            'currentSeries' => $currentSeries,
-            'upcomingSeries' => $upcomingSeries,
-            'allSeries' => $allSeries,
+            'conferences' => $conferences,
         ];
     }
 

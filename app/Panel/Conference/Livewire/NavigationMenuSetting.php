@@ -27,10 +27,6 @@ class NavigationMenuSetting extends Component implements HasActions, HasForms
 {
     use InteractsWithActions, InteractsWithForms;
 
-    public function mount()
-    {
-    }
-
     public function render()
     {
         return view('panel.conference.livewire.navigation-menu', $this->getViewData());
@@ -43,6 +39,9 @@ class NavigationMenuSetting extends Component implements HasActions, HasForms
     {
         return [
             'navigationMenus' => NavigationMenu::query()
+                ->when(!app()->getCurrentScheduledConferenceId(), function ($query) {
+                    $query->where('scheduled_conference_id', 0);
+                })           
                 ->with([
                     'items' => function ($query) {
                         $query
@@ -246,9 +245,6 @@ class NavigationMenuSetting extends Component implements HasActions, HasForms
 
                         return $type ? $type::getAdditionalForm() : [];
                     }),
-                Checkbox::make('meta.new_tab')
-                    ->label('Open in new tab')
-                    ->default(false),
             ];
         };
     }

@@ -23,16 +23,23 @@ class SetupDefaultData
     {
         if(!app()->isInstalled()) return $next($request);
 
-        if ($currentConference = app()->getCurrentConference()) {
-            $this->setupConference($request, $currentConference);
-        } else {
-            $this->setupSite();
+
+        $currentScheduledConference = app()->getCurrentScheduledConference();
+        if($currentScheduledConference){
+            $this->setupScheduledConference($request, $currentScheduledConference);
+            return $next($request);
         }
 
-        View::share('currentConference', $currentConference);
-        View::share('homeUrl', $currentConference ? route('livewirePageGroup.conference.pages.home') : route('livewirePageGroup.website.pages.home'));
 
+        if ($currentConference = app()->getCurrentConference()) {
+            $this->setupConference($request, $currentConference);
+            return $next($request);
+        }
+        
+        
+        $this->setupSite();
         return $next($request);
+     
     }
 
     protected function setupSite()
@@ -40,6 +47,7 @@ class SetupDefaultData
         $site = app()->getSite();
 
         View::share('site', $site);
+        View::share('homeUrl', route('livewirePageGroup.website.pages.home'));
         View::share('headerLogo', $site->getFirstMedia('logo')?->getAvailableUrl(['thumb', 'thumb-xl']));
         View::share('headerLogoAltText', $site->getMeta('name'));
         View::share('contextName', $site->getMeta('name'));
@@ -62,6 +70,8 @@ class SetupDefaultData
 
     protected function setupConference(Request $request, $currentConference)
     {
+        View::share('currentConference', $currentConference);
+        View::share('homeUrl', route('livewirePageGroup.conference.pages.home'));
         View::share('headerLogo', $currentConference->getFirstMedia('logo')?->getAvailableUrl(['thumb', 'thumb-xl']));
         View::share('headerLogoAltText', $currentConference->name);
         View::share('contextName', $currentConference->name);
@@ -80,6 +90,31 @@ class SetupDefaultData
         MetaTag::add('description', preg_replace("/\r|\n/", '', $currentConference->getMeta('description')));
 
         foreach ($currentConference->getMeta('meta_tags') ?? [] as $name => $content) {
+            MetaTag::add($name, $content);
+        }
+    }
+
+    protected function setupScheduledConference(Request $request, $currentScheduledConference)
+    {
+        View::share('homeUrl', route('livewirePageGroup.scheduledConference.pages.home'));
+        View::share('headerLogo', $currentScheduledConference->getFirstMedia('logo')?->getAvailableUrl(['thumb', 'thumb-xl']));
+        View::share('headerLogoAltText', $currentScheduledConference->title);
+        View::share('contextName', $currentScheduledConference->title);
+        View::share('pageFooter', $currentScheduledConference->getMeta('page_footer'));
+        View::share('favicon', $currentScheduledConference->getFirstMediaUrl('favicon'));
+        View::share('styleSheet', $currentScheduledConference->getFirstMediaUrl('styleSheet'));
+
+        if ($appearanceColor = $currentScheduledConference->getMeta('appearance_color')) {
+            $oklch = ColorFactory::new($appearanceColor)->to(ColorSpace::OkLch);
+            $css = new CSSGenerator();
+            $css->root_variable('p', "{$oklch->lightness}% {$oklch->chroma} {$oklch->hue}");
+
+            View::share('appearanceColor', $css->get_output());
+        }
+
+        MetaTag::add('description', preg_replace("/\r|\n/", '', $currentScheduledConference->getMeta('description')));
+
+        foreach ($currentScheduledConference->getMeta('meta_tags') ?? [] as $name => $content) {
             MetaTag::add($name, $content);
         }
     }

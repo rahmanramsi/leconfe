@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Panel\Conference\Pages\Settings;
+namespace App\Panel\Conference\Pages;
 
 use App\Infolists\Components\LivewireEntry;
 use App\Panel\Conference\Livewire\Forms\Conferences\DOISetup;
@@ -27,7 +27,7 @@ class DistributionSetting extends Page implements HasForms, HasInfolists
 
     protected static ?string $navigationIcon = 'heroicon-o-window';
 
-    protected static string $view = 'panel.conference.pages.settings.distribution';
+    protected static string $view = 'panel.conference.pages.distribution';
 
     protected ?string $heading = 'Distribution Settings';
 

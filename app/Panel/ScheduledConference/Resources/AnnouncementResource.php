@@ -78,7 +78,7 @@ class AnnouncementResource extends Resource
             ->actions([
                 Action::make('view')
                     ->icon('heroicon-o-eye')
-                    ->url(fn ($record) =>  route('livewirePageGroup.conference.pages.announcement-page', [
+                    ->url(fn ($record) =>  route('livewirePageGroup.scheduledConference.pages.announcement-page', [
                         'announcement' => $record->id,
                     ]))
                     ->color('gray'),

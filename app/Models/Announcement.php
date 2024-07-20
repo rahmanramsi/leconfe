@@ -25,7 +25,7 @@ class Announcement extends Model implements HasMedia
 
     public function getUrl()
     {
-        return route('livewirePageGroup.conference.pages.announcement-page', [
+        return route('livewirePageGroup.scheduledConference.pages.announcement-page', [
             'conference' => $this->conference->path,
             'announcement' => $this->id,
         ]);

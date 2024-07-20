@@ -34,7 +34,7 @@
         <x-website::heading-title :title="'Articles'" />
         <div class="space-y-5">
             @forelse($articles as $article)
-                <x-conference::article-summary :article="$article"/>  
+                <x-scheduledConference::article-summary :article="$article"/>  
             @empty
                 <div class="text-center text-gray-500">
                     No articles found.

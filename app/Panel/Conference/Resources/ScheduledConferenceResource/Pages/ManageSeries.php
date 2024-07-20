@@ -28,12 +28,16 @@ class ManageSeries extends ManageRecords
     {
         return [
             'current' => Tab::make()
+                ->badge(fn () => ScheduledConferenceResource::getEloquentQuery()->where('state', ScheduledConferenceState::Current)->count())
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('state', ScheduledConferenceState::Current)),
             'draft' => Tab::make()
+                ->badge(fn () => ScheduledConferenceResource::getEloquentQuery()->where('state', ScheduledConferenceState::Draft)->count())
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('state', ScheduledConferenceState::Draft)),
             'upcoming' => Tab::make()
+                ->badge(fn () => ScheduledConferenceResource::getEloquentQuery()->where('state', ScheduledConferenceState::Published)->count())
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('state', ScheduledConferenceState::Published)),
             'archived' => Tab::make()
+                ->badge(fn () => ScheduledConferenceResource::getEloquentQuery()->where('state', ScheduledConferenceState::Archived)->count())
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('state', ScheduledConferenceState::Archived)),
         ];
     }

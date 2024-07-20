@@ -23,6 +23,14 @@ class Register extends BaseNavigationItemType
 
     public static function getUrl(NavigationMenuItem $navigationMenuItem): string
     {
-        return app()->getCurrentConference() ? route('livewirePageGroup.conference.pages.register') : route('livewirePageGroup.website.pages.register');
+        if(app()->getCurrentScheduledConferenceId()){
+            return route('livewirePageGroup.scheduledConference.pages.register');
+        }
+
+        if(app()->getCurrentConferenceId()){
+            return route('livewirePageGroup.conference.pages.register');
+        }
+
+        return route('livewirePageGroup.website.pages.register');
     }
 }

@@ -44,12 +44,13 @@ class ConferenceFactory extends Factory
             $conference->setManyMeta([
                 'publisher_name' => fake()->company(),
                 'publisher_place' => fake()->city(),
-                'acronym' => $conference->path,
                 'theme' => fake()->sentence(),
                 'affiliation' => fake()->company(),
                 'country' => Country::inRandomOrder()->first()->id,
                 'location' => fake()->city(),
                 'page_footer' => view('frontend.examples.footer')->render(),
+                'summary' => fake()->paragraph(),
+                'about' => fake()->paragraphs(3, true),
             ]);
         });
     }

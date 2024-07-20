@@ -162,6 +162,11 @@ class Conference extends Model implements HasAvatar, HasMedia, HasName
         return $this->getMeta('payment.supported_currencies') ?? ['usd'];
     }
 
+    public function hasThumbnail(): bool
+    {
+        return $this->getMedia('thumbnail')->isNotEmpty();
+    }
+
     public function getThumbnailUrl(): string
     {
         return $this->getFirstMedia('thumbnail')?->getAvailableUrl(['thumb', 'thumb-xl']) ?? Vite::asset('resources/assets/images/placeholder-vertical.jpg');

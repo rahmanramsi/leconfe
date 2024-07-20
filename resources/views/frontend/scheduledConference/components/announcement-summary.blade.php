@@ -7,7 +7,7 @@
     @endif
     <div class="leading-normal space-y-1">
         <h3 class="announcement-title text-lg tracking-tight text-gray-900">
-            <a href="{{ route('livewirePageGroup.conference.pages.announcement-page', ['announcement' => $announcement->id]) }}" class="link link-hover">
+            <a href="{{ route('livewirePageGroup.scheduledConference.pages.announcement-page', ['announcement' => $announcement->id]) }}" class="link link-hover">
                 {{ $announcement->title }}
             </a>    
         </h3>

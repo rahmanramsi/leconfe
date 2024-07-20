@@ -203,7 +203,7 @@ class PluginManager
         return Cache::rememberForever($this->getCacheKey($plugin, $key), function () use ($plugin, $key, $default) {
             $setting = PluginSetting::query()
                 ->where('conference_id', App::getCurrentConferenceId())
-                ->where('scheduled_conference_id', App::getCurrentScheduledConferenceId())
+                ->where('scheduled_conference_id', App::getCurrentScheduledConferenceId() ?? 0)
                 ->where('plugin', $plugin)
                 ->where('key', $key)
                 ->first();
@@ -215,7 +215,7 @@ class PluginManager
     public function updateSetting(string $plugin, $key, $value): mixed
     {
         $conferenceId = App::getCurrentConferenceId();
-        $scheduledConferenceId = App::getCurrentScheduledConferenceId();
+        $scheduledConferenceId = App::getCurrentScheduledConferenceId() ?? 0;
 
         Cache::forget($this->getCacheKey($plugin, $key));
 

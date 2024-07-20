@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Frontend\Conference\Pages;
+namespace App\Frontend\ScheduledConference\Pages;
 
 use App\Models\Announcement;
 use Livewire\Attributes\Title;
@@ -8,34 +8,31 @@ use Illuminate\Support\Facades\Route;
 use Rahmanramsi\LivewirePageGroup\PageGroup;
 use Rahmanramsi\LivewirePageGroup\Pages\Page;
 
-class AnnouncementList extends Page
+class AnnouncementPage extends Page
 {
-    protected static string $view = 'frontend.conference.pages.announcement-list';
+    protected static string $view = 'frontend.scheduledConference.pages.announcement';
+
+    public Announcement $announcement;
 
     public function getBreadcrumbs(): array
     {
         return [
             route(Home::getRouteName()) => 'Home',
-            'Announcements',
+            route(AnnouncementList::getRouteName()) => 'Announcements',
+            $this->announcement->title,
         ];
     }
-    
+
     protected function getViewData(): array
     {
-        return [
-            'announcements' => Announcement::query()
-                ->where('expires_at', '>', now()->startOfDay())
-                ->orderBy('created_at', 'desc')
-                ->with('meta')
-                ->get(),
-        ];
+        return [];
     }
 
     public static function routes(PageGroup $pageGroup): void
     {
         $slug = static::getSlug();
 
-        Route::get('announcements', static::class)
+        Route::get('announcements/{announcement}', static::class)
             ->middleware(static::getRouteMiddleware($pageGroup))
             ->withoutMiddleware(static::getWithoutRouteMiddleware($pageGroup))
             ->name((string) str($slug)->replace('/', '.'));

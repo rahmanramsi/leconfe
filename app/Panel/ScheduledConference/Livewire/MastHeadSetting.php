@@ -21,6 +21,7 @@ use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use App\Forms\Components\TinyEditor;
+use Filament\Forms\Components\Textarea;
 use Squire\Models\Country;
 
 class MastHeadSetting extends Component implements HasForms
@@ -51,8 +52,8 @@ class MastHeadSetting extends Component implements HasForms
             ->schema([
                 Section::make()
                     ->schema([
-                        Section::make('Conference Identity')
-                            ->description('Information about the conference')
+                        Section::make('Scheduled Conference Identity')
+                            ->description('Information about the scheduled conference')
                             ->aside()
                             ->schema([
                                 TextInput::make('title')
@@ -60,7 +61,13 @@ class MastHeadSetting extends Component implements HasForms
                                     ->autofocus()
                                     ->autocomplete()
                                     ->required()
-                                    ->placeholder('Enter the title of the serie'),
+                                    ->placeholder('Enter the title of the scheduled conference'),
+                                Textarea::make('meta.description')
+                                    ->rows(3)
+                                    ->autosize()
+                                    ->columnSpanFull()
+                                    ->hint('Recommended length: 50-160 characters')
+                                    ->helperText('A short description of the website. This will used to help search engines understand the website.'),
                                 TextInput::make('meta.acronym')
                                     ->rule('alpha_dash')
                                     ->helperText('The popularly known as or jargon name (e.g. SIGGRAPH for "Special Interest Group on Computer Graphics"). Authors commonly cite the conference acronym rather than the full conference or proceedings name, so it is best to fill this element when it is available.'),
@@ -99,7 +106,7 @@ class MastHeadSetting extends Component implements HasForms
                                     ->label('Editorial Team')
                                     ->profile('basic')
                                     ->minHeight(100),
-                                
+
                             ]),
                         Section::make('Description')
                             ->aside()
