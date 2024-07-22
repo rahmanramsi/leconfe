@@ -22,15 +22,6 @@ class ProductionFiles extends SubmissionFilesTable
         return ! auth()->user()->can('editing', $this->submission);
     }
 
-    public function getAcceptedFiles(): array
-    {
-        return StageManager::editing()
-            ->getSetting(
-                'production_allowed_file_types',
-                ['pdf']
-            );
-    }
-
     public function getTargetCategory(): string
     {
         return $this->getCategory();

@@ -22,6 +22,7 @@ use App\Models\Site;
 use App\Models\SpeakerRole;
 use App\Models\StaticPage;
 use App\Models\Submission;
+use App\Models\SubmissionFileType;
 use App\Models\Timeline;
 use App\Models\Topic;
 use App\Models\Venue;
@@ -153,6 +154,7 @@ class Application extends LaravelApplication
             Announcement::class,
             Topic::class,
             NavigationMenu::class,
+            SubmissionFileType::class,
         ];
 
         foreach ($models as $model) {

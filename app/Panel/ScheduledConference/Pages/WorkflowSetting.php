@@ -8,17 +8,14 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Filament\Infolists\Components\Tabs;
 use App\Infolists\Components\LivewireEntry;
-use App\Panel\Administration\Livewire\SidebarSetting;
-use App\Panel\Conference\Livewire\NavigationMenuSetting;
 use App\Panel\ScheduledConference\Livewire\AuthorGuidance;
-use App\Panel\ScheduledConference\Livewire\ContactSetting;
-use App\Panel\ScheduledConference\Livewire\InformationSetting;
-use App\Panel\ScheduledConference\Livewire\MastHeadSetting;
-use App\Panel\ScheduledConference\Livewire\SetupSetting;
-use App\Panel\ScheduledConference\Livewire\SponsorSetting;
-use App\Panel\ScheduledConference\Livewire\TopicTable;
 use App\Infolists\Components\VerticalTabs as InfolistsVerticalTabs;
+use App\Panel\ScheduledConference\Livewire\AuthorRoleTable;
+use App\Panel\ScheduledConference\Livewire\ReviewGuidance;
+use App\Panel\ScheduledConference\Livewire\ReviewSetupSetting;
 use App\Panel\ScheduledConference\Livewire\SubmissionFileTypeTable;
+use App\Panel\ScheduledConference\Livewire\TimelineTable;
+use App\Panel\ScheduledConference\Livewire\TopicTable;
 
 class WorkflowSetting extends Page
 {
@@ -51,22 +48,49 @@ class WorkflowSetting extends Page
                             ->schema([
                                 InfolistsVerticalTabs\Tabs::make()
                                     ->schema([
-                                        InfolistsVerticalTabs\Tab::make('Author Guidance')
-                                            ->schema([
-                                                LivewireEntry::make('author-guidance')
-                                                    ->livewire(AuthorGuidance::class),
-                                            ]),
                                         InfolistsVerticalTabs\Tab::make('Components')
                                             ->schema([
                                                 LivewireEntry::make('submission-file-type-table')
                                                     ->livewire(SubmissionFileTypeTable::class),
                                             ]),
+                                        InfolistsVerticalTabs\Tab::make('Author Guidance')
+                                            ->schema([
+                                                LivewireEntry::make('author-guidance')
+                                                    ->livewire(AuthorGuidance::class),
+                                            ]),
+                                        InfolistsVerticalTabs\Tab::make('Author Roles')
+                                            ->schema([
+                                                LivewireEntry::make('author-roles')
+                                                    ->livewire(AuthorRoleTable::class),
+                                            ]),
+                                        InfolistsVerticalTabs\Tab::make('Topics')
+                                            ->schema([
+                                                LivewireEntry::make('topics')
+                                                    ->livewire(TopicTable::class),
+                                            ]),
                                     ]),
                             ]),
                         Tabs\Tab::make('Review')
-                            ->schema([]),
-                        Tabs\Tab::make('Topics')
-                            ->schema([]),
+                            ->schema([
+                                InfolistsVerticalTabs\Tabs::make()
+                                    ->schema([
+                                        InfolistsVerticalTabs\Tab::make('Setup')
+                                            ->schema([
+                                                LivewireEntry::make('review-setup')
+                                                    ->livewire(ReviewSetupSetting::class),
+                                            ]),
+                                        InfolistsVerticalTabs\Tab::make('Reviewer Guidance')
+                                            ->schema([
+                                                LivewireEntry::make('review-guidance')
+                                                    ->livewire(ReviewGuidance::class),
+                                            ]),
+                                    ]),
+                            ]),
+                        Tabs\Tab::make('Timeline')
+                            ->schema([
+                                LivewireEntry::make('timeline-table')
+                                    ->livewire(TimelineTable::class),
+                            ]),
 
                     ]),
             ]);

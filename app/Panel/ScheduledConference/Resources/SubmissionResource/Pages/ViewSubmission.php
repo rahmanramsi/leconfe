@@ -269,25 +269,22 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                 ->icon('heroicon-o-eye')
                 ->color('primary')
                 ->outlined()
-                ->url(route('livewirePageGroup.scheduledConference.pages.submission-detail', ['submission' => $this->record->id]), true)
+                ->url(route('livewirePageGroup.conference.pages.submission-detail', ['submission' => $this->record->id]), true)
                 ->label(function () {
                     if ($this->record->isPublished()) {
                         return 'View';
                     }
 
-                    if (StageManager::editing()->isStageOpen() && auth()->user()->can('editing', $this->record)) {
+                    if (auth()->user()->can('editing', $this->record)) {
                         return 'Preview';
                     }
                 })
                 ->visible(
-                    fn (): bool => ($this->record->isPublished() 
-                        || (StageManager::editing()->isStageOpen() && auth()->user()->can('editing', $this->record)))
-                        && $this->record->proceeding 
+                    fn (): bool => ($this->record->isPublished() || auth()->user()->can('editing', $this->record)) && $this->record->proceeding  
                 ),
             Action::make('assign_proceeding')
                 ->label('Publish Now')
                 ->modalHeading('Assign Proceeding for publication')
-                ->disabled(! StageManager::editing()->isStageOpen())
                 ->visible(fn () => ! $this->record->proceeding && $this->record->stage == SubmissionStage::Editing)
                 ->modalWidth(MaxWidth::ExtraLarge)
                 ->form(SubmissionProceeding::getFormAssignProceeding($this->record))
@@ -300,7 +297,6 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
             Action::make('publish')
                 ->color('primary')
                 ->label('Publish Now')
-                ->disabled(! StageManager::editing()->isStageOpen())
                 ->visible(
                     fn (): bool => $this->record->proceeding ? true : false
                 )
@@ -584,61 +580,28 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                                     ->tabs([
                                         Tab::make('Call for Abstract')
                                             ->icon('heroicon-o-information-circle')
-                                            ->schema(function () {
-                                                if (! StageManager::callForAbstract()->isStageOpen() && ! $this->record->isPublished()) {
-                                                    return [
-                                                        ShoutEntry::make('call-for-abstract-closed')
-                                                            ->type('warning')
-                                                            ->color('warning')
-                                                            ->content('Call for abstract stage is closed.'),
-                                                    ];
-                                                }
-
-                                                return [
-                                                    LivewireEntry::make('call-for-abstract')
-                                                        ->livewire(CallforAbstract::class, [
-                                                            'submission' => $this->record,
-                                                        ]),
-                                                ];
-                                            }),
+                                            ->schema([
+                                                LivewireEntry::make('call-for-abstract')
+                                                    ->livewire(CallforAbstract::class, [
+                                                        'submission' => $this->record,
+                                                    ]),
+                                            ]),
                                         Tab::make('Peer Review')
                                             ->icon('iconpark-checklist-o')
-                                            ->schema(function (): array {
-                                                if (! StageManager::peerReview()->isStageOpen() && ! $this->record->isPublished()) {
-                                                    return [
-                                                        ShoutEntry::make('peer-review-closed')
-                                                            ->type('warning')
-                                                            ->color('warning')
-                                                            ->content('Peer review stage is closed.'),
-                                                    ];
-                                                }
-
-                                                return [
-                                                    LivewireEntry::make('peer-review')
-                                                        ->livewire(PeerReview::class, [
-                                                            'submission' => $this->record,
-                                                        ]),
-                                                ];
-                                            }),
+                                            ->schema([
+                                                LivewireEntry::make('peer-review')
+                                                    ->livewire(PeerReview::class, [
+                                                        'submission' => $this->record,
+                                                    ]),
+                                            ]),
                                         Tab::make('Editing')
                                             ->icon('heroicon-o-pencil')
-                                            ->schema(function () {
-                                                if (! StageManager::editing()->isStageOpen() && ! $this->record->isPublished()) {
-                                                    return [
-                                                        ShoutEntry::make('editing-closed')
-                                                            ->type('warning')
-                                                            ->color('warning')
-                                                            ->content('Editing stage is closed.'),
-                                                    ];
-                                                }
-
-                                                return [
-                                                    LivewireEntry::make('editing')
-                                                        ->livewire(Editing::class, [
-                                                            'submission' => $this->record,
-                                                        ]),
-                                                ];
-                                            }),
+                                            ->schema([
+                                                LivewireEntry::make('editing')
+                                                    ->livewire(Editing::class, [
+                                                        'submission' => $this->record,
+                                                    ]),
+                                            ]),
                                     ])
                                     ->maxWidth('full'),
                             ]),

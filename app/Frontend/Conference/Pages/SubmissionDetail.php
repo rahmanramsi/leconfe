@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Frontend\ScheduledConference\Pages;
+namespace App\Frontend\Conference\Pages;
 
 use App\Facades\MetaTag;
 use App\Models\Submission;
@@ -14,7 +14,7 @@ use Illuminate\Support\Str;
 
 class SubmissionDetail extends Page
 {
-    protected static string $view = 'frontend.scheduledConference.pages.submission-detail';
+    protected static string $view = 'frontend.conference.pages.submission-detail';
 
     public Submission $submission;
 
@@ -100,11 +100,9 @@ class SubmissionDetail extends Page
 
         $isSubmissionNotPublished = !$this->submission->isPublished();
 
-        $isEditingStageOpen = StageManager::editing()->isStageOpen();
-
         $canUserEdit = auth()->user()?->can('editing', $this->submission);
 
-        if ($isSubmissionNotPublished && $isEditingStageOpen && $canUserEdit) {
+        if ($isSubmissionNotPublished && $canUserEdit) {
             return true;
         }
 

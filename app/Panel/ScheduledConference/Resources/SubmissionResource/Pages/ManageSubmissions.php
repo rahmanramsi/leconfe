@@ -4,8 +4,10 @@ namespace App\Panel\ScheduledConference\Resources\SubmissionResource\Pages;
 
 use App\Models\Enums\SubmissionStatus;
 use App\Models\Enums\UserRole;
+use App\Models\Timeline;
 use App\Panel\ScheduledConference\Livewire\Workflows\Classes\StageManager;
 use App\Panel\ScheduledConference\Pages\Workflow;
+use App\Panel\ScheduledConference\Pages\WorkflowSetting;
 use App\Panel\ScheduledConference\Resources\SubmissionResource;
 use Awcodes\Shout\Components\ShoutEntry;
 use Filament\Actions\Action;
@@ -30,24 +32,6 @@ class ManageSubmissions extends ManageRecords
 
     protected const TAB_ARCHIVED = 'Archived';
 
-    public function infolist(Infolist $infolist): Infolist
-    {
-        return $infolist
-            ->schema([
-                ShoutEntry::make('title')
-                    ->hidden(function () {
-                        return StageManager::callForAbstract()->isStageOpen() || ! Auth::user()->can('Workflow:update');
-                    })
-                    ->type('warning')
-                    ->content(function () {
-                        $htmlString = 'Call for abstract stage is closed. ';
-                        $htmlString .= sprintf("<a href='%s' class='text-warning-700 hover:underline'>Click here</a> to open it.", Workflow::getUrl());
-
-                        return new HtmlString($htmlString);
-                    }),
-            ]);
-    }
-
     protected function getHeaderActions(): array
     {
         return [
@@ -56,12 +40,12 @@ class ManageSubmissions extends ManageRecords
                 ->authorize('Workflow:update')
                 ->outlined()
                 ->icon('heroicon-o-cog')
-                ->url(Workflow::getUrl()),
+                ->url(WorkflowSetting::getUrl()),
             Action::make('create')
                 ->button()
                 ->authorize('Submission:create')
                 ->disabled(
-                    fn (): bool => ! StageManager::callForAbstract()->isStageOpen()
+                    fn (): bool => !Timeline::isSubmissionOpen()
                 )
                 ->url(static::$resource::getUrl('create'))
                 ->icon('heroicon-o-plus')

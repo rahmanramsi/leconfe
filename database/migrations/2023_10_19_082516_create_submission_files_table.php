@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Media;
+use App\Models\ScheduledConference;
 use App\Models\Submission;
 use App\Models\SubmissionFileType;
 use App\Models\User;
@@ -17,6 +18,7 @@ return new class extends Migration
     {
         Schema::create('submission_file_types', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(ScheduledConference::class)->constrained();
             $table->string('name');
             $table->unsignedInteger('order_column')->nullable();
             $table->timestamps();

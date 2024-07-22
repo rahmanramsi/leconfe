@@ -27,15 +27,6 @@ class DraftFiles extends SubmissionFilesTable
         return $this->getCategory();
     }
 
-    public function getAcceptedFiles(): array
-    {
-        return StageManager::editing()
-            ->getSetting(
-                'draft_allowed_file_types',
-                ['pdf', 'doc', 'docx']
-            );
-    }
-
     public function getSelectableCategories(): array
     {
         return [

@@ -2,10 +2,11 @@
 
 namespace App\Panel\ScheduledConference\Livewire;
 
-use App\Actions\Topics\TopicCreateAction;
-use App\Actions\User\TopicUpdateAction;
-use App\Models\SubmissionFileType;
-use App\Models\Topic;
+use App\Facades\Setting;
+use App\Models\Timeline;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -16,12 +17,14 @@ use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
+use Illuminate\Validation\Rules\Unique;
 use Livewire\Component;
 
-class SubmissionFileTypeTable extends Component implements HasForms, HasTable
+class TimelineTable extends Component implements HasForms, HasTable
 {
     use InteractsWithForms, InteractsWithTable;
 
@@ -33,29 +36,31 @@ class SubmissionFileTypeTable extends Component implements HasForms, HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->query(SubmissionFileType::query())
-            ->defaultPaginationPageOption(10)
-            ->heading('Paper Components')
-            ->reorderable('order_column')
-            ->defaultSort('order_column')
+            ->query(Timeline::query())
+            ->heading('Timeline')
+            ->defaultSort('date')
             ->columns([
-                TextColumn::make('name')
-                    ->searchable(),
+                TextColumn::make('name'),
+                TextColumn::make('date')
+                    ->dateTime(Setting::get('format_date'))
+                    ->sortable(),
+                ToggleColumn::make('hide')
+                    ->label('Hidden'),
             ])
             ->headerActions([
                 CreateAction::make()
-                    ->label('Add a Component')
+                    ->label('Add new Timeline')
                     ->modalWidth(MaxWidth::ExtraLarge)
                     ->form(fn (Form $form) => $this->form($form)),
+            ])
+            ->filters([
+                // ...
             ])
             ->actions([
                 EditAction::make()
                     ->modalWidth(MaxWidth::ExtraLarge)
                     ->form(fn (Form $form) => $this->form($form)),
                 DeleteAction::make(),
-            ])
-            ->bulkActions([
-                DeleteBulkAction::make(),
             ]);
     }
 
@@ -65,6 +70,17 @@ class SubmissionFileTypeTable extends Component implements HasForms, HasTable
             ->schema([
                 TextInput::make('name')
                     ->required(),
+                Textarea::make('description')
+                    ->maxLength(255),
+                DatePicker::make('date')
+                    ->required(),
+                Select::make('type')
+                    ->options(Timeline::getTypes())
+                    ->helperText('Type that integrates with the workflow process.')
+                    ->unique(
+                        ignorable: fn () => $form->getRecord(),
+                        modifyRuleUsing: fn (Unique $rule) => $rule->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId()),
+                    ),
             ]);
     }
 }

@@ -4,8 +4,10 @@ namespace App\Observers;
 
 use App\Actions\Committees\CommitteeRolePopulateDefaultDataAction;
 use App\Actions\Speakers\SpeakerRolePopulateDefaultDataAction;
+use App\Actions\SubmissionFiles\FilesTypePopulateAction;
 use App\Models\NavigationMenu;
 use App\Models\NavigationMenuItem;
+use App\Models\Review;
 use App\Models\ScheduledConference;
 use HTML5;
 use Illuminate\Support\HtmlString;
@@ -121,6 +123,8 @@ class ScheduledConferenceObserver
             ],
         ]);
 
+        FilesTypePopulateAction::run($scheduledConference);
+        
         $scheduledConference->setManyMeta([
             'before_you_begin' =>  <<<HTML
             <p>Thank you for submitting to the $scheduledConference->title. You will be asked to upload files, identify co-authors, and provide information such as the title and abstract.</p>
@@ -137,6 +141,9 @@ class ScheduledConferenceObserver
                 <li>The text adheres to the stylistic and bibliographic requirements outlined in the Author Guidelines.</li>
             </ul>
         HTML,
+            'review_mode' => Review::MODE_DOUBLE_ANONYMOUS,
+            'review_invitation_response_deadline' => 28,
+            'review_completion_deadline' => 28,
         ]);
     }
 }

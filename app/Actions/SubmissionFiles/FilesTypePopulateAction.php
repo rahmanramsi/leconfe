@@ -2,6 +2,7 @@
 
 namespace App\Actions\SubmissionFiles;
 
+use App\Models\ScheduledConference;
 use App\Models\SubmissionFileType;
 use Lorisleiva\Actions\Concerns\AsAction;
 
@@ -9,7 +10,7 @@ class FilesTypePopulateAction
 {
     use AsAction;
 
-    public function handle()
+    public function handle(ScheduledConference $scheduledConference)
     {
         foreach ([
             'Research Instrument',
@@ -20,9 +21,10 @@ class FilesTypePopulateAction
             'Data Set',
             'Source Text',
             'Other',
-        ] as $type) {
+        ] as $name) {
             SubmissionFileType::firstOrCreate([
-                'name' => $type,
+                'name' => $name,
+                'scheduled_conference_id' => $scheduledConference->id,
             ]);
         }
     }

@@ -14,9 +14,6 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 
-/**
- * Create a job to change status
- */
 class AbstractSetting extends WorkflowStage implements HasActions, HasForms
 {
     use InteractsWithActions, InteractsWithForms;

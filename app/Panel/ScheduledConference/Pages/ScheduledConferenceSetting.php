@@ -11,7 +11,6 @@ use App\Infolists\Components\LivewireEntry;
 use App\Panel\Administration\Livewire\SidebarSetting;
 use App\Panel\Conference\Livewire\NavigationMenuSetting;
 use App\Panel\ScheduledConference\Livewire\ContactSetting;
-use App\Panel\ScheduledConference\Livewire\InformationSetting;
 use App\Panel\ScheduledConference\Livewire\MastHeadSetting;
 use App\Panel\ScheduledConference\Livewire\SetupSetting;
 use App\Panel\ScheduledConference\Livewire\SponsorSetting;
@@ -54,12 +53,6 @@ class ScheduledConferenceSetting extends Page
                                 LivewireEntry::make('contact')
                                     ->livewire(ContactSetting::class),
                             ]),
-                        Tabs\Tab::make('Topics')
-                            ->schema([
-                                LivewireEntry::make('topics')
-                                    ->livewire(TopicTable::class),
-                            ]),
-                        
                     ]),
             ]);
     }

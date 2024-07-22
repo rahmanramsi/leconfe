@@ -3,6 +3,7 @@
 namespace App\Panel\ScheduledConference\Resources\SubmissionResource\Pages;
 
 use App\Actions\Submissions\SubmissionCreateAction;
+use App\Models\Timeline;
 use App\Panel\ScheduledConference\Livewire\Workflows\Classes\StageManager;
 use App\Panel\ScheduledConference\Resources\SubmissionResource;
 use Filament\Forms\Components\Checkbox;
@@ -47,7 +48,7 @@ class CreateSubmission extends Page implements HasForms
     protected function getViewData(): array
     {
         return [
-            'isOpen' => StageManager::callForAbstract()->isStageOpen(),
+            'isOpen' => Timeline::isSubmissionOpen(),
         ];
     }
 

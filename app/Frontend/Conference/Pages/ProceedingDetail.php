@@ -23,12 +23,12 @@ class ProceedingDetail extends Page
 
     public function canAccess(): bool
     {
-        return StageManager::editing()->isStageOpen() || $this->proceeding->isPublished();
+        return $this->proceeding->isPublished();
     }
 
     public function canPreview(): bool
     {
-        return ! $this->proceeding->isPublished() && StageManager::editing()->isStageOpen();
+        return ! $this->proceeding->isPublished();
     }
 
     public function getBreadcrumbs(): array

@@ -13,9 +13,6 @@ use App\Panel\Administration\Livewire\SidebarSetting;
 use App\Panel\Conference\Livewire\NavigationMenuSetting;
 use App\Panel\Conference\Livewire\SetupSetting;
 use App\Panel\Conference\Livewire\ThemeSetting;
-use App\Panel\ScheduledConference\Livewire\InformationSetting;
-use App\Panel\ScheduledConference\Livewire\PrivacySetting;
-use App\Panel\ScheduledConference\Livewire\SponsorSetting;
 
 class WebsiteSetting extends Page
 {
