@@ -9,7 +9,6 @@ use App\Models\Enums\UserRole;
 use App\Models\Review;
 use App\Models\Submission;
 use App\Models\User;
-use App\Panel\ScheduledConference\Livewire\Workflows\Concerns\InteractWithTenant;
 use App\Panel\ScheduledConference\Resources\SubmissionResource;
 use Awcodes\Shout\Components\ShoutEntry;
 use Filament\Actions\Action;
@@ -31,7 +30,7 @@ use App\Forms\Components\TinyEditor;
 
 class ReviewSubmissionPage extends Page implements HasActions, HasInfolists
 {
-    use InteractsWithActions, InteractsWithInfolists, InteractWithTenant;
+    use InteractsWithActions, InteractsWithInfolists;
 
     protected static string $resource = SubmissionResource::class;
 

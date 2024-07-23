@@ -58,10 +58,8 @@ use App\Panel\ScheduledConference\Livewire\Submissions\Forms\Detail;
 use Filament\Infolists\Components\Tabs\Tab as HorizontalTab;
 use App\Panel\ScheduledConference\Livewire\Submissions\CallforAbstract;
 use App\Panel\ScheduledConference\Livewire\Submissions\Forms\References;
-use App\Panel\ScheduledConference\Livewire\Workflows\Classes\StageManager;
 use App\Forms\Components\TinyEditor;
 use App\Panel\ScheduledConference\Livewire\Submissions\Components\GalleyList;
-use App\Panel\ScheduledConference\Livewire\Workflows\Concerns\InteractWithTenant;
 use App\Panel\ScheduledConference\Livewire\Submissions\Components\ActivityLogList;
 use App\Panel\ScheduledConference\Livewire\Submissions\Components\ContributorList;
 use App\Panel\ScheduledConference\Livewire\Submissions\Components\SubmissionProceeding;
@@ -69,7 +67,7 @@ use Filament\Support\Enums\MaxWidth;
 
 class ViewSubmission extends Page implements HasForms, HasInfolists
 {
-    use InteractsWithForms, InteractsWithInfolists, InteractsWithRecord, InteractWithTenant;
+    use InteractsWithForms, InteractsWithInfolists, InteractsWithRecord;
 
     protected static string $resource = SubmissionResource::class;
 
@@ -103,7 +101,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
     {
         return [
             Action::make('payment')
-                ->visible($this->record->hasPaymentProcess())
+            ->visible($this->record->hasPaymentProcess())
                 ->record(fn () => $this->record->payment)
                 ->model(Payment::class)
                 ->icon('heroicon-o-currency-dollar')

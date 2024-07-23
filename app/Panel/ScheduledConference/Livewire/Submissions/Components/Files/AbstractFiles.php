@@ -3,7 +3,6 @@
 namespace App\Panel\ScheduledConference\Livewire\Submissions\Components\Files;
 
 use App\Constants\SubmissionFileCategory;
-use App\Panel\ScheduledConference\Livewire\Workflows\Classes\StageManager;
 
 class AbstractFiles extends SubmissionFilesTable
 {
@@ -18,15 +17,6 @@ class AbstractFiles extends SubmissionFilesTable
     public function getTargetCategory(): string
     {
         return $this->getCategory();
-    }
-
-    public function getAcceptedFiles(): array
-    {
-        return StageManager::callForAbstract()
-            ->getSetting(
-                'allowed_file_types',
-                parent::ACCEPTED_FILE_TYPES
-            );
     }
 
     public function isViewOnly(): bool

@@ -10,7 +10,6 @@ use App\Models\Enums\SubmissionStage;
 use App\Models\Enums\SubmissionStatus;
 use App\Models\MailTemplate;
 use App\Models\Submission;
-use App\Panel\ScheduledConference\Livewire\Workflows\Classes\StageManager;
 use App\Panel\ScheduledConference\Resources\SubmissionResource;
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
@@ -33,15 +32,12 @@ class PeerReview extends Component implements HasActions, HasForms
 
     public Submission $submission;
 
-    public bool $stageOpened = false;
-
     protected $listeners = [
         'refreshSubmission' => '$refresh',
     ];
 
     public function mount(Submission $submission)
     {
-        $this->stageOpened = StageManager::peerReview()->isStageOpen();
     }
 
     public function declineSubmissionAction()

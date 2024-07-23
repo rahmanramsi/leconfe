@@ -16,8 +16,8 @@ use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Illuminate\Support\Facades\Log;
 use Squire\Models\Currency;
-
-class PaymentSetting extends WorkflowStage implements HasActions, HasForms
+use Livewire\Component;
+class PaymentSetting extends Component implements HasActions, HasForms
 {
     use InteractsWithActions, InteractsWithForms;
 
@@ -31,9 +31,9 @@ class PaymentSetting extends WorkflowStage implements HasActions, HasForms
     {
         $this->form->fill([
             'payment' => [
-                'enabled' => $this->scheduledConference->getMeta('payment.enabled'),
-                'method' => $this->scheduledConference->getMeta('payment.method', 'manual'),
-                'supported_currencies' => $this->scheduledConference->getMeta('payment.supported_currencies', ['usd']),
+                'enabled' => app()->getCurrentScheduledConference()->getMeta('payment.enabled'),
+                'method' => app()->getCurrentScheduledConference()->getMeta('payment.method', 'manual'),
+                'supported_currencies' => app()->getCurrentScheduledConference()->getMeta('payment.supported_currencies', ['usd']),
             ],
             ...Payment::getAllDriverNames()->map(fn ($name, $key) => Payment::driver($key)?->getSettingFormFill() ?? [])->toArray(),
         ]);

@@ -28,8 +28,6 @@ abstract class SubmissionFilesTable extends \Livewire\Component implements HasFo
 {
     use InteractsWithForms, InteractsWithTable;
 
-    public const ACCEPTED_FILE_TYPES = ['pdf', 'docx', 'xls', 'png', 'jpg', 'jpeg'];
-
     public Submission $submission;
 
     public bool $viewOnly = false;
@@ -54,7 +52,7 @@ abstract class SubmissionFilesTable extends \Livewire\Component implements HasFo
 
     public function getAcceptedFiles(): array
     {
-        return static::ACCEPTED_FILE_TYPES;
+        return config('media-library.accepted_file_types');
     }
 
     public function tableColumns(): array

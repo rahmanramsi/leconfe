@@ -3,7 +3,6 @@
 namespace App\Panel\ScheduledConference\Livewire\Submissions\Components\Files;
 
 use App\Constants\SubmissionFileCategory;
-use App\Panel\ScheduledConference\Livewire\Workflows\Classes\StageManager;
 
 class DraftFiles extends SubmissionFilesTable
 {

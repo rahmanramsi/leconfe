@@ -5,8 +5,6 @@ namespace App\Mail\Templates;
 use App\Classes\Log;
 use App\Mail\Templates\Traits\CanCustomizeTemplate;
 use App\Models\Review;
-use App\Panel\ScheduledConference\Livewire\Workflows\Classes\StageManager;
-use Carbon\Carbon;
 
 class ReviewerInvitationMail extends TemplateMailable
 {

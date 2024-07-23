@@ -11,8 +11,6 @@ use App\Models\Role;
 use App\Models\Submission;
 use App\Notifications\AbstractAccepted;
 use App\Notifications\AbstractDeclined;
-use App\Panel\ScheduledConference\Livewire\Workflows\Classes\StageManager;
-use App\Panel\ScheduledConference\Livewire\Workflows\Concerns\InteractWithTenant;
 use App\Panel\ScheduledConference\Resources\SubmissionResource;
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
@@ -29,7 +27,7 @@ use App\Forms\Components\TinyEditor;
 
 class CallforAbstract extends Component implements HasActions, HasForms
 {
-    use InteractsWithActions, InteractsWithForms, InteractWithTenant;
+    use InteractsWithActions, InteractsWithForms;
 
     public Submission $submission;
 
@@ -208,7 +206,6 @@ class CallforAbstract extends Component implements HasActions, HasForms
     public function render()
     {
         return view('panel.scheduledConference.livewire.submissions.call-for-abstract', [
-            'reviewStageOpen' => StageManager::peerReview()->isStageOpen(),
             'submissionDecision' => in_array($this->submission->status, [SubmissionStatus::OnReview, SubmissionStatus::Editing, SubmissionStatus::Declined]),
         ]);
     }
