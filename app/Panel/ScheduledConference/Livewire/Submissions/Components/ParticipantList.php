@@ -174,6 +174,7 @@ class ParticipantList extends Component implements HasForms, HasTable
                                             ->readOnly(),
                                         TinyEditor::make('message')
                                             ->minHeight(300)
+                                            ->profile('email')
                                             ->columnSpanFull()
                                             ->toolbarSticky(false),
                                     ]),
@@ -259,6 +260,7 @@ class ParticipantList extends Component implements HasForms, HasTable
                                         ->required(),
                                     TinyEditor::make('message')
                                         ->minHeight(300)
+                                        ->profile('email')
                                         ->label('Message')
                                         ->required()
                                         ->columnSpanFull(),

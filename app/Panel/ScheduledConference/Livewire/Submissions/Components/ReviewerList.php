@@ -321,7 +321,8 @@ class ReviewerList extends Component implements HasForms, HasTable
                             TextInput::make('subject')
                                 ->required(),
                             TinyEditor::make('message')
-                                ->minHeight(300),
+                                ->minHeight(300)
+                                ->profile('email'),
                         ])
                         ->successNotificationTitle('E-mail sent')
                         ->action(function (Action $action, Review $record, array $data) {
@@ -364,6 +365,7 @@ class ReviewerList extends Component implements HasForms, HasTable
                                         ->columnSpanFull(),
                                     TinyEditor::make('message')
                                         ->minHeight(300)
+                                        ->profile('email')
                                         ->hidden(fn (Get $get) => $get('do-not-notify-cancelation'))
                                         ->columnSpanFull(),
                                     Checkbox::make('do-not-notify-cancelation')
@@ -409,6 +411,7 @@ class ReviewerList extends Component implements HasForms, HasTable
                                 ->columnSpanFull(),
                             TinyEditor::make('message')
                                 ->minHeight(300)
+                                ->profile('email')
                                 ->columnSpanFull(),
                         ])
                         ->action(function (Action $action, Review $record) {
@@ -463,6 +466,7 @@ class ReviewerList extends Component implements HasForms, HasTable
                                     ->columnSpanFull(),
                                 TinyEditor::make('message')
                                     ->minHeight(300)
+                                    ->profile('email')
                                     ->label('Reviewer invitation message')
                                     ->columnSpanFull(),
                                 Checkbox::make('no-invitation-notification')

@@ -4,7 +4,6 @@ namespace App\Frontend\Conference\Pages;
 
 use App\Facades\MetaTag;
 use App\Models\Submission;
-use App\Panel\ScheduledConference\Livewire\Workflows\Classes\StageManager;
 use Illuminate\Contracts\Support\Htmlable;
 use Livewire\Attributes\Title;
 use Illuminate\Support\Facades\Route;
@@ -81,7 +80,7 @@ class SubmissionDetail extends Page
             return false;
         }
 
-        if (StageManager::editing()->isStageOpen() && auth()->user()?->can('editing', $this->submission)) {
+        if (auth()->user()?->can('editing', $this->submission)) {
             return true;
         }
 

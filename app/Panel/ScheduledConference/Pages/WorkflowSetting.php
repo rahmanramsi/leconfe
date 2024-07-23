@@ -10,10 +10,13 @@ use Filament\Infolists\Components\Tabs;
 use App\Infolists\Components\LivewireEntry;
 use App\Panel\ScheduledConference\Livewire\AuthorGuidance;
 use App\Infolists\Components\VerticalTabs as InfolistsVerticalTabs;
+use App\Panel\Conference\Livewire\EmailSetting;
 use App\Panel\ScheduledConference\Livewire\AuthorRoleTable;
+use App\Panel\ScheduledConference\Livewire\PaymentSetting;
 use App\Panel\ScheduledConference\Livewire\ReviewGuidance;
 use App\Panel\ScheduledConference\Livewire\ReviewSetupSetting;
 use App\Panel\ScheduledConference\Livewire\SubmissionFileTypeTable;
+use App\Panel\ScheduledConference\Livewire\SubmissionPaymentItemTable;
 use App\Panel\ScheduledConference\Livewire\TimelineTable;
 use App\Panel\ScheduledConference\Livewire\TopicTable;
 
@@ -90,6 +93,27 @@ class WorkflowSetting extends Page
                             ->schema([
                                 LivewireEntry::make('timeline-table')
                                     ->livewire(TimelineTable::class),
+                            ]),
+                        Tabs\Tab::make('Emails')
+                            ->schema([
+                                LivewireEntry::make('email-setting')
+                                    ->livewire(EmailSetting::class),
+                            ]),
+                        Tabs\Tab::make('Payments')
+                            ->schema([
+                                InfolistsVerticalTabs\Tabs::make()
+                                ->schema([
+                                    InfolistsVerticalTabs\Tab::make('Setup')
+                                        ->schema([
+                                            LivewireEntry::make('payments')
+                                                ->livewire(PaymentSetting::class),
+                                        ]),
+                                    InfolistsVerticalTabs\Tab::make('Submission Payment Items')
+                                        ->schema([
+                                            LivewireEntry::make('payment-items')
+                                                ->livewire(SubmissionPaymentItemTable::class),
+                                        ]),
+                                ]),
                             ]),
 
                     ]),

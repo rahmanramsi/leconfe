@@ -332,6 +332,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                                     TextInput::make('subject')
                                         ->required(),
                                     TinyEditor::make('message')
+                                        ->profile('email')
                                         ->minHeight(300),
                                     Checkbox::make('do-not-notify-author')
                                         ->label("Don't Send Notification to Author"),

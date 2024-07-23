@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Panel\ScheduledConference\Livewire\Workflows\Payment\Tables;
+namespace App\Panel\ScheduledConference\Livewire;
 
 use App\Models\Enums\PaymentType;
 use App\Models\PaymentItem;

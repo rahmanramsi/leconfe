@@ -16,11 +16,9 @@ class ReviewerInvitationMail extends TemplateMailable
 
     public string $submissionTitle;
 
-    public string $dateStart;
+    public string $responseDueDate;
 
-    public string $dateEnd;
-
-    public string $responseDeadline;
+    public string $reviewDueDate;
 
     public string $loginLink;
 
@@ -30,31 +28,17 @@ class ReviewerInvitationMail extends TemplateMailable
 
     public function __construct(Review $review)
     {
-        $stageManager = StageManager::peerReview();
+        $submission = $review->submission;
+        $scheduledConference = $submission->scheduledConference;
+
         $this->name = $review->user->fullName;
         $this->submissionTitle = $review->submission->getMeta('title');
 
-        $this->dateStart = Carbon::parse(
-            $stageManager->getSetting(
-                'start_at',
-                now()->addDays(1)->format('d F Y')
-            )
-        )->format('d F Y');
+        $this->responseDueDate = now()->addDays($scheduledConference->getMeta('review_invitation_response_deadline') ?? 28)->format('d F Y');
 
-        $this->dateEnd = Carbon::parse(
-            $stageManager->getSetting(
-                'end_at',
-                now()->addDays(14)->format('d F Y')
-            )
-        )->format('d F Y');
+        $this->reviewDueDate = now()->addDays($scheduledConference->getMeta('review_completion_deadline') ?? 28)->format('d F Y');
 
-        $this->responseDeadline = Carbon::parse(
-            $review->created_at->addDays(
-                $stageManager->getSetting('invitation_response_days', 14)
-            )
-        )->format('d F Y');
-
-        $this->loginLink = route('livewirePageGroup.website.pages.login');
+        $this->loginLink = route('filament.scheduledConference.pages.dashboard', ['scheduledConference' => $scheduledConference, 'conference' => $scheduledConference->conference]);
 
         $this->log = Log::make(
             name: 'email',
@@ -88,20 +72,16 @@ class ReviewerInvitationMail extends TemplateMailable
             And here is the review details:
             <table>
                 <tr>
-                    <td style="width:100px;">Date Start</td>
+                    <td>Response Due Date</td>
                     <td>:</td>
-                    <td>{{ dateStart }}</td>
+                    <td>{{ responseDueDate }}</td>
                 </tr>
                 <tr>
-                    <td style="width:100px;">Date End</td>
+                    <td>Review Due Date</td>
                     <td>:</td>
-                    <td>{{ dateEnd }}</td>
+                    <td>{{ reviewDueDate }}</td>
                 </tr>
-                <tr>
-                    <td style="width:100px;">Response Deadline</td>
-                    <td>:</td>
-                    <td>{{ responseDeadline }}</td>
-                </tr>
+            </table>
             <p>Please <a href="{{ loginLink }}"> log in</a> to the system to proceed with the evaluation process.</p>
         HTML;
     }

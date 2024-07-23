@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Panel\ScheduledConference\Livewire\Workflows;
+namespace App\Panel\ScheduledConference\Livewire;
 
 use App\Facades\Payment;
 use App\Panel\ScheduledConference\Livewire\Workflows\Base\WorkflowStage;

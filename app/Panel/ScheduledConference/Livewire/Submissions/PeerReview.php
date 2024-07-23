@@ -71,6 +71,7 @@ class PeerReview extends Component implements HasActions, HasForms
                             ->required(),
                         TinyEditor::make('message')
                             ->minHeight(300)
+                            ->profile('email')
                             ->columnSpanFull(),
                         Checkbox::make('do-not-notify-author')
                             ->label("Don't Send Notification to Author")
@@ -131,6 +132,7 @@ class PeerReview extends Component implements HasActions, HasForms
                             ->required(),
                         TinyEditor::make('message')
                             ->minHeight(300)
+                            ->profile('email')
                             ->columnSpanFull(),
                         Checkbox::make('do-not-notify-author')
                             ->label("Don't Send Notification to Author")
@@ -192,6 +194,7 @@ class PeerReview extends Component implements HasActions, HasForms
                             ->required(),
                         TinyEditor::make('message')
                             ->minHeight(300)
+                            ->profile('email')
                             ->columnSpanFull(),
                         Checkbox::make('do-not-notify-author')
                             ->label("Don't Send Notification to Author")
