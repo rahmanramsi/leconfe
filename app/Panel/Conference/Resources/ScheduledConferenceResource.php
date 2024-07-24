@@ -7,7 +7,7 @@ use App\Facades\Setting;
 use App\Models\Enums\ScheduledConferenceState;
 use App\Models\Enums\ScheduledConferenceType;
 use App\Models\ScheduledConference;
-use App\Panel\Conference\Resources\SerieResource\Pages;
+use App\Panel\Conference\Resources\ScheduledConferenceResource\Pages;
 use App\Tables\Columns\IndexColumn;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DatePicker;
@@ -143,7 +143,7 @@ class ScheduledConferenceResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageSeries::route('/'),
+            'index' => Pages\ManageScheduledConferences::route('/'),
         ];
     }
 }

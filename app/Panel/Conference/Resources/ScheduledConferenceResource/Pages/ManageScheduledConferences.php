@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Panel\Conference\Resources\SerieResource\Pages;
+namespace App\Panel\Conference\Resources\ScheduledConferenceResource\Pages;
 
 use App\Actions\ScheduledConferences\ScheduledConferenceCreateAction;
 use App\Models\Enums\ScheduledConferenceState;
@@ -11,7 +11,7 @@ use Filament\Resources\Pages\ManageRecords;
 use Filament\Support\Enums\MaxWidth;
 use Illuminate\Database\Eloquent\Builder;
 
-class ManageSeries extends ManageRecords
+class ManageScheduledConferences extends ManageRecords
 {
     protected static string $resource = ScheduledConferenceResource::class;
 
