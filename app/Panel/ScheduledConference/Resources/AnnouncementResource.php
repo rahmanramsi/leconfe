@@ -48,7 +48,7 @@ class AnnouncementResource extends Resource
                     ->autosize(),
                 TinyEditor::make('meta.content')
                     ->label('Announcement')
-                    // ->minHeight(300)
+                    ->profile('basic')
                     ->helperText('The complete announcement content.'),
                 DatePicker::make('expires_at')
                     ->minDate(today()->addDay()),
