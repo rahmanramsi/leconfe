@@ -88,7 +88,6 @@ Admin:
     - 'Venue:update'
     - 'Venue:view'
     - 'Venue:viewAny'
-    - 'Workflow:update'
     - 'Proceeding:view'
     - 'Proceeding:viewAny'
     - 'Proceeding:update'
@@ -167,7 +166,6 @@ Admin:
     - 'Venue:update'
     - 'Venue:view'
     - 'Venue:viewAny'
-    - 'Workflow:update'
 Editor:
     - 'Discussion:delete'
     - 'DiscussionTopic:create'

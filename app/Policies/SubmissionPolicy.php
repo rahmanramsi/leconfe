@@ -46,7 +46,7 @@ class SubmissionPolicy
     public function delete(User $user, Submission $submission)
     {
         // Only submission with status: withdrawn or declined can be deleted.
-        if (! in_array($submission->status, [SubmissionStatus::Declined, SubmissionStatus::Withdrawn, SubmissionStatus::Incomplete])) {
+        if (!in_array($submission->status, [SubmissionStatus::Declined, SubmissionStatus::Withdrawn, SubmissionStatus::Incomplete])) {
             return false;
         }
 
@@ -145,6 +145,31 @@ class SubmissionPolicy
         }
 
         if ($user->can('Submission:uploadAbstract')) {
+            return true;
+        }
+    }
+
+    public function uploadPresentation(User $user, Submission $submission)
+    {
+        if (in_array($submission->status, [
+            SubmissionStatus::Declined, 
+            SubmissionStatus::Withdrawn, 
+            SubmissionStatus::Published,
+            SubmissionStatus::OnReview,
+        ])) {
+            return false;
+        }
+
+        if (filled($submission->withdrawn_reason)) {
+            return false;
+        }
+
+        // Cannot upload an abstract if it has not been accepted yet.
+        if ($submission->stage == SubmissionStage::CallforAbstract) {
+            return false;
+        }
+
+        if ($user->can('Submission:uploadPresentation')) {
             return true;
         }
     }
@@ -270,12 +295,23 @@ class SubmissionPolicy
         }
     }
 
-    public function assignParticipant(User $user, Submission $submission)
+    public function sendToEditing(User $user, Submission $submission)
     {
-        if (in_array($submission->status, [SubmissionStatus::Withdrawn, SubmissionStatus::Published])) {
+        if ($submission->stage != SubmissionStage::Presentation) {
             return false;
         }
-        
+
+        if ($user->can('Submission:sendToEditing')) {
+            return true;
+        }
+    }
+
+    public function assignParticipant(User $user, Submission $submission)
+    {
+        if ($submission->stage != SubmissionStage::Editing) {
+            return false;
+        }
+
         if (filled($submission->withdrawn_reason)) {
             return false;
         }
@@ -311,7 +347,7 @@ class SubmissionPolicy
         }
 
         // Editors cannot withdraw submissions; they must wait for the author to request it..
-        if (! filled($submission->withdrawn_reason)) {
+        if (!filled($submission->withdrawn_reason)) {
             return false;
         }
 

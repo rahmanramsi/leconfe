@@ -12,6 +12,8 @@ final class SubmissionFileCategory
 
     public const REVIEWER_FILES = 'reviewer-files';
 
+    public const PRESENTATION_FILES = 'presentation-files';
+
     public const REVISION_FILES = 'revision-files';
 
     public const REVIEWER_ASSIGNED_FILES = 'reviewer-assigned-files';

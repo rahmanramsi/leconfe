@@ -19,7 +19,8 @@ class PublishedSubmissionState extends BaseSubmissionState
         Log::make(
             name: 'submission',
             subject: $this->submission,
-            description: __('log.submission.unpublished')
+            description: __('log.submission.unpublished'),
+            event: 'submission-unpublished',
         )
             ->by(auth()->user())
             ->save();

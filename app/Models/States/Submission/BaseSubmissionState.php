@@ -21,9 +21,14 @@ class BaseSubmissionState implements SubmissionStateInterface
         throw new \Exception('Cannot accept abstract');
     }
 
-    public function accept(): void
+    public function sendToEditing(): void
     {
         throw new \Exception('Cannot accept');
+    }
+
+    public function sendToPresentation(): void
+    {
+        throw new \Exception('Cannot send to presentation');
     }
 
     public function publish(): void

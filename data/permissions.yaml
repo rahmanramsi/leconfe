@@ -64,6 +64,7 @@
 - 'Submission:update'
 - 'Submission:uploadAbstract'
 - 'Submission:uploadPaper'
+- 'Submission:uploadPresentation'
 - 'Submission:uploadRevisionFiles'
 - 'Submission:view'
 - 'Submission:viewAny'
@@ -92,4 +93,3 @@
 - 'Venue:update'
 - 'Venue:view'
 - 'Venue:viewAny'
-- 'Workflow:update'

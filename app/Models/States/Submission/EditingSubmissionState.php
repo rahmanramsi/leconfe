@@ -33,25 +33,6 @@ class EditingSubmissionState extends BaseSubmissionState
             ->save();
     }
 
-    public function accept(): void
-    {
-        SubmissionUpdateAction::run([
-            'revision_required' => false,
-            'stage' => SubmissionStage::Editing,
-            'status' => SubmissionStatus::Editing,
-        ], $this->submission);
-
-        Accepted::dispatch($this->submission);
-
-        Log::make(
-            name: 'submission',
-            subject: $this->submission,
-            description: __('log.submission.accepted')
-        )
-            ->by(auth()->user())
-            ->save();
-    }
-
     public function decline(): void
     {
         SubmissionUpdateAction::run([

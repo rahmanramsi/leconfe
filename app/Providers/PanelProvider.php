@@ -24,6 +24,7 @@ use Filament\View\PanelsRenderHook;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use App\Forms\Components\TinyEditor;
+use GuzzleHttp\Psr7\MimeType;
 
 class PanelProvider extends ServiceProvider
 {
@@ -102,9 +103,7 @@ class PanelProvider extends ServiceProvider
             ->id('administration')
             ->path('administration')
             ->homeUrl(fn () => route('livewirePageGroup.website.pages.home'))
-            ->bootUsing(function () {
-                static::setupFilamentComponent();
-            })
+            ->bootUsing(fn() => static::setupFilamentComponent())
             ->discoverResources(in: app_path('Panel/Administration/Resources'), for: 'App\\Panel\\Administration\\Resources')
             ->discoverPages(in: app_path('Panel/Administration/Pages'), for: 'App\\Panel\\Administration\\Pages')
             ->discoverWidgets(in: app_path('Panel/Administration/Widgets'), for: 'App\\Panel\\Administration\\Widgets')
@@ -204,9 +203,10 @@ class PanelProvider extends ServiceProvider
                 ->imageResizeTargetWidth(2048)
                 ->imageResizeMode('contain')
                 ->imageResizeUpscale(false)
-                ->maxSize(config('media-library.max_file_size') / 1024);
-
-            // ->acceptedFileTypes(config('media-library.accepted_file_types'))
+                ->maxSize(config('media-library.max_file_size') / 1024)
+                ->acceptedFileTypes(collect(config('media-library.accepted_file_types'))
+                    ->map(fn ($ext) => MimeType::fromExtension($ext) ?? $ext)
+                    ->toArray());
         });
         DatePicker::configureUsing(function (DatePicker $datePicker): void {
             $datePicker

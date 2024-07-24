@@ -16,19 +16,22 @@ class Log
     public function __construct(
         public Model $subject,
         public string $name,
-        public ?string $description = null
+        public ?string $description = null,
+        public ?string $event = null,
     ) {
     }
 
     public static function make(
         Model $subject,
         string $name,
-        ?string $description = null
+        ?string $description = null,
+        ?string $event = null,
     ): self {
         return app(static::class, [
             'subject' => $subject,
             'name' => $name,
             'description' => $description,
+            'event' => $event,
         ]);
     }
 
