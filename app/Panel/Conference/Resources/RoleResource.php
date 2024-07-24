@@ -22,7 +22,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
-use Spatie\Permission\Models\Permission;
+use App\Models\Permission;
 use Spatie\Permission\PermissionRegistrar;
 use Livewire\Component as Livewire;
 
@@ -40,7 +40,7 @@ class RoleResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return static::getModel()::query();
+        return static::getModel()::query()->where('name', '!=', UserRole::Admin);
     }
 
     public static function form(Form $form): Form
@@ -53,11 +53,11 @@ class RoleResource extends Resource
                         Select::make('copy_permissions_from')
                             ->dehydrated(false)
                             ->label('Copy permissions from')
-                            ->hidden(fn(string $operation) => $operation === 'view')
-                            ->options(fn() => static::getEloquentQuery()->pluck('name', 'id')->toArray())
+                            ->hidden(fn (string $operation) => $operation === 'view')
+                            ->options(fn () => static::getEloquentQuery()->where('name', '!=', UserRole::Admin)->pluck('name', 'id')->toArray())
                             ->live()
                             ->afterStateUpdated(function (Set $set, ?string $state) {
-                                if (! $state) {
+                                if (!$state) {
                                     return;
                                 }
 
@@ -70,7 +70,7 @@ class RoleResource extends Resource
 
                                         $condition = $newParent->hasPermissionTo($permission);
 
-                                        $set('permissions.'.$permission->name, $condition);
+                                        $set('permissions.' . $permission->name, $condition);
                                     });
                             })
                             ->preload(),
@@ -107,8 +107,8 @@ class RoleResource extends Resource
                     ->requiresConfirmation()
                     ->icon('heroicon-o-shield-check')
                     ->label('Persist Permissions')
-                    ->hidden(fn(Role $record) => !in_array($record->name, UserRole::values()) || app()->isProduction())
-                    ->action(fn(Role $record) => RolePersistAssignedPermissions::run($record))
+                    ->hidden(fn (Role $record) => !in_array($record->name, UserRole::values()) || app()->isProduction())
+                    ->action(fn (Role $record) => RolePersistAssignedPermissions::run($record))
                     ->successNotificationTitle('Permissions persisted successfully.')
             ])
             ->bulkActions([
@@ -141,32 +141,37 @@ class RoleResource extends Resource
     public static function getPermissionEntitySchema(): array
     {
         $permissions = app(PermissionRegistrar::class)->getPermissions();
-        $permissionsGroupedByEntity = $permissions->groupBy(function ($permission) {
-            // Split the permission name by the first colon
-            // Example : "User:update" become ["User", "update"]
-            [$context, $action] = explode(':', $permission->name);
+        $protectedPermissionContexts = Permission::getProtectedPermissionContexts();
+        $permissionsGroupedByEntity = $permissions
+            ->filter(fn ($permission) => !in_array($permission->context, $protectedPermissionContexts))
+            ->groupBy(function ($permission) {
+                // Split the permission name by the first colon
+                // Example : "User:update" become ["User", "update"]
+                [$context, $action] = explode(':', $permission->name);
 
-            return $context;
-        })->map(function ($permissions, $key) {
-            return Fieldset::make($key)
-                ->label(Str::headline($key))
-                ->columns(1)
-                ->extraAttributes([
-                    'class' => 'h-full',
-                ])
-                ->hidden(fn() => $permissions->filter(fn($permission) => auth()->user()->can('assign', $permission))->isEmpty())
-                ->columnSpan([
-                    'lg' => 2,
-                    'xl' => 1,
-                    // 'xl' => fn($component) => count($component->getChildComponents()) > 5 ? 2 : 1,
-                ])
-                ->schema($permissions->map(function ($permission) {
-                    [$context, $action] = explode(':', $permission->name);
-                    return Checkbox::make('permissions.'.$permission->name)
-                        ->hidden(fn() => !auth()->user()->can('assign', $permission))
-                        ->label(Str::headline($action));
-                })->toArray());
-        })->toArray();
+                return $context;
+            })->map(function ($permissions, $key) {
+
+
+                return Fieldset::make($key)
+                    ->label(Str::headline($key))
+                    ->columns(1)
+                    ->extraAttributes([
+                        'class' => 'h-full',
+                    ])
+                    ->hidden(fn () => $permissions->filter(fn ($permission) => auth()->user()->can('assign', $permission))->isEmpty())
+                    ->columnSpan([
+                        'lg' => 2,
+                        'xl' => 1,
+                    ])
+                    ->schema($permissions->map(function ($permission) {
+                        [$context, $action] = explode(':', $permission->name);
+                        return Checkbox::make('permissions.' . $permission->name)
+                            ->hidden(fn () => !auth()->user()->can('assign', $permission))
+                            ->label(Str::headline($action));
+                    })
+                        ->toArray());
+            })->toArray();
 
         return $permissionsGroupedByEntity;
     }

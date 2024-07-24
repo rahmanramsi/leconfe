@@ -1,4 +1,4 @@
-<x-filament::page>
+<x-filament-panels::page>
     <div class="mx-auto max-w-xl w-full space-y-6">
         <h1 class="font-bold text-2xl text-center">Make a Submission</h1>
         @if (!$isOpen)
@@ -24,4 +24,4 @@
             </div>
         @endif
     </div>
-</x-filament::page>
+</x-filament-panels::page>

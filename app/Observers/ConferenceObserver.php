@@ -50,25 +50,9 @@ class ConferenceObserver
             ],
             [
                 'navigation_menu_id' => $primaryNavigationMenu->getKey(),
-                'label' => 'About',
-                'type' => 'about',
-                'order_column' => 2,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'navigation_menu_id' => $primaryNavigationMenu->getKey(),
-                'label' => 'Announcements',
-                'type' => 'announcements',
-                'order_column' => 3,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'navigation_menu_id' => $primaryNavigationMenu->getKey(),
                 'label' => 'Proceedings',
                 'type' => 'proceedings',
-                'order_column' => 4,
+                'order_column' => 2,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -126,8 +110,6 @@ class ConferenceObserver
                 'updated_at' => now(),
             ],
         ]);
-
-        Plugin::installDefaultPlugins($conference);
 
         RolePopulateConferenceAction::run($conference);
 

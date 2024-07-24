@@ -4,8 +4,8 @@ namespace DefaultSidebar\Sidebar;
 
 use App\Classes\Sidebar;
 use App\Models\Committee;
-use App\Models\Enums\SerieState;
-use App\Models\Serie;
+use App\Models\Enums\ScheduledConferenceState;
+use App\Models\ScheduledConference;
 use App\Models\Topic;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\HtmlString;
@@ -34,10 +34,10 @@ class PreviousEventSidebar extends Sidebar
         return [
             'id' => $this->getId(),
             'name' => $this->getName(),
-            'previousEvents' => Serie::query()
+            'previousEvents' => ScheduledConference::query()
                 ->with('conference')
-                ->where('id', '!=', app()->getCurrentSerieId())
-                ->where('state', SerieState::Archived)
+                ->where('id', '!=', app()->getCurrentScheduledConferenceId())
+                ->where('state', ScheduledConferenceState::Archived)
                 ->orderBy('date_start', 'desc')
                 ->take(3)
                 ->get(),

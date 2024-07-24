@@ -92,7 +92,6 @@ class Installer
     private function configureEnv()
     {
         $envs = [
-            'APP_ENV' => 'production',
             'APP_DEBUG' => 'false',
             'APP_URL' => $this->readParam('url') ?? url('/'),
             'APP_KEY' => 'base64:'.base64_encode(Encrypter::generateKey(config('app.cipher'))),

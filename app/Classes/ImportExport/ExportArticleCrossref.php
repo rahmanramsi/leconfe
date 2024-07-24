@@ -160,7 +160,7 @@ class ExportArticleCrossref
 	protected function createHead()
 	{
 		$conference = $this->submission->conference;
-		$serie = $this->submission->serie;
+		$scheduledConference = $this->submission->scheduledConference;
 
 		return [
 			'doi_batch_id' => $this->batchId,
@@ -169,7 +169,7 @@ class ExportArticleCrossref
 				'depositor_name' => $conference->getMeta('doi_crossref_depositor_name'),
 				'email_address' => $conference->getMeta('doi_crossref_depositor_email')
 			],
-			'registrant' => $serie->getMeta('publisher_name'),
+			'registrant' => $scheduledConference->getMeta('publisher_name'),
 		];
 	}
 
@@ -188,39 +188,39 @@ class ExportArticleCrossref
 
 	protected function createEventMetadata(): array
 	{
-		$serie = $this->submission->serie;
+		$scheduledConference = $this->submission->scheduledConference;
 
 		$metadata = [
-			'conference_name' => $serie->title,
+			'conference_name' => $scheduledConference->title,
 		];
 
-		if ($serie->getMeta('theme')) {
-			$metadata['conference_theme'] = $serie->getMeta('theme');
+		if ($scheduledConference->getMeta('theme')) {
+			$metadata['conference_theme'] = $scheduledConference->getMeta('theme');
 		}
 
-		if ($serie->getMeta('acronym')) {
-			$metadata['conference_acronym'] = $serie->getMeta('acronym');
+		if ($scheduledConference->getMeta('acronym')) {
+			$metadata['conference_acronym'] = $scheduledConference->getMeta('acronym');
 		}
 
-		if ($serie->getMeta('number')) {
-			$metadata['conference_number'] = $serie->getMeta('number');
+		if ($scheduledConference->getMeta('number')) {
+			$metadata['conference_number'] = $scheduledConference->getMeta('number');
 		}
 
-		if ($serie->getMeta('location')) {
-			$metadata['conference_location'] = $serie->getMeta('location');
+		if ($scheduledConference->getMeta('location')) {
+			$metadata['conference_location'] = $scheduledConference->getMeta('location');
 		}
 
-		if ($serie->date_start && $serie->date_end) {
+		if ($scheduledConference->date_start && $scheduledConference->date_end) {
 			$metadata['conference_date'] = [
 				'_attributes' => [
-					'start_day' => $serie->date_start->format('d'),
-					'start_month' => $serie->date_start->format('m'),
-					'start_year' => $serie->date_start->format('Y'),
-					'end_day' => $serie->date_end->format('d'),
-					'end_month' => $serie->date_end->format('m'),
-					'end_year' => $serie->date_end->format('Y'),
+					'start_day' => $scheduledConference->date_start->format('d'),
+					'start_month' => $scheduledConference->date_start->format('m'),
+					'start_year' => $scheduledConference->date_start->format('Y'),
+					'end_day' => $scheduledConference->date_end->format('d'),
+					'end_month' => $scheduledConference->date_end->format('m'),
+					'end_year' => $scheduledConference->date_end->format('Y'),
 				],
-				'_value' => $serie->date_start->format('M. d') . ' - ' . $serie->date_end->format('M. d, Y'),
+				'_value' => $scheduledConference->date_start->format('M. d') . ' - ' . $scheduledConference->date_end->format('M. d, Y'),
 			];
 		}
 
@@ -229,7 +229,7 @@ class ExportArticleCrossref
 
 	protected function createProceedingsSeriesMetadata(): array
 	{
-		$serie 		= $this->submission->serie;
+		$scheduledConference 		= $this->submission->scheduledConference;
 		$proceeding = $this->submission->proceeding;
 
 		$metadata =  [
@@ -241,12 +241,12 @@ class ExportArticleCrossref
 			$metadata['volume'] = $proceeding->volume;
 		}
 
-		if ($serie->getMeta('publisher_name')) {
-			$metadata['publisher']['publisher_name'] = $serie->getMeta('publisher_name');
+		if ($scheduledConference->getMeta('publisher_name')) {
+			$metadata['publisher']['publisher_name'] = $scheduledConference->getMeta('publisher_name');
 		}
 
-		if ($serie->getMeta('publisher_location')) {
-			$metadata['publisher']['publisher_place'] = $serie->getMeta('publisher_location');
+		if ($scheduledConference->getMeta('publisher_location')) {
+			$metadata['publisher']['publisher_place'] = $scheduledConference->getMeta('publisher_location');
 		}
 
 		if ($proceeding->published_at) {

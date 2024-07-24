@@ -4,7 +4,6 @@ namespace App\Frontend\Conference\Pages;
 
 use App\Frontend\Conference\Pages\Proceedings as PagesProceedings;
 use App\Models\Proceeding;
-use App\Panel\Conference\Livewire\Workflows\Classes\StageManager;
 use Illuminate\Support\Facades\Route;
 use Rahmanramsi\LivewirePageGroup\PageGroup;
 use Rahmanramsi\LivewirePageGroup\Pages\Page;
@@ -23,12 +22,12 @@ class ProceedingDetail extends Page
 
     public function canAccess(): bool
     {
-        return StageManager::editing()->isStageOpen() || $this->proceeding->isPublished();
+        return $this->proceeding->isPublished();
     }
 
     public function canPreview(): bool
     {
-        return ! $this->proceeding->isPublished() && StageManager::editing()->isStageOpen();
+        return ! $this->proceeding->isPublished();
     }
 
     public function getBreadcrumbs(): array

@@ -16,7 +16,7 @@ class ListStaticPages extends ListRecords
     {
         return [
             Actions\CreateAction::make()
-                ->using(fn(StaticPage $record, array $data) => StaticPageCreateAction::run($record, $data)),
+                ->using(fn(array $data) => StaticPageCreateAction::run($data)),
         ];
     }
 }

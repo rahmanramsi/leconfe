@@ -3,7 +3,7 @@
 namespace App\Actions\Committees;
 
 use App\Models\CommitteeRole;
-use App\Models\Serie;
+use App\Models\ScheduledConference;
 use Illuminate\Support\Facades\DB;
 use Lorisleiva\Actions\Concerns\AsAction;
 
@@ -11,7 +11,7 @@ class CommitteeRolePopulateDefaultDataAction
 {
     use AsAction;
 
-    public function handle(Serie $serie): void
+    public function handle(ScheduledConference $scheduledConference): void
     {
         try {
             DB::beginTransaction();
@@ -22,7 +22,7 @@ class CommitteeRolePopulateDefaultDataAction
             ] as $committeeRole) {
                 CommitteeRole::firstOrCreate([
                     'name' => $committeeRole,
-                    'serie_id' => $serie->getKey(),
+                    'scheduled_conference_id' => $scheduledConference->getKey(),
                 ]);
             }
 

@@ -54,20 +54,20 @@
         </form>
 
         @if($searchResults->isNotEmpty())
-        <div id="search-results" class="search-results grid lg:grid-cols-2 gap-6">
-            @foreach ($searchResults as $serie)
-                <x-website::serie-summary :serie="$serie" />
-            @endforeach 
-        </div>
-        @if($searchResults->hasPages())
-            <div>
-                {{ $searchResults->links('livewire.simple-pagination') }}
+            <div id="search-results" class="search-results grid lg:grid-cols-2 gap-6">
+                @foreach ($searchResults as $scheduledConference)
+                    <x-website::scheduled-conference-summary :serie="$scheduledConference" />
+                @endforeach 
             </div>
-        @endif
+            @if($searchResults->hasPages())
+                <div>
+                    {{ $searchResults->links('livewire.simple-pagination') }}
+                </div>
+            @endif
         @else 
-        <div class="flex items-center justify-center w-full">
-            <p class="text-gray-500">No conference found</p>
-        </div>
+            <div class="flex items-center justify-center w-full">
+                <p class="text-gray-500">No conference found</p>
+            </div>
         @endif
 
     </div>

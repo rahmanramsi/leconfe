@@ -43,11 +43,11 @@ class PermissionResource extends Resource
         return $form
             ->schema([
                 TextInput::make('context')
-                    ->datalist(fn () => static::getEloquentQuery()->pluck('context')->unique()->sort()->values()->all())
                     ->dehydrateStateUsing(fn (string $state): string => Str::studly($state))
+                    ->alpha()
                     ->helperText('Context must be StudlyCase'),
                 TextInput::make('action')
-                    ->datalist(fn () => static::getEloquentQuery()->pluck('action')->unique()->sort()->values()->all())
+                    ->alpha()
                     ->helperText('Action must be camelCase')
                     ->dehydrateStateUsing(fn (string $state): string => Str::camel($state)),
                 CheckboxList::make('roles')
@@ -66,12 +66,8 @@ class PermissionResource extends Resource
                     ->badge()
                     ->searchable(),
                 TextColumn::make('context')
-                    ->sortable()
-                    ->formatStateUsing(fn (string $state): string => Str::headline($state))
-                    ->searchable(),
+                    ->formatStateUsing(fn (string $state): string => Str::headline($state)),
                 TextColumn::make('action')
-                    ->searchable()
-                    ->sortable()
                     ->formatStateUsing(fn (string $state): string => Str::headline($state)),
                 TextColumn::make('roles_count')
                     ->label('Assigned Roles')
@@ -79,16 +75,14 @@ class PermissionResource extends Resource
                     ->badge()
                     ->color(fn (int $state) => $state > 0 ? 'primary' : 'gray'),
             ])
-            ->groups([
-                Group::make('context'),
-                Group::make('action')
-                    ->getTitleFromRecordUsing(fn (Permission $permission): string => Str::headline($permission->action)),
-            ])
-            ->filters([
-                //
-            ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->mutateRecordDataUsing(function (Permission $record, array $data) {
+                        $data['context'] = $record->context;
+                        $data['action'] = $record->action;  
+
+                        return $data;
+                    }),
                 Tables\Actions\DeleteAction::make()
                     ->using(function (Permission $record, Tables\Actions\DeleteAction $action) {
                         try {
@@ -102,9 +96,6 @@ class PermissionResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ])
-            ->emptyStateActions([
-                Tables\Actions\CreateAction::make(),
             ]);
     }
 

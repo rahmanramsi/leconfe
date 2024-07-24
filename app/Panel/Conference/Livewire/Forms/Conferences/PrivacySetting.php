@@ -11,7 +11,7 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Livewire\Component;
-use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
+use App\Forms\Components\TinyEditor;
 
 class PrivacySetting extends Component implements HasForms
 {
@@ -31,7 +31,7 @@ class PrivacySetting extends Component implements HasForms
 
     public function render()
     {
-        return view('panel.conference.livewire.form');
+        return view('forms.form');
     }
 
     public function form(Form $form): Form

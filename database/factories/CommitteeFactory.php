@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\CommitteeRole;
-use App\Models\Serie;
+use App\Models\ScheduledConference;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,10 +18,10 @@ class CommitteeFactory extends Factory
      */
     public function definition(): array
     {
-        $randomSerie = Serie::pluck('id')->random();
+        $randomSerie = ScheduledConference::pluck('id')->random();
         return [
-            'serie_id' => $randomSerie,
-            'committee_role_id' => CommitteeRole::withoutGlobalScopes()->whereSerieId($randomSerie)->pluck('id')->random(),
+            'scheduled_conference_id' => $randomSerie,
+            'committee_role_id' => CommitteeRole::withoutGlobalScopes()->where('scheduled_conference_id', $randomSerie)->pluck('id')->random(),
             'given_name' => fake()->firstName(),
             'family_name' => fake()->lastName(),
             'public_name' => fake()->name(),

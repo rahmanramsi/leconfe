@@ -1,14 +1,9 @@
 <div class="navigation-menus space-y-4">
     @forelse ($navigationMenus as $navigationMenu)
-        <div class="navigation-menu bg-white rounded-lg border">
-            <div class="flex items-center flex-wrap p-4 gap-2">
+        <div class="navigation-menu bg-white rounded-xl border">
+            <div class="flex items-center flex-wrap py-4 px-6 gap-2">
                 <div>
-                    <h2 class="text-base font-medium leading-none">{{ $navigationMenu->name }}</h2>
-                    <span class="text-sm text-gray-500">{{ $navigationMenu->handle }}</span>
-                </div>
-                <div class="ml-auto flex flex-wrap items-center gap-2">
-                    {{ ($this->editNavigationMenuAction)(['id' => $navigationMenu->id]) }}
-                    {{ ($this->deleteNavigationMenuAction)(['id' => $navigationMenu->id]) }}
+                    <h2 class="text-base font-medium leading-6">{{ $navigationMenu->name }}</h2>
                 </div>
             </div>
             <hr />

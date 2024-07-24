@@ -5,8 +5,8 @@ namespace App\Frontend\Website\Pages;
 use App\Facades\Block as BlockFacade;
 use App\Facades\SidebarFacade;
 use App\Models\Conference;
-use App\Models\Enums\SerieState;
-use App\Models\Serie;
+use App\Models\Enums\ScheduledConferenceState;
+use App\Models\ScheduledConference;
 use App\Models\Sponsor;
 use App\Models\Topic;
 use Illuminate\Support\Facades\Route;
@@ -24,26 +24,12 @@ class Home extends Page
 
     protected function getViewData(): array
     {
-        $serieQuery = Serie::query()
-            ->withoutGlobalScopes()
-            ->with(['conference', 'media', 'meta']);
-        
-        $currentSeries = (clone $serieQuery)
-            ->state(SerieState::Current)
-            ->paginate(6, pageName: 'currentSeriesPage');
-
-        $upcomingSeries = (clone $serieQuery)
-            ->state(SerieState::Published)
-            ->paginate(6, pageName: 'upcomingSeriesPage');
-
-        $allSeries = (clone $serieQuery)
-            ->whereNot('state', SerieState::Draft)
-            ->paginate(6, pageName: 'allSeriesPage');
+        $conferences = Conference::query()
+            ->with(['media', 'meta'])
+            ->get();
 
         return [
-            'currentSeries' => $currentSeries,
-            'upcomingSeries' => $upcomingSeries,
-            'allSeries' => $allSeries,
+            'conferences' => $conferences,
         ];
     }
 

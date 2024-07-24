@@ -5,7 +5,7 @@ namespace App\Providers;
 use App\Application;
 use App\Classes\Setting;
 use App\Facades\SidebarFacade;
-use App\Models\Serie;
+use App\Models\ScheduledConference;
 use Livewire\Livewire;
 use App\Classes\Settings;
 use App\Listeners\SubmissionEventSubscriber;
@@ -191,9 +191,9 @@ class AppServiceProvider extends ServiceProvider
                 // Eager load conference relations
                 $conference->load(['media', 'meta']);
 
-                if(isset($pathInfos[3]) && !blank($pathInfos[3]) && $serie = Serie::where('path', $pathInfos[3])->first()){
-                    $this->app->setCurrentSerieId($serie->getKey());
-                    $this->app->scopeCurrentSerie();
+                if(isset($pathInfos[3]) && !blank($pathInfos[3]) && $scheduledConference = ScheduledConference::where('path', $pathInfos[3])->first()){
+                    $this->app->setCurrentScheduledConferenceId($scheduledConference->getKey());
+                    $this->app->scopeCurrentScheduledConference();
                 }
 
             }
@@ -203,7 +203,7 @@ class AppServiceProvider extends ServiceProvider
         $currentConference = $this->app->getCurrentConference();
         if ($currentConference) {
             // Scope livewire update path to current serie
-            $currentSerie = $this->app->getCurrentSerie();
+            $currentSerie = $this->app->getCurrentScheduledConference();
             if (isset($pathInfos[3]) && $currentSerie && $currentSerie->path === $pathInfos[3]) {
                 Livewire::setUpdateRoute(
                     fn ($handle) => Route::post($currentConference->path . '/series/' . $currentSerie->path . '/livewire/update', $handle)->middleware('web')

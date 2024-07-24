@@ -11,8 +11,11 @@ use App\Models\SpeakerRole;
 use Illuminate\Support\Str;
 use App\Models\Announcement;
 use App\Models\CommitteeRole;
+use App\Models\Enums\ScheduledConferenceState;
+use App\Models\ScheduledConference;
 use Livewire\Attributes\Title;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\HtmlString;
 use Rahmanramsi\LivewirePageGroup\PageGroup;
 use Rahmanramsi\LivewirePageGroup\Pages\Page;
 
@@ -26,32 +29,22 @@ class Home extends Page
 
     protected function getViewData(): array
     {
-        $additionalInformations = collect(app()->getCurrentConference()->getMeta('additional_information') ?? [])
-            ->filter(fn ($tab) => $tab['is_shown'] ?? false)
-            ->map(function ($tab) {
-                $tab['slug'] = Str::slug($tab['title']);
-                return $tab;
-            })
-            ->values();
+        $conference = app()->getCurrentConference();
+        $pastScheduledConferences = ScheduledConference::query()
+            ->with(['media', 'meta', 'conference'])
+            ->where('state', ScheduledConferenceState::Archived)
+            ->orderBy('date_start', 'desc')
+            ->get();
 
-        $currentProceeding = app()->getCurrentConference()
-            ->proceedings()
-            ->published()
-            ->current()
+        $nextScheduledConference = ScheduledConference::query()
+            ->with(['media', 'meta', 'conference'])
+            ->where('state', ScheduledConferenceState::Current)
             ->first();
 
-        $currentSerie = app()->getCurrentSerie();
-        $currentSerie?->load([
-            'speakerRoles.speakers' => ['meta'],
-        ]);
-
         return [
-            'currentProceeding' => $currentProceeding,
-            'currentSerie' => $currentSerie,
-            // 'announcements' => Announcement::query()->get(),
-            'acceptedSubmission' => app()->getCurrentConference()->submission()->published()->get(),
-            'additionalInformations' => $additionalInformations,
-            'venues' => Venue::query()->get(),
+            'conference' => $conference,
+            'pastScheduledConferences' => $pastScheduledConferences,
+            'nextScheduledConference' => $nextScheduledConference,
         ];
     }
 

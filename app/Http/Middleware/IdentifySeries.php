@@ -15,7 +15,7 @@ class IdentifySeries
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(!app()->getCurrentSerieId()){
+        if(!app()->getCurrentScheduledConferenceId()){
             return abort(404);
         }
 

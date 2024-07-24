@@ -18,11 +18,19 @@ class Login extends BaseNavigationItemType
 
     public static function getUrl(NavigationMenuItem $navigationMenuItem): string
     {
-        return app()->getCurrentConferenceId() ? route('livewirePageGroup.conference.pages.login') : route('livewirePageGroup.website.pages.login');
+        if (app()->getCurrentScheduledConferenceId()) {
+            return route('livewirePageGroup.scheduledConference.pages.login');
+        }
+
+        if (app()->getCurrentConferenceId()) {
+            return route('livewirePageGroup.conference.pages.login');
+        }
+
+        return route('livewirePageGroup.website.pages.login');
     }
 
     public static function getIsDisplayed(NavigationMenuItem $navigationMenuItem): bool
     {
-        return ! auth()->check();
+        return !auth()->check();
     }
 }

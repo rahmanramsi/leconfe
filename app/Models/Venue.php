@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Spatie\MediaLibrary\HasMedia;
-use App\Models\Concerns\BelongsToSerie;
+use App\Models\Concerns\BelongsToScheduledConference;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
@@ -12,9 +12,9 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Venue extends Model implements HasMedia
 {
-    use BelongsToSerie, Cachable, HasFactory, InteractsWithMedia;
+    use BelongsToScheduledConference, Cachable, HasFactory, InteractsWithMedia;
 
-    protected $fillable = ['name', 'location', 'description', 'serie_id'];
+    protected $fillable = ['name', 'location', 'description', 'scheduled_conference_id'];
 
 
     public function registerMediaConversions(?Media $media = null): void

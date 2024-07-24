@@ -5,7 +5,7 @@ namespace App\Panel\Administration\Resources;
 use App\Actions\Conferences\ConferenceUpdateAction;
 use App\Facades\Setting;
 use App\Models\Conference;
-use App\Models\Enums\SerieType;
+use App\Models\Enums\ScheduledConferenceType;
 use App\Panel\Administration\Resources\ConferenceResource\Pages;
 use App\Tables\Columns\IndexColumn;
 use Filament\Forms\Components\DatePicker;
@@ -41,14 +41,6 @@ class ConferenceResource extends Resource
                 TextInput::make('name')
                     ->columnSpanFull()
                     ->required(),
-                Grid::make()
-                    ->schema([
-                        TextInput::make('meta.acronym')
-                            ->helperText('The acronym of the conference series'),
-                        TextInput::make('meta.issn')
-                            ->label('ISSN')
-                            ->helperText('The ISSN of the conference series'),
-                    ]),
                 TextInput::make('path')
                     ->label('Path')
                     ->helperText('The path of the conference. This will be used in the URL of the conference.')

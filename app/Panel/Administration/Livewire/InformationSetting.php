@@ -13,7 +13,7 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Livewire\Component;
-use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
+use App\Forms\Components\TinyEditor;
 use Stevebauman\Purify\Facades\Purify;
 
 class InformationSetting extends Component implements HasForms
@@ -31,7 +31,7 @@ class InformationSetting extends Component implements HasForms
 
     public function render()
     {
-        return view('panel.administration.livewire.form');
+        return view('forms.form');
     }
 
     public function form(Form $form): Form
@@ -48,31 +48,23 @@ class InformationSetting extends Component implements HasForms
                             ->model(app()->getSite())
                             ->image()
                             ->imageResizeUpscale(false)
-                            ->conversion('thumb')
-                            ->columnSpan([
-                                'sm' => 2,
-                            ]),
+                            ->conversion('thumb'),
                         Textarea::make('meta.description')
                             ->rows(3)
                             ->autosize()
-                            ->columnSpanFull()
                             ->hint('Recommended length: 50-160 characters')
                             ->helperText('A short description of the website. This will used to help search engines understand the website.'),
                         TinyEditor::make('meta.about')
                             ->label('About Site')
                             ->minHeight(300)
-                            ->dehydrateStateUsing(fn (?string $state) => Purify::clean($state))
-                            ->columnSpan([
-                                'sm' => 2,
-                            ]),
+                            ->dehydrateStateUsing(fn (?string $state) => Purify::clean($state)),
                         TinyEditor::make('meta.page_footer')
+                            ->toolbar('bold italic superscript subscript | link | blockquote bullist numlist | image | code')
+                            ->plugins('paste link lists image code')
                             ->minHeight(300)
-                            ->dehydrateStateUsing(fn (?string $state) => Purify::clean($state))
-                            ->columnSpan([
-                                'sm' => 2,
-                            ]),
+                            ->dehydrateStateUsing(fn (?string $state) => Purify::clean($state)),
                     ])
-                    ->columns(2),
+                    ->columns(1),
                 Actions::make([
                     Action::make('save')
                         ->successNotificationTitle('Saved!')

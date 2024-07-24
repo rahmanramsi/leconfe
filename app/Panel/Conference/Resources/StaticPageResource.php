@@ -2,30 +2,19 @@
 
 namespace App\Panel\Conference\Resources;
 
-use App\Actions\StaticPages\StaticPageCreateAction;
 use App\Actions\StaticPages\StaticPageUpdateAction;
-use App\Forms\Components\TagSuggestions;
-use App\Models\Enums\ContentType;
 use App\Models\StaticPage;
-use App\Models\StaticPageTag;
 use App\Panel\Conference\Resources\StaticPageResource\Pages;
-use Filament\Forms\Components\CheckboxList;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Components\SpatieTagsInput;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\HtmlString;
-use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Unique;
-use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
+use App\Forms\Components\TinyEditor;
 
 class StaticPageResource extends Resource
 {
@@ -33,14 +22,14 @@ class StaticPageResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-credit-card';
 
-    protected static ?string $navigationGroup = 'Conferences';
+    protected static ?string $navigationGroup = 'Settings';
 
     public static function getEloquentQuery(): Builder
     {
         $query = static::getModel()::query();
 
-        if(!app()->getCurrentSerieId()){
-            $query->where('serie_id', 0);
+        if(!app()->getCurrentScheduledConferenceId()){
+            $query->where('scheduled_conference_id', 0);
         }
 
         return $query;
@@ -51,18 +40,18 @@ class StaticPageResource extends Resource
     {
         return $form
             ->schema([
+                TextInput::make('title')
+                    ->required(),
                 TextInput::make('slug')
                     ->alphaDash()
                     ->unique(ignoreRecord: true, modifyRuleUsing: function (Unique $rule) {
                         return $rule
                             ->where('conference_id', app()->getCurrentConference()->getKey())
-                            ->where('serie_id', app()->getCurrentSerie()?->getKey() ?? 0);
+                            ->where('scheduled_conference_id', app()->getCurrentScheduledConference()?->getKey() ?? 0);
                     }),
-                TextInput::make('title')
-                    ->required(),
                 TinyEditor::make('meta.content')
                     ->label('Content')
-                    ->minHeight(600)
+                    ->minHeight(400)
                     ->columnSpanFull()
                     ->helperText('The complete page content.'),
             ]);
@@ -80,28 +69,17 @@ class StaticPageResource extends Resource
                     ->url(fn (StaticPage $staticPage) => $staticPage->getUrl())
                     ->openUrlInNewTab()
             ])
-            ->filters([
-                //
-            ])
-            ->headerActions([
-                //
-            ])
             ->actions([
                 EditAction::make()
+                    ->mutateRecordDataUsing(function (StaticPage $record, array $data) {
+                        $data['meta'] = $record->getAllMeta()->toArray();
+
+                        return $data;
+                    })
                     ->using(fn(StaticPage $record, array $data) => StaticPageUpdateAction::run($record, $data)),
                 DeleteAction::make(),
             ])
-            ->bulkActions([
-                // Tables\Actions\DeleteBulkAction::make(),
-            ])
             ->defaultSort('created_at', 'desc');
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
     }
 
     public static function getPages(): array

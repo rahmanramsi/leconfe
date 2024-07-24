@@ -36,7 +36,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
+use App\Forms\Components\TinyEditor;
 use STS\FilamentImpersonate\Tables\Actions\Impersonate;
 
 class UserResource extends Resource
@@ -52,7 +52,8 @@ class UserResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return static::getModel()::query()
-            ->whereHas('roles')
+            ->whereHas('roles', fn ($query) => $query->where('name', '!=', UserRole::Admin))
+            ->where('id', '!=', auth()->id())
             ->with(['meta', 'media', 'bans']);
     }
 
@@ -104,15 +105,8 @@ class UserResource extends Resource
                 Forms\Components\Grid::make()
                     ->schema([
                         Forms\Components\Section::make()
+                            ->visible(fn(?User $record) => $record?->isBanned())
                             ->schema([
-                                Forms\Components\Placeholder::make('created_at')
-                                    ->label('Created at')
-                                    ->content(fn (?User $record): ?string => $record?->created_at?->diffForHumans() ?? '-'),
-
-                                Forms\Components\Placeholder::make('updated_at')
-                                    ->label('Last modified at')
-                                    ->content(fn (?User $record): ?string => $record?->updated_at?->diffForHumans() ?? '-'),
-
                                 Forms\Components\Placeholder::make('disabled_at')
                                     ->visible(fn (?User $record) => $record?->isBanned())
                                     ->label('Disabled at')
@@ -134,7 +128,7 @@ class UserResource extends Resource
                         Forms\Components\Section::make('User Roles')
                             ->schema([
                                 Forms\Components\CheckboxList::make('roles')
-                                    ->label('')
+                                    ->hiddenLabel()
                                     ->relationship(
                                         name: 'roles',
                                         titleAttribute: 'name',
@@ -142,6 +136,8 @@ class UserResource extends Resource
                                     )
                                     ->saveRelationshipsUsing(function (Forms\Components\CheckboxList $component, ?array $state) {
                                         $roles = $state ? Role::whereIn('id', $state)->pluck('name')->toArray() : [];
+
+                                        $roles = array_diff($roles, [UserRole::Admin->value]);
 
                                         $component->getModelInstance()->syncRoles($roles);
                                     }),
@@ -223,34 +219,18 @@ class UserResource extends Resource
                         TextColumn::make('roles.name')
                             ->badge(),
                     ]),
-                    // Stack::make([
-                    //     TextColumn::make('phone')
-                    //         ->icon('heroicon-m-phone')
-                    //         ->getStateUsing(fn (User $record) => $record->getMeta('phone')),
-                    //     TextColumn::make('orcid_id')
-                    //         ->color(Color::hex('#A6CE39'))
-                    //         ->icon('academicon-orcid')
-                    //         ->getStateUsing(fn (User $record) => $record->getMeta('orcid_id')),
-                    //     TextColumn::make('google_scholar')
-                    //         ->color(Color::hex('#4081EC'))
-                    //         ->icon('academicon-google-scholar')
-                    //         ->getStateUsing(fn (User $record) => $record->getMeta('google_scholar_id')),
-                    //     TextColumn::make('scopus_id')
-                    //         ->color(Color::hex('#e9711c'))
-                    //         ->icon('academicon-scopus-square')
-                    //         ->getStateUsing(fn (User $record) => $record->getMeta('scopus_id')),
-                    // ])
                 ])->from('md'),
             ])
             ->filters([
                 SelectFilter::make('roles')
-                    ->relationship('roles', 'name')
+                    ->relationship('roles', 'name', modifyQueryUsing: fn ($query) => $query->where('name', '!=', UserRole::Admin))
                     ->multiple()
                     ->preload(),
             ])
             ->actions([
                 EditAction::make()
                     ->modalWidth('full')
+                    ->hidden(fn (User $record) => $record->hasRole(UserRole::Admin))
                     ->mutateRecordDataUsing(fn ($data, User $record) => array_merge($data, ['meta' => $record->getAllMeta()->toArray()]))
                     ->using(fn (array $data, User $record) => UserUpdateAction::run($data, $record)),
                 DeleteAction::make()

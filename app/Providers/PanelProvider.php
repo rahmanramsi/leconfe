@@ -8,8 +8,8 @@ use App\Http\Middleware\IdentifyConference;
 use App\Http\Middleware\IdentifySeries;
 use App\Http\Middleware\MustVerifyEmail;
 use App\Http\Middleware\PanelAuthenticate;
+use App\Panel\Administration\Pages\Profile;
 use App\Panel\Conference\Pages\Dashboard;
-use App\Panel\Conference\Pages\Profile;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
@@ -23,34 +23,28 @@ use Filament\Tables\Table;
 use Filament\View\PanelsRenderHook;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
-use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
-use Filament\Http\Responses\Auth\Contracts\LogoutResponse as LogoutResponseContract;
-
+use App\Forms\Components\TinyEditor;
 
 class PanelProvider extends ServiceProvider
 {
-    public function seriesPanel(Panel $panel): Panel
+    public function scheduledConference(Panel $panel): Panel
     {
         $this->setupPanel($panel)
-            ->id('series')
-            ->path('{conference:path}/series/{serie:path}/panel')
+            ->id('scheduledConference')
+            ->path('{conference:path}/scheduled/{serie:path}/panel')
             ->bootUsing(fn () => static::setupFilamentComponent())
-            ->homeUrl(fn () => app()->getCurrentSerie()?->getHomeUrl())
-            ->discoverResources(in: app_path('Panel/Series/Resources'), for: 'App\\Panel\\Series\\Resources')
-            ->discoverPages(in: app_path('Panel/Series/Pages'), for: 'App\\Panel\\Series\\Pages')
-            ->discoverWidgets(in: app_path('Panel/Series/Widgets'), for: 'App\\Panel\\Series\\Widgets')
-            ->discoverLivewireComponents(in: app_path('Panel/Series/Livewire'), for: 'App\\Panel\\Series\\Livewire')
-            ->userMenuItems([
-                'logout' => MenuItem::make()
-                    ->url(fn (): string => route('conference.logout')),
-            ])
+            ->homeUrl(fn () => app()->getCurrentScheduledConference()?->getHomeUrl())
+            ->discoverResources(in: app_path('Panel/ScheduledConference/Resources'), for: 'App\\Panel\\ScheduledConference\\Resources')
+            ->discoverPages(in: app_path('Panel/ScheduledConference/Pages'), for: 'App\\Panel\\ScheduledConference\\Pages')
+            ->discoverWidgets(in: app_path('Panel/ScheduledConference/Widgets'), for: 'App\\Panel\\ScheduledConference\\Widgets')
+            ->discoverLivewireComponents(in: app_path('Panel/ScheduledConference/Livewire'), for: 'App\\Panel\\ScheduledConference\\Livewire')
             ->renderHook(
                 PanelsRenderHook::TOPBAR_START,
-                fn () => view('panel.series.hooks.topbar'),
+                fn () => view('panel.scheduledConference.hooks.topbar'),
             )
             ->renderHook(
                 PanelsRenderHook::SIDEBAR_NAV_START,
-                fn () => view('panel.series.hooks.sidebar-nav-start'),
+                fn () => view('panel.scheduledConference.hooks.sidebar-nav-start'),
             )
             ->middleware([
                 IdentifyConference::class,
@@ -58,6 +52,10 @@ class PanelProvider extends ServiceProvider
                 ...static::getMiddleware(),
             ], true)
             ->authMiddleware(static::getAuthMiddleware(), true);
+
+        Plugin::getPlugins()->each(function ($plugin) use ($panel) {
+            $plugin->onPanel($panel);
+        });
 
         return $panel;
     }
@@ -74,12 +72,8 @@ class PanelProvider extends ServiceProvider
             ->discoverPages(in: app_path('Panel/Conference/Pages'), for: 'App\\Panel\\Conference\\Pages')
             ->discoverWidgets(in: app_path('Panel/Conference/Widgets'), for: 'App\\Panel\\Conference\\Widgets')
             ->discoverLivewireComponents(in: app_path('Panel/Conference/Livewire'), for: 'App\\Panel\\Conference\\Livewire')
-            ->pages(static::getPages())
-            ->userMenuItems([
-                'logout' => MenuItem::make()
-                    ->url(fn (): string => route('conference.logout')),
-                'profile' => MenuItem::make()
-                    ->url(fn (): string => Profile::getUrl()),
+            ->pages([
+                Dashboard::class,
             ])
             ->renderHook(
                 PanelsRenderHook::TOPBAR_START,
@@ -96,7 +90,7 @@ class PanelProvider extends ServiceProvider
             ->authMiddleware(static::getAuthMiddleware(), true);
 
         Plugin::getPlugins()->each(function ($plugin) use ($panel) {
-            $plugin->onConferencePanel($panel);
+            $plugin->onPanel($panel);
         });
 
         return $panel;
@@ -119,17 +113,11 @@ class PanelProvider extends ServiceProvider
                 PanelsRenderHook::SIDEBAR_NAV_START,
                 fn () => view('panel.administration.hooks.sidebar-nav-start'),
             )
-            ->userMenuItems([
-                'logout' => MenuItem::make()
-                    ->url(fn (): string => route('logout')),
-                'profile' => MenuItem::make()
-                    ->url(fn (): string => Profile::getUrl(panel: 'administration')),
-            ])
             ->middleware(static::getMiddleware(), true)
             ->authMiddleware(static::getAuthMiddleware(), true);
 
         Plugin::getPlugins()->each(function ($plugin) use ($panel) {
-            $plugin->onAdministrationPanel($panel);
+            $plugin->onPanel($panel);
         });
 
         return $panel;
@@ -138,7 +126,6 @@ class PanelProvider extends ServiceProvider
     public function setupPanel(Panel $panel): Panel
     {
         return $panel
-            ->sidebarCollapsibleOnDesktop()
             ->maxContentWidth('full')
             ->renderHook(
                 'panels::scripts.before',
@@ -151,6 +138,12 @@ class PanelProvider extends ServiceProvider
             ->colors([
                 'primary' => Color::hex('#1c3569'),
             ])
+            // ->userMenuItems([
+            //     'logout' => MenuItem::make()
+            //         ->url(fn (): string => route('logout')),
+            //     'profile' => MenuItem::make()
+            //         ->url(fn (): string => Profile::getUrl()),
+            // ])
             ->darkMode(false)
             ->databaseNotifications()
             ->databaseNotificationsPolling(null);
@@ -159,7 +152,7 @@ class PanelProvider extends ServiceProvider
     public function register(): void
     {
         Filament::registerPanel(
-            fn (): Panel => $this->seriesPanel(Panel::make()),
+            fn (): Panel => $this->scheduledConference(Panel::make()),
         );
 
         Filament::registerPanel(
@@ -169,8 +162,6 @@ class PanelProvider extends ServiceProvider
         Filament::registerPanel(
             fn (): Panel => $this->administrationPanel(Panel::make()),
         );
-
-        // $this->app->bind(LogoutResponseContract::class, LogoutResponse::class);
     }
 
     /**
@@ -181,18 +172,6 @@ class PanelProvider extends ServiceProvider
         Blade::anonymousComponentPath(resource_path('views/panel/conference/components'), 'panel');
         Blade::anonymousComponentPath(resource_path('views/panel/administration/components'), 'administration');
         Blade::anonymousComponentPath(resource_path('views/panel/series/components'), 'series');
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            Dashboard::class,
-        ];
-    }
-
-    public static function getWidgets(): array
-    {
-        return [];
     }
 
     public static function getMiddleware(): array

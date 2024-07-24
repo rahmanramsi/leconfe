@@ -1,0 +1,87 @@
+<?php
+
+namespace App\Panel\ScheduledConference\Livewire\Submissions\Forms;
+
+use App\Actions\Submissions\SubmissionUpdateAction;
+use App\Classes\Log;
+use App\Models\Submission;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TagsInput;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
+use Filament\Forms\Form;
+use Filament\Notifications\Notification;
+use App\Forms\Components\TinyEditor;
+
+class Detail extends \Livewire\Component implements HasForms
+{
+    use InteractsWithForms;
+
+    public Submission $submission;
+
+    public array $meta = [];
+
+    public array $topics = [];
+
+    public function mount(Submission $submission)
+    {
+        $this->form->fill([
+            'topics' => $this->submission->topics()->pluck('id')->toArray(),
+            'meta' => $this->submission->getAllMeta()->toArray(),
+        ]);
+    }
+
+    public function form(Form $form): Form
+    {
+        return $form
+            ->disabled(function (): bool {
+                return ! auth()->user()->can('editing', $this->submission);
+            })
+            ->model($this->submission)
+            ->schema([
+                TextInput::make('meta.title'),
+                TextInput::make('meta.subtitle'),
+                Select::make('topics')
+                    ->preload()
+                    ->multiple()
+                    ->relationship('topics', 'name')
+                    ->label('Topic')
+                    ->searchable(),
+                TagsInput::make('meta.keywords')
+                    ->splitKeys([','])
+                    ->placeholder(''),
+                TinyEditor::make('meta.abstract')
+                    ->required()
+                    ->minHeight(300)
+                    ->profile('basic'),
+            ]);
+    }
+
+    public function submit(): void
+    {
+
+        SubmissionUpdateAction::run(
+            $this->form->getState(),
+            $this->submission
+        );
+
+        Log::make(
+            name: 'submission',
+            subject: $this->submission,
+            description: __('log.submission.metadata_updated')
+        )
+            ->by(auth()->user())
+            ->save();
+
+        Notification::make()
+            ->body('Saved successfully')
+            ->success()
+            ->send();
+    }
+
+    public function render()
+    {
+        return view('panel.scheduledConference.livewire.submissions.forms.detail');
+    }
+}

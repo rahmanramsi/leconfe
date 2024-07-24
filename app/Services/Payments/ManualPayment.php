@@ -6,7 +6,7 @@ use App\Models\Enums\PaymentState;
 use App\Models\Payment;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Illuminate\Support\Facades\App;
-use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
+use App\Forms\Components\TinyEditor;
 
 class ManualPayment extends BasePayment
 {

@@ -2,6 +2,7 @@
 
 use App\Models\Conference;
 use App\Models\NavigationMenu;
+use App\Models\ScheduledConference;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,11 +17,12 @@ return new class extends Migration
         Schema::create('navigation_menus', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Conference::class)->default(0);
+            $table->foreignIdFor(ScheduledConference::class)->default(0);
             $table->string('name');
             $table->string('handle');
             $table->timestamps();
 
-            $table->unique(['conference_id', 'handle']);
+            $table->unique(['conference_id', 'scheduled_conference_id', 'handle'], 'unique_navigation_menus');
         });
 
         Schema::create('navigation_menu_items', function (Blueprint $table) {

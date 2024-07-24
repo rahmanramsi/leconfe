@@ -15,18 +15,18 @@ use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Concerns\InteractsWithForms;
 use App\Actions\Conferences\ConferenceUpdateAction;
 use Filament\Forms\Components\Group;
-use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
+use App\Forms\Components\TinyEditor;
 
 class AdditionalInformationSetting extends Component implements HasForms
 {
     use InteractsWithForms;
 
-    public Conference $conference;
-
     public ?array $formData = [];
 
-    public function mount(Conference $conference): void
+    public function mount(): void
     {
+        $conference = app()->getCurrentConference();
+
         $this->form->fill([
             'meta' => $conference->getAllMeta(),
         ]);
@@ -34,13 +34,13 @@ class AdditionalInformationSetting extends Component implements HasForms
 
     public function render()
     {
-        return view('panel.conference.livewire.form');
+        return view('forms.form');
     }
 
     public function form(Form $form): Form
     {
         return $form
-            ->model($this->conference)
+            ->model(app()->getCurrentConference())
             ->schema([
                 Section::make('')
                     ->schema([

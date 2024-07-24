@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Actions\Roles\RoleAssignDefaultPermissions;
 use App\Application;
+use App\Facades\Plugin;
 use App\Models\Enums\UserRole;
 use App\Models\NavigationMenu;
 use App\Models\NavigationMenuItem;

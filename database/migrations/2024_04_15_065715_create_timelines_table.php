@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Serie;
+use App\Models\ScheduledConference;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -14,11 +14,12 @@ return new class extends Migration
     {
         Schema::create('timelines', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('subtitle')->nullable();
+            $table->foreignIdFor(ScheduledConference::class)->constrained()->cascadeOnDelete();
+            $table->string('name');
+            $table->string('description')->nullable();
             $table->date('date')->nullable();
-            $table->text('roles')->nullable();
-            $table->foreignIdFor(Serie::class)->constrained();
+            $table->boolean('hide')->default(false);
+            $table->unsignedInteger('type')->nullable();
             $table->timestamps();
         });
     }

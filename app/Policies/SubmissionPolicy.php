@@ -165,25 +165,6 @@ class SubmissionPolicy
         }
     }
 
-    public function uploadPresenterFiles(User $user, Submission $submission)
-    {
-        if (in_array($submission->status, [SubmissionStatus::Declined, SubmissionStatus::Withdrawn])) {
-            return false;
-        }
-
-        if (filled($submission->withdrawn_reason)) {
-            return false;
-        }
-
-        if ($submission->stage != SubmissionStage::Editing) {
-            return false;
-        }
-
-        if ($user->can('Submission:uploadPresenterFiles')) {
-            return true;
-        }
-    }
-
     public function uploadRevisionFiles(User $user, Submission $submission)
     {
         if (in_array($submission->status, [SubmissionStatus::Declined, SubmissionStatus::Withdrawn, SubmissionStatus::Published])) {

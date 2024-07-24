@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Concerns\BelongsToSerie;
+use App\Models\Concerns\BelongsToScheduledConference;
 use Illuminate\Database\Eloquent\Model;
 use Plank\Metable\Metable;
 use Spatie\MediaLibrary\HasMedia;
@@ -11,7 +11,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Announcement extends Model implements HasMedia
 {
-    use Metable, BelongsToSerie, InteractsWithMedia;
+    use Metable, BelongsToScheduledConference, InteractsWithMedia;
 
     protected $fillable = [
         'title',
@@ -25,7 +25,7 @@ class Announcement extends Model implements HasMedia
 
     public function getUrl()
     {
-        return route('livewirePageGroup.conference.pages.announcement-page', [
+        return route('livewirePageGroup.scheduledConference.pages.announcement-page', [
             'conference' => $this->conference->path,
             'announcement' => $this->id,
         ]);

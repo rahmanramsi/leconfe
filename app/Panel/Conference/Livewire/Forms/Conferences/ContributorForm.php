@@ -3,7 +3,7 @@
 namespace App\Panel\Conference\Livewire\Forms\Conferences;
 
 use App\Models\Conference;
-use App\Models\Serie;
+use App\Models\ScheduledConference;
 use App\Models\Submission;
 use App\Tables\Columns\IndexColumn;
 use Livewire\Component;
@@ -42,7 +42,7 @@ class ContributorForm extends Component
                     modifyRuleUsing: function (Unique $rule) use ($modelType) {
                         return $rule
                             ->when($modelType instanceof Conference, fn ($rule) => $rule->where('conference_id', $modelType->getKey()))
-                            ->when($modelType instanceof Serie, fn ($rule) => $rule->where('serie_id', $modelType->getKey()))
+                            ->when($modelType instanceof ScheduledConference, fn ($rule) => $rule->where('scheduled_conference_id', $modelType->getKey()))
                             ->when($modelType instanceof Submission, fn ($rule) => $rule->where('submission_id', $modelType->getKey()));
                     }
                 )

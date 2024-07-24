@@ -95,7 +95,7 @@
                     @if($galleys->isNotEmpty())
                         <div class="flex flex-wrap gap-1.5 mt-2">
                             @foreach ($galleys as $galley)
-                                <x-conference::galley-link :galley="$galley"/>
+                                <x-scheduledConference::galley-link :galley="$galley"/>
                             @endforeach
                         </div>
                     @endif

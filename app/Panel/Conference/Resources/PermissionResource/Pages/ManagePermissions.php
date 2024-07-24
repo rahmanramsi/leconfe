@@ -2,6 +2,7 @@
 
 namespace App\Panel\Conference\Resources\PermissionResource\Pages;
 
+use App\Actions\Permissions\PermissionCreateAction;
 use App\Actions\Permissions\PermissionPersistAction;
 use App\Actions\Roles\RolePersistAssignedPermissions;
 use App\Models\Permission;
@@ -17,7 +18,7 @@ class ManagePermissions extends ManageRecords
     {
         return [
             Actions\CreateAction::make()
-                ->using(fn (array $data) => Permission::create(['name' => data_get($data, 'context').':'.data_get($data, 'action')])),
+                ->using(fn (array $data) => PermissionCreateAction::run(['name' => data_get($data, 'context').':'.data_get($data, 'action')])),
             Actions\ActionGroup::make([
                 Actions\Action::make('persist')
                     ->requiresConfirmation()

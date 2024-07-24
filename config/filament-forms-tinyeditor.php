@@ -12,23 +12,30 @@ return [
 
     'profiles' => [
 
+        // 'default' => [
+        //     'plugins' => 'advlist autoresize codesample directionality emoticons fullscreen hr image imagetools link lists media table toc wordcount code',
+        //     'toolbar' => 'undo redo removeformat | formatselect fontsizeselect | bold italic | rtl ltr | alignjustify alignright aligncenter alignleft | numlist bullist | forecolor backcolor | blockquote table hr | image link code',
+        //     'upload_directory' => 'tinyeditor',
+        // ],
+
         'default' => [
-            'plugins' => 'advlist autoresize codesample directionality emoticons fullscreen hr image imagetools link lists media table toc wordcount code',
-            'toolbar' => 'undo redo removeformat | formatselect fontsizeselect | bold italic | rtl ltr | alignjustify alignright aligncenter alignleft | numlist bullist | forecolor backcolor | blockquote table hr | image link code',
+            'plugins' => 'autoresize link wordcount',
+            'toolbar' => 'bold italic superscript subscript | link | blockquote bullist numlist',
             'upload_directory' => 'tinyeditor',
         ],
 
-        'simple' => [
-            'plugins' => 'autoresize directionality emoticons link wordcount',
-            'toolbar' => 'removeformat | bold italic | rtl ltr | link emoticons',
+        'basic' => [
+            'plugins' => 'autoresize link wordcount image code lists',
+            'toolbar' => 'bold italic superscript subscript | link | blockquote bullist numlist | image | code',
             'upload_directory' => 'tinyeditor',
         ],
 
-        'template' => [
-            'plugins' => 'autoresize template',
-            'toolbar' => 'template',
+        'advanced' => [
+            'plugins' => 'autoresize link wordcount image code lists',
+            'toolbar' => 'bold italic superscript subscript | link | blockquote bullist numlist | image | code',
             'upload_directory' => 'tinyeditor',
         ],
+
         /*
         |--------------------------------------------------------------------------
         | Custom Configs

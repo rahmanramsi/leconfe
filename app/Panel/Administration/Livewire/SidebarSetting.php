@@ -15,11 +15,6 @@ class SidebarSetting extends Component implements HasForms, HasActions
     use InteractsWithActions;
     use InteractsWithForms;
 
-    public function mount(): void
-    {
-        
-    }
-
     public function render()
     {
         return view('panel.administration.livewire.sidebar-setting', $this->getViewData());
