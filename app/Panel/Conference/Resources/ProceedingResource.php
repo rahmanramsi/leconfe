@@ -95,14 +95,17 @@ class ProceedingResource extends Resource
                         ->modalWidth('xl'),
                     Tables\Actions\Action::make('preview')
                         ->icon('heroicon-o-eye')
+                        ->hidden(fn (Proceeding $record) => !$record->published)
                         ->url(fn (Proceeding $record) => route('livewirePageGroup.conference.pages.proceeding-detail', [$record->id]), true),
                     Tables\Actions\Action::make('publish')
                         ->requiresConfirmation()
+                        ->color('success')
                         ->icon('heroicon-o-arrow-up-tray')
                         ->hidden(fn (Proceeding $record) => $record->published)
                         ->action(fn (Proceeding $record) => $record->publish()),
                     Tables\Actions\Action::make('unpublish')
                         ->requiresConfirmation()
+                        ->color('danger')
                         ->icon('heroicon-o-arrow-down-tray')
                         ->hidden(fn (Proceeding $record) => !$record->published)
                         ->action(fn (Proceeding $record) => $record->unpublish()),

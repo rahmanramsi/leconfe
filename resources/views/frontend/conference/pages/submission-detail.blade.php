@@ -48,24 +48,24 @@
                     @endforeach
                 </div>
             </section>
-            {{-- Keywords --}}
-            <section class="keywords">
-                <div class="mt-4 text-slate-800">
-                    <h2 class="pb-1 mb-3 text-xl font-medium border-b border-b-slate-200">
-                        {{ __('Keywords') }}
-                    </h2>
-                    <div class="flex flex-wrap gap-3">
-                        @foreach ($submission->tagsWithType('submissionKeywords')->pluck('name') as $keyword)
-                            <span 
-                                class="flex items-center px-2 py-1 transition duration-200 ease-in-out border rounded-md shadow-sm bg-slate-100 border-slate-200 link-primary hover:bg-slate-200 hover:border-slate-300">
-                                {{ $keyword }}
-                            </span>
-                        @endforeach
+            @if($submission->getMeta('keywords'))
+                <section class="keywords">
+                    <div class="mt-4 text-slate-800">
+                        <h2 class="pb-1 mb-3 text-xl font-medium border-b border-b-slate-200">
+                            {{ __('Keywords') }}
+                        </h2>
+                        <div class="flex flex-wrap gap-3">
+                            @foreach ($submission->getMeta('keywords') as $keyword)
+                                <span 
+                                    class="flex items-center px-2 py-1 transition duration-200 ease-in-out border rounded-md shadow-sm bg-slate-100 border-slate-200 link-primary hover:bg-slate-200 hover:border-slate-300">
+                                    {{ $keyword }}
+                                </span>
+                            @endforeach
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            @endif
             <section clas="abstract">
-                {{-- Abstract --}}
                 <div class="mt-4 text-slate-800">
                     <h2 class="pb-1 mb-3 text-xl font-medium border-b border-b-slate-200">
                         {{ __('Abstract') }}
@@ -87,20 +87,21 @@
                     @endif
                 </div>
             </section>
-            <section class="downloads">
-                <div class="mt-4 text-slate-800">
-                    <h2 class="text-xl">
-                        {{ __('Downloads') }}
-                    </h2>
-                    @if($galleys->isNotEmpty())
-                        <div class="flex flex-wrap gap-1.5 mt-2">
-                            @foreach ($galleys as $galley)
-                                <x-scheduledConference::galley-link :galley="$galley"/>
-                            @endforeach
-                        </div>
-                    @endif
-                </div>
-            </section>
+            @if($galleys->isNotEmpty())
+                <section class="downloads">
+                    <div class="mt-4 text-slate-800">
+                        <h2 class="text-xl">
+                            {{ __('Downloads') }}
+                        </h2>
+                            <div class="flex flex-wrap gap-1.5 mt-2">
+                                @foreach ($galleys as $galley)
+                                    <x-scheduledConference::galley-link :galley="$galley"/>
+                                @endforeach
+                            </div>
+                    </div>
+                </section>
+            @endif
+
         </div>
     </div>
 </x-website::layouts.main>

@@ -6,6 +6,7 @@ use App\Actions\Submissions\SubmissionUpdateAction;
 use App\Infolists\Components\BladeEntry;
 use App\Models\Proceeding;
 use App\Models\Submission;
+use Exception;
 use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\Actions\Action as ActionsAction;
 use Filament\Forms\Components\Select;
@@ -19,7 +20,9 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Concerns\InteractsWithInfolists;
 use Filament\Infolists\Contracts\HasInfolists;
 use Filament\Infolists\Infolist;
+use Filament\Notifications\Notification;
 use Filament\Support\Enums\MaxWidth;
+use Illuminate\Support\Facades\Log;
 
 class SubmissionProceeding extends \Livewire\Component implements HasForms, HasInfolists
 {
@@ -136,8 +139,19 @@ class SubmissionProceeding extends \Livewire\Component implements HasForms, HasI
             );
 
             $this->form->model($submission)->saveRelationships();
+            
+            Notification::make('success')
+                ->success()
+                ->title('Saved!')
+                ->send();
         } catch (\Throwable $th) {
-            throw $th;
+            Notification::make('error')
+                ->danger()
+                ->title('Error!')
+                ->body('There was an error pleas contact the administrator.')
+                ->send();
+
+            Log::error($th);
         }
     }
 }

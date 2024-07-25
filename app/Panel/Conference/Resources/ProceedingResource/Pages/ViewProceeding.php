@@ -2,8 +2,10 @@
 
 namespace App\Panel\Conference\Resources\ProceedingResource\Pages;
 
+use App\Models\Proceeding;
 use App\Models\Submission;
 use App\Panel\Conference\Resources\ProceedingResource;
+use App\Tables\Columns\IndexColumn;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
@@ -16,6 +18,8 @@ use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Model;
+use Filament\Actions;
+
 
 class ViewProceeding extends Page implements HasForms, HasTable
 {
@@ -36,6 +40,16 @@ class ViewProceeding extends Page implements HasForms, HasTable
         $this->authorizeAccess();
 
         $this->form->fill($this->record->attributesToArray());
+    }
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            Actions\Action::make('preview')
+                ->icon('heroicon-o-eye')
+                ->hidden(fn (Proceeding $record) => !$record->published)
+                ->url(fn (Proceeding $record) => route('livewirePageGroup.conference.pages.proceeding-detail', [$record->id]), true),
+        ];
     }
 
     protected function authorizeAccess(): void
@@ -61,7 +75,7 @@ class ViewProceeding extends Page implements HasForms, HasTable
     public function form(Form $form): Form
     {
         $form
-            ->disabled(fn() => !$this->can('update', $this->record))
+            ->disabled(fn () => !$this->can('update', $this->record))
             ->model($this->record);
 
         return static::getResource()::form($form)
@@ -90,9 +104,11 @@ class ViewProceeding extends Page implements HasForms, HasTable
             )
             ->reorderable('proceeding_order_column')
             ->columns([
+                IndexColumn::make('no')
+                    ->label('No.'),
                 TextColumn::make('title')
                     ->getStateUsing(fn (Submission $record) => $record->getMeta('title'))
-                    ->url(fn (Submission $record) => route('filament.conference.resources.submissions.view', ['record' => $record->id]))
+                    ->url(fn (Submission $record) => route('filament.scheduledConference.resources.submissions.view', ['record' => $record->id, 'serie' => $record->scheduledConference]))
                     ->searchable()
                     ->color('primary'),
             ])
