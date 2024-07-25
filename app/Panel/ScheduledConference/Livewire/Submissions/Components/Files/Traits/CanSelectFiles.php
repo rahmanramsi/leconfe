@@ -38,7 +38,7 @@ trait CanSelectFiles
                                 'submission' => $this->submission,
                                 'targetCategory' => $this->getTargetCategory(),
                                 'selectableCategories' => $this->getSelectableCategories(),
-                                'allowedFileTypes' => $this->getAcceptedFiles(),
+                                'allowedFileTypes' => config('media-library.accepted_file_types'),
                                 'lazy' => true,
                             ]
                         ),

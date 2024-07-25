@@ -109,7 +109,7 @@ class CallforAbstract extends Component implements HasActions, HasForms
     {
         return Action::make('accept')
             ->modalHeading('Confirmation')
-            ->modalSubmitActionLabel('Accept')
+            ->modalSubmitActionLabel('Send for Review')
             ->authorize('acceptAbstract', $this->submission)
             ->modalWidth('2xl')
             ->record($this->submission)
@@ -206,7 +206,7 @@ class CallforAbstract extends Component implements HasActions, HasForms
     public function render()
     {
         return view('panel.scheduledConference.livewire.submissions.call-for-abstract', [
-            'submissionDecision' => in_array($this->submission->status, [SubmissionStatus::OnReview, SubmissionStatus::Editing, SubmissionStatus::Declined]),
+            'submissionDecision' => in_array($this->submission->status, [SubmissionStatus::OnReview, SubmissionStatus::Editing, SubmissionStatus::Declined, SubmissionStatus::OnPresentation]),
         ]);
     }
 }

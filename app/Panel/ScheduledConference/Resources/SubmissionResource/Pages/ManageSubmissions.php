@@ -4,6 +4,7 @@ namespace App\Panel\ScheduledConference\Resources\SubmissionResource\Pages;
 
 use App\Models\Enums\SubmissionStatus;
 use App\Models\Enums\UserRole;
+use App\Models\Submission;
 use App\Models\Timeline;
 use App\Panel\ScheduledConference\Pages\Workflow;
 use App\Panel\ScheduledConference\Pages\WorkflowSetting;
@@ -36,7 +37,7 @@ class ManageSubmissions extends ManageRecords
         return [
             Action::make('Settings')
                 ->button()
-                ->authorize('Workflow:update')
+                ->authorize('update', app()->getCurrentScheduledConference())
                 ->outlined()
                 ->icon('heroicon-o-cog')
                 ->url(WorkflowSetting::getUrl()),
@@ -67,6 +68,7 @@ class ManageSubmissions extends ManageRecords
             static::TAB_ACTIVE => [
                 SubmissionStatus::OnReview,
                 SubmissionStatus::Editing,
+                SubmissionStatus::OnPresentation,
             ],
             static::TAB_PUBLISHED => [
                 SubmissionStatus::Published,

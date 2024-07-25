@@ -13,13 +13,13 @@ class OnReviewSubmissionState extends BaseSubmissionState
 {
     use CanWithdraw;
 
-    public function accept(): void
+    public function sendToPresentation(): void
     {
         SubmissionUpdateAction::run([
             'revision_required' => false,
             'skipped_review' => false,
-            'stage' => SubmissionStage::Editing,
-            'status' => SubmissionStatus::Editing,
+            'stage' => SubmissionStage::Presentation,
+            'status' => SubmissionStatus::OnPresentation,
         ], $this->submission);
 
         Accepted::dispatch($this->submission);
@@ -27,7 +27,8 @@ class OnReviewSubmissionState extends BaseSubmissionState
         Log::make(
             name: 'submission',
             subject: $this->submission,
-            description: __('log.submission.accepted')
+            description: __('log.submission.send_to_presentation'),
+            event: 'submission-send-to-presentation',
         )
             ->by(auth()->user())
             ->save();
@@ -44,7 +45,8 @@ class OnReviewSubmissionState extends BaseSubmissionState
         Log::make(
             name: 'submission',
             subject: $this->submission,
-            description: __('log.submission.declined')
+            description: __('log.submission.declined'),
+            event: 'submission-declined',
         )
             ->by(auth()->user())
             ->save();
@@ -55,14 +57,15 @@ class OnReviewSubmissionState extends BaseSubmissionState
         SubmissionUpdateAction::run([
             'skipped_review' => true,
             'revision_required' => false,
-            'status' => SubmissionStatus::Editing,
-            'stage' => SubmissionStage::Editing,
+            'status' => SubmissionStatus::OnPresentation,
+            'stage' => SubmissionStage::Presentation,
         ], $this->submission);
 
         Log::make(
             name: 'submission',
             subject: $this->submission,
-            description: __('log.submission.skip_review')
+            description: __('log.submission.skip_review'),
+            event: 'submission-skip-review',
         )
             ->by(auth()->user())
             ->save();
@@ -79,7 +82,8 @@ class OnReviewSubmissionState extends BaseSubmissionState
         Log::make(
             name: 'submission',
             subject: $this->submission,
-            description: __('log.submission.revision_required')
+            description: __('log.submission.revision_required'),
+            event: 'submission-revision-required',
         )
             ->by(auth()->user())
             ->save();

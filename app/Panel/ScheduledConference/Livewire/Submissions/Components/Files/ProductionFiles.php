@@ -30,6 +30,7 @@ class ProductionFiles extends SubmissionFilesTable
     {
         return [
             SubmissionFileCategory::PAPER_FILES,
+            SubmissionFileCategory::PRESENTATION_FILES,
             SubmissionFileCategory::REVIEWER_FILES,
             SubmissionFileCategory::REVISION_FILES,
             SubmissionFileCategory::EDITING_DRAFT_FILES,

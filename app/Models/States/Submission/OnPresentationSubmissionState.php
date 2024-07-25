@@ -4,26 +4,31 @@ namespace App\Models\States\Submission;
 
 use App\Actions\Submissions\SubmissionUpdateAction;
 use App\Classes\Log;
+use App\Events\Submissions\Accepted;
 use App\Models\Enums\SubmissionStage;
 use App\Models\Enums\SubmissionStatus;
 use App\Models\States\Submission\Concerns\CanWithdraw;
 
-class QueuedSubmissionState extends BaseSubmissionState
+class OnPresentationSubmissionState extends BaseSubmissionState
 {
     use CanWithdraw;
 
-    public function acceptAbstract(): void
+    public function sendToEditing(): void
     {
         SubmissionUpdateAction::run([
-            'stage' => SubmissionStage::PeerReview,
-            'status' => SubmissionStatus::OnReview,
+            'revision_required' => false,
+            'skipped_review' => false,
+            'stage' => SubmissionStage::Editing,
+            'status' => SubmissionStatus::Editing,
         ], $this->submission);
+
+        Accepted::dispatch($this->submission);
 
         Log::make(
             name: 'submission',
             subject: $this->submission,
-            description: __('log.submission.abstract_accepted'),
-            event : 'submission-abstract-accepted',
+            description: __('log.submission.send_to_editing'),
+            event: 'submission-send-to-editing',
         )
             ->by(auth()->user())
             ->save();
@@ -32,14 +37,15 @@ class QueuedSubmissionState extends BaseSubmissionState
     public function decline(): void
     {
         SubmissionUpdateAction::run([
+            'revision_required' => false,
+            'stage' => SubmissionStage::PeerReview,
             'status' => SubmissionStatus::Declined,
         ], $this->submission);
 
         Log::make(
             name: 'submission',
             subject: $this->submission,
-            description: __('log.submission.declined'),
-            event: 'submission-declined',
+            description: __('log.submission.declined')
         )
             ->by(auth()->user())
             ->save();

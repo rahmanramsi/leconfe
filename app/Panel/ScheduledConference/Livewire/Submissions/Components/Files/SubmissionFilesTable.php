@@ -50,11 +50,6 @@ abstract class SubmissionFilesTable extends \Livewire\Component implements HasFo
         return $this->category;
     }
 
-    public function getAcceptedFiles(): array
-    {
-        return config('media-library.accepted_file_types');
-    }
-
     public function tableColumns(): array
     {
         return [
@@ -114,11 +109,6 @@ abstract class SubmissionFilesTable extends \Livewire\Component implements HasFo
                 ->reorderable()
                 ->disk('private-files')
                 ->preserveFilenames()
-                ->acceptedFileTypes(
-                    fn (): array => collect($this->getAcceptedFiles())
-                        ->map(fn ($ext) => MimeType::fromExtension($ext))
-                        ->toArray()
-                )
                 ->collection($this->category)
                 ->visibility('private')
                 ->model(fn () => $this->submission)

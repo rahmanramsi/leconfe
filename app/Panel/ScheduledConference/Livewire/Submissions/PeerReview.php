@@ -136,7 +136,7 @@ class PeerReview extends Component implements HasActions, HasForms
                     ]),
             ])
             ->action(function (Action $action, array $data) {
-                $this->submission->state()->accept();
+                $this->submission->state()->sendToPresentation();
 
                 if (! $data['do-not-notify-author']) {
                     try {
@@ -254,7 +254,7 @@ class PeerReview extends Component implements HasActions, HasForms
     public function render()
     {
         return view('panel.scheduledConference.livewire.submissions.peer-review', [
-            'submissionDecision' => in_array($this->submission->status, [SubmissionStatus::Editing, SubmissionStatus::Declined])
+            'submissionDecision' => in_array($this->submission->status, [SubmissionStatus::Editing, SubmissionStatus::Declined, SubmissionStatus::OnPresentation])
         ]);
     }
 }

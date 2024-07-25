@@ -13,6 +13,7 @@ enum SubmissionStatus: string implements HasColor, HasLabel
     case Incomplete = 'Incomplete';
     case Queued = 'Queued';
     case OnReview = 'On Review';
+    case OnPresentation = 'On Presentation';
     case Editing = 'Editing';
     case Published = 'Published';
     case Declined = 'Declined';

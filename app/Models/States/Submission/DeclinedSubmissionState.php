@@ -26,7 +26,7 @@ class DeclinedSubmissionState extends BaseSubmissionState
             ->save();
     }
 
-    public function accept(): void
+    public function sendToEditing(): void
     {
         SubmissionUpdateAction::run([
             'revision_required' => false,
@@ -39,7 +39,7 @@ class DeclinedSubmissionState extends BaseSubmissionState
         Log::make(
             name: 'submission',
             subject: $this->submission,
-            description: __('log.submission.accepted')
+            description: __('log.submission.send_to_editing')
         )
             ->by(auth()->user())
             ->save();

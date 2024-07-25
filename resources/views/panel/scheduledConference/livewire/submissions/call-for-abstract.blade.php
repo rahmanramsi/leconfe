@@ -24,7 +24,7 @@
                 @if($submissionDecision)
                     <div class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:ring-white/10 space-y-3 py-5 px-6">
                         <div class="text-base">
-                            {{ $submission->status == SubmissionStatus::Declined ? 'Submission Declined' : 'Submission Accepted' }}
+                            {{ $submission->status == SubmissionStatus::Declined ? 'Submission Declined' : 'Submission accepted for review.' }}
                         </div>
                         <button class="text-sm text-primary-500 underline"
                             @@click="decision = !decision" x-text="decision ? 'Change Decision' : 'Cancel'"
@@ -36,7 +36,7 @@
                     'space-y-4',
                     'hidden' => in_array($submission->status, [SubmissionStatus::Published])
                 ]) x-show="!decision">
-                    @if ($user->can('acceptAbstract', $submission) && ! in_array($this->submission->status, [SubmissionStatus::OnReview, SubmissionStatus::Editing]))
+                    @if ($user->can('acceptAbstract', $submission) && ! in_array($this->submission->status, [SubmissionStatus::OnReview, SubmissionStatus::Editing, SubmissionStatus::OnPresentation]))
                         {{ $this->acceptAction() }}
                     @endif
                     @if ($user->can('declineAbstract', $submission) && ! in_array($this->submission->status, [SubmissionStatus::Declined]))

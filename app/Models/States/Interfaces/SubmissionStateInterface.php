@@ -8,7 +8,9 @@ interface SubmissionStateInterface
 
     public function acceptAbstract(): void;
 
-    public function accept(): void;
+    public function sendToEditing(): void;
+    
+    public function sendToPresentation(): void;
 
     public function publish(): void;
 

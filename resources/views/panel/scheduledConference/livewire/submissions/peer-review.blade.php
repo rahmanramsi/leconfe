@@ -45,9 +45,9 @@
                                 @if ($submission->status == SubmissionStatus::Declined)
                                     Submission Declined
                                 @elseif ($submission->skipped_review)
-                                    Submission skipped for review.
+                                    Submission skipped
                                 @else
-                                    Submission accepted for review.
+                                    Submission accepted
                                 @endif
                             </div>
                             <button class="text-sm text-primary-500 underline" 
@@ -65,13 +65,13 @@
                         @endif
                         @if ($user->can('requestRevision', $submission) && ! $submission->revision_required)
                             {{ $this->requestRevisionAction() }}
-                        @endcan
+                        @endif
                         @if ($user->can('acceptPaper', $submission) && ($submission->status != SubmissionStatus::Editing || $submission->skipped_review))
                             {{ $this->acceptSubmissionAction() }}
-                        @endcan
+                        @endif
                         @if ($user->can('declinePaper', $submission) && ! in_array($submission->status, [SubmissionStatus::Declined]))
                             {{ $this->declineSubmissionAction() }}
-                        @endcan
+                        @endif
                     </div>
                 @endif
             @endif

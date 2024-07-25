@@ -70,8 +70,8 @@ return [
         */
 
         'email' => [
-            'plugins' => 'autoresize directionality emoticons link wordcount code',
-            'toolbar' => 'formatselect fontsizeselect | removeformat | bold italic | rtl ltr | alignjustify alignright aligncenter alignleft | link | code',
+            'plugins' => 'autoresize directionality link wordcount lists code ',
+            'toolbar' => 'formatselect fontsizeselect | removeformat | bold italic | rtl ltr | alignjustify alignright aligncenter alignleft | link | blockquote bullist numlist | code',
             'upload_directory' => 'tinyeditor',
         ],
 
