@@ -203,4 +203,17 @@ class Application extends LaravelApplication
 
         return false;
     }
+
+    public function getLoginUrl(): string
+    {
+        if(app()->getCurrentScheduledConference()){
+            return route('livewirePageGroup.scheduledConference.pages.login');
+        }
+
+        if(app()->getCurrentConference()){
+            return route('livewirePageGroup.conference.pages.login');
+        }
+
+        return route('livewirePageGroup.website.pages.login');
+    }
 }

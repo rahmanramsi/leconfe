@@ -225,4 +225,6 @@ return [
         'MetaTag' => App\Facades\MetaTag::class,
         'Setting' => App\Facades\Setting::class,
     ])->toArray(),
+
+    'must_verify_email' => env('MUST_VERIFY_EMAIL', false),
 ];

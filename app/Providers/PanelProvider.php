@@ -153,12 +153,10 @@ class PanelProvider extends ServiceProvider
             ->colors([
                 'primary' => Color::hex('#1c3569'),
             ])
-            // ->userMenuItems([
-            //     'logout' => MenuItem::make()
-            //         ->url(fn (): string => route('logout')),
-            //     'profile' => MenuItem::make()
-            //         ->url(fn (): string => Profile::getUrl()),
-            // ])
+            ->userMenuItems([
+                'profile' => MenuItem::make()
+                    ->url(fn (): string => Profile::getUrl()),
+            ])
             ->darkMode(false)
             ->databaseNotifications()
             ->databaseNotificationsPolling(null);

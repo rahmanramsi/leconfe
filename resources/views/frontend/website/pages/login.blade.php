@@ -41,9 +41,11 @@
                     <span class="loading loading-spinner loading-xs" wire:loading></span>
                     Login
                 </button>
+                @if($registerUrl)
                 <x-website::link class="btn btn-outline btn-sm" :href="$registerUrl">
                     Register
                 </x-website::link>
+                @endif
             </div>
         </form>
     </div>

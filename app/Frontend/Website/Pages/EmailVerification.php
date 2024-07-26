@@ -16,7 +16,7 @@ class EmailVerification extends Page
 
     public function mount()
     {
-        if (! Setting::get('must_verify_email')) {
+        if (! config('app.must_verify_email')) {
             return redirect()->route('livewirePageGroup.website.pages.home');
         }
 

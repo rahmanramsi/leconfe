@@ -16,12 +16,12 @@ class MustVerifyEmail
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (! Setting::get('must_verify_email')) {
+        if (! config('app.must_verify_email')) {
             return $next($request);
         }
 
         if (! $request->user()) {
-            return redirect()->route('livewirePageGroup.website.pages.login');
+            return redirect()->to(app()->getLoginUrl());
         }
 
         if (! $request->user()->hasVerifiedEmail()) {
