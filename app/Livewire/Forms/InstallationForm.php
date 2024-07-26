@@ -50,12 +50,6 @@ class InstallationForm extends Form
     #[Rule('required', onUpdate: false)]
     public $db_port = '3306';
 
-    /**
-     * Field for Timezone
-     */
-    #[Rule('required')]
-    public $timezone = 'Asia/Makassar';
-
     public function checkDatabaseConnection(): bool
     {
         try {

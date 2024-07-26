@@ -153,10 +153,10 @@ class CallforAbstract extends Component implements HasActions, HasForms
                     try {
                         $this->submission->state()->acceptAbstract();
 
-                        if (auth()->user()->hasRole(UserRole::Editor->value)) {
+                        if (auth()->user()->hasRole(UserRole::ConferenceEditor->value)) {
                             $this->submission->participants()->create([
                                 'user_id' => auth()->id(),
-                                'role_id' => Role::where('name', UserRole::Editor->value)->first()->getKey(),
+                                'role_id' => Role::where('name', UserRole::ConferenceEditor->value)->first()->getKey(),
                             ]);
                         }
 

@@ -155,7 +155,7 @@ class SubmissionResource extends Resource
                                 $editorAssigned = $record->participants()
                                     ->whereHas(
                                         'role',
-                                        fn (Builder $query) => $query->where('name', UserRole::Editor)
+                                        fn (Builder $query) => $query->where('name', UserRole::ConferenceEditor)
                                     )
                                     ->count();
 

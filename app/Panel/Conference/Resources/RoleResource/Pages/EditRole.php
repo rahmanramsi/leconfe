@@ -44,6 +44,7 @@ class EditRole extends EditRecord
             ->keys()
             ->toArray();
 
+
         return RoleUpdateAction::run($record, $data);
     }
 }

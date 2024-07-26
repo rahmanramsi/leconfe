@@ -15,7 +15,7 @@
             @livewire(Components\Discussions\DiscussionTopic::class, ['submission' => $submission, 'stage' => SubmissionStage::CallforAbstract, 'lazy' => true])
         </div>
         <div class="sticky z-30 flex flex-col self-start col-span-4 gap-3 top-24" x-data="{ decision:@js($submissionDecision) }">
-            @if($submission->getEditors()->isEmpty() && ! $user->hasRole(\App\Models\Enums\UserRole::Editor->value))
+            @if($submission->getEditors()->isEmpty() && ! $user->hasRole(\App\Models\Enums\UserRole::ConferenceEditor->value))
                 <div class="px-4 py-3.5 text-base text-white rounded-lg border-2 border-primary-700 bg-primary-500">
                     {{ $user->can('assignParticipant', $submission) ? 'Assign an editor to enable the editorial decisions for this stage.' : 'No editor assigned to this submission.' }}
                 </div>

@@ -5,7 +5,7 @@
                 {{ $code }}
             </h1>
             <p class="mb-4 text-lg text-gray-600">{{ $message }}</p>
-            <x-website::link class="btn btn-primary btn-sm" :href="$homeUrl">
+            <x-website::link class="btn btn-primary btn-sm" :href="$homeUrl ?? route('livewirePageGroup.website.pages.home')">
                 Home
             </x-website::link>
         </div>

@@ -81,7 +81,7 @@ class Submission extends Model implements HasMedia, HasPayment, Sortable
         static::addGlobalScope('user', function (Builder $builder) {
             // $currentUser = auth()->user();
             // if (
-            //     $currentUser->hasRole(UserRole::Editor->value)
+            //     $currentUser->hasRole(UserRole::ConferenceEditor->value)
             //     || $currentUser->hasRole(UserRole::Reviewer->value)
             // ) {
             //     $builder->where('user_id', auth()->id());
@@ -239,7 +239,7 @@ class Submission extends Model implements HasMedia, HasPayment, Sortable
     {
         return $this->participants()
             ->whereHas('role', function ($query) {
-                $query->where('name', UserRole::Editor->value);
+                $query->where('name', UserRole::ConferenceEditor->value);
             })
             ->get()
             ->pluck('user_id')

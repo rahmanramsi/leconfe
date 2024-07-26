@@ -156,7 +156,6 @@ class Installer
                 'password' => $this->readParam('password'),
             ]);
 
-            setPermissionsTeamId(Application::CONTEXT_WEBSITE);
             $user->assignRole(UserRole::Admin->value);
 
             auth()->login($user);

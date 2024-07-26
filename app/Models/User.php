@@ -224,4 +224,54 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasMedia,
     {
         Mail::to($this->getEmailForVerification())->send(new VerifyUserEmail($this));
     }
+
+        /**
+     * Assign the given role to the model.
+     *
+     * @param  string|int|array|Role|Collection|\BackedEnum  ...$roles
+     * @return $this
+     */
+    public function assignRole(...$roles)
+    {
+        $roles = $this->collectRoles($roles);
+
+        $model = $this->getModel();
+
+        $conference = app()->getCurrentConference();
+        $scheduledConference = app()->getCurrentScheduledConference();
+        
+        $teamPivot = [];
+        if($conference) {
+            $teamPivot['conference_id'] = $conference->getKey();
+        }
+        
+        if($scheduledConference) {
+            $teamPivot['scheduled_conference_id'] = $scheduledConference->getKey();
+        }
+
+        if ($model->exists) {
+            $currentRoles = $this->roles->map(fn ($role) => $role->getKey())->toArray();
+
+            $this->roles()->attach(array_diff($roles, $currentRoles), $teamPivot);
+            $model->unsetRelation('roles');
+        } else {
+            $class = \get_class($model);
+
+            $class::saved(
+                function ($object) use ($roles, $model, $teamPivot) {
+                    if ($model->getKey() != $object->getKey()) {
+                        return;
+                    }
+                    $model->roles()->attach($roles, $teamPivot);
+                    $model->unsetRelation('roles');
+                }
+            );
+        }
+
+        if (is_a($this, Permission::class)) {
+            $this->forgetCachedPermissions();
+        }
+
+        return $this;
+    }
 }

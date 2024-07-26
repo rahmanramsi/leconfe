@@ -14,6 +14,7 @@ use App\Models\Sponsor;
 use App\Models\NavigationMenu;
 use App\Models\PaymentItem;
 use App\Models\Proceeding;
+use App\Models\Role;
 use App\Models\Scopes\ConferenceScope;
 use App\Models\Scopes\ScheduledConferenceScope;
 use App\Models\ScheduledConference;
@@ -134,6 +135,7 @@ class Application extends LaravelApplication
             ScheduledConference::class,
             Proceeding::class,
             MailTemplate::class,
+            // Role::class,
         ];
 
         foreach ($models as $model) {
@@ -155,6 +157,7 @@ class Application extends LaravelApplication
             Topic::class,
             NavigationMenu::class,
             SubmissionFileType::class,
+            // Role::class,
         ];
 
         foreach ($models as $model) {

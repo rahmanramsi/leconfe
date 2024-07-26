@@ -37,6 +37,8 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use App\Forms\Components\TinyEditor;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\TernaryFilter;
 use STS\FilamentImpersonate\Tables\Actions\Impersonate;
 
 class UserResource extends Resource
@@ -52,7 +54,7 @@ class UserResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return static::getModel()::query()
-            ->whereHas('roles', fn ($query) => $query->where('name', '!=', UserRole::Admin))
+
             ->where('id', '!=', auth()->id())
             ->with(['meta', 'media', 'bans']);
     }
@@ -226,7 +228,12 @@ class UserResource extends Resource
                     ->relationship('roles', 'name', modifyQueryUsing: fn ($query) => $query->where('name', '!=', UserRole::Admin))
                     ->multiple()
                     ->preload(),
+                Filter::make('hide_user_with_no_roles')
+                    ->default()
+                    ->label('Hide users with no roles in this scheduled conference.')
+                    ->query(fn(array $data, Builder $query) => $query->whereHas('roles', fn ($query) => $query->where('name', '!=', UserRole::Admin)))
             ])
+            ->deferFilters()
             ->actions([
                 EditAction::make()
                     ->modalWidth('full')
@@ -242,10 +249,10 @@ class UserResource extends Resource
                         ->label(fn (User $record) => "Login as {$record->given_name}")
                         ->icon('heroicon-m-key')
                         ->color('primary')
-                        ->redirectTo(fn () => route('filament.conference.pages.dashboard')),
+                        ->redirectTo(fn () => app()->getCurrentScheduledConference()?->getPanelUrl() ?? app()->getCurrentConference()?->getPanelUrl()),
                     Action::make('enable')
                         ->visible(fn (User $record) => auth()->user()->can('enable', $record))
-                        ->label(fn (User $record) => 'Enable User')
+                        ->label('Enable User')
                         ->icon('heroicon-o-check-circle')
                         ->color('success')
                         ->requiresConfirmation()

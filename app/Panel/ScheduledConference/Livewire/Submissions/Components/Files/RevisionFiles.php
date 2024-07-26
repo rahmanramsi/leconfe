@@ -16,6 +16,10 @@ class RevisionFiles extends SubmissionFilesTable
 
     public function isViewOnly(): bool
     {
+        if($this->submission->stage !== SubmissionStage::PeerReview) {
+            return true;
+        }
+
         return ! auth()->user()->can('uploadRevisionFiles', $this->submission) && ! $this->submission->revision_required;
     }
 

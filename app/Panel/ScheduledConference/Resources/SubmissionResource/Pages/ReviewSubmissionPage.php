@@ -203,7 +203,7 @@ class ReviewSubmissionPage extends Page implements HasActions, HasInfolists
                     ]);
 
                     $editors = $this->record->participants()
-                        ->whereHas('role', fn ($query) => $query->where('name', UserRole::Editor))
+                        ->whereHas('role', fn ($query) => $query->where('name', UserRole::ConferenceEditor))
                         ->get()
                         ->pluck('user_id')
                         ->toArray();
