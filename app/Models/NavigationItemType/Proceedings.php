@@ -16,12 +16,13 @@ class Proceedings extends BaseNavigationItemType
         return 'Proceedings';
     }
 
+    public static function getIsDisplayed(NavigationMenuItem $navigationMenuItem): bool
+    {
+        return app()->getCurrentConferenceId();
+    }
+
     public static function getUrl(NavigationMenuItem $navigationMenuItem): string
     {
-        if(app()->getCurrentConferenceId()){
-            return route('livewirePageGroup.conference.pages.proceedings');
-        }
-
-        return '#';
+        return route('livewirePageGroup.conference.pages.proceedings');
     }
 }

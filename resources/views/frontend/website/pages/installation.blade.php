@@ -151,32 +151,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="timezone space-y-4">
-                        <div class="mt-2.5 mb-6 space-y-2">
-                            <h2 class="text-lg not-italic font-semibold leading-7 text-black">Timezone</h2>
-                            <p class="w-full text-sm not-italic leading-snug ">
-                                The timezone that application gonna use.
-                            </p>
-                        </div>
-                        <div class="sm:grid sm:grid-cols-2 gap-4">
-                            <div class="form-control gap-2">
-                                <select class="select select-sm select-bordered" wire:model="form.timezone" required>
-                                    @foreach ($groupedTimezone as $group => $timezones)
-                                        <optgroup label="{{ $group }}">
-                                            @foreach ($timezones as $key => $timezone)
-                                                <option value="{{ $key }}">{{ $timezone }}</option>
-                                            @endforeach
-                                        </optgroup>
-                                    @endforeach
-                                </select>
-                                @error('database.connection')
-                                    <div class="text-red-600 text-sm">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
-                        </div>
-                    </div>
                     <div class="database space-y-4">
                         <div class="mt-2.5 mb-6 space-y-2">
                             <h2 class="text-lg not-italic font-semibold leading-7 text-black">Database</h2>

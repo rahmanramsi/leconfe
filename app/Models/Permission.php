@@ -40,9 +40,7 @@ class Permission extends Model
     {
         return [
             'Administration',
-            'Permission',
             'Plugin',
-            'Role',
         ];
     }
 }

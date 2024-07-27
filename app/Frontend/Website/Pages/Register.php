@@ -115,11 +115,8 @@ class Register extends Page
             'countries' => Country::all(),
             'roles' => UserRole::selfAssignedRoleNames(),
             'privacyStatementUrl' => '#',
+            'loginUrl' => app()->getLoginUrl(),
         ];
-
-        if(!app()->getCurrentConference()){
-            $data['conferences'] = Conference::query()->get();
-        }
 
         return $data;
     }

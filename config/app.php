@@ -74,7 +74,7 @@ return [
     |
     */
 
-    'timezone' => env('APP_TIMEZONE', 'Asia/Makassar'),
+    'timezone' => env('APP_TIMEZONE', 'UTC'),
 
     /*
     |--------------------------------------------------------------------------
@@ -225,4 +225,6 @@ return [
         'MetaTag' => App\Facades\MetaTag::class,
         'Setting' => App\Facades\Setting::class,
     ])->toArray(),
+
+    'must_verify_email' => env('MUST_VERIFY_EMAIL', false),
 ];

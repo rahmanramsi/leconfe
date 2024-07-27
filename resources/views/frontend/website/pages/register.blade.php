@@ -95,27 +95,27 @@
                                 @enderror
                             </div>
                             
-                            @if($currentConference)
-                            <div class="form-control sm:col-span-6 gap-2">
-                                <label class="label-text">Register as <span class="text-red-500">*</span></label>
-                                @foreach ($roles as $role)
-                                    <div class="form-control">
-                                        <div class="inline-flex gap-2 items-center cursor">
-                                            <input type="checkbox" class="checkbox checkbox-sm" wire:model='selfAssignRoles'
-                                                value="{{ $role }}" />
-                                            <label class="label-text">{{ $role }}</label>
+                            @if(isset($scheduledConference) && $scheduledConference)
+                                <div class="form-control sm:col-span-6 gap-2">
+                                    <label class="label-text">Register as <span class="text-red-500">*</span></label>
+                                    @foreach ($roles as $role)
+                                        <div class="form-control">
+                                            <div class="inline-flex gap-2 items-center cursor">
+                                                <input type="checkbox" class="checkbox checkbox-sm" wire:model='selfAssignRoles'
+                                                    value="{{ $role }}" />
+                                                <label class="label-text">{{ $role }}</label>
+                                            </div>
                                         </div>
-                                    </div>
-                                @endforeach
-                                @error('selfAssignRoles')
-                                    <div class="text-red-600 text-sm">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
+                                    @endforeach
+                                    @error('selfAssignRoles')
+                                        <div class="text-red-600 text-sm">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
                             @endif
 
-                            @if(!$currentConference)
+                            @if(isset($scheduledConference) && !$scheduledConference))
                                 <div class="col-span-full space-y-4">
                                     <p class="">Which conferences listed on this website are you interested in registering for?</p>
                                     @foreach ($conferences as $conference)
@@ -152,7 +152,7 @@
                                 <span class="loading loading-spinner loading-xs" wire:loading></span>
                                 Register
                             </button>
-                            <x-website::link class="btn btn-outline btn-sm" :href="url('login')">
+                            <x-website::link class="btn btn-outline btn-sm" :href="$loginUrl">
                                 Login
                             </x-website::link>
                         </div>
@@ -163,7 +163,7 @@
         @else
                 <p>Thank you for completing the registration! What would you like to proceed with next?</p>
                 <ul class='list-disc list-inside'> 
-                    <li><x-website::link class="link link-primary link-hover" href="{{ $currentConference ? route('filament.conference.pages.profile') : route('filament.administration.pages.profile') }}">Edit My Profile</x-website::link></li>
+                    <li><x-website::link class="link link-primary link-hover" href="{{ route('filament.scheduledConference.pages.profile') }}">Edit My Profile</x-website::link></li>
                     <li><x-website::link class="link link-primary link-hover" href="{{ $homeUrl }}">Continue Browsing</x-website::link></li>
                 </ul>
         @endif

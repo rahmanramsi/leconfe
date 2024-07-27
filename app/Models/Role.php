@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Concerns\BelongsToConference;
+use App\Models\Concerns\BelongsToScheduledConference;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\Permission\Models\Permission;
@@ -13,6 +14,7 @@ class Role extends Model
     protected $fillable = [
         'name',
         'conference_id',
+        'scheduled_conference_id',
         'guard_name',
     ];
 
@@ -22,9 +24,20 @@ class Role extends Model
     protected static function booted(): void
     {
         static::addGlobalScope('conferences', function (Builder $builder) {
-            if(app()->getCurrentConferenceId()){
-                $scopeColumn =  config('permission.table_names.roles', 'roles') . '.conference_id';
-                $builder->where($scopeColumn, null)->orWhere($scopeColumn, app()->getCurrentConferenceId());
+            
+            $conferenceScopeColumn =  config('permission.table_names.roles', 'roles') . '.conference_id';
+            $scheduledConferenceScopeColumn =  config('permission.table_names.roles', 'roles') . '.scheduled_conference_id';
+            
+            $conferenceId = app()->getCurrentConferenceId();
+            $builder->where($conferenceScopeColumn, 0);
+            if($conferenceId){
+                $builder->orWhere($conferenceScopeColumn, app()->getCurrentConferenceId());
+            }
+            
+            $scheduledConferenceId = app()->getCurrentScheduledConferenceId();
+            $builder->where($scheduledConferenceScopeColumn, 0);
+            if($scheduledConferenceId){
+                $builder->orWhere($scheduledConferenceScopeColumn, app()->getCurrentScheduledConferenceId());
             }
         });
     }

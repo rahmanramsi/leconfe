@@ -85,6 +85,7 @@ class ManageSubmissions extends ManageRecords
         if (Auth::user()->hasAnyRole([
             UserRole::Admin->value,
             UserRole::ConferenceManager->value,
+            UserRole::ConferenceEditor->value,
         ])) {
             return $query->whereIn('status', $statuses)->when(
                 $tabs == static::TAB_MYQUEUE,
@@ -127,7 +128,7 @@ class ManageSubmissions extends ManageRecords
                 $conditionBeforeExist = true;
             }
         )->when(
-            Auth::user()->hasRole(UserRole::Editor->value),
+            Auth::user()->hasRole(UserRole::ConferenceEditor->value),
             function (Builder $query) use ($statuses, &$conditionBeforeExist) {
                 $query->when($conditionBeforeExist, function (Builder $query) {
                     $query->orWhereHas('participants', function (Builder $query) {

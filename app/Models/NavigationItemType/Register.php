@@ -2,6 +2,7 @@
 
 namespace App\Models\NavigationItemType;
 
+use App\Facades\Setting;
 use App\Models\NavigationMenuItem;
 
 class Register extends BaseNavigationItemType
@@ -18,7 +19,7 @@ class Register extends BaseNavigationItemType
 
     public static function getIsDisplayed(NavigationMenuItem $navigationMenuItem): bool
     {
-        return ! auth()->check();
+        return app()->getCurrentScheduledConferenceId() && Setting::get('allow_registration') && !auth()->check();
     }
 
     public static function getUrl(NavigationMenuItem $navigationMenuItem): string
@@ -28,7 +29,9 @@ class Register extends BaseNavigationItemType
         }
 
         if(app()->getCurrentConferenceId()){
-            return route('livewirePageGroup.conference.pages.register');
+            $currentScheduledConference = app()->getCurrentConference()->currentScheduledConference;
+
+            return route('livewirePageGroup.scheduledConference.pages.register', ['serie' => $currentScheduledConference]);
         }
 
         return route('livewirePageGroup.website.pages.register');

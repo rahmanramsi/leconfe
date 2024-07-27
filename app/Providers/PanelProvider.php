@@ -24,6 +24,8 @@ use Filament\View\PanelsRenderHook;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use App\Forms\Components\TinyEditor;
+use App\Models\Conference;
+use App\Models\Enums\UserRole;
 use GuzzleHttp\Psr7\MimeType;
 
 class PanelProvider extends ServiceProvider
@@ -48,8 +50,6 @@ class PanelProvider extends ServiceProvider
                 fn () => view('panel.scheduledConference.hooks.sidebar-nav-start'),
             )
             ->middleware([
-                IdentifyConference::class,
-                IdentifySeries::class,
                 ...static::getMiddleware(),
             ], true)
             ->authMiddleware(static::getAuthMiddleware(), true);
@@ -82,10 +82,26 @@ class PanelProvider extends ServiceProvider
             )
             ->renderHook(
                 PanelsRenderHook::SIDEBAR_NAV_START,
-                fn () => view('panel.conference.hooks.sidebar-nav-start'),
+                function(){
+                    $currentConference = app()->getCurrentConference();
+                    $conferenceQuery = Conference::query()
+                        ->where('path', '!=', $currentConference->path)
+                        ->with(['media'])
+                        ->latest();
+
+                    if(!auth()->user()->hasRole(UserRole::Admin)){
+                        $conferenceQuery->whereHas('conferenceUsers', function ($query) {
+                            $query->where('model_has_roles.model_id', auth()->id());
+                        });
+                    }
+
+
+                    return view('panel.conference.hooks.sidebar-nav-start', [
+                        'conferences' => $conferenceQuery->get(),
+                    ]);
+                }
             )
             ->middleware([
-                IdentifyConference::class,
                 ...static::getMiddleware(),
             ], true)
             ->authMiddleware(static::getAuthMiddleware(), true);
@@ -137,12 +153,10 @@ class PanelProvider extends ServiceProvider
             ->colors([
                 'primary' => Color::hex('#1c3569'),
             ])
-            // ->userMenuItems([
-            //     'logout' => MenuItem::make()
-            //         ->url(fn (): string => route('logout')),
-            //     'profile' => MenuItem::make()
-            //         ->url(fn (): string => Profile::getUrl()),
-            // ])
+            ->userMenuItems([
+                'profile' => MenuItem::make()
+                    ->url(fn (): string => Profile::getUrl()),
+            ])
             ->darkMode(false)
             ->databaseNotifications()
             ->databaseNotificationsPolling(null);

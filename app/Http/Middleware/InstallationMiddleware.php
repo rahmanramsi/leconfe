@@ -17,7 +17,6 @@ class InstallationMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-
         // Allow livewire update route
         if (Route::getCurrentRoute()->uri === 'livewire/update') {
             return $next($request);

@@ -10,9 +10,10 @@ enum UserRole: string implements HasLabel
     use UsefulEnums;
 
     case Admin = 'Admin';
-    case ConferenceManager = 'Conference Manager';
     case SeriesManager = 'Series Manager';
-    case Editor = 'Editor';
+    case ConferenceManager = 'Conference Manager';
+    case ConferenceEditor = 'Conference Editor';
+    case TrackEditor = 'Track Editor';
     case Reviewer = 'Reviewer';
     case Author = 'Author';
     case Reader = 'Reader';
@@ -44,9 +45,15 @@ enum UserRole: string implements HasLabel
     public static function conferenceRoles(): array
     {
         return [
-            static::ConferenceManager,
             static::SeriesManager,
-            static::Editor,
+            static::ConferenceManager,
+        ];
+    }
+
+    public static function scheduledConferenceRoles(): array 
+    {
+        return [
+            static::ConferenceEditor,
             static::Reviewer,
             static::Author,
             static::Reader,
@@ -59,7 +66,7 @@ enum UserRole: string implements HasLabel
             static::Admin,
             static::ConferenceManager,
             static::SeriesManager,
-            static::Editor,
+            static::ConferenceEditor,
         ];
     }
 }

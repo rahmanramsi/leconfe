@@ -7,6 +7,7 @@ namespace Database\Seeders\Developments;
 use App\Application;
 use App\Models\Conference;
 use App\Models\Enums\UserRole;
+use App\Models\ScheduledConference;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -18,23 +19,32 @@ class UserSeeder extends Seeder
     public function run(): void
     {
 
-        $user = \App\Models\User::factory()->create([
+        $admin = \App\Models\User::factory()->create([
             'given_name' => 'admin',
             'email' => 'admin@admin.com',
             'password' => Hash::make('admin'),
         ]);
+        $admin->assignRole(UserRole::Admin->value);
+
+        $users = \App\Models\User::factory(100)->create();
+        
 
         $conferences = Conference::all();
-
-        setPermissionsTeamId(Application::CONTEXT_WEBSITE);
-        $user->assignRole(UserRole::Admin->value);
         foreach ($conferences as $key => $conference) {
-            setPermissionsTeamId($conference->getKey());
+            app()->setCurrentConferenceId($conference->getKey());
 
-            $user->assignRole(UserRole::Admin->value);
-            
-            $users = \App\Models\User::factory(10)->create();
-            $users->each(fn ($user) => $user->assignRole(UserRole::random()->value));
+            $users->random(2)->each(fn ($user) => $user->assignRole(UserRole::conferenceRoles()));
+        }
+
+        $scheduledConferences = ScheduledConference::all();
+        foreach ($scheduledConferences as $key => $scheduledConference) {
+            app()->setCurrentConferenceId($scheduledConference->conference_id);
+            app()->setCurrentScheduledConferenceId($scheduledConference->getKey());
+
+            $roles = collect(UserRole::scheduledConferenceRoles());
+
+
+            $users->random(50)->each(fn ($user) => $user->assignRole($roles->random(2)));
         }
 
     }

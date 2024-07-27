@@ -308,10 +308,6 @@ class SubmissionPolicy
 
     public function assignParticipant(User $user, Submission $submission)
     {
-        if ($submission->stage != SubmissionStage::Editing) {
-            return false;
-        }
-
         if (filled($submission->withdrawn_reason)) {
             return false;
         }

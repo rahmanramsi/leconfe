@@ -39,7 +39,7 @@ class Dashboard extends PagesDashboard
             UserRole::Admin->value,
             UserRole::ConferenceManager->value,
             UserRole::SeriesManager->value,
-            UserRole::Editor->value,
+            UserRole::ConferenceEditor->value,
         ];
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Panel\ScheduledConference\Pages;
 
+use App\Models\Submission;
 use Filament\Pages\Dashboard as BaseDashboard;
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,6 +13,7 @@ class Dashboard extends BaseDashboard
      */
     public function getWidgets(): array
     {
+
         return [];
     }
 }
