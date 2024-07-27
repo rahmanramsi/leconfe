@@ -26,6 +26,7 @@ use App\Models\Submission;
 use App\Models\SubmissionFileType;
 use App\Models\Timeline;
 use App\Models\Topic;
+use App\Models\Track;
 use App\Models\Venue;
 use App\Models\Version;
 use Illuminate\Foundation\Application as LaravelApplication;
@@ -135,7 +136,6 @@ class Application extends LaravelApplication
             ScheduledConference::class,
             Proceeding::class,
             MailTemplate::class,
-            // Role::class,
         ];
 
         foreach ($models as $model) {
@@ -157,7 +157,7 @@ class Application extends LaravelApplication
             Topic::class,
             NavigationMenu::class,
             SubmissionFileType::class,
-            // Role::class,
+            Track::class,
         ];
 
         foreach ($models as $model) {

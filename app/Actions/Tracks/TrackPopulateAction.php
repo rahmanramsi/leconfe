@@ -1,0 +1,26 @@
+<?php
+
+namespace App\Actions\Tracks;
+
+use App\Models\ScheduledConference;
+use App\Models\SubmissionFileType;
+use App\Models\Track;
+use Lorisleiva\Actions\Concerns\AsAction;
+
+class TrackPopulateAction
+{
+    use AsAction;
+
+    public function handle(ScheduledConference $scheduledConference)
+    {
+        foreach ([
+            'general' => 'General Track',
+        ] as $abbr => $title) {
+            Track::firstOrCreate([
+                'abbreviation' => $abbr,
+                'title' => $title,
+                'scheduled_conference_id' => $scheduledConference->id,
+            ]);
+        }
+    }
+}
