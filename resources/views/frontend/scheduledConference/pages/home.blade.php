@@ -124,14 +124,6 @@
                     </div>
                 </section>
             @endif
-
-            @if($currentProceeding)
-                <section id="current-proceeding">
-                    <div class="mb-6">
-                        <x-scheduledConference::proceeding :proceeding="$currentProceeding" :title="'Current Proceeding'" />
-                    </div>
-                </section>
-            @endif
         </div>
     @else 
         <div>
