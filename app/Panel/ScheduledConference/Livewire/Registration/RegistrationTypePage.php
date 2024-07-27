@@ -43,7 +43,7 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\Fieldset as ComponentsFieldset;
-use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
+use App\Forms\Components\TinyEditor;
 
 class RegistrationTypePage extends Component implements HasTable, HasForms
 {

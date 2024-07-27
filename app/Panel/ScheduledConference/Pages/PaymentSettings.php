@@ -14,7 +14,7 @@ use Filament\Pages\SubNavigationPosition;
 use App\Infolists\Components\LivewireEntry;
 use Filament\Forms\Components\Actions\Action;
 use App\Panel\ScheduledConference\Livewire\Payment\BankPayment;
-use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
+use App\Forms\Components\TinyEditor;
 use App\Infolists\Components\VerticalTabs as InfolistsVerticalTabs;
 
 class PaymentSettings extends Page

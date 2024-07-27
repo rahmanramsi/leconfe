@@ -12,7 +12,7 @@ use Filament\Forms\Components\TextInput;
 use App\Actions\ScheduledConferences\ScheduledConferenceUpdateAction;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Concerns\InteractsWithForms;
-use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
+use App\Forms\Components\TinyEditor;
 
 class RegistrationPolicyPage extends Component implements HasForms
 {

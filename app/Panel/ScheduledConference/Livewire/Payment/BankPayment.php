@@ -24,7 +24,7 @@ use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
-use Mohamedsabil83\FilamentFormsTinyeditor\Components\TinyEditor;
+use App\Forms\Components\TinyEditor;
 
 class BankPayment extends Component implements HasForms, HasTable
 {
