@@ -26,7 +26,9 @@ class Committees extends Page
     protected function getViewData(): array
     {
         $committeeRoles = CommitteeRole::query()
+            ->whereHas('committees')
             ->with(['committees' => fn ($query) => $query->orderBy('order_column')])
+            ->orderBy('order_column')
             ->get();
 
         return [

@@ -10,18 +10,18 @@
         @forelse ($committeeRoles as $role)
             <div class="">
                 <h2 class="text-xl">{{ $role->name }}</h2>
-                <div class="flex flex-wrap w-full gap-3">
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     @foreach ($role->committees as $committee)
                         <div class="card card-compact border">
                             <div class="card-body">
                                 <div class="flex flex-col gap-4">
-                                    <div class="flex gap-x-2">
-                                            <div class="profile-image avatar">
-                                                <div class="w-12 h-12 rounded-full">
-                                                    <img src="{{ $committee->getFilamentAvatarUrl() }}"
-                                                        alt="{{ $committee->fullName }}" />
-                                                </div>
+                                    <div class="flex gap-x-2 items-center">
+                                        <div class="profile-image avatar">
+                                            <div class="w-14 h-14 rounded-full">
+                                                <img src="{{ $committee->getFilamentAvatarUrl() }}"
+                                                    alt="{{ $committee->fullName }}" />
                                             </div>
+                                        </div>
                                         <div class="profile-description">
                                             <p class="text-content">{{ $committee->fullName }}</p>
                                             @if ($committee->hasMeta('affiliation'))
@@ -29,14 +29,6 @@
                                             @endif
                                         </div>
                                     </div>
-                                    @if ($committee->hasMeta('expertise'))
-                                        <div class="inline-flex flex-wrap gap-2">
-                                            @foreach ($committee->getMeta('expertise') as $expertise)
-                                                <div class="h-6 text-xs border border-gray-300 badge badge-outline">
-                                                    {{ $expertise }}</div>
-                                            @endforeach
-                                        </div>
-                                    @endif
                                 </div>
                             </div>
                         </div>
