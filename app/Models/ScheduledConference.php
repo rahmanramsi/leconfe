@@ -2,22 +2,23 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Plank\Metable\Metable;
 use Spatie\MediaLibrary\HasMedia;
+use Illuminate\Support\Facades\Vite;
 use Filament\Models\Contracts\HasName;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Models\Contracts\HasAvatar;
+use Kra8\Snowflake\HasShortflakePrimary;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use App\Models\Concerns\BelongsToConference;
-use App\Models\Enums\ScheduledConferenceState;
 use App\Models\Enums\ScheduledConferenceType;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Enums\ScheduledConferenceState;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Support\Facades\Vite;
-use Kra8\Snowflake\HasShortflakePrimary;
 
 class ScheduledConference extends Model implements HasMedia, HasAvatar, HasName
 {
@@ -127,6 +128,15 @@ class ScheduledConference extends Model implements HasMedia, HasAvatar, HasName
     public function getHomeUrl(): string
     {
         return route('livewirePageGroup.scheduledConference.pages.home', ['conference' => $this->conference, 'serie' => $this->path]);
+    }
+
+    public function isValid(): bool
+    {
+        $start = Carbon::parse($this->date_start)->diffInDays(now(), false);
+        $end = Carbon::parse($this->date_end)->diffInDays(now(), false);
+        if($start >= 0 && $end <= 0) 
+            return true;
+        return false;
     }
 
     public function isCurrent(): bool

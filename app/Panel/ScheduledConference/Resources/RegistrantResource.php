@@ -29,6 +29,7 @@ use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Actions\DeleteBulkAction;
 use AnourValar\EloquentSerialize\Tests\Models\Post;
+use App\Models\ScheduledConference;
 use App\Panel\ScheduledConference\Resources\RegistrantResource\Pages;
 use App\Panel\ScheduledConference\Resources\RegistrantResource\RelationManagers;
 use Filament\Navigation\NavigationGroup;

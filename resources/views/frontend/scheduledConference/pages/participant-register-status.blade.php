@@ -1,7 +1,7 @@
 @use('Illuminate\Support\Str')
 @use('Carbon\Carbon')
 <x-website::layouts.main>
-    @if ($currentScheduledConference && $isLogged)
+    @if ($isLogged)
         <div class="space-y-6">
             <x-website::breadcrumbs :breadcrumbs="$this->getBreadcrumbs()" />
         </div>

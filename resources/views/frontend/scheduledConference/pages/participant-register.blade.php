@@ -1,10 +1,10 @@
 @use('Illuminate\Support\Str')
 @use('Carbon\Carbon')
 <x-website::layouts.main>
-    @if ($currentScheduledConference)
-        <div class="space-y-6">
-            <x-website::breadcrumbs :breadcrumbs="$this->getBreadcrumbs()" />
-        </div>
+    <div class="space-y-6">
+        <x-website::breadcrumbs :breadcrumbs="$this->getBreadcrumbs()" />
+    </div>
+    @if ($currentScheduledConference->isValid())
         <div class="my-6 w-full">
             <div class="flex mb-5 space-x-4">
                 <h1 class="text-xl font-semibold min-w-fit">Participant Registration</h1>
@@ -50,7 +50,7 @@
                                                 </strong>
                                             </td>
                                             <td>
-                                                <input class="{{ !$is_invalid ? 'cursor-pointer' : null }}" id="{{ $elementID }}" type="radio" wire:model="type" value="{{ $is_invalid ? $index : $type->id }}" {{ $is_invalid ? 'disabled' : '' }}>
+                                                <input class="{{ !$is_invalid ? 'cursor-pointer' : null }}" id="{{ $elementID }}" type="radio" wire:model="type" value="{{ $is_invalid ? $index : $type->id }}" {{ $is_invalid || !$isLogged ? 'disabled' : '' }}>
                                                 <label class="{{ !$is_invalid ? 'cursor-pointer' : null }}" for="{{ $elementID }}">{{ $type->getCostWithCurrency() }}</label>
                                             </td>
                                         </tr>
@@ -205,7 +205,11 @@
             @endif
         </div>
     @else
-        {{ abort(404) }}
+        <div class="my-6 w-full">
+            <p class="text-lg">
+                this conference are not in progress, please select other conference.
+            </p>
+        </div>
     @endif
 </x-website::layouts.main>
                         
