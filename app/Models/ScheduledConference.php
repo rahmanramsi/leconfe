@@ -89,6 +89,16 @@ class ScheduledConference extends Model implements HasMedia, HasAvatar, HasName
         return $this->hasMany(Sponsor::class);
     }
 
+    public function registration(): HasMany
+    {
+        return $this->hasMany(Registration::class);
+    }
+
+    public function registration_type(): HasMany
+    {
+        return $this->hasMany(RegistrationType::class);
+    }
+
     public function getPanelUrl(): string
     {
         return route('filament.scheduledConference.pages.dashboard', ['serie' => $this->path]);

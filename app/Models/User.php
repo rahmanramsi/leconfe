@@ -137,6 +137,11 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasMedia,
         return $this->hasMany(Submission::class);
     }
 
+    public function registration()
+    {
+        return $this->hasMany(Registration::class);
+    }
+
     /**
      * Determine if the model may perform the given permission.
      *

@@ -19,7 +19,7 @@ use App\Infolists\Components\VerticalTabs as InfolistsVerticalTabs;
 
 class PaymentSettings extends Page
 {
-    protected static string $view = 'panel.series.pages.payment-setting';
+    protected static string $view = 'panel.scheduledConference.pages.payment-setting';
 
     protected static ?string $navigationGroup = 'Settings';
 

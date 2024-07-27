@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Panel\Series\Resources;
+namespace App\Panel\ScheduledConference\Resources;
 
 use Filament\Forms;
 use App\Models\User;
@@ -25,8 +25,8 @@ use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Actions\DeleteBulkAction;
 use AnourValar\EloquentSerialize\Tests\Models\Post;
-use App\Panel\Series\Resources\RegistrantResource\Pages;
-use App\Panel\Series\Resources\RegistrantResource\RelationManagers;
+use App\Panel\ScheduledConference\Resources\RegistrantResource\Pages;
+use App\Panel\ScheduledConference\Resources\RegistrantResource\RelationManagers;
 use Filament\Support\Colors\Color;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
@@ -74,7 +74,7 @@ class RegistrantResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn (Builder $query) => $query->whereSerieId(app()->getCurrentSerieId()))
+            ->modifyQueryUsing(fn (Builder $query) => $query->whereScheduledConferenceId(app()->getCurrentScheduledConferenceId()))
             ->heading('Registrant List')
             ->headerActions([
                 Action::make('Enroll User')

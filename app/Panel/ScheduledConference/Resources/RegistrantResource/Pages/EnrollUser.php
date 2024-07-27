@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Panel\Series\Resources\RegistrantResource\Pages;
+namespace App\Panel\ScheduledConference\Resources\RegistrantResource\Pages;
 
 use Closure;
 use Carbon\Carbon;
@@ -29,7 +29,7 @@ use Filament\Tables\Columns\Layout\Split;
 use Filament\Tables\Columns\Layout\Stack;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\Placeholder;
-use App\Panel\Series\Resources\RegistrantResource;
+use App\Panel\ScheduledConference\Resources\RegistrantResource;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Illuminate\Support\HtmlString;
 
@@ -63,7 +63,7 @@ class EnrollUser extends ListRecords
 
     public static function getRegistrationTypeOptions(): array
     {
-        $registration_type = RegistrationType::whereSerieId(app()->getCurrentSerieId())->get();
+        $registration_type = RegistrationType::whereScheduledConferenceId(app()->getCurrentScheduledConferenceId())->get();
         $registration_type_options = [];
         foreach($registration_type as $type)
         {
@@ -125,7 +125,7 @@ class EnrollUser extends ListRecords
             ->query(
                 User::query()
                     ->whereDoesntHave('registration', function (Builder $query) {
-                        $query->whereSerieId(app()->getCurrentSerieId());
+                        $query->whereScheduledConferenceId(app()->getCurrentScheduledConferenceId());
                     })
             )
             ->columns([
