@@ -32,7 +32,7 @@ class AnnouncementPage extends Page
     {
         $slug = static::getSlug();
 
-        Route::get('announcements/{announcement}', static::class)
+        Route::get('announcements/view/{announcement}', static::class)
             ->middleware(static::getRouteMiddleware($pageGroup))
             ->withoutMiddleware(static::getWithoutRouteMiddleware($pageGroup))
             ->name((string) str($slug)->replace('/', '.'));

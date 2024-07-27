@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Panel\Conference\Resources\StaticPageResource\Pages;
+namespace App\Panel\Administration\Resources\StaticPageResource\Pages;
 
 use App\Actions\StaticPages\StaticPageCreateAction;
 use App\Models\StaticPage;
-use App\Panel\Conference\Resources\StaticPageResource;
+use App\Panel\Administration\Resources\StaticPageResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
