@@ -23,6 +23,6 @@ class Announcements extends BaseNavigationItemType
 
     public static function getUrl(NavigationMenuItem $navigationMenuItem): string
     {
-        return route('livewirePageGroup.scheduledConference.pages.announcement-list');
+        return route('livewirePageGroup.scheduledConference.pages.announcements');
     }
 }
