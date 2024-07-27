@@ -11,9 +11,9 @@ use Rahmanramsi\LivewirePageGroup\PageGroup;
 use Rahmanramsi\LivewirePageGroup\Pages\Page;
 use Illuminate\Support\Str;
 
-class SubmissionDetail extends Page
+class Paper extends Page
 {
-    protected static string $view = 'frontend.conference.pages.submission-detail';
+    protected static string $view = 'frontend.conference.pages.paper';
 
     public Submission $submission;
 
@@ -33,7 +33,6 @@ class SubmissionDetail extends Page
 
     public function addMetadata() : void
     {
-        
         MetaTag::add('citation_conference_title', app()->getCurrentConference()->name);
         MetaTag::add('citation_title', e($this->submission->getMeta('title')));
 
@@ -123,7 +122,7 @@ class SubmissionDetail extends Page
     public static function routes(PageGroup $pageGroup): void
     {
         $slug = static::getSlug();
-        Route::get("/submission/{submission}", static::class)
+        Route::get("/paper/view/{submission}", static::class)
             ->middleware(static::getRouteMiddleware($pageGroup))
             ->withoutMiddleware(static::getWithoutRouteMiddleware($pageGroup))
             ->name((string) str($slug)->replace('/', '.'));

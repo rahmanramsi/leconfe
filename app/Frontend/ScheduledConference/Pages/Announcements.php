@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 use Rahmanramsi\LivewirePageGroup\PageGroup;
 use Rahmanramsi\LivewirePageGroup\Pages\Page;
 
-class AnnouncementList extends Page
+class Announcements extends Page
 {
     protected static string $view = 'frontend.scheduledConference.pages.announcement-list';
 

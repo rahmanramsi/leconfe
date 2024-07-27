@@ -4,6 +4,7 @@ namespace App\Panel\ScheduledConference\Livewire;
 
 use App\Facades\Setting;
 use App\Models\Timeline;
+use App\Tables\Columns\IndexColumn;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -40,6 +41,8 @@ class TimelineTable extends Component implements HasForms, HasTable
             ->heading('Timeline')
             ->defaultSort('date')
             ->columns([
+                IndexColumn::make('no')
+                    ->label('No.'),
                 TextColumn::make('name'),
                 TextColumn::make('date')
                     ->dateTime(Setting::get('format_date'))
