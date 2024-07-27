@@ -15,7 +15,7 @@ use Rahmanramsi\LivewirePageGroup\Pages\Page;
 
 class ParticipantRegister extends Page
 {
-    protected static string $view = 'frontend.conference.pages.participant-register';
+    protected static string $view = 'frontend.scheduledConference.pages.participant-register';
 
     protected static ?string $slug = 'participant-registration';
 
