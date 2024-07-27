@@ -3,7 +3,6 @@
 namespace App\Models\NavigationItemType;
 
 use App\Models\NavigationMenuItem;
-use App\Panel\Conference\Pages\Profile as ConferenceProfile;
 
 class Profile extends BaseNavigationItemType
 {

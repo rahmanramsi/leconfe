@@ -16,12 +16,13 @@ class Announcements extends BaseNavigationItemType
         return 'Announcements';
     }
 
+    public static function getIsDisplayed(NavigationMenuItem $navigationMenuItem): bool
+    {
+        return app()->getCurrentScheduledConferenceId();
+    }
+
     public static function getUrl(NavigationMenuItem $navigationMenuItem): string
     {
-        if(app()->getCurrentScheduledConferenceId()){
-            return route('livewirePageGroup.scheduledConference.pages.announcement-list');
-        }
-
-        return parent::getUrl($navigationMenuItem);
+        return route('livewirePageGroup.scheduledConference.pages.announcement-list');
     }
 }
