@@ -2,7 +2,7 @@
 
 use App\Models\Enums\RegistrationStatus;
 use App\Models\RegistrationType;
-use App\Models\Serie;
+use App\Models\ScheduledConference;
 use App\Models\User;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
@@ -17,7 +17,7 @@ return new class extends Migration
     {
         Schema::create('registration_types', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Serie::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(ScheduledConference::class)->constrained()->cascadeOnDelete();
             $table->string('type');
             $table->integer('cost');
             $table->integer('quota');
@@ -29,20 +29,11 @@ return new class extends Migration
         });
         Schema::create('registrations', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Serie::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(ScheduledConference::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(User::class);
             $table->foreignIdFor(RegistrationType::class);
             $table->boolean('is_trashed')->default(false);
             $table->timestamp('paid_at')->nullable();
-            $table->timestamps();
-        });
-        Schema::create('registration_notifications', function (Blueprint $table) {
-            $table->id();
-            $table->foreignIdFor(Serie::class)->constrained()->cascadeOnDelete();
-            $table->integer('time');
-            $table->integer('type');
-            $table->integer('interval');
-            $table->boolean('active');
             $table->timestamps();
         });
     }
