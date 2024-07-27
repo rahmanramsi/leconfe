@@ -1,7 +1,7 @@
-<x-filament-widgets::widget>
+<x-filament-panels::page>
     <div class="flex flex-wrap gap-4" wire:poll.2s>
         @foreach ($registrationTypes as $registrationType)
-            <x-filament::section class="w-fit min-w-48">
+            <x-filament::section class="w-fit min-w-48 shadow-xl outline outline-1 outline-gray-200">
                 <h1 class="block font-semibold text-lg">{{ $registrationType->type }}</h1>
                 <table class="w-full mt-2">
                     <tr>
@@ -23,4 +23,4 @@
             </x-filament::section>
         @endforeach
     </div>
-</x-filament-widgets::widget>
+</x-filament-panels::page>

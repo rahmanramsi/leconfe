@@ -12,14 +12,18 @@ use Illuminate\Support\Str;
 use App\Models\Registration;
 use App\Models\RegistrationType;
 use Filament\Resources\Resource;
+use Filament\Support\Colors\Color;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Grouping\Group;
 use Filament\Forms\Components\Select;
 use Filament\Resources\Components\Tab;
 use Filament\Forms\Components\Checkbox;
+use Filament\Navigation\NavigationItem;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Database\Eloquent\Builder;
@@ -27,9 +31,7 @@ use Filament\Tables\Actions\DeleteBulkAction;
 use AnourValar\EloquentSerialize\Tests\Models\Post;
 use App\Panel\ScheduledConference\Resources\RegistrantResource\Pages;
 use App\Panel\ScheduledConference\Resources\RegistrantResource\RelationManagers;
-use Filament\Support\Colors\Color;
-use Filament\Tables\Actions\Action;
-use Filament\Tables\Actions\ActionGroup;
+use Filament\Navigation\NavigationGroup;
 
 class RegistrantResource extends Resource
 {
@@ -41,7 +43,7 @@ class RegistrantResource extends Resource
 
     protected static ?string $navigationGroup = 'Conference';
 
-    protected static ?string $navigationLabel = 'Registrant';
+    protected static ?string $navigationLabel = 'Registrants';
 
     public static function canAccess(): bool
     {
@@ -114,44 +116,42 @@ class RegistrantResource extends Resource
                 //
             ])
             ->actions([
-                EditAction::make()
-                    ->label('Paid Status')
-                    ->icon('heroicon-m-banknotes')
-                    ->button()
-                    ->modalHeading('Change paid status')
-                    ->mutateFormDataUsing(function ($data) {
-                        if($data['not_paid']) {
-                            $data['paid_at'] = null;
-                        }
-                        return $data;
-                    })
-                    ->authorize('Registrant:edit'),
-                Action::make('trash')
-                    ->button()
-                    ->color(Color::Red)
-                    ->icon('heroicon-m-trash')
-                    ->requiresConfirmation()
-                    ->action(function (Model $record) {
-                        $record->is_trashed = true;
-                        $record->save();
-                    })
-                    ->visible(fn (Model $record) => !$record->is_trashed)
-                    ->authorize('Registrant:delete'),
-                Action::make('restore')
-                    ->button()
-                    ->color(Color::Green)
-                    ->icon('heroicon-m-arrow-uturn-left')
-                    ->requiresConfirmation()
-                    ->action(function (Model $record) {
-                        $record->is_trashed = false;
-                        $record->save();
-                    })
-                    ->hidden(fn (Model $record) => !$record->is_trashed)
-                    ->authorize('Registrant:edit'),
-                DeleteAction::make()
-                    ->button()
-                    ->hidden(fn (Model $record) => !$record->is_trashed)
-                    ->authorize('Registrant:delete'),
+                ActionGroup::make([
+                    EditAction::make()
+                        ->label('Paid Status')
+                        ->icon('heroicon-m-banknotes')
+                        ->modalHeading('Change paid status')
+                        ->mutateFormDataUsing(function ($data) {
+                            if($data['not_paid']) {
+                                $data['paid_at'] = null;
+                            }
+                            return $data;
+                        })
+                        ->authorize('Registrant:edit'),
+                    Action::make('trash')
+                        ->color(Color::Red)
+                        ->icon('heroicon-m-trash')
+                        ->requiresConfirmation()
+                        ->action(function (Model $record) {
+                            $record->is_trashed = true;
+                            $record->save();
+                        })
+                        ->visible(fn (Model $record) => !$record->is_trashed)
+                        ->authorize('Registrant:delete'),
+                    Action::make('restore')
+                        ->color(Color::Green)
+                        ->icon('heroicon-m-arrow-uturn-left')
+                        ->requiresConfirmation()
+                        ->action(function (Model $record) {
+                            $record->is_trashed = false;
+                            $record->save();
+                        })
+                        ->hidden(fn (Model $record) => !$record->is_trashed)
+                        ->authorize('Registrant:edit'),
+                    DeleteAction::make()
+                        ->hidden(fn (Model $record) => !$record->is_trashed)
+                        ->authorize('Registrant:delete'),
+                ]),
             ])
             ->bulkActions([
                 DeleteBulkAction::make()
@@ -172,13 +172,35 @@ class RegistrantResource extends Resource
         ];
     }
 
+    public static function getSubNavigation(): array
+    {
+        $url = url()->current();
+
+        return [
+            NavigationGroup::make()
+                ->items([
+                    NavigationItem::make('Registration Type')
+                        ->icon('heroicon-o-list-bullet')
+                        ->badge(fn () => RegistrationType::whereScheduledConferenceId(app()->getCurrentScheduledConferenceId())->count())
+                        ->isActiveWhen(fn () => $url === Pages\ListTypeSummary::getUrl())
+                        ->url(Pages\ListTypeSummary::getUrl()),
+                    NavigationItem::make('Registrant List')
+                        ->icon('heroicon-o-bars-3-bottom-left')
+                        ->isActiveWhen(fn () => $url === Pages\ListRegistrants::getUrl())
+                        ->url(Pages\ListRegistrants::getUrl()),
+                ])
+                ->extraSidebarAttributes([
+                    'class' => 'bg-white p-2 rounded-xl shadow-lg outline outline-1 outline-gray-200 w-11/12',
+                ], true)
+        ];
+    }
+
     public static function getPages(): array
     {
         return [
             'index' => Pages\ListRegistrants::route('/'),
+            'type' => Pages\ListTypeSummary::route('/type'),
             'enroll' => Pages\EnrollUser::route('/enroll'),
-            // 'create' => Pages\CreateRegistrant::route('/create'),
-            // 'edit' => Pages\EditRegistrant::route('/{record}/edit'),
         ];
     }
 }

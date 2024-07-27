@@ -44,6 +44,7 @@ use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\Fieldset as ComponentsFieldset;
 use App\Forms\Components\TinyEditor;
+use Filament\Tables\Actions\ActionGroup;
 
 class RegistrationTypePage extends Component implements HasTable, HasForms
 {
@@ -202,23 +203,23 @@ class RegistrationTypePage extends Component implements HasTable, HasForms
             ->emptyStateHeading('Type are empty')
             ->emptyStateDescription('Create a Type to get started.')
             ->actions([
-                EditAction::make()
-                    ->form(static::registrationTypeCreateForm())
-                    ->using(fn (Model $record, array $data) => RegistrationTypeUpdateAction::run($record, $data))
-                    ->mutateFormDataUsing(function ($data) {
-                        if($data['free'])
-                        {
-                            $data['cost'] = 0;
-                            $data['currency'] = 'free';
-                        }
-                        return $data;
-                    })
-                    ->button()
-                    ->authorize('RegistrationSetting:edit'),
-                DeleteAction::make()
-                    ->using(fn (Model $record) => RegistrationTypeDeleteAction::run($record))
-                    ->button()
-                    ->authorize('RegistrationSetting:delete'),
+                ActionGroup::make([
+                    EditAction::make()
+                        ->form(static::registrationTypeCreateForm())
+                        ->using(fn (Model $record, array $data) => RegistrationTypeUpdateAction::run($record, $data))
+                        ->mutateFormDataUsing(function ($data) {
+                            if($data['free'])
+                            {
+                                $data['cost'] = 0;
+                                $data['currency'] = 'free';
+                            }
+                            return $data;
+                        })
+                        ->authorize('RegistrationSetting:edit'),
+                    DeleteAction::make()
+                        ->using(fn (Model $record) => RegistrationTypeDeleteAction::run($record))
+                        ->authorize('RegistrationSetting:delete'),
+                ])
             ])
             ->bulkActions([
                 DeleteBulkAction::make()

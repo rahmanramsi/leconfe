@@ -25,6 +25,7 @@ use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
 use App\Forms\Components\TinyEditor;
+use Filament\Tables\Actions\ActionGroup;
 
 class BankPayment extends Component implements HasForms, HasTable
 {
@@ -105,13 +106,13 @@ class BankPayment extends Component implements HasForms, HasTable
             ])
             ->emptyStateHeading('Bank are empty')
             ->actions([
-                EditAction::make()
-                    ->form(static::bankForm())
-                    ->button()
-                    ->authorize('PaymentSetting:edit'),
-                DeleteAction::make()
-                    ->button()
-                    ->authorize('PaymentSetting:delete'),
+                ActionGroup::make([
+                    EditAction::make()
+                        ->form(static::bankForm())
+                        ->authorize('PaymentSetting:edit'),
+                    DeleteAction::make()
+                        ->authorize('PaymentSetting:delete'),
+                ])
             ])
             ->bulkActions([
                 DeleteBulkAction::make()
