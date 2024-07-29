@@ -95,7 +95,7 @@ class Sitemap extends Page
                 );
 
                 $sitemap->add(
-                    Url::create(route(ScheduledConferencePages\AnnouncementList::getRouteName('scheduledConference'), ['serie' => $scheduledConference]))
+                    Url::create(route(ScheduledConferencePages\Announcements::getRouteName('scheduledConference'), ['serie' => $scheduledConference]))
                         ->setLastModificationDate($scheduledConference->updated_at)
                         ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
                 );

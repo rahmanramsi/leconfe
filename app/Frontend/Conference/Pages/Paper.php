@@ -33,7 +33,6 @@ class Paper extends Page
 
     public function addMetadata() : void
     {
-        
         MetaTag::add('citation_conference_title', app()->getCurrentConference()->name);
         MetaTag::add('citation_title', e($this->submission->getMeta('title')));
 

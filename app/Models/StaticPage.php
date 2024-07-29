@@ -32,7 +32,7 @@ class StaticPage extends Model
         if(app()->getCurrentScheduledConferenceId()){
             $routeName = 'livewirePageGroup.scheduledConference.pages.static-page'; 
         }
-        
+
         return route($routeName, [
             'staticPage' => $this->slug,
         ]);

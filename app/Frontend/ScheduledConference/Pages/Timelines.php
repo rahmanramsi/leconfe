@@ -17,13 +17,19 @@ class Timelines extends Page
 
     public function getBreadcrumbs(): array
     {
-        return [];
+        return [
+            route(Home::getRouteName()) => 'Home',
+            'Timelines',
+        ];
     }
 
     protected function getViewData(): array
     {
         return [
-            'timelines' => Timeline::query()->get(),
+            'timelines' => Timeline::query()
+                ->where('hide', false)
+                ->orderBy('date')    
+                ->get(),
         ];
     }
 }

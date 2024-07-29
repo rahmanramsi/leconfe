@@ -18,7 +18,7 @@ class AnnouncementPage extends Page
     {
         return [
             route(Home::getRouteName()) => 'Home',
-            route(AnnouncementList::getRouteName()) => 'Announcements',
+            route(Announcements::getRouteName()) => 'Announcements',
             $this->announcement->title,
         ];
     }

@@ -118,5 +118,5 @@ class Proceeding extends Model implements HasMedia, Sortable
             'conference' => $this->conference
         ]);
     }
-    
+
 }
