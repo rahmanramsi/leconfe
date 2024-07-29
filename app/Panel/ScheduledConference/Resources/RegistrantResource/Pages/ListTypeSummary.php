@@ -10,6 +10,8 @@ class ListTypeSummary extends Page
 {
     protected static string $resource = RegistrantResource::class;
 
+    protected static ?string $breadcrumb = 'Registration Type Stats';
+
     protected static string $view = 'panel.scheduledConference.resources.registrant-resource.pages.list-type-summary';
 
     public function getSubNavigation(): array

@@ -59,16 +59,16 @@ class RegistrantResource extends Resource
     {
         return $form
             ->schema([
-                Checkbox::make('not_paid')
-                    ->label('Set as not paid')
-                    ->formatStateUsing(fn (Model $record) => $record->paid_at !== null ? false : true)
+                Checkbox::make('paid')
+                    ->label('Set as paid')
+                    ->formatStateUsing(fn (Model $record) => $record->paid_at !== null ? true : false)
                     ->live(),
                 DatePicker::make('paid_at')
                     ->label('Paid Date')
                     ->placeholder('Select registration paid date..')
                     ->prefixIcon('heroicon-m-calendar')
-                    ->default(now())
-                    ->visible(fn (Get $get) => (bool) !$get('not_paid'))
+                    ->formatStateUsing(fn () => now())
+                    ->visible(fn (Get $get) => (bool) $get('paid'))
                     ->required()
             ])
             ->columns(1);
@@ -117,18 +117,19 @@ class RegistrantResource extends Resource
                 //
             ])
             ->actions([
+                EditAction::make()
+                    ->label('Decision')
+                    ->icon('heroicon-m-banknotes')
+                    ->modalHeading('Paid Status Decision')
+                    ->modalWidth('lg')
+                    ->mutateFormDataUsing(function ($data) {
+                        if(!$data['paid']) {
+                            $data['paid_at'] = null;
+                        }
+                        return $data;
+                    })
+                    ->authorize('Registrant:edit'),
                 ActionGroup::make([
-                    EditAction::make()
-                        ->label('Paid Status')
-                        ->icon('heroicon-m-banknotes')
-                        ->modalHeading('Change paid status')
-                        ->mutateFormDataUsing(function ($data) {
-                            if($data['not_paid']) {
-                                $data['paid_at'] = null;
-                            }
-                            return $data;
-                        })
-                        ->authorize('Registrant:edit'),
                     Action::make('trash')
                         ->color(Color::Red)
                         ->icon('heroicon-m-trash')
