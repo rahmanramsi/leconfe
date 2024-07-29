@@ -45,6 +45,7 @@ use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\Fieldset as ComponentsFieldset;
 use App\Forms\Components\TinyEditor;
 use Filament\Tables\Actions\ActionGroup;
+use Squire\Models\Currency as ModelsCurrency;
 
 class RegistrationTypePage extends Component implements HasTable, HasForms
 {
@@ -54,20 +55,13 @@ class RegistrationTypePage extends Component implements HasTable, HasForms
 
     public static function countryCurrencySelectOption()
     {
-        $country = Country::all();
-        $countryArr = [];
-        foreach($country as $c)
-        {
-            // invalid currency
-            if ($c['currency_id'] === 'byr' || 
-                $c['currency_id'] === 'zmk' || 
-                empty($c['currency_id'])) 
-                    continue;
-            
-            $currencyCode = $c['currency_id'];
-            $countryArr[$currencyCode] = $c['flag'].' - '.$c['name'].', '.currency($currencyCode)->getName();
-        }
-        return $countryArr;
+        $currencies = ModelsCurrency::get();
+        $currencies_option = $currencies->mapWithKeys(function (?ModelsCurrency $value, int $key) {
+            $currency_code = Str::upper($value->id);
+            $currency_name = $value->name;
+            return [$value->id => "($currency_code) $currency_name"];
+        });
+        return $currencies_option;
     }
     
     public static function registrationTypeCreateForm(): array
@@ -134,13 +128,13 @@ class RegistrationTypePage extends Component implements HasTable, HasForms
             Grid::make(2)
                 ->schema([
                     DatePicker::make('opened_at')
-                        ->label(_('Opened Date'))
+                        ->label('Opened Date')
                         ->placeholder('Select type opened date..')
                         ->prefixIcon('heroicon-m-calendar-days')
                         ->required()
                         ->before('closed_at'),
                     DatePicker::make('closed_at')
-                        ->label(_('Closed Date'))
+                        ->label('Closed Date')
                         ->placeholder('Select type closed date..')
                         ->prefixIcon('heroicon-m-calendar-days')
                         ->required()
