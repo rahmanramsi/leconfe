@@ -110,15 +110,14 @@
                     @endif
                 </div>
             @endif
-            <hr class="my-8">
-            <div class="w-full">
-                @if (!empty($currentScheduledConference->getMeta('payment_policy')))
-                    <p>{{ new Illuminate\Support\HtmlString($currentScheduledConference->getMeta('payment_policy')) }}</p>
-                @else 
-                    <p>Payment Policy</p>
-                @endif
-            </div>
-            <hr class="my-8">
+            @empty(!$currentScheduledConference->getMeta('payment_policy'))
+                <hr class="my-8">
+                <div class="w-full text-wrap ">
+                    <p>
+                        {{ new Illuminate\Support\HtmlString($currentScheduledConference->getMeta('payment_policy')) }}
+                    </p>
+                </div>
+            @endempty
         </div>
         @endif
     @else

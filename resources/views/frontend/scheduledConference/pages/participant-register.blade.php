@@ -5,14 +5,14 @@
         <x-website::breadcrumbs :breadcrumbs="$this->getBreadcrumbs()" />
     </div>
     @if ($currentScheduledConference->isValid())
-        <div class="my-6 w-full">
+        <div class="mt-6 w-full">
             <div class="flex mb-5 space-x-4">
                 <h1 class="text-xl font-semibold min-w-fit">Participant Registration</h1>
                 <hr class="w-full h-px my-auto bg-gray-200 border-0 dark:bg-gray-700">
             </div>
             @if (!$isSubmit)
                 <form wire:submit='register'>
-                    <div class="my-2 w-full">
+                    <div class="mt-2 w-full">
                         <table class="mt-2 table">
                             <thead class="text-base">
                                 <tr>
@@ -70,14 +70,12 @@
                                 {{ $message }}
                             </div>
                         @enderror
-                        <hr class="my-8">
-                        <div class="w-full">
-                            @if (!empty($currentScheduledConference->getMeta('registration_policy')))
+                        @empty(!$currentScheduledConference->getMeta('registration_policy'))
+                            <hr class="my-8">
+                            <div class="w-full">
                                 {{ new Illuminate\Support\HtmlString($currentScheduledConference->getMeta('registration_policy')) }}
-                            @else
-                                <p>Registration Policy</p>
-                            @endif
-                        </div>
+                            </div>
+                        @endempty
                         <hr class="my-8">
                         @if ($isLogged)
                             <p class="mb-2">This is your detailed account information.</p>
@@ -181,26 +179,24 @@
                             <td>{{ $userCountry->name }} {{ $userCountry->flag }}</td>
                         </tr>
                     </table>
-                    <hr class="my-8">
-                    <form wire:submit='confirm'>
-                        <div class="w-full">
-                            @if (!empty($currentScheduledConference->getMeta('payment_policy')))
-                                <p>{!! $currentScheduledConference->getMeta('payment_policy') !!}</p>
-                            @else 
-                                <p>Payment Policy</p>
-                            @endif
-                        </div>
+                    @empty(!$currentScheduledConference->getMeta('payment_policy'))
                         <hr class="my-8">
-                        <div class="flex gap-2 mt-2 justify-end">
-                            <button type="button" class="btn btn-outline btn-sm" wire:click="cancel" x-data x-on:click="window.scrollTo(0, 0)"> 
-                                Cancel
-                            </button>
-                            <button type="submit" class="btn btn-primary btn-sm" wire:loading.attr="disabled">
-                                <span class="loading loading-spinner loading-xs" wire:loading></span>
-                                Confirm
-                            </button>
+                        <div class="w-full">
+                            <p>
+                                {!! $currentScheduledConference->getMeta('payment_policy') !!}
+                            </p>
                         </div>
-                    </form>
+                    @endempty
+                    <hr class="my-8">
+                    <div class="flex gap-2 mt-2 justify-end">
+                        <button type="button" class="btn btn-error text-white btn-sm" wire:click="cancel" x-data x-on:click="window.scrollTo(0, 0)"> 
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn btn-primary btn-sm" wire:click="confirm" wire:loading.attr="disabled">
+                            <span class="loading loading-spinner loading-xs" wire:loading></span>
+                            Confirm
+                        </button>
+                    </div>
                 </div>
             @endif
         </div>
