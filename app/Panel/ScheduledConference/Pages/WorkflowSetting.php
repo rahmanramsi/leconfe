@@ -19,6 +19,7 @@ use App\Panel\ScheduledConference\Livewire\SubmissionFileTypeTable;
 use App\Panel\ScheduledConference\Livewire\SubmissionPaymentItemTable;
 use App\Panel\ScheduledConference\Livewire\TimelineTable;
 use App\Panel\ScheduledConference\Livewire\TopicTable;
+use App\Panel\ScheduledConference\Livewire\TrackTable;
 
 class WorkflowSetting extends Page
 {
@@ -28,7 +29,7 @@ class WorkflowSetting extends Page
 
     protected static ?string $navigationIcon = 'heroicon-o-window';
 
-    protected static ?string $navigationLabel = 'Workflow Setting';
+    protected static ?string $navigationLabel = 'Workflow';
 
     public function mount(): void
     {
@@ -65,6 +66,11 @@ class WorkflowSetting extends Page
                                             ->schema([
                                                 LivewireEntry::make('author-roles')
                                                     ->livewire(AuthorRoleTable::class),
+                                            ]),
+                                        InfolistsVerticalTabs\Tab::make('Tracks')
+                                            ->schema([
+                                                LivewireEntry::make('tracks')
+                                                    ->livewire(TrackTable::class),
                                             ]),
                                         InfolistsVerticalTabs\Tab::make('Topics')
                                             ->schema([

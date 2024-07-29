@@ -6,12 +6,11 @@ use App\Actions\Committees\CommitteeRolePopulateDefaultDataAction;
 use App\Actions\Roles\RolePopulateScheduledConferenceAction;
 use App\Actions\Speakers\SpeakerRolePopulateDefaultDataAction;
 use App\Actions\SubmissionFiles\FilesTypePopulateAction;
+use App\Actions\Tracks\TrackPopulateAction;
 use App\Models\NavigationMenu;
 use App\Models\NavigationMenuItem;
 use App\Models\Review;
 use App\Models\ScheduledConference;
-use HTML5;
-use Illuminate\Support\HtmlString;
 
 class ScheduledConferenceObserver
 {
@@ -124,6 +123,7 @@ class ScheduledConferenceObserver
             ],
         ]);
 
+        TrackPopulateAction::run($scheduledConference);
         RolePopulateScheduledConferenceAction::run($scheduledConference);
         FilesTypePopulateAction::run($scheduledConference);
         
