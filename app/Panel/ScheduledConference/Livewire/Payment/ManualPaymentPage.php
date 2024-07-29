@@ -6,7 +6,7 @@ use Livewire\Component;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Squire\Models\Country;
-use App\Models\PaymentBank;
+use App\Models\PaymentManual;
 use Illuminate\Support\Str;
 use Squire\Models\Currency;
 use Filament\Support\Colors\Color;
@@ -27,7 +27,7 @@ use Filament\Tables\Concerns\InteractsWithTable;
 use App\Forms\Components\TinyEditor;
 use Filament\Tables\Actions\ActionGroup;
 
-class BankPayment extends Component implements HasForms, HasTable
+class ManualPaymentPage extends Component implements HasForms, HasTable
 {
     use
         InteractsWithForms,
@@ -46,12 +46,11 @@ class BankPayment extends Component implements HasForms, HasTable
         return $options;
     }
 
-    public static function bankForm(): array
+    public static function manualPaymentForm(): array
     {
         return [
             TextInput::make('name')
-                ->label('Bank name')
-                ->placeholder('Input a name for the bank..')
+                ->placeholder('Input a name for the payment method..')
                 ->required(),
             Select::make('currency')
                 ->options((static::getCurrencyOptions()))
@@ -69,17 +68,17 @@ class BankPayment extends Component implements HasForms, HasTable
     {
         return $table
             ->query(
-                PaymentBank::query()
+                PaymentManual::query()
                     ->whereScheduledConferenceId(app()->getCurrentScheduledConferenceId())
             )
-            ->heading('Bank')
+            ->heading('Manual Payment List')
             ->headerActions([
                 CreateAction::make()
-                    ->label("Add Bank")
-                    ->modalHeading('Create new bank')
+                    ->label("Add Manual Payment")
+                    ->modalHeading('Create new manual payment')
                     ->modalWidth('4xl')
-                    ->model(PaymentBank::class)
-                    ->form(static::bankForm())
+                    ->model(PaymentManual::class)
+                    ->form(static::manualPaymentForm())
                     ->authorize('PaymentSetting:create')
             ])
             ->columns([
@@ -101,14 +100,14 @@ class BankPayment extends Component implements HasForms, HasTable
                 Group::make('currency')
                     ->getTitleFromRecordUsing(fn (Model $record): string => Str::upper($record->currency))
                     ->getDescriptionFromRecordUsing(fn (Model $record): string => currency($record->currency)->getName())
-                    ->label('Currency ID')
+                    ->label('Code')
                     ->collapsible()
             ])
-            ->emptyStateHeading('Bank are empty')
+            ->emptyStateHeading('Manual payment are empty')
             ->actions([
                 ActionGroup::make([
                     EditAction::make()
-                        ->form(static::bankForm())
+                        ->form(static::manualPaymentForm())
                         ->authorize('PaymentSetting:edit'),
                     DeleteAction::make()
                         ->authorize('PaymentSetting:delete'),
@@ -117,12 +116,11 @@ class BankPayment extends Component implements HasForms, HasTable
             ->bulkActions([
                 DeleteBulkAction::make()
                     ->authorize('PaymentSetting:delete'),
-            ])
-            ->paginated(false);
+            ]);
     }
 
     public function render()
     {
-        return view('panel.scheduledConference.livewire.payment.bank');
+        return view('panel.scheduledConference.livewire.payment.manual');
     }
 }

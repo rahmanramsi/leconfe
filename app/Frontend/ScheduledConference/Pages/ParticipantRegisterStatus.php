@@ -2,7 +2,7 @@
 
 namespace App\Frontend\ScheduledConference\Pages;
 
-use App\Models\PaymentBank;
+use App\Models\PaymentManual;
 use App\Models\Registration;
 use Livewire\Attributes\Title;
 use App\Models\RegistrationType;
@@ -40,7 +40,7 @@ class ParticipantRegisterStatus extends Page
             ->whereUserId(auth()->user()->id)
             ->first();
 
-        $paymentList = PaymentBank::select('*')
+        $paymentList = PaymentManual::select('*')
             ->whereScheduledConferenceId(app()->getCurrentScheduledConferenceId())
             ->select(
                 'currency',

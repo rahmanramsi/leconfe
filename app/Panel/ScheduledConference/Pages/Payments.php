@@ -6,13 +6,11 @@ use Filament\Forms\Form;
 use Filament\Pages\Page;
 use Filament\Infolists\Infolist;
 use App\Infolists\Components\LivewireEntry;
-use App\Panel\ScheduledConference\Livewire\Payment\BankPayment;
 use App\Infolists\Components\VerticalTabs as InfolistsVerticalTabs;
+use App\Panel\ScheduledConference\Livewire\Payment\ManualPaymentPage;
 use Filament\Navigation\NavigationGroup;
 use Filament\Navigation\NavigationItem;
 use Filament\Pages\SubNavigationPosition;
-use Filament\Support\Colors\Color;
-use Filament\Support\Enums\IconPosition;
 
 class Payments extends Page
 {
@@ -43,11 +41,11 @@ class Payments extends Page
             ->schema([
                 InfolistsVerticalTabs\Tabs::make()
                     ->schema([
-                        InfolistsVerticalTabs\Tab::make('Bank')
-                            ->icon('heroicon-o-building-library')
+                        InfolistsVerticalTabs\Tab::make('Manual')
+                            ->icon('heroicon-o-credit-card')
                             ->schema([
-                                LivewireEntry::make('bank')
-                                    ->livewire(BankPayment::class)
+                                LivewireEntry::make('manual')
+                                    ->livewire(ManualPaymentPage::class)
                             ]),
                     ]),
             ]);

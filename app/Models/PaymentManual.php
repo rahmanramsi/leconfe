@@ -8,7 +8,7 @@ use Kra8\Snowflake\HasShortflakePrimary;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class PaymentBank extends Model
+class PaymentManual extends Model
 {
     use 
         BelongsToScheduledConference,
@@ -16,7 +16,7 @@ class PaymentBank extends Model
         Cachable,
         HasFactory;
 
-    protected $table = 'bank_payment';
+    protected $table = 'manual_payment';
 
     protected $guarded = ['id', 'serie_id'];
 }

@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bank_payment', function (Blueprint $table) {
+        Schema::create('manual_payment', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(ScheduledConference::class)->constrained()->cascadeOnDelete();
             $table->string('name');
