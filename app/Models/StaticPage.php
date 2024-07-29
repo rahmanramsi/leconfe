@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Frontend\ScheduledConference\Pages\StaticPage as PagesStaticPage;
 use App\Models\Concerns\BelongsToConference;
 use App\Models\Concerns\BelongsToScheduledConference;
 use Illuminate\Database\Eloquent\Model;
@@ -24,8 +23,16 @@ class StaticPage extends Model
 
     public function getUrl(): string
     {
-        $routeName = app()->getCurrentScheduledConferenceId() ? PagesStaticPage::getRouteName('series') : PagesStaticPage::getRouteName('conference');
+        $routeName = 'livewirePageGroup.website.pages.static-page';
 
+        if(app()->getCurrentConference()){
+            $routeName = 'livewirePageGroup.conference.pages.static-page'; 
+        }
+
+        if(app()->getCurrentScheduledConferenceId()){
+            $routeName = 'livewirePageGroup.scheduledConference.pages.static-page'; 
+        }
+        
         return route($routeName, [
             'staticPage' => $this->slug,
         ]);

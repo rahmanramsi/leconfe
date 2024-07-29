@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Frontend\Conference\Pages\ProceedingDetail;
 use App\Models\Concerns\BelongsToConference;
 use App\Models\Concerns\HasDOI;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
@@ -109,4 +110,13 @@ class Proceeding extends Model implements HasMedia, Sortable
             ($this->year ? " ({$this->year})" : '').
             ': '.$this->title;
     }
+
+    public function getUrl(): string
+    {
+        return route(ProceedingDetail::getRouteName(), [
+            'proceeding' => $this,
+            'conference' => $this->conference
+        ]);
+    }
+    
 }

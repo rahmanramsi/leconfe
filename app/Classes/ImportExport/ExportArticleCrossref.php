@@ -331,7 +331,7 @@ class ExportArticleCrossref
 
 		$metadata['doi_data'] = [
 			'doi' => $this->submission->doi->doi,
-			'resource' => route('livewirePageGroup.conference.pages.submission-detail', ['submission' => $this->submission]),
+			'resource' => route('livewirePageGroup.conference.pages.paper', ['submission' => $this->submission]),
 		];
 
 		return $metadata;

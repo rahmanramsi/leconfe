@@ -16,7 +16,10 @@ class PrivacyStatement extends Page
 
     public function getBreadcrumbs(): array
     {
-        return [];
+        return [
+            route(Home::getRouteName()) => 'Home',
+            'Privacy Statement',
+        ];
     }
 
     /**
@@ -25,7 +28,7 @@ class PrivacyStatement extends Page
     protected function getViewData(): array
     {
         return [
-
+            'privacyStatement' => app()->getCurrentScheduledConference()->getMeta('privacy_statement'),
         ];
     }
 }

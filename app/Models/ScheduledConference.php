@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Frontend\ScheduledConference\Pages\Home;
 use Carbon\Carbon;
 use Plank\Metable\Metable;
 use Spatie\MediaLibrary\HasMedia;
@@ -88,6 +89,21 @@ class ScheduledConference extends Model implements HasMedia, HasAvatar, HasName
     public function sponsors(): HasMany
     {
         return $this->hasMany(Sponsor::class);
+    }
+    
+    public function announcements(): HasMany
+    {
+        return $this->hasMany(Announcement::class);
+    }
+
+    public function staticPages(): HasMany
+    {
+        return $this->hasMany(StaticPage::class);
+    }
+
+    public function getUrl(): string
+    {
+        return $this->getHomeUrl();
     }
 
     public function registration(): HasMany

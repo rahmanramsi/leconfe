@@ -2,8 +2,8 @@
 
 namespace App\Panel\ScheduledConference\Resources;
 
-use App\Panel\Conference\Resources\StaticPageResource as ConferenceStaticPageResource;
+use App\Panel\Administration\Resources\StaticPageResource as Resource;
 
-class StaticPageResource extends ConferenceStaticPageResource
+class StaticPageResource extends Resource
 {
 }

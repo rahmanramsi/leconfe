@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Frontend\Conference\Pages\Paper;
 use App\Models\Concerns\HasDOI;
 use App\Models\Concerns\HasTopics;
 use App\Models\Concerns\InteractsWithPayment;
@@ -273,5 +274,13 @@ class Submission extends Model implements HasMedia, HasPayment, Sortable
     public function buildSortQuery()
     {
         return static::query()->where('proceeding_order_column', $this->proceeding_id);
+    }
+
+    public function getUrl(): string
+    {
+        return route(Paper::getRouteName(), [
+            'submission' => $this,
+            'conference' => $this->conference
+        ]);
     }
 }
