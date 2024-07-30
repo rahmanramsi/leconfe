@@ -31,17 +31,6 @@ class ParticipantRegisterStatus extends Page
             return redirect(route(ParticipantRegister::getRouteName()));
     }
 
-    public static function formatRegistrationCost(Model $record): string
-    {
-        if ($record->cost === 0 || $record->currency === 'free') {
-            return 'Free';
-        }
-        //---
-        $code = Str::upper($record->currency);
-        $cost = money($record->cost, $record->currency);
-        return "($code) $cost";
-    }
-
     protected function getViewData(): array
     {
         $currentScheduledConference = app()->getCurrentScheduledConference();

@@ -24,9 +24,7 @@
                             <tbody>
                                 @foreach ($registrationTypeList as $index => $type)
                                     @if ($type->active)
-                                        @php
-                                            $elementID = Str::slug($type->type);
-                                        @endphp
+                                        @php($elementID = Str::slug($type->type))
                                         <tr @class(['bg-red-100' => $type->isInvalid()])>
                                             <td>
                                                 <label>
@@ -47,7 +45,9 @@
                                             </td>
                                             <td>
                                                 <input @class(['cursor-pointer' => !$type->isInvalid()]) id="{{ $elementID }}" type="radio" wire:model="type" value="{{ $type->isInvalid() ? $index : $type->id }}" @disabled($type->isInvalid() || !$isLogged)>
-                                                <label @class(['cursor-pointer' => !$type->isInvalid()]) for="{{ $elementID }}">{{ static::formatRegistrationCost($type) }}</label>
+                                                <label @class(['cursor-pointer' => !$type->isInvalid()]) for="{{ $elementID }}">
+                                                    {{ ($type->currency === 'free' || $type->cost <= 0) ? 'Free' : '('.Str::upper($type->currency).') '.money($type->cost, $type->currency)}}
+                                                </label>
                                             </td>
                                         </tr>
                                     @endif
@@ -143,7 +143,9 @@
                         <tr>
                             <td class="align-text-top">Cost</td>
                             <td class="align-text-top pl-5">:</td>
-                            <td class="pl-2">{{ static::formatRegistrationCost($registrationType) }}</td>
+                            <td class="pl-2">
+                                {{ ($registrationType->cost === 0 || $registrationType->currency === 'free') ? 'Free' : '('.Str::upper($registrationType->currency).') '.money($registrationType->cost, $registrationType->currency) }}
+                            </td>
                         </tr>
                     </table>
                     <p class="mt-2">

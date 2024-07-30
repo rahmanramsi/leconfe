@@ -104,11 +104,6 @@ class ParticipantRegister extends Page
         return 1;
     }
 
-    public static function formatRegistrationCost(Model $record): string
-    {
-        return ParticipantRegisterStatus::formatRegistrationCost($record);
-    }
-
     protected function getViewData(): array
     {
         $currentScheduledConference = app()->getCurrentScheduledConference();

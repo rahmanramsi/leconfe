@@ -35,7 +35,7 @@
                     <td class="align-text-top">Type</td>
                     <td class="align-text-top pl-5">:</td>
                     <td class="pl-2">
-                        <strong>{{ $userRegistration->registrationType->type }}</strong>
+                        <strong>{{ $userRegistration->name }}</strong>
                     </td>
                 </tr>
                 <tr>
@@ -49,7 +49,7 @@
                     <td class="align-text-top">Cost</td>
                     <td class="align-text-top pl-5">:</td>
                     <td class="pl-2">
-                        {{ static::formatRegistrationCost($userRegistration) }}
+                        {{ ($userRegistration->cost === 0 || $userRegistration->currency === 'free') ? 'Free' : '('.Str::upper($userRegistration->currency).') '.money($userRegistration->cost, $userRegistration->currency) }}
                     </td>
                 </tr>
                 <tr>
