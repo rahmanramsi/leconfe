@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "81e3094df152834d7fdf0fd3bb0a39b2",
+    "content-hash": "324e3c859618955799641b1e5427e0dc",
     "packages": [
         {
             "name": "akaunting/laravel-money",
@@ -7782,6 +7782,58 @@
                 "source": "https://github.com/revoltphp/event-loop/tree/v1.0.6"
             },
             "time": "2023-11-30T05:34:44+00:00"
+        },
+        {
+            "name": "rickselby/laravel-gate-cache",
+            "version": "3.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rickselby/laravel-gate-cache.git",
+                "reference": "d19bc9aaaffa5853c531e76bc19330dca4a5c606"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rickselby/laravel-gate-cache/zipball/d19bc9aaaffa5853c531e76bc19330dca4a5c606",
+                "reference": "d19bc9aaaffa5853c531e76bc19330dca4a5c606",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/auth": "10.*|11.*",
+                "illuminate/contracts": "10.*|11.*"
+            },
+            "require-dev": {
+                "graham-campbell/testbench": "^6.1",
+                "phpunit/phpunit": "^10.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "RickSelby\\Laravel\\GateCache\\GateCacheProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "RickSelby\\Laravel\\GateCache\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Rick Selby",
+                    "email": "rick@selby-family.co.uk"
+                }
+            ],
+            "description": "Add a per-request caching layer to Laravel's Gate",
+            "support": {
+                "issues": "https://github.com/rickselby/laravel-gate-cache/issues",
+                "source": "https://github.com/rickselby/laravel-gate-cache/tree/3.8.0"
+            },
+            "time": "2024-03-14T12:27:24+00:00"
         },
         {
             "name": "ryangjchandler/blade-capture-directive",

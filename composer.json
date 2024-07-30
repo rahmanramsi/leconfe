@@ -39,6 +39,7 @@
         "propaganistas/laravel-phone": "^5.0",
         "rahmanramsi/laravel-async-queue": "^1.0",
         "rahmanramsi/livewire-page-group": "*",
+        "rickselby/laravel-gate-cache": "^3.8",
         "spatie/array-to-xml": "^3.3",
         "spatie/eloquent-sortable": "^4.0",
         "spatie/laravel-activitylog": "^4.7",
