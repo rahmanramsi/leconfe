@@ -27,7 +27,7 @@ class RegistrationSettings extends Page
     public static function canAccess(): bool
     {
         $user = auth()->user();
-        if($user->can('RegistrationSetting:viewAny')) {
+        if ($user->can('RegistrationSetting:viewAny')) {
             return true;
         }
         return false;
@@ -42,13 +42,13 @@ class RegistrationSettings extends Page
                         InfolistsVerticalTabs\Tab::make('Type')
                             ->icon('heroicon-o-list-bullet')
                             ->schema([
-                                LivewireEntry::make('registration_type')
+                                LivewireEntry::make('registrationType')
                                     ->livewire(RegistrationTypePage::class)
                             ]),
                         InfolistsVerticalTabs\Tab::make('Settings')
                             ->icon('heroicon-o-cog-6-tooth')
                             ->schema([
-                                LivewireEntry::make('registration_policy')
+                                LivewireEntry::make('registrationPolicy')
                                     ->livewire(RegistrationPolicyPage::class)
                             ]),
                     ]),

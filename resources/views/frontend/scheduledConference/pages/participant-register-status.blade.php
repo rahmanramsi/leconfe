@@ -44,22 +44,22 @@
                     <td class="align-text-top">Type</td>
                     <td class="align-text-top pl-5">:</td>
                     <td class="pl-2">
-                        <strong>{{ $userRegistration->registration_type->type }}</strong>
+                        <strong>{{ $userRegistration->registrationType->type }}</strong>
                     </td>
                 </tr>
                 <tr>
                     <td class="align-text-top">Description</td>
                     <td class="align-text-top pl-5">:</td>
                     <td class="pl-2">
-                        {!! $userRegistration->registration_type->getMeta('description') !!}
+                        {!! $userRegistration->registrationType->getMeta('description') !!}
                     </td>
                 </tr>
                 <tr>
                     <td class="align-text-top">Cost</td>
                     <td class="align-text-top pl-5">:</td>
-                    <td class="pl-2">{{ $userRegistration->registration_type->getCostWithCurrency() }}</td>
+                    <td class="pl-2">{{ $userRegistration->registrationType->getCostWithCurrency() }}</td>
                 </tr>
-                @if ($userRegistration->getStatus() === 'Paid' && $userRegistration->registration_type->currency !== 'free')
+                @if ($userRegistration->getStatus() === 'Paid' && $userRegistration->registrationType->currency !== 'free')
                     <tr>
                         <td class="align-text-top">Payment Date</td>
                         <td class="align-text-top pl-5">:</td>

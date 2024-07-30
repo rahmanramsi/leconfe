@@ -15,10 +15,10 @@ class RegistrationTypeCreateAction
         try {
             DB::beginTransaction();
 
-            $registration_type = RegistrationType::create($data);
+            $registrationType = RegistrationType::create($data);
 
             if (data_get($data, 'meta')) {
-                $registration_type->setManyMeta(data_get($data, 'meta'));
+                $registrationType->setManyMeta(data_get($data, 'meta'));
             }
 
             DB::commit();
@@ -28,6 +28,6 @@ class RegistrationTypeCreateAction
             throw $th;
         }
 
-        return $registration_type;
+        return $registrationType;
     }
 }

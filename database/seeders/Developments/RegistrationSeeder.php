@@ -13,12 +13,12 @@ class RegistrationSeeder extends Seeder
      */
     public function run(): void
     {
-        RegistrationType::lazy()->each(function (RegistrationType $registration_type) {
+        RegistrationType::lazy()->each(function (RegistrationType $registrationType) {
             Registration::factory()
                 ->count(5)
-                ->for($registration_type)
+                ->for($registrationType)
                 ->create([
-                    'scheduled_conference_id' => $registration_type->scheduled_conference_id,
+                    'scheduled_conference_id' => $registrationType->scheduled_conference_id,
                 ]);
         });
     }

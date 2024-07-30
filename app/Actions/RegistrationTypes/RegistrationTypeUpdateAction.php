@@ -10,15 +10,15 @@ class RegistrationTypeUpdateAction
 {
     use AsAction;
 
-    public function handle(RegistrationType $registration_type, array $data): RegistrationType
+    public function handle(RegistrationType $registrationType, array $data): RegistrationType
     {
         try {
             DB::beginTransaction();
 
-            $registration_type->update($data);
+            $registrationType->update($data);
 
             if (data_get($data, 'meta')) {
-                $registration_type->setManyMeta(data_get($data, 'meta'));
+                $registrationType->setManyMeta(data_get($data, 'meta'));
             }
 
             DB::commit();
@@ -28,6 +28,6 @@ class RegistrationTypeUpdateAction
             throw $th;
         }
 
-        return $registration_type;
+        return $registrationType;
     }
 }

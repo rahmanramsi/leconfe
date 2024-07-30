@@ -27,11 +27,11 @@
                                         @php
                                             $elementID = Str::slug($type->type);
                                             $quotaFull = $type->getQuotaLeft() <= 0;
-                                            $is_expired = $type->isExpired();
+                                            $isExpired = $type->isExpired();
 
-                                            $is_invalid = $quotaFull || $is_expired;
+                                            $isInvalid = $quotaFull || $isExpired;
                                         @endphp
-                                        <tr class="{{ $is_invalid ? 'bg-red-100' : null }}">
+                                        <tr class="{{ $isInvalid ? 'bg-red-100' : null }}">
                                             <td>
                                                 <label>
                                                     <strong>{{ $type->type }}</strong>
@@ -42,7 +42,7 @@
                                             </td>
                                             <td>
                                                 <strong>
-                                                    @if ($is_expired)
+                                                    @if ($isExpired)
                                                         Expired!
                                                     @else
                                                         {{ $type->getPaidParticipantCount() }}/{{ $type->quota }}
@@ -50,8 +50,8 @@
                                                 </strong>
                                             </td>
                                             <td>
-                                                <input class="{{ !$is_invalid ? 'cursor-pointer' : null }}" id="{{ $elementID }}" type="radio" wire:model="type" value="{{ $is_invalid ? $index : $type->id }}" {{ $is_invalid || !$isLogged ? 'disabled' : '' }}>
-                                                <label class="{{ !$is_invalid ? 'cursor-pointer' : null }}" for="{{ $elementID }}">{{ $type->getCostWithCurrency() }}</label>
+                                                <input class="{{ !$isInvalid ? 'cursor-pointer' : null }}" id="{{ $elementID }}" type="radio" wire:model="type" value="{{ $isInvalid ? $index : $type->id }}" {{ $isInvalid || !$isLogged ? 'disabled' : '' }}>
+                                                <label class="{{ !$isInvalid ? 'cursor-pointer' : null }}" for="{{ $elementID }}">{{ $type->getCostWithCurrency() }}</label>
                                             </td>
                                         </tr>
                                     @endif

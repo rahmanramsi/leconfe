@@ -165,11 +165,11 @@ class RegistrantResource extends Resource
                     ->authorize('Registrant:delete'),
             ])
             ->groups([
-                Group::make('registration_type.type')
+                Group::make('registrationType.type')
                     ->label('Type')
                     ->collapsible(),
             ])
-            ->defaultGroup('registration_type.type');
+            ->defaultGroup('registrationType.type');
     }
 
     public static function getRelations(): array

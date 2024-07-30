@@ -19,7 +19,7 @@ class ParticipantRegister extends Page
 
     protected static ?string $slug = 'participant-registration';
 
-    public bool $is_submit = false;
+    public bool $isSubmit = false;
 
     public array $formData;
 
@@ -54,32 +54,32 @@ class ParticipantRegister extends Page
 
     public function register()
     {
-        if(!auth()->check()) return;
+        if (!auth()->check()) return;
 
         $data = $this->validate();
-        $registration_type = RegistrationType::where('id', $data['type'])->first();
+        $registrationType = RegistrationType::where('id', $data['type'])->first();
 
         // validation
-        if(!$registration_type) return;
-        if($registration_type->isExpired()) return;
-        if($registration_type->getQuotaLeft() <= 0) return;
-        
+        if (!$registrationType) return;
+        if ($registrationType->isExpired()) return;
+        if ($registrationType->getQuotaLeft() <= 0) return;
+
         $this->formData = Arr::only($data, 'type');
-        $this->is_submit = true;
+        $this->isSubmit = true;
 
         return 1;
     }
 
     public function confirm()
     {
-        if(!auth()->check()) return;
+        if (!auth()->check()) return;
 
         $data = $this->formData;
-        $registration_type = RegistrationType::where('id', $data['type'])->first();
+        $registrationType = RegistrationType::where('id', $data['type'])->first();
         Registration::create([
             'user_id' => auth()->user()->id,
             'registration_type_id' => $data['type'],
-            'paid_at' => $registration_type->currency === 'free' ? now() : null,
+            'paid_at' => $registrationType->currency === 'free' ? now() : null,
         ]);
 
         return redirect(request()->header('Referer'));
@@ -88,7 +88,7 @@ class ParticipantRegister extends Page
     public function cancel()
     {
         $this->formData = [];
-        $this->is_submit = false;
+        $this->isSubmit = false;
 
         return 1;
     }
@@ -113,10 +113,10 @@ class ParticipantRegister extends Page
             ->get();
 
         $registrationType = null;
-        if(isset($this->formData['type'])) {
+        if (isset($this->formData['type'])) {
             $registrationType = RegistrationType::where('id', $this->formData['type'])->first();
         }
-            
+
         return [
             // account registration
             'countries' => Country::all(),
@@ -130,7 +130,7 @@ class ParticipantRegister extends Page
             'userRegistration' => $userRegistration,
             'registrationTypeList' => $registrationTypeList,
             // participant registration confirm
-            'isSubmit' => $this->is_submit,
+            'isSubmit' => $this->isSubmit,
             'registrationType' => $registrationType,
         ];
     }

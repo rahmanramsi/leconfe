@@ -43,7 +43,7 @@ class Registration extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function registration_type(): BelongsTo
+    public function registrationType(): BelongsTo
     {
         return $this->belongsTo(RegistrationType::class);
     }

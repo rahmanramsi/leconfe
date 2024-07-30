@@ -63,7 +63,7 @@ class RegistrationTypePage extends Component implements HasTable, HasForms
         });
         return $currencies_option;
     }
-    
+
     public static function registrationTypeCreateForm(): array
     {
         return [
@@ -75,12 +75,12 @@ class RegistrationTypePage extends Component implements HasTable, HasForms
                         ->required()
                         ->columnSpan(3)
                         ->rules([
-                            fn ($record): Closure => function (string $attribute, $value, Closure $fail) use($record) {
-                                if($registration_type = RegistrationType::whereScheduledConferenceId(app()->getCurrentScheduledConferenceId())->where('type', $value)->first()) {
-                                    if($record) {
-                                        if($record->id === $registration_type->id)
+                            fn ($record): Closure => function (string $attribute, $value, Closure $fail) use ($record) {
+                                if ($registrationType = RegistrationType::whereScheduledConferenceId(app()->getCurrentScheduledConferenceId())->where('type', $value)->first()) {
+                                    if ($record) {
+                                        if ($record->id === $registrationType->id)
                                             return;
-                                    } 
+                                    }
                                     $fail('Type already exist.');
                                 }
                             },
@@ -161,8 +161,7 @@ class RegistrationTypePage extends Component implements HasTable, HasForms
                     ->model(RegistrationType::class)
                     ->form(static::registrationTypeCreateForm())
                     ->mutateFormDataUsing(function ($data) {
-                        if($data['free'])
-                        {
+                        if ($data['free']) {
                             $data['cost'] = 0;
                             $data['currency'] = 'free';
                         }
@@ -185,7 +184,7 @@ class RegistrationTypePage extends Component implements HasTable, HasForms
                     ->formatStateUsing(fn (Model $record) => $record->getCost()),
                 TextColumn::make('currency')
                     ->label('Currency')
-                    ->formatStateUsing(fn (Model $record) => $record->currency === 'free' ? 'None' : currency($record->currency)->getName().' ('.currency($record->currency)->getCurrency().')'),
+                    ->formatStateUsing(fn (Model $record) => $record->currency === 'free' ? 'None' : currency($record->currency)->getName() . ' (' . currency($record->currency)->getCurrency() . ')'),
                 TextColumn::make('opened_at')
                     ->date('Y-M-d'),
                 TextColumn::make('closed_at')
@@ -202,8 +201,7 @@ class RegistrationTypePage extends Component implements HasTable, HasForms
                         ->form(static::registrationTypeCreateForm())
                         ->using(fn (Model $record, array $data) => RegistrationTypeUpdateAction::run($record, $data))
                         ->mutateFormDataUsing(function ($data) {
-                            if($data['free'])
-                            {
+                            if ($data['free']) {
                                 $data['cost'] = 0;
                                 $data['currency'] = 'free';
                             }

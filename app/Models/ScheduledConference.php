@@ -90,7 +90,7 @@ class ScheduledConference extends Model implements HasMedia, HasAvatar, HasName
     {
         return $this->hasMany(Sponsor::class);
     }
-    
+
     public function announcements(): HasMany
     {
         return $this->hasMany(Announcement::class);
@@ -111,7 +111,7 @@ class ScheduledConference extends Model implements HasMedia, HasAvatar, HasName
         return $this->hasMany(Registration::class);
     }
 
-    public function registration_type(): HasMany
+    public function registrationType(): HasMany
     {
         return $this->hasMany(RegistrationType::class);
     }
@@ -150,7 +150,7 @@ class ScheduledConference extends Model implements HasMedia, HasAvatar, HasName
     {
         $start = Carbon::parse($this->date_start)->diffInDays(now(), false);
         $end = Carbon::parse($this->date_end)->diffInDays(now(), false);
-        if($start >= 0 && $end <= 0) 
+        if ($start >= 0 && $end <= 0)
             return true;
         return false;
     }

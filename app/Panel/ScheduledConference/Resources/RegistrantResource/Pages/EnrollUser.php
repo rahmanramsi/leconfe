@@ -44,7 +44,7 @@ class EnrollUser extends ListRecords
     public static function canAccess(array $parameters = []): bool
     {
         $user = auth()->user();
-        if($user->can('Registrant:enroll')) {
+        if ($user->can('Registrant:enroll')) {
             return true;
         }
         return false;
@@ -62,17 +62,16 @@ class EnrollUser extends ListRecords
 
     public static function getRegistrationTypeOptions(): array
     {
-        $registration_type = RegistrationType::whereScheduledConferenceId(app()->getCurrentScheduledConferenceId())->get();
-        $registration_type_options = [];
-        foreach($registration_type as $type)
-        {
-            if(!$type->active) continue;
-            
+        $registrationType = RegistrationType::whereScheduledConferenceId(app()->getCurrentScheduledConferenceId())->get();
+        $registrationTypeOptions = [];
+        foreach ($registrationType as $type) {
+            if (!$type->active) continue;
+
             $key = $type->id;
             $is_expired = $type->isExpired();
-            $registration_type_options[$key] = $type->type . ' [Quota Left: ' . $type->getPaidParticipantCount() . '/' . $type->quota . '] [' . ($is_expired ? 'Expired' : 'Valid') . ']';
+            $registrationTypeOptions[$key] = $type->type . ' [Quota Left: ' . $type->getPaidParticipantCount() . '/' . $type->quota . '] [' . ($is_expired ? 'Expired' : 'Valid') . ']';
         }
-        return $registration_type_options;
+        return $registrationTypeOptions;
     }
 
     public static function enrollForm(Model $record)
@@ -81,9 +80,9 @@ class EnrollUser extends ListRecords
             Placeholder::make('user')
                 ->content(new HtmlString('
                     <ul>
-                        <li>Name: <strong>'.$record->full_name.'</strong></li>
-                        <li>Email: <strong>'.$record->email.'</strong></li>
-                        <li>Affiliation: <strong>'.$record->getMeta('affiliation').'</strong></li>
+                        <li>Name: <strong>' . $record->full_name . '</strong></li>
+                        <li>Email: <strong>' . $record->email . '</strong></li>
+                        <li>Affiliation: <strong>' . $record->getMeta('affiliation') . '</strong></li>
                     </ul>
                 ')),
             Select::make('registration_type_id')
@@ -93,11 +92,13 @@ class EnrollUser extends ListRecords
                 ->required()
                 ->rules([
                     fn (): Closure => function (string $attribute, $value, Closure $fail) {
-                        $registration_type = RegistrationType::findOrFail($value);
-                        if($registration_type->getQuotaLeft() <= 0)
-                            $fail($registration_type->type . ' quota has ran out!');
-                        if(!$registration_type->active)
-                            $fail($registration_type->type . ' not active!');
+                        $registrationType = RegistrationType::findOrFail($value);
+                        if ($registrationType->getQuotaLeft() <= 0) {
+                            $fail($registrationType->type . ' quota has ran out!');
+                        }
+                        if (!$registrationType->active) {
+                            $fail($registrationType->type . ' not active!');
+                        }
                     },
                 ]),
             Fieldset::make('Payment')
@@ -194,15 +195,15 @@ class EnrollUser extends ListRecords
                     ->createAnother(false)
                     ->modalSubmitActionLabel('Enroll')
                     ->mutateFormDataUsing(function (Model $record, $data) {
-                        $registration_type = RegistrationType::where('id', $data['registration_type_id'])->first();
-                        
-                        if(!$registration_type) return;
+                        $registrationType = RegistrationType::where('id', $data['registration_type_id'])->first();
+
+                        if (!$registrationType) return;
 
                         $data['user_id'] = $record->id;
-                        $data['name'] = $registration_type->type;
-                        $data['cost'] = $registration_type->cost;
-                        $data['currency'] = $registration_type->currency;
-    
+                        $data['name'] = $registrationType->type;
+                        $data['cost'] = $registrationType->cost;
+                        $data['currency'] = $registrationType->currency;
+
                         return $data;
                     })
             ])

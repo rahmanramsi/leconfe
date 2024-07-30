@@ -10,12 +10,12 @@ class RegistrationTypeDeleteAction
 {
     use AsAction;
 
-    public function handle(RegistrationType $registration_type)
+    public function handle(RegistrationType $registrationType)
     {
         try {
             DB::beginTransaction();
 
-            $registration_type->delete();
+            $registrationType->delete();
 
             DB::commit();
         } catch (\Throwable $th) {
