@@ -42,13 +42,13 @@
                 <h2 class="text-lg font-bold">
                     Review Guidelines
                 </h2>
-                {!! $scheduledConference->getMeta('review_guidelines') !!}
+                {!! $currentScheduledConference->getMeta('review_guidelines') !!}
             </div>
             <div>
                 <h2 class="text-lg font-bold">
                     Competing Interests
                 </h2>
-                {!! $scheduledConference->getMeta('competing_interests') !!}
+                {!! $currentScheduledConference->getMeta('competing_interests') !!}
             </div>
 
             <div class="flex items-center mb-4">

@@ -3,17 +3,22 @@
 namespace App\Panel\ScheduledConference\Pages;
 
 use App\Models\Submission;
+use App\Panel\ScheduledConference\Resources\SubmissionResource\Pages\ManageSubmissions;
 use Filament\Pages\Dashboard as BaseDashboard;
 use Illuminate\Database\Eloquent\Model;
 
 class Dashboard extends BaseDashboard
 {
-    /**
-     * @return array<class-string<Widget> | WidgetConfiguration>
-     */
-    public function getWidgets(): array
-    {
+	public function mount()
+	{
+		if(!auth()->user()->can('view', app()->getCurrentScheduledConference())){
+			return redirect()->to(ManageSubmissions::getUrl());
+		}
+	}
 
-        return [];
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return auth()->user()->can('view', app()->getCurrentScheduledConference());
     }
 }
