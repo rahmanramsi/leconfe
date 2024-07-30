@@ -46,6 +46,7 @@ class Submission extends Model implements HasMedia, HasPayment, Sortable
      * @var array<int, string>
      */
     protected $fillable = [
+        'track_id',
         'skipped_review',
         'stage',
         'status',
@@ -93,6 +94,10 @@ class Submission extends Model implements HasMedia, HasPayment, Sortable
             $submission->user_id ??= Auth::id();
             $submission->conference_id ??= app()->getCurrentConferenceId();
             $submission->scheduled_conference_id ??= app()->getCurrentScheduledConferenceId();
+
+            if(!$submission->track_id){
+                $submission->track_id = Track::first()?->getKey();
+            }
         });
 
         static::deleting(function (Submission $submission) {
@@ -125,6 +130,11 @@ class Submission extends Model implements HasMedia, HasPayment, Sortable
     public function proceeding() : BelongsTo
     {
         return $this->belongsTo(Proceeding::class);
+    }
+
+    public function track() : BelongsTo
+    {
+        return $this->belongsTo(Track::class);
     }
 
     public function assignProceeding(Proceeding|int $proceeding)

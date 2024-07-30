@@ -1,5 +1,5 @@
 <x-filament-panels::page>
-    <div class="mx-auto max-w-xl w-full space-y-6">
+    <div class="mx-auto max-w-2xl w-full space-y-6">
         <h1 class="font-bold text-2xl text-center">Make a Submission</h1>
         @if (!$isOpen)
             <div class="flex p-4 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300"
@@ -16,12 +16,12 @@
                 </div>
             </div>
         @else
-            <div class="bg-white dark:bg-gray-900 w-full rounded-xl p-4">
+            <x-filament::section>
                 <form wire:submit="submit" class="space-y-4">
                     {{ $this->form }}
                      <x-filament::button type="submit">Save</x-filament::button>
                 </form>
-            </div>
+            </x-filament::section>
         @endif
     </div>
 </x-filament-panels::page>

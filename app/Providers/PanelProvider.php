@@ -207,10 +207,6 @@ class PanelProvider extends ServiceProvider
 
     public static function setupFilamentComponent()
     {
-        // TODO Validasi file type menggunakan format extension, bukan dengan mime type,
-        // hal ini agar mempermudah pengguna dalam melakukan setting file apa saja yang diperbolehkan
-        // Saat ini SpatieMediaLibraryFileUpload hanya support file validation dengan mime type.
-        // Solusi mungkin buat custom component upload dengan menggunakan library seperti dropzone, atau yang lainnya.
         SpatieMediaLibraryFileUpload::configureUsing(function (SpatieMediaLibraryFileUpload $fileUpload): void {
             $fileUpload
                 ->imageResizeTargetWidth(2048)
