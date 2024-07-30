@@ -83,7 +83,7 @@ class RegistrantResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn (Builder $query) => $query->whereScheduledConferenceId(app()->getCurrentScheduledConferenceId()))
+            ->modifyQueryUsing(fn (Builder $query) => $query->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId()))
             ->heading('Registrant List')
             ->headerActions([
                 Action::make('Enroll User')
@@ -188,7 +188,7 @@ class RegistrantResource extends Resource
                 ->items([
                     NavigationItem::make('Registration Type')
                         ->icon('heroicon-o-list-bullet')
-                        ->badge(fn () => RegistrationType::whereScheduledConferenceId(app()->getCurrentScheduledConferenceId())->count())
+                        ->badge(fn () => RegistrationType::where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())->count())
                         ->isActiveWhen(fn () => $url === Pages\ListTypeSummary::getUrl())
                         ->url(Pages\ListTypeSummary::getUrl()),
                     NavigationItem::make('Registrant List')

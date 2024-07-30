@@ -30,30 +30,33 @@ class ListRegistrants extends ListRecords
         return [
             'paid' => Tab::make()
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('state', RegistrationStatus::Paid->value)->where('trashed', false))
-                ->badge(fn () => Registration::select('id')
-                    ->whereScheduledConferenceId(app()->getCurrentScheduledConferenceId())
-                    ->where('state', RegistrationStatus::Paid->value)
-                    ->where('trashed', false)
-                    ->count()
+                ->badge(
+                    fn () => Registration::select('id')
+                        ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
+                        ->where('state', RegistrationStatus::Paid->value)
+                        ->where('trashed', false)
+                        ->count()
                 ),
             'unpaid' => Tab::make()
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('state', RegistrationStatus::Unpaid->value)->where('trashed', false))
-                ->badge(fn () => Registration::select('id')
-                    ->whereScheduledConferenceId(app()->getCurrentScheduledConferenceId())
-                    ->where('state', RegistrationStatus::Unpaid->value)
-                    ->where('trashed', false)
-                    ->count()
+                ->badge(
+                    fn () => Registration::select('id')
+                        ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
+                        ->where('state', RegistrationStatus::Unpaid->value)
+                        ->where('trashed', false)
+                        ->count()
                 )
                 ->badgeColor(Color::Yellow),
             'trashed' => Tab::make()
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('trashed', true))
-                ->badge(fn () => Registration::select('id')
-                    ->whereScheduledConferenceId(app()->getCurrentScheduledConferenceId())
-                    ->where('trashed', true)
-                    ->count()
+                ->badge(
+                    fn () => Registration::select('id')
+                        ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
+                        ->where('trashed', true)
+                        ->count()
                 ),
             'all' => Tab::make()
-                ->badge(fn () => Registration::whereScheduledConferenceId(app()->getCurrentScheduledConferenceId())->count()),
+                ->badge(fn () => Registration::where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())->count()),
         ];
     }
 

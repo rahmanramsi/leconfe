@@ -21,7 +21,7 @@ class ListTypeSummary extends Page
 
     protected function getViewData(): array
     {
-        $registrationTypes = RegistrationType::whereScheduledConferenceId(app()->getCurrentScheduledConferenceId())->get();
+        $registrationTypes = RegistrationType::where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())->get();
 
         return [
             'registrationTypes' => $registrationTypes,

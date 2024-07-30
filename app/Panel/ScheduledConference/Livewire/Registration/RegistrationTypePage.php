@@ -76,7 +76,7 @@ class RegistrationTypePage extends Component implements HasTable, HasForms
                         ->columnSpan(3)
                         ->rules([
                             fn ($record): Closure => function (string $attribute, $value, Closure $fail) use ($record) {
-                                if ($registrationType = RegistrationType::whereScheduledConferenceId(app()->getCurrentScheduledConferenceId())->where('type', $value)->first()) {
+                                if ($registrationType = RegistrationType::where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())->where('type', $value)->first()) {
                                     if ($record) {
                                         if ($record->id === $registrationType->id)
                                             return;
@@ -149,7 +149,7 @@ class RegistrationTypePage extends Component implements HasTable, HasForms
         return $table
             ->query(
                 RegistrationType::query()
-                    ->whereScheduledConferenceId(app()->getCurrentScheduledConferenceId())
+                    ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
                     ->with('meta')
             )
             ->heading('Type')

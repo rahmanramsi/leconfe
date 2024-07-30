@@ -22,7 +22,7 @@ class ParticipantRegisterStatus extends Page
     {
         $isLogged = auth()->check();
         $userRegistration = !$isLogged ? null : Registration::select('*')
-            ->whereScheduledConferenceId(app()->getCurrentScheduledConferenceId())
+            ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
             ->whereUserId(auth()->user()->id)
             ->first();
         if (!$userRegistration)
@@ -36,12 +36,12 @@ class ParticipantRegisterStatus extends Page
         $isLogged = auth()->check();
 
         $userRegistration = !$isLogged ? null : Registration::select('*')
-            ->whereScheduledConferenceId(app()->getCurrentScheduledConferenceId())
+            ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
             ->whereUserId(auth()->user()->id)
             ->first();
 
         $paymentList = PaymentManual::select('*')
-            ->whereScheduledConferenceId(app()->getCurrentScheduledConferenceId())
+            ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
             ->select(
                 'currency',
                 DB::raw('JSON_ARRAYAGG(JSON_OBJECT(
@@ -52,7 +52,7 @@ class ParticipantRegisterStatus extends Page
             )
             ->groupBy('currency')
             ->get();
-        
+
         return [
             'currentScheduledConference' => $currentScheduledConference,
             'isLogged' => $isLogged,

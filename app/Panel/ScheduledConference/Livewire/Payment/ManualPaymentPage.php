@@ -41,7 +41,7 @@ class ManualPaymentPage extends Component implements HasForms, HasTable
     {
         $options = [];
         $currencies = Currency::get();
-        foreach($currencies as $currency) $options[$currency->id] = '(' . Str::upper($currency->id) . ') ' . $currency->name;
+        foreach ($currencies as $currency) $options[$currency->id] = '(' . Str::upper($currency->id) . ') ' . $currency->name;
 
         return $options;
     }
@@ -69,7 +69,7 @@ class ManualPaymentPage extends Component implements HasForms, HasTable
         return $table
             ->query(
                 PaymentManual::query()
-                    ->whereScheduledConferenceId(app()->getCurrentScheduledConferenceId())
+                    ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
             )
             ->heading('Manual Payment List')
             ->headerActions([

@@ -62,7 +62,7 @@ class EnrollUser extends ListRecords
 
     public static function getRegistrationTypeOptions(): array
     {
-        $registrationType = RegistrationType::whereScheduledConferenceId(app()->getCurrentScheduledConferenceId())->get();
+        $registrationType = RegistrationType::where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())->get();
         $registrationTypeOptions = [];
         foreach ($registrationType as $type) {
             if (!$type->active) continue;
@@ -129,7 +129,7 @@ class EnrollUser extends ListRecords
             ->query(
                 User::query()
                     ->whereDoesntHave('registration', function (Builder $query) {
-                        $query->whereScheduledConferenceId(app()->getCurrentScheduledConferenceId());
+                        $query->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId());
                     })
             )
             ->columns([
