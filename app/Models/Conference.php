@@ -86,7 +86,7 @@ class Conference extends Model implements HasAvatar, HasMedia, HasName
         return $this->navigations->firstWhere('handle', $handle)?->items ?? [];
     }
 
-    public function series(): HasMany
+    public function scheduledConferences(): HasMany
     {
         return $this->hasMany(ScheduledConference::class);
     }

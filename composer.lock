@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0bf543c52a1e1f398251cf69a79b8cb2",
+    "content-hash": "81e3094df152834d7fdf0fd3bb0a39b2",
     "packages": [
         {
             "name": "akaunting/laravel-money",
@@ -5699,24 +5699,24 @@
         },
         {
             "name": "mchev/banhammer",
-            "version": "v1.2.1",
+            "version": "v2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mchev/banhammer.git",
-                "reference": "2a305a891d630f736a20356146835a1c4f096479"
+                "reference": "9821abe9a2be60742b43b880091481c2a113d938"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mchev/banhammer/zipball/2a305a891d630f736a20356146835a1c4f096479",
-                "reference": "2a305a891d630f736a20356146835a1c4f096479",
+                "url": "https://api.github.com/repos/mchev/banhammer/zipball/9821abe9a2be60742b43b880091481c2a113d938",
+                "reference": "9821abe9a2be60742b43b880091481c2a113d938",
                 "shasum": ""
             },
             "require": {
                 "php": "^8.0"
             },
             "require-dev": {
-                "orchestra/testbench": "^7.0|^8.0",
-                "phpunit/phpunit": "^9.5"
+                "orchestra/testbench": "^7.0|^8.0|^9.0",
+                "phpunit/phpunit": "^9.5|^10.5|^11.0"
             },
             "type": "library",
             "extra": {
@@ -5742,19 +5742,20 @@
                     "role": "Developer"
                 }
             ],
-            "description": "BanHamer for Laravel allows you to ban any Model by key and by IP.",
+            "description": "Banhammer for Laravel allows you to ban any Model by key and by IP.",
             "homepage": "https://github.com/mchev/banhammer",
             "keywords": [
                 "IP",
                 "ban",
                 "bannable",
                 "bans-for-laravel",
+                "country",
                 "laravel",
                 "mchev"
             ],
             "support": {
                 "issues": "https://github.com/mchev/banhammer/issues",
-                "source": "https://github.com/mchev/banhammer/tree/v1.2.1"
+                "source": "https://github.com/mchev/banhammer/tree/v2.3.0"
             },
             "funding": [
                 {
@@ -5762,7 +5763,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-06-10T16:46:08+00:00"
+            "time": "2024-05-24T10:09:58+00:00"
         },
         {
             "name": "mohamedsabil83/filament-forms-tinyeditor",
@@ -7781,58 +7782,6 @@
                 "source": "https://github.com/revoltphp/event-loop/tree/v1.0.6"
             },
             "time": "2023-11-30T05:34:44+00:00"
-        },
-        {
-            "name": "rickselby/laravel-gate-cache",
-            "version": "3.8.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/rickselby/laravel-gate-cache.git",
-                "reference": "d19bc9aaaffa5853c531e76bc19330dca4a5c606"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/rickselby/laravel-gate-cache/zipball/d19bc9aaaffa5853c531e76bc19330dca4a5c606",
-                "reference": "d19bc9aaaffa5853c531e76bc19330dca4a5c606",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/auth": "10.*|11.*",
-                "illuminate/contracts": "10.*|11.*"
-            },
-            "require-dev": {
-                "graham-campbell/testbench": "^6.1",
-                "phpunit/phpunit": "^10.0"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "RickSelby\\Laravel\\GateCache\\GateCacheProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "RickSelby\\Laravel\\GateCache\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Rick Selby",
-                    "email": "rick@selby-family.co.uk"
-                }
-            ],
-            "description": "Add a per-request caching layer to Laravel's Gate",
-            "support": {
-                "issues": "https://github.com/rickselby/laravel-gate-cache/issues",
-                "source": "https://github.com/rickselby/laravel-gate-cache/tree/3.8.0"
-            },
-            "time": "2024-03-14T12:27:24+00:00"
         },
         {
             "name": "ryangjchandler/blade-capture-directive",

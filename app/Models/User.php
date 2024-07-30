@@ -105,15 +105,6 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasMedia,
         return $this->morphMany(DatabaseNotification::class, 'notifiable')->latest();
     }
 
-    public function canAccessTenant(Model $tenant): bool
-    {
-        if ($tenant->getKey() == Conference::active()?->getKey()) {
-            return true;
-        }
-
-        return $this->can('view', $tenant);
-    }
-
     public function canImpersonate()
     {
         return $this->can('User:loginAs');
@@ -135,44 +126,6 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasMedia,
     public function submissions()
     {
         return $this->hasMany(Submission::class);
-    }
-
-    /**
-     * Determine if the model may perform the given permission.
-     *
-     * @param  string|int|\Spatie\Permission\Contracts\Permission  $permission
-     * @param  string|null  $guardName
-     *
-     * @throws PermissionDoesNotExist
-     */
-    public function hasPermissionTo($permission, $guardName = null): bool
-    {
-        if ($this->getWildcardClass()) {
-            return $this->hasWildcardPermission($permission, $guardName);
-        }
-
-        $permission = $this->filterPermission($permission, $guardName);
-
-        return $this->hasDirectPermission($permission) || $this->hasPermissionViaRole($permission) || $this->hasPermissionViaParentRole($permission);
-    }
-
-    public function hasPermissionViaParentRole(Permission $permission)
-    {
-        $this->loadMissing(['roles' => function (MorphToMany $query) {
-            $query->with('ancestors');
-        }]);
-
-        foreach ($this->roles as $role) {
-            if (!$role->parent_id) {
-                continue;
-            }
-
-            if (!$role->ancestors->pluck('id')->intersect($permission->roles->pluck('id')->toArray())->isEmpty()) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     public function getFilamentAvatarUrl(): ?string

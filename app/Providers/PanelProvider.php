@@ -4,8 +4,6 @@ namespace App\Providers;
 
 use App\Facades\Plugin;
 use App\Facades\Setting;
-use App\Http\Middleware\IdentifyConference;
-use App\Http\Middleware\IdentifySeries;
 use App\Http\Middleware\MustVerifyEmail;
 use App\Http\Middleware\PanelAuthenticate;
 use App\Panel\Administration\Pages\Profile;
@@ -24,16 +22,22 @@ use Filament\View\PanelsRenderHook;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use App\Forms\Components\TinyEditor;
+use App\Http\Middleware\RedirectPanelIfCannotAccess;
 use App\Models\Conference;
 use App\Models\Enums\UserRole;
+use App\Models\ScheduledConference;
 use GuzzleHttp\Psr7\MimeType;
 
 class PanelProvider extends ServiceProvider
 {
-    public function scheduledConference(Panel $panel): Panel
+    public const PANEL_ADMINISTRATION = 'administration';
+    public const PANEL_CONFERENCE = 'conference';
+    public const PANEL_SCHEDULED_CONFERENCE = 'scheduledConference';
+
+    public function scheduledConferencePanel(Panel $panel): Panel
     {
         $this->setupPanel($panel)
-            ->id('scheduledConference')
+            ->id(static::PANEL_SCHEDULED_CONFERENCE)
             ->path('{conference:path}/scheduled/{serie:path}/panel')
             ->bootUsing(fn () => static::setupFilamentComponent())
             ->homeUrl(fn () => app()->getCurrentScheduledConference()?->getHomeUrl())
@@ -47,7 +51,17 @@ class PanelProvider extends ServiceProvider
             )
             ->renderHook(
                 PanelsRenderHook::SIDEBAR_NAV_START,
-                fn () => view('panel.scheduledConference.hooks.sidebar-nav-start'),
+                function(){
+                    $currentConference = app()->getCurrentConference();
+                    $currentScheduledConference = app()->getCurrentScheduledConference();
+                    $scheduledConferences = ScheduledConference::query()
+                        ->where('path', '!=', $currentScheduledConference->path)
+                        ->with(['media'])
+                        ->latest()
+                        ->get();
+
+                    return view('panel.scheduledConference.hooks.sidebar-nav-start', compact('currentConference', 'currentScheduledConference', 'scheduledConferences'));
+                }
             )
             ->middleware([
                 ...static::getMiddleware(),
@@ -64,7 +78,7 @@ class PanelProvider extends ServiceProvider
     public function conferencePanel(Panel $panel): Panel
     {
         $this->setupPanel($panel)
-            ->id('conference')
+            ->id(static::PANEL_CONFERENCE)
             ->default()
             ->path('{conference:path}/panel')
             ->bootUsing(fn () => static::setupFilamentComponent())
@@ -85,15 +99,13 @@ class PanelProvider extends ServiceProvider
                 function(){
                     $currentConference = app()->getCurrentConference();
                     $conferenceQuery = Conference::query()
+                        ->when(!auth()->user()->hasRole(UserRole::Admin), fn($query) => $query->whereHas('conferenceUsers', function ($query) {
+                            $query->where('model_has_roles.model_id', auth()->id());
+                        }))
                         ->where('path', '!=', $currentConference->path)
                         ->with(['media'])
                         ->latest();
 
-                    if(!auth()->user()->hasRole(UserRole::Admin)){
-                        $conferenceQuery->whereHas('conferenceUsers', function ($query) {
-                            $query->where('model_has_roles.model_id', auth()->id());
-                        });
-                    }
 
 
                     return view('panel.conference.hooks.sidebar-nav-start', [
@@ -116,7 +128,7 @@ class PanelProvider extends ServiceProvider
     public function administrationPanel(Panel $panel): Panel
     {
         $this->setupPanel($panel)
-            ->id('administration')
+            ->id(static::PANEL_ADMINISTRATION)
             ->path('administration')
             ->homeUrl(fn () => route('livewirePageGroup.website.pages.home'))
             ->bootUsing(fn() => static::setupFilamentComponent())
@@ -165,7 +177,7 @@ class PanelProvider extends ServiceProvider
     public function register(): void
     {
         Filament::registerPanel(
-            fn (): Panel => $this->scheduledConference(Panel::make()),
+            fn (): Panel => $this->scheduledConferencePanel(Panel::make()),
         );
 
         Filament::registerPanel(
@@ -193,7 +205,6 @@ class PanelProvider extends ServiceProvider
             'web',
             DisableBladeIconComponents::class,
             DispatchServingFilamentEvent::class,
-            'logout.banned',
         ];
     }
 
@@ -202,6 +213,8 @@ class PanelProvider extends ServiceProvider
         return [
             PanelAuthenticate::class,
             MustVerifyEmail::class,
+            'logout.banned',
+            RedirectPanelIfCannotAccess::class,
         ];
     }
 

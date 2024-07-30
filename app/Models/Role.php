@@ -41,4 +41,14 @@ class Role extends Model
             }
         });
     }
+
+    public function conference(): BelongsTo
+    {
+        return $this->belongsTo(Conference::class);
+    }
+
+    public function scheduledConference(): BelongsTo
+    {
+        return $this->belongsTo(ScheduledConference::class);
+    }
 }
