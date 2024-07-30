@@ -4,6 +4,7 @@ namespace App\Models\NavigationItemType;
 
 use App\Facades\Setting;
 use App\Models\NavigationMenuItem;
+use App\Models\Timeline;
 
 class ParticipantRegistration extends BaseNavigationItemType
 {
@@ -19,7 +20,7 @@ class ParticipantRegistration extends BaseNavigationItemType
 
     public static function getIsDisplayed(NavigationMenuItem $navigationMenuItem): bool
     {
-        return app()->getCurrentScheduledConferenceId();
+        return app()->getCurrentScheduledConferenceId() && Timeline::isRegistrationOpen();
     }
 
     public static function getUrl(NavigationMenuItem $navigationMenuItem): string
