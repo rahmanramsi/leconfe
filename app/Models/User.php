@@ -194,6 +194,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasMedia,
         $scheduledConference = app()->getCurrentScheduledConference();
         
         $teamPivot = [];
+        
         if($conference) {
             $teamPivot['conference_id'] = $conference->getKey();
         }
@@ -226,5 +227,15 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasMedia,
         }
 
         return $this;
+    }
+
+    public function syncRoles(...$roles)
+    {
+        if ($this->getModel()->exists) {
+            $this->roles()->detach($this->roles->pluck('id')->toArray());
+            $this->setRelation('roles', collect());
+        }
+
+        return $this->assignRole($roles);
     }
 }
