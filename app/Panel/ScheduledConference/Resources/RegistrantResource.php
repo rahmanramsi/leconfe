@@ -107,7 +107,7 @@ class RegistrantResource extends Resource
                     ->label('State')
                     ->formatStateUsing(fn (Model $record) => $record->getStatus())
                     ->badge()
-                    ->color(fn (Model $record) => RegistrationStatus::from($record->state)->getColor()),
+                    ->color(fn (Model $record) => RegistrationStatus::from($record->getStatus())->getColor()),
                 TextColumn::make('paid_at')
                     ->label('Paid Date')
                     ->placeholder('Not Paid')
@@ -197,7 +197,7 @@ class RegistrantResource extends Resource
                         ->url(Pages\ListRegistrants::getUrl()),
                 ])
                 ->extraSidebarAttributes([
-                    'class' => 'bg-white p-2 rounded-xl shadow-lg outline outline-1 outline-gray-200 w-11/12',
+                    'class' => 'bg-white p-2 rounded-xl shadow-lg outline outline-1 outline-gray-200',
                 ], true)
         ];
     }
