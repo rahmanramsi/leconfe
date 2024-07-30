@@ -22,6 +22,7 @@ use Filament\View\PanelsRenderHook;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use App\Forms\Components\TinyEditor;
+use App\Http\Middleware\IdentifyConference;
 use App\Http\Middleware\RedirectPanelIfCannotAccess;
 use App\Models\Conference;
 use App\Models\Enums\UserRole;
@@ -114,6 +115,7 @@ class PanelProvider extends ServiceProvider
                 }
             )
             ->middleware([
+                IdentifyConference::class,
                 ...static::getMiddleware(),
             ], true)
             ->authMiddleware(static::getAuthMiddleware(), true);
