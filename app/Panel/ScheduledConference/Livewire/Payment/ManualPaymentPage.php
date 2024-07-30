@@ -5,7 +5,6 @@ namespace App\Panel\ScheduledConference\Livewire\Payment;
 use Livewire\Component;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
-use Squire\Models\Country;
 use App\Models\PaymentManual;
 use Illuminate\Support\Str;
 use Squire\Models\Currency;
@@ -25,25 +24,27 @@ use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
 use App\Forms\Components\TinyEditor;
+use App\Panel\ScheduledConference\Livewire\Registration\RegistrationTypePage;
 use Filament\Tables\Actions\ActionGroup;
+use Illuminate\Support\Collection;
 
 class ManualPaymentPage extends Component implements HasForms, HasTable
 {
-    use
-        InteractsWithForms,
-        InteractsWithTable;
+    use InteractsWithForms, InteractsWithTable;
 
     public function mount(): void
     {
     }
 
-    public static function getCurrencyOptions()
+    public static function getCurrencyOptions(): Collection
     {
-        $options = [];
         $currencies = Currency::get();
-        foreach ($currencies as $currency) $options[$currency->id] = '(' . Str::upper($currency->id) . ') ' . $currency->name;
-
-        return $options;
+        $currenciesOptions = $currencies->mapWithKeys(function (?Currency $value, int $key) {
+            $currencyCode = Str::upper($value->id);
+            $currencyName = $value->name;
+            return [$value->id => "($currencyCode) $currencyName"];
+        });
+        return $currenciesOptions;
     }
 
     public static function manualPaymentForm(): array
@@ -53,7 +54,7 @@ class ManualPaymentPage extends Component implements HasForms, HasTable
                 ->placeholder('Input a name for the payment method..')
                 ->required(),
             Select::make('currency')
-                ->options((static::getCurrencyOptions()))
+                ->options(static::getCurrencyOptions())
                 ->placeholder('Select payment currency..')
                 ->searchable()
                 ->required(),
@@ -79,7 +80,7 @@ class ManualPaymentPage extends Component implements HasForms, HasTable
                     ->modalWidth('4xl')
                     ->model(PaymentManual::class)
                     ->form(static::manualPaymentForm())
-                    ->authorize('PaymentSetting:create')
+                    ->authorize('RegistrationSetting:create')
             ])
             ->columns([
                 TextColumn::make('name')
@@ -105,22 +106,22 @@ class ManualPaymentPage extends Component implements HasForms, HasTable
             ])
             ->emptyStateHeading('Manual payment are empty')
             ->actions([
+                EditAction::make()
+                    ->form(static::manualPaymentForm())
+                    ->authorize('RegistrationSetting:edit'),
                 ActionGroup::make([
-                    EditAction::make()
-                        ->form(static::manualPaymentForm())
-                        ->authorize('PaymentSetting:edit'),
                     DeleteAction::make()
-                        ->authorize('PaymentSetting:delete'),
+                        ->authorize('RegistrationSetting:delete'),
                 ])
             ])
             ->bulkActions([
                 DeleteBulkAction::make()
-                    ->authorize('PaymentSetting:delete'),
+                    ->authorize('RegistrationSetting:delete'),
             ]);
     }
 
     public function render()
     {
-        return view('panel.scheduledConference.livewire.payment.manual');
+        return view('tables.table');
     }
 }

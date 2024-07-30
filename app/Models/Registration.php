@@ -12,11 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Registration extends Model
 {
-    use
-        BelongsToScheduledConference,
-        HasShortflakePrimary,
-        Cachable,
-        HasFactory;
+    use BelongsToScheduledConference, HasShortflakePrimary, Cachable, HasFactory;
 
     protected $guarded = ['id', 'scheduled_conference_id'];
 

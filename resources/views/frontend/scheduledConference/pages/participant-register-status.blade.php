@@ -1,5 +1,6 @@
 @use('Illuminate\Support\Str')
 @use('Carbon\Carbon')
+@use('App\Models\Enums\RegistrationStatus')
 <x-website::layouts.main>
     @if ($isLogged)
         <div class="space-y-6">
@@ -17,26 +18,16 @@
                     <td class="align-text-top">Status</td>
                     <td class="align-text-top pl-5">:</td>
                     <td class="pl-2">
-                        <span class="
-                            inline-flex 
-                            items-center 
-                            rounded-md 
-                            {{ 
-                                match($userRegistration->getStatus()) {
-                                    'paid' => 'bg-green-500',
-                                    'unpaid' => 'bg-yellow-500',
-                                    'trash' => 'bg-red-500',
-                                } 
-                            }}
-                            px-2 py-1 
-                            text-xs 
-                            font-medium 
-                            text-white
-                            ring-1 
-                            ring-inset 
-                            ring-gray-500/10
-                        ">
-                            {{ Str::headline($userRegistration->getPublicStatus()) }}
+                        <span @class([
+                            'inline-flex items-center rounded-md px-2 py-1 text-xs font-medium text-white ring-1 ring-inset ring-gray-500/10', 
+                            'bg-green-500' => $userRegistration->getStatus() === RegistrationStatus::Paid->value,
+                            'bg-yellow-500' => $userRegistration->getStatus() === RegistrationStatus::Unpaid->value,
+                            'bg-red-500' => $userRegistration->getStatus() === RegistrationStatus::Trashed->value,
+                        ])>
+                            {{ Str::headline(match($userRegistration->getStatus()) {
+                                RegistrationStatus::Trashed->value => 'Failed',
+                                default => $userRegistration->getStatus(),
+                            }) }}
                         </span>
                     </td>
                 </tr>
@@ -59,7 +50,14 @@
                     <td class="align-text-top pl-5">:</td>
                     <td class="pl-2">{{ $userRegistration->registrationType->getCostWithCurrency() }}</td>
                 </tr>
-                @if ($userRegistration->getStatus() === 'Paid' && $userRegistration->registrationType->currency !== 'free')
+                <tr>
+                    <td class="align-text-top">Registration Date</td>
+                    <td class="align-text-top pl-5">:</td>
+                    <td class="pl-2">
+                        {{ Carbon::parse($userRegistration->created_at)->format('Y-M-d') }}
+                    </td>
+                </tr>
+                @if ($userRegistration->getStatus() === RegistrationStatus::Paid->value && $userRegistration->registrationType->currency !== 'free')
                     <tr>
                         <td class="align-text-top">Payment Date</td>
                         <td class="align-text-top pl-5">:</td>
@@ -69,13 +67,15 @@
                     </tr>
                 @endif
             </table>
-            @if ($userRegistration->getStatus() === 'Unpaid')
+            @if ($userRegistration->getStatus() === RegistrationStatus::Unpaid->value)
                 <hr class="my-8">
                 <div class="w-full">
                     @foreach ($paymentList as $currency)
                         <div class="my-6">
                             <div class="flex space-x-4">
-                                <h1 class="text-lg font-semibold min-w-fit">{{ currency($currency->currency)->getName() }} ({{ Str::upper($currency->currency) }})</h1>
+                                <h1 class="text-lg font-semibold min-w-fit">
+                                    {{ currency($currency->currency)->getName() }} ({{ Str::upper($currency->currency) }})
+                                </h1>
                                 <hr class="w-full h-px my-auto bg-gray-200 border-0 dark:bg-gray-700">
                             </div>
                             <div class="grid md:grid-cols-6 gap-4 mt-1">

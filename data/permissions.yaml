@@ -109,7 +109,3 @@
 - 'RegistrationSetting:edit'
 - 'RegistrationSetting:create'
 - 'RegistrationSetting:delete'
-- 'PaymentSetting:viewAny'
-- 'PaymentSetting:edit'
-- 'PaymentSetting:create'
-- 'PaymentSetting:delete'

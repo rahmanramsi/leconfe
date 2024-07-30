@@ -44,25 +44,13 @@ use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\Fieldset as ComponentsFieldset;
 use App\Forms\Components\TinyEditor;
+use App\Panel\ScheduledConference\Livewire\Payment\ManualPaymentPage;
 use Filament\Tables\Actions\ActionGroup;
 use Squire\Models\Currency as ModelsCurrency;
 
 class RegistrationTypePage extends Component implements HasTable, HasForms
 {
-    use
-        InteractsWithForms,
-        InteractsWithTable;
-
-    public static function countryCurrencySelectOption()
-    {
-        $currencies = ModelsCurrency::get();
-        $currencies_option = $currencies->mapWithKeys(function (?ModelsCurrency $value, int $key) {
-            $currency_code = Str::upper($value->id);
-            $currency_name = $value->name;
-            return [$value->id => "($currency_code) $currency_name"];
-        });
-        return $currencies_option;
-    }
+    use InteractsWithForms, InteractsWithTable;
 
     public static function registrationTypeCreateForm(): array
     {
@@ -76,13 +64,10 @@ class RegistrationTypePage extends Component implements HasTable, HasForms
                         ->columnSpan(3)
                         ->rules([
                             fn ($record): Closure => function (string $attribute, $value, Closure $fail) use ($record) {
-                                if ($registrationType = RegistrationType::where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())->where('type', $value)->first()) {
-                                    if ($record) {
-                                        if ($record->id === $registrationType->id)
-                                            return;
-                                    }
-                                    $fail('Type already exist.');
-                                }
+                                $registrationType = RegistrationType::where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())->where('type', $value)->first();
+                                if(!$registrationType) return;
+                                if($record && ($record->id === $registrationType->id)) return;
+                                $fail('Name already exist.');
                             },
                         ]),
                     TextInput::make('quota')
@@ -105,7 +90,7 @@ class RegistrationTypePage extends Component implements HasTable, HasForms
                     Select::make('currency')
                         ->label('Currency')
                         ->formatStateUsing(fn ($state) => ($state !== null) ? ($state !== 'free' ? $state : null) : null)
-                        ->options(static::countryCurrencySelectOption())
+                        ->options(ManualPaymentPage::getCurrencyOptions())
                         ->searchable()
                         ->required()
                         ->live(),
@@ -222,6 +207,6 @@ class RegistrationTypePage extends Component implements HasTable, HasForms
 
     public function render()
     {
-        return view('panel.scheduledConference.livewire.registration.registration-type');
+        return view('tables.table');
     }
 }

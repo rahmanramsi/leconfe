@@ -99,6 +99,9 @@ class RegistrantResource extends Resource
                 TextColumn::make('name')
                     ->label('Type')
                     ->description(function (Model $record) {
+                        if($record->currency === 'free') {
+                            return 'Free';
+                        }
                         $code = Str::upper($record->currency);
                         $cost = money($record->cost, $record->currency);
                         return "($code) $cost";
@@ -143,7 +146,7 @@ class RegistrantResource extends Resource
                             $record->trashed = true;
                             $record->save();
                         })
-                        ->visible(fn (Model $record) => $record->state !== RegistrationStatus::Trashed->value)
+                        ->visible(fn (Model $record) => !$record->trashed)
                         ->authorize('Registrant:delete'),
                     Action::make('restore')
                         ->color(Color::Green)
@@ -153,10 +156,10 @@ class RegistrantResource extends Resource
                             $record->trashed = false;
                             $record->save();
                         })
-                        ->hidden(fn (Model $record) => $record->state !== RegistrationStatus::Trashed->value)
+                        ->hidden(fn (Model $record) => !$record->trashed)
                         ->authorize('Registrant:edit'),
                     DeleteAction::make()
-                        ->hidden(fn (Model $record) => $record->state !== RegistrationStatus::Trashed->value)
+                        ->hidden(fn (Model $record) => !$record->trashed)
                         ->authorize('Registrant:delete'),
                 ]),
             ])

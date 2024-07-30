@@ -13,12 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class RegistrationType extends Model
 {
-    use 
-        BelongsToScheduledConference, 
-        HasShortflakePrimary,
-        Cachable, 
-        Metable,
-        HasFactory;
+    use BelongsToScheduledConference, HasShortflakePrimary, Cachable, Metable, HasFactory;
 
     protected $guarded = ['id', 'scheduled_conference_id'];
 
@@ -37,9 +32,19 @@ class RegistrationType extends Model
         return ($this->quota - $this->getPaidParticipantCount());
     }
 
+    public function isQuotaFull()
+    {
+        return $this->getQuotaLeft() <= 0;
+    }
+
     public function isExpired()
     {
         return Carbon::parse($this->closed_at)->diffInDays(now(), false) > 0;
+    }
+
+    public function isInvalid()
+    {
+        return $this->isQuotaFull() || $this->isExpired();
     }
 
     public function getCost()

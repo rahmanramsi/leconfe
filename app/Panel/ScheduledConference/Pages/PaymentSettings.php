@@ -43,7 +43,7 @@ class PaymentSettings extends Page
     public static function canAccess(): bool
     {
         $user = auth()->user();
-        if($user->can('PaymentSetting:viewAny')) {
+        if($user->can('RegistrationSetting:viewAny')) {
             return true;
         }
         return false;
@@ -55,7 +55,7 @@ class PaymentSettings extends Page
             ->schema([
                 TinyEditor::make('meta.payment_policy')
                     ->minHeight(450)
-                    ->disabled(fn () =>  auth()->user()->cannot('PaymentSetting:edit')),
+                    ->disabled(fn () =>  auth()->user()->cannot('RegistrationSetting:edit')),
                 Actions::make([
                     Action::make('save')
                         ->label('Save')
@@ -71,7 +71,7 @@ class PaymentSettings extends Page
                                 throw $th;
                             }
                         })
-                        ->authorize('PaymentSetting:edit'),
+                        ->authorize('RegistrationSetting:edit'),
                 ])->alignRight(),
             ])
             ->statePath('formData');

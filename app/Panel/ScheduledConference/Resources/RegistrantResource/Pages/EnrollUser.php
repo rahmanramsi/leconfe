@@ -62,29 +62,57 @@ class EnrollUser extends ListRecords
 
     public static function getRegistrationTypeOptions(): array
     {
-        $registrationType = RegistrationType::where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())->get();
         $registrationTypeOptions = [];
-        foreach ($registrationType as $type) {
-            if (!$type->active) continue;
+        $registrationTypes = RegistrationType::where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())->get();
+        foreach($registrationTypes as $registrationType) {
+            if (!$registrationType->active) continue;
 
-            $key = $type->id;
-            $is_expired = $type->isExpired();
-            $registrationTypeOptions[$key] = $type->type . ' [Quota Left: ' . $type->getPaidParticipantCount() . '/' . $type->quota . '] [' . ($is_expired ? 'Expired' : 'Valid') . ']';
+            $name = $registrationType->type;
+            $quotaCurrent = $registrationType->quota;
+            $quotaLeft = $registrationType->getPaidParticipantCount();
+            $expired = $registrationType->isExpired() ? 'Expired' : 'Valid';
+
+            $registrationTypeOptions[$registrationType->id] = "$name [Quota: $quotaLeft/$quotaCurrent] [$expired]";
         }
         return $registrationTypeOptions;
     }
 
     public static function enrollForm(Model $record)
     {
+        $fullName = $record->full_name;
+        $email = $record->email;
+        $affiliation = $record->getMeta('affiliation');
         return [
-            Placeholder::make('user')
-                ->content(new HtmlString('
-                    <ul>
-                        <li>Name: <strong>' . $record->full_name . '</strong></li>
-                        <li>Email: <strong>' . $record->email . '</strong></li>
-                        <li>Affiliation: <strong>' . $record->getMeta('affiliation') . '</strong></li>
-                    </ul>
-                ')),
+            Fieldset::make('User details')
+                ->schema([
+                    Placeholder::make('user')
+                        ->label('')
+                        ->content(new HtmlString(<<<HTML
+                            <table class='w-full'>
+                                <tr>
+                                    <td>
+                                        <strong>Name</strong>
+                                    </td>
+                                    <td class='pl-5'>:</td>
+                                    <td>{$fullName}</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Email</strong>
+                                    </td>
+                                    <td class='pl-5'>:</td>
+                                    <td>{$email}</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Affiliation</strong>
+                                    </td>
+                                    <td class='pl-5'>:</td>
+                                    <td>{$affiliation}</td>
+                                </tr>
+                            </table>
+                        HTML))
+                ]),
             Select::make('registration_type_id')
                 ->label('Type')
                 ->options(static::getRegistrationTypeOptions())
@@ -174,7 +202,6 @@ class EnrollUser extends ListRecords
                             ->sortable()
                             ->icon('heroicon-m-envelope'),
                         TextColumn::make('affiliation')
-                            // ->color(Color::hex('#A6CE39'))
                             ->size('sm')
                             ->wrap()
                             ->color('gray')

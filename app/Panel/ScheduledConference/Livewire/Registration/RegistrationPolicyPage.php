@@ -59,6 +59,6 @@ class RegistrationPolicyPage extends Component implements HasForms
 
     public function render()
     {
-        return view('panel.scheduledConference.livewire.registration.registration-policy');
+        return view('forms.form');
     }
 }

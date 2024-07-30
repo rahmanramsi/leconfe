@@ -26,12 +26,8 @@
                                     @if ($type->active)
                                         @php
                                             $elementID = Str::slug($type->type);
-                                            $quotaFull = $type->getQuotaLeft() <= 0;
-                                            $isExpired = $type->isExpired();
-
-                                            $isInvalid = $quotaFull || $isExpired;
                                         @endphp
-                                        <tr class="{{ $isInvalid ? 'bg-red-100' : null }}">
+                                        <tr @class(['bg-red-100' => $type->isInvalid()])>
                                             <td>
                                                 <label>
                                                     <strong>{{ $type->type }}</strong>
@@ -42,7 +38,7 @@
                                             </td>
                                             <td>
                                                 <strong>
-                                                    @if ($isExpired)
+                                                    @if ($type->isExpired())
                                                         Expired!
                                                     @else
                                                         {{ $type->getPaidParticipantCount() }}/{{ $type->quota }}
@@ -50,8 +46,8 @@
                                                 </strong>
                                             </td>
                                             <td>
-                                                <input class="{{ !$isInvalid ? 'cursor-pointer' : null }}" id="{{ $elementID }}" type="radio" wire:model="type" value="{{ $isInvalid ? $index : $type->id }}" {{ $isInvalid || !$isLogged ? 'disabled' : '' }}>
-                                                <label class="{{ !$isInvalid ? 'cursor-pointer' : null }}" for="{{ $elementID }}">{{ $type->getCostWithCurrency() }}</label>
+                                                <input @class(['cursor-pointer' => !$type->isInvalid()]) id="{{ $elementID }}" type="radio" wire:model="type" value="{{ $type->isInvalid() ? $index : $type->id }}" @disabled($type->isInvalid() || !$isLogged)>
+                                                <label @class(['cursor-pointer' => !$type->isInvalid()]) for="{{ $elementID }}">{{ $type->getCostWithCurrency() }}</label>
                                             </td>
                                         </tr>
                                     @endif
@@ -113,8 +109,11 @@
                             </p>
                         @endif
                         <hr class="my-8">
-                        <div class="flex gap-2 mt-2 justify-end">
-                            <button type="submit" class="btn {{ $isLogged ? 'btn-primary' : 'btn-disabled' }} btn-sm" x-data x-on:click="window.scrollTo(0, 0)" wire:loading.attr="disabled">
+                        <div class="flex gap-2 mt-2 justify-end"> 
+                            <button type="submit" @class([
+                                'btn btn-sm btn-primary',
+                                'btn-disabled' => !$isLogged || $registrationTypeList->isEmpty(),
+                            ]) x-data x-on:click="window.scrollTo(0, 0)" wire:loading.attr="disabled">
                                 <span class="loading loading-spinner loading-xs" wire:loading></span>
                                 Register now
                             </button>

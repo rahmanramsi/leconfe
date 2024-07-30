@@ -2,6 +2,7 @@
 
 namespace App\Frontend\ScheduledConference\Pages;
 
+use App\Models\Enums\RegistrationStatus;
 use Squire\Models\Country;
 use App\Models\Registration;
 use App\Models\Enums\UserRole;
@@ -36,7 +37,7 @@ class ParticipantRegister extends Page
             return redirect(route(ParticipantRegisterStatus::getRouteName()));
     }
 
-    public function rules()
+    public function rules(): array
     {
         $rules =  [
             'type' => 'required',
@@ -44,7 +45,7 @@ class ParticipantRegister extends Page
         return $rules;
     }
 
-    public function messages()
+    public function messages(): array
     {
         $message = [
             'type' => 'Registration type have to selected.',
@@ -58,8 +59,11 @@ class ParticipantRegister extends Page
 
         $data = $this->validate();
         $registrationType = RegistrationType::where('id', $data['type'])->first();
+        $registrationTypeList = RegistrationType::select('*')
+            ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
+            ->get();
 
-        // validation
+        if ($registrationTypeList->isEmpty()) return;
         if (!$registrationType) return;
         if ($registrationType->isExpired()) return;
         if ($registrationType->getQuotaLeft() <= 0) return;
@@ -76,10 +80,16 @@ class ParticipantRegister extends Page
 
         $data = $this->formData;
         $registrationType = RegistrationType::where('id', $data['type'])->first();
+        $isFree = $registrationType->currency === 'free';
+
         Registration::create([
             'user_id' => auth()->user()->id,
             'registration_type_id' => $data['type'],
-            'paid_at' => $registrationType->currency === 'free' ? now() : null,
+            'name' => $registrationType->type,
+            'cost' => $registrationType->cost,
+            'currency' => $registrationType->currency,
+            'state' => $isFree ? RegistrationStatus::Paid : RegistrationStatus::Unpaid,
+            'paid_at' => $isFree ? now() : null,
         ]);
 
         return redirect(request()->header('Referer'));
@@ -118,10 +128,6 @@ class ParticipantRegister extends Page
         }
 
         return [
-            // account registration
-            'countries' => Country::all(),
-            'roles' => UserRole::selfAssignedRoleNames(),
-            'privacyStatementUrl' => '#',
             // participant registration
             'currentScheduledConference' => $currentScheduledConference,
             'isLogged' => $isLogged,

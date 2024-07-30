@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Schema;
 use App\Models\Enums\RegistrationStatus;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Arr;
 
 return new class extends Migration
 {
@@ -36,7 +37,7 @@ return new class extends Migration
             $table->string('name');
             $table->integer('cost');
             $table->string('currency');
-            $table->enum('state', RegistrationStatus::array())->default(RegistrationStatus::Unpaid->value);
+            $table->enum('state', Arr::except(RegistrationStatus::array(), RegistrationStatus::Trashed->value))->default(RegistrationStatus::Unpaid->value);
             $table->boolean('trashed')->default(false);
             $table->timestamp('paid_at')->nullable();
             $table->timestamps();
