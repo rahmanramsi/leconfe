@@ -8,6 +8,7 @@ use App\Models\Registration;
 use App\Models\Enums\UserRole;
 use Livewire\Attributes\Title;
 use App\Models\RegistrationType;
+use App\Models\Timeline;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -136,6 +137,7 @@ class ParticipantRegister extends Page
             'userCountry' => $userCountry,
             'userRegistration' => $userRegistration,
             'registrationTypeList' => $registrationTypeList,
+            'registrationOpen' => Timeline::isRegistrationOpen(),
             // participant registration confirm
             'isSubmit' => $this->isSubmit,
             'registrationType' => $registrationType,

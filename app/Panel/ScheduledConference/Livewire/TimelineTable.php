@@ -83,7 +83,8 @@ class TimelineTable extends Component implements HasForms, HasTable
                     ->unique(
                         ignorable: fn () => $form->getRecord(),
                         modifyRuleUsing: fn (Unique $rule) => $rule->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId()),
-                    ),
+                    )
+                    ->native(false),
             ]);
     }
 }

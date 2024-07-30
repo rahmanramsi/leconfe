@@ -4,7 +4,7 @@
     <div class="space-y-6">
         <x-website::breadcrumbs :breadcrumbs="$this->getBreadcrumbs()" />
     </div>
-    @if ($currentScheduledConference->isValid())
+    @if ($registrationOpen)
         <div class="mt-6 w-full">
             <div class="flex mb-5 space-x-4">
                 <h1 class="text-xl font-semibold min-w-fit">Participant Registration</h1>
@@ -204,7 +204,7 @@
     @else
         <div class="my-6 w-full">
             <p class="text-lg">
-                this conference are not in progress, please select other conference.
+                this conference registration are not open.
             </p>
         </div>
     @endif

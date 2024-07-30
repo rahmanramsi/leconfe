@@ -146,15 +146,6 @@ class ScheduledConference extends Model implements HasMedia, HasAvatar, HasName
         return route('livewirePageGroup.scheduledConference.pages.home', ['conference' => $this->conference, 'serie' => $this->path]);
     }
 
-    public function isValid(): bool
-    {
-        $start = Carbon::parse($this->date_start)->diffInDays(now(), false);
-        $end = Carbon::parse($this->date_end)->diffInDays(now(), false);
-        if ($start >= 0 && $end <= 0)
-            return true;
-        return false;
-    }
-
     public function isCurrent(): bool
     {
         return $this->state == ScheduledConferenceState::Current;
