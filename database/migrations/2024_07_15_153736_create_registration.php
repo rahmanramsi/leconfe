@@ -1,10 +1,10 @@
 <?php
 
-use App\Models\Enums\RegistrationStatus;
+use App\Models\User;
 use App\Models\RegistrationType;
 use App\Models\ScheduledConference;
-use App\Models\User;
 use Illuminate\Support\Facades\Schema;
+use App\Models\Enums\RegistrationStatus;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
@@ -27,12 +27,17 @@ return new class extends Migration
             $table->timestamp('closed_at');
             $table->timestamps();
         });
+
         Schema::create('registrations', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(ScheduledConference::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(User::class);
             $table->foreignIdFor(RegistrationType::class);
-            $table->boolean('is_trashed')->default(false);
+            $table->string('name');
+            $table->integer('cost');
+            $table->string('currency');
+            $table->enum('state', RegistrationStatus::array())->default(RegistrationStatus::Unpaid->value);
+            $table->boolean('trashed')->default(false);
             $table->timestamp('paid_at')->nullable();
             $table->timestamps();
         });
@@ -45,7 +50,5 @@ return new class extends Migration
     {
         Schema::dropIfExists('registration_types');
         Schema::dropIfExists('registration');
-        Schema::dropIfExists('registration_notifications');
-        Schema::dropIfExists('registration_options');
     }
 };

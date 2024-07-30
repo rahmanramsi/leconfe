@@ -8,31 +8,34 @@ use Filament\Tables;
 use Filament\Forms\Get;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Squire\Models\Currency;
 use App\Models\Registration;
 use App\Models\RegistrationType;
 use Filament\Resources\Resource;
 use Filament\Support\Colors\Color;
+use App\Models\ScheduledConference;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Grouping\Group;
 use Filament\Forms\Components\Select;
 use Filament\Resources\Components\Tab;
+use App\Models\Enums\RegistrationStatus;
 use Filament\Forms\Components\Checkbox;
 use Filament\Navigation\NavigationItem;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
+use Filament\Navigation\NavigationGroup;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Actions\DeleteBulkAction;
 use AnourValar\EloquentSerialize\Tests\Models\Post;
-use App\Models\ScheduledConference;
 use App\Panel\ScheduledConference\Resources\RegistrantResource\Pages;
 use App\Panel\ScheduledConference\Resources\RegistrantResource\RelationManagers;
-use Filament\Navigation\NavigationGroup;
 
 class RegistrantResource extends Resource
 {
@@ -49,7 +52,7 @@ class RegistrantResource extends Resource
     public static function canAccess(): bool
     {
         $user = auth()->user();
-        if($user->can('Registrant:viewAny')) {
+        if ($user->can('Registrant:viewAny')) {
             return true;
         }
         return false;
@@ -59,16 +62,19 @@ class RegistrantResource extends Resource
     {
         return $form
             ->schema([
-                Checkbox::make('paid')
-                    ->label('Set as paid')
-                    ->formatStateUsing(fn (Model $record) => $record->paid_at !== null ? true : false)
+                Select::make('state')
+                    ->options(
+                        Arr::except(RegistrationStatus::array(), RegistrationStatus::Trashed->value)
+                    )
+                    ->native(false)
+                    ->required()
                     ->live(),
                 DatePicker::make('paid_at')
                     ->label('Paid Date')
                     ->placeholder('Select registration paid date..')
                     ->prefixIcon('heroicon-m-calendar')
                     ->formatStateUsing(fn () => now())
-                    ->visible(fn (Get $get) => (bool) $get('paid'))
+                    ->visible(fn (Get $get) => $get('state') === RegistrationStatus::Paid->value)
                     ->required()
             ])
             ->columns(1);
@@ -87,21 +93,21 @@ class RegistrantResource extends Resource
             ->columns([
                 TextColumn::make('user.given_name')
                     ->label('User')
-                    ->formatStateUsing(fn (Model $record) => $record->user->given_name.' '.$record->user->family_name)
+                    ->formatStateUsing(fn (Model $record) => $record->user->full_name)
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('registration_type.type')
+                TextColumn::make('name')
                     ->label('Type')
-                    ->description(fn (Model $record) => $record->registration_type->getCostWithCurrency()),
-                TextColumn::make('is_trashed')
-                    ->label('Status')
-                    ->formatStateUsing(fn (Model $record) => Str::headline($record->getStatus()))
-                    ->badge()
-                    ->color(fn (Model $record) => match($record->getStatus()) {
-                        'paid' => Color::Green,
-                        'unpaid' => Color::Yellow,
-                        'trash' => Color::Red,
+                    ->description(function (Model $record) {
+                        $code = Str::upper($record->currency);
+                        $cost = money($record->cost, $record->currency);
+                        return "($code) $cost";
                     }),
+                TextColumn::make('state')
+                    ->label('State')
+                    ->formatStateUsing(fn (Model $record) => $record->getStatus())
+                    ->badge()
+                    ->color(fn (Model $record) => RegistrationStatus::from($record->state)->getColor()),
                 TextColumn::make('paid_at')
                     ->label('Paid Date')
                     ->placeholder('Not Paid')
@@ -119,11 +125,10 @@ class RegistrantResource extends Resource
             ->actions([
                 EditAction::make()
                     ->label('Decision')
-                    ->icon('heroicon-m-banknotes')
                     ->modalHeading('Paid Status Decision')
                     ->modalWidth('lg')
                     ->mutateFormDataUsing(function ($data) {
-                        if(!$data['paid']) {
+                        if ($data['state'] !== RegistrationStatus::Paid->value) {
                             $data['paid_at'] = null;
                         }
                         return $data;
@@ -135,23 +140,23 @@ class RegistrantResource extends Resource
                         ->icon('heroicon-m-trash')
                         ->requiresConfirmation()
                         ->action(function (Model $record) {
-                            $record->is_trashed = true;
+                            $record->trashed = true;
                             $record->save();
                         })
-                        ->visible(fn (Model $record) => !$record->is_trashed)
+                        ->visible(fn (Model $record) => $record->state !== RegistrationStatus::Trashed->value)
                         ->authorize('Registrant:delete'),
                     Action::make('restore')
                         ->color(Color::Green)
                         ->icon('heroicon-m-arrow-uturn-left')
                         ->requiresConfirmation()
                         ->action(function (Model $record) {
-                            $record->is_trashed = false;
+                            $record->trashed = false;
                             $record->save();
                         })
-                        ->hidden(fn (Model $record) => !$record->is_trashed)
+                        ->hidden(fn (Model $record) => $record->state !== RegistrationStatus::Trashed->value)
                         ->authorize('Registrant:edit'),
                     DeleteAction::make()
-                        ->hidden(fn (Model $record) => !$record->is_trashed)
+                        ->hidden(fn (Model $record) => $record->state !== RegistrationStatus::Trashed->value)
                         ->authorize('Registrant:delete'),
                 ]),
             ])
@@ -201,8 +206,8 @@ class RegistrantResource extends Resource
     {
         return [
             'index' => Pages\ListRegistrants::route('/'),
-            'type' => Pages\ListTypeSummary::route('/type'),
             'enroll' => Pages\EnrollUser::route('/enroll'),
+            'type' => Pages\ListTypeSummary::route('/type'),
         ];
     }
 }

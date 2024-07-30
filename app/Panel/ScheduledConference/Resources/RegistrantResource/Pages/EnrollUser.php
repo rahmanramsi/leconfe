@@ -9,10 +9,12 @@ use Filament\Actions;
 use Filament\Forms\Get;
 use App\Facades\Setting;
 use Filament\Tables\Table;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use App\Models\Registration;
 use Filament\Facades\Filament;
 use App\Models\RegistrationType;
+use Illuminate\Support\HtmlString;
 use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Support\Enums\FontWeight;
@@ -21,6 +23,7 @@ use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Enums\RegistrationStatus;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Resources\Pages\ListRecords;
@@ -29,9 +32,8 @@ use Filament\Tables\Columns\Layout\Split;
 use Filament\Tables\Columns\Layout\Stack;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\Placeholder;
-use App\Panel\ScheduledConference\Resources\RegistrantResource;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
-use Illuminate\Support\HtmlString;
+use App\Panel\ScheduledConference\Resources\RegistrantResource;
 
 class EnrollUser extends ListRecords
 {
@@ -51,14 +53,11 @@ class EnrollUser extends ListRecords
     public function getBreadcrumbs(): array
     {
         $resource = static::getResource();
-
-        $breadcrumbs = [
+        return [
             $resource::getUrl() => $resource::getBreadcrumb(),
             'List',
             'Enroll User',
         ];
-
-        return $breadcrumbs;
     }
 
     public static function getRegistrationTypeOptions(): array
@@ -80,7 +79,6 @@ class EnrollUser extends ListRecords
     {
         return [
             Placeholder::make('user')
-                // ->content($record->full_name),
                 ->content(new HtmlString('
                     <ul>
                         <li>Name: <strong>'.$record->full_name.'</strong></li>
@@ -104,16 +102,21 @@ class EnrollUser extends ListRecords
                 ]),
             Fieldset::make('Payment')
                 ->schema([
-                    Checkbox::make('paid_status')
-                        ->label('Set as unpaid')
-                        ->default(true)
+                    Select::make('state')
+                        ->options(
+                            Arr::except(RegistrationStatus::array(), RegistrationStatus::Trashed->value)
+                        )
+                        ->default(RegistrationStatus::Unpaid->value)
+                        ->native(false)
+                        ->required()
                         ->live(),
                     DatePicker::make('paid_at')
                         ->label('Paid Date')
-                        ->placeholder('Input paid date..')
-                        ->default(now())
-                        ->visible(fn (Get $get) => !$get('paid_status'))
-                        ->required(),
+                        ->placeholder('Select registration paid date..')
+                        ->prefixIcon('heroicon-m-calendar')
+                        ->formatStateUsing(fn () => now())
+                        ->visible(fn (Get $get) => $get('state') === RegistrationStatus::Paid->value)
+                        ->required()
                 ])
                 ->columns(1),
         ];
@@ -191,12 +194,17 @@ class EnrollUser extends ListRecords
                     ->createAnother(false)
                     ->modalSubmitActionLabel('Enroll')
                     ->mutateFormDataUsing(function (Model $record, $data) {
+                        $registration_type = RegistrationType::where('id', $data['registration_type_id'])->first();
+                        
+                        if(!$registration_type) return;
+
                         $data['user_id'] = $record->id;
+                        $data['name'] = $registration_type->type;
+                        $data['cost'] = $registration_type->cost;
+                        $data['currency'] = $registration_type->currency;
+    
                         return $data;
                     })
-            ])
-            ->bulkActions([
-                //null
             ])
             ->extremePaginationLinks();
     }

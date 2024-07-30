@@ -2,41 +2,40 @@
 
 namespace App\Models;
 
-use App\Models\Concerns\BelongsToScheduledConference;
+use App\Models\Enums\RegistrationStatus;
 use Illuminate\Database\Eloquent\Model;
 use Kra8\Snowflake\HasShortflakePrimary;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
+use App\Models\Concerns\BelongsToScheduledConference;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Registration extends Model
 {
-    use 
-        BelongsToScheduledConference, 
+    use
+        BelongsToScheduledConference,
         HasShortflakePrimary,
-        Cachable, 
+        Cachable,
         HasFactory;
 
     protected $guarded = ['id', 'serie_id'];
 
-    public function getStatus()
+    public function getState()
     {
-        if(!$this->is_trashed) {
-            if($this->paid_at === null)
-                return 'unpaid';
-            return 'paid';
-        }
-        return 'trash';
+        return $this->state;
     }
 
-    public function getPublicStatus()
+    public function isTrashed()
     {
-        switch ($this->getStatus()) {
-            case 'trash':
-                return 'failed';
-            default:
-                return $this->getStatus();
+        return $this->trashed;
+    }
+
+    public function getStatus()
+    {
+        if ($this->isTrashed()) {
+            return RegistrationStatus::Trashed->value;
         }
+        return $this->getState();
     }
 
     public function user(): BelongsTo

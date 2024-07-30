@@ -22,11 +22,11 @@
                             items-center 
                             rounded-md 
                             {{ 
-                            match ($userRegistration->getStatus()) {
-                                'paid' => 'bg-green-500',
-                                'unpaid' => 'bg-yellow-500',
-                                'trash' => 'bg-red-500',
-                            } 
+                                match($userRegistration->getStatus()) {
+                                    'paid' => 'bg-green-500',
+                                    'unpaid' => 'bg-yellow-500',
+                                    'trash' => 'bg-red-500',
+                                } 
                             }}
                             px-2 py-1 
                             text-xs 
@@ -59,7 +59,7 @@
                     <td class="align-text-top pl-5">:</td>
                     <td class="pl-2">{{ $userRegistration->registration_type->getCostWithCurrency() }}</td>
                 </tr>
-                @if ($userRegistration->getStatus() === 'paid' && $userRegistration->registration_type->currency !== 'free')
+                @if ($userRegistration->getStatus() === 'Paid' && $userRegistration->registration_type->currency !== 'free')
                     <tr>
                         <td class="align-text-top">Payment Date</td>
                         <td class="align-text-top pl-5">:</td>
@@ -69,7 +69,7 @@
                     </tr>
                 @endif
             </table>
-            @if ($userRegistration->getStatus() === 'unpaid')
+            @if ($userRegistration->getStatus() === 'Unpaid')
                 <hr class="my-8">
                 <div class="w-full">
                     @foreach ($paymentList as $currency)
