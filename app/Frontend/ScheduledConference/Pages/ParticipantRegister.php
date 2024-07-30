@@ -10,6 +10,7 @@ use Livewire\Attributes\Title;
 use App\Models\RegistrationType;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Rahmanramsi\LivewirePageGroup\PageGroup;
 use Rahmanramsi\LivewirePageGroup\Pages\Page;
@@ -101,6 +102,11 @@ class ParticipantRegister extends Page
         $this->isSubmit = false;
 
         return 1;
+    }
+
+    public static function formatRegistrationCost(Model $record): string
+    {
+        return ParticipantRegisterStatus::formatRegistrationCost($record);
     }
 
     protected function getViewData(): array

@@ -166,10 +166,10 @@ class RegistrationTypePage extends Component implements HasTable, HasForms
                     ->badge()
                     ->color(Color::Blue),
                 TextColumn::make('cost')
-                    ->formatStateUsing(fn (Model $record) => $record->getCost()),
+                    ->formatStateUsing(fn (Model $record) => ($record->cost === 0) ? 'Free' : money($record->cost, $record->currency)),
                 TextColumn::make('currency')
                     ->label('Currency')
-                    ->formatStateUsing(fn (Model $record) => $record->currency === 'free' ? 'None' : currency($record->currency)->getName() . ' (' . currency($record->currency)->getCurrency() . ')'),
+                    ->formatStateUsing(fn (Model $record) => ($record->currency === 'free') ? 'None' : currency($record->currency)->getName() . ' (' . currency($record->currency)->getCurrency() . ')'),
                 TextColumn::make('opened_at')
                     ->date('Y-M-d'),
                 TextColumn::make('closed_at')

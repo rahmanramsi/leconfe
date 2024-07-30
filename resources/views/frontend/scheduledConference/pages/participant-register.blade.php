@@ -47,7 +47,7 @@
                                             </td>
                                             <td>
                                                 <input @class(['cursor-pointer' => !$type->isInvalid()]) id="{{ $elementID }}" type="radio" wire:model="type" value="{{ $type->isInvalid() ? $index : $type->id }}" @disabled($type->isInvalid() || !$isLogged)>
-                                                <label @class(['cursor-pointer' => !$type->isInvalid()]) for="{{ $elementID }}">{{ $type->getCostWithCurrency() }}</label>
+                                                <label @class(['cursor-pointer' => !$type->isInvalid()]) for="{{ $elementID }}">{{ static::formatRegistrationCost($type) }}</label>
                                             </td>
                                         </tr>
                                     @endif
@@ -143,7 +143,7 @@
                         <tr>
                             <td class="align-text-top">Cost</td>
                             <td class="align-text-top pl-5">:</td>
-                            <td class="pl-2">{{ $registrationType->getCostWithCurrency() }}</td>
+                            <td class="pl-2">{{ static::formatRegistrationCost($registrationType) }}</td>
                         </tr>
                     </table>
                     <p class="mt-2">

@@ -48,7 +48,9 @@
                 <tr>
                     <td class="align-text-top">Cost</td>
                     <td class="align-text-top pl-5">:</td>
-                    <td class="pl-2">{{ $userRegistration->registrationType->getCostWithCurrency() }}</td>
+                    <td class="pl-2">
+                        {{ static::formatRegistrationCost($userRegistration) }}
+                    </td>
                 </tr>
                 <tr>
                     <td class="align-text-top">Registration Date</td>

@@ -47,15 +47,6 @@ class RegistrationType extends Model
         return $this->isQuotaFull() || $this->isExpired();
     }
 
-    public function getCost()
-    {
-        return $this->cost === 0 ? 'Free' : money($this->cost, $this->currency);
-    }
-    public function getCostWithCurrency()
-    {
-        return $this->cost === 0 ? 'Free' : ($this->currency === 'free' ? '' : ' (' . currency($this->currency)->getCurrency() . ') ' . money($this->cost, $this->currency));
-    }
-
     public function registration(): HasMany
     {
         return $this->hasMany(Registration::class, 'registration_type_id', 'id');
