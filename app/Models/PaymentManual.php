@@ -16,7 +16,5 @@ class PaymentManual extends Model
         Cachable,
         HasFactory;
 
-    protected $table = 'manual_payment';
-
-    protected $guarded = ['id', 'serie_id'];
+    protected $guarded = ['id', 'scheduled_conference_id'];
 }

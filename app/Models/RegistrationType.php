@@ -20,7 +20,7 @@ class RegistrationType extends Model
         Metable,
         HasFactory;
 
-    protected $guarded = ['id', 'serie_id'];
+    protected $guarded = ['id', 'scheduled_conference_id'];
 
     public function getRegisteredUserCount()
     {

@@ -18,7 +18,7 @@ class Registration extends Model
         Cachable,
         HasFactory;
 
-    protected $guarded = ['id', 'serie_id'];
+    protected $guarded = ['id', 'scheduled_conference_id'];
 
     public function getState()
     {
