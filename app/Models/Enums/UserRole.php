@@ -47,6 +47,9 @@ enum UserRole: string implements HasLabel
         return [
             static::SeriesManager,
             static::ConferenceManager,
+            static::Reviewer,
+            static::Author,
+            static::Reader,
         ];
     }
 
@@ -54,9 +57,6 @@ enum UserRole: string implements HasLabel
     {
         return [
             static::ConferenceEditor,
-            static::Reviewer,
-            static::Author,
-            static::Reader,
         ];
     }
 

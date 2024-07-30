@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0bf543c52a1e1f398251cf69a79b8cb2",
+    "content-hash": "0664499c39e8ed08422db6d022a36d68",
     "packages": [
         {
             "name": "akaunting/laravel-money",
@@ -555,81 +555,6 @@
                 }
             ],
             "time": "2024-03-29T20:28:36+00:00"
-        },
-        {
-            "name": "binarytorch/larecipe",
-            "version": "v2.7.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/saleem-hadad/larecipe.git",
-                "reference": "5e00d457a8ae8daf14d45b0f65e53c9c14c30e3d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/saleem-hadad/larecipe/zipball/5e00d457a8ae8daf14d45b0f65e53c9c14c30e3d",
-                "reference": "5e00d457a8ae8daf14d45b0f65e53c9c14c30e3d",
-                "shasum": ""
-            },
-            "require": {
-                "erusev/parsedown-extra": "^0.8.1|^0.8",
-                "illuminate/support": "^5.4|^6.0|^7.0|^8.0|^9.0|^10.0|^11.0",
-                "illuminate/view": "^5.4|^6.0|^7.0|^8.0|^9.0|^10.0|^11.0",
-                "php": "^7.1|^8.0",
-                "symfony/dom-crawler": "^4.1|^5.0|^6.0|^7.0"
-            },
-            "require-dev": {
-                "laravel/framework": "^5.4|^6.0|^7.0|^8.0|^9.0|^10.0|^11.0",
-                "orchestra/testbench": "^3.4|^4.0|^5.0|^7.0|^8.0|^9.0",
-                "phpunit/phpunit": "^7.0|^8.0|^9.0|^10.0"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "BinaryTorch\\LaRecipe\\LaRecipeServiceProvider"
-                    ],
-                    "aliases": {
-                        "LaRecipe": "BinaryTorch\\LaRecipe\\LaRecipe"
-                    }
-                }
-            },
-            "autoload": {
-                "files": [
-                    "src/Helpers/helpers.php"
-                ],
-                "psr-4": {
-                    "BinaryTorch\\LaRecipe\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Saleem Hadad",
-                    "email": "saleem@binary-torch.com"
-                }
-            ],
-            "description": "Generate gorgeous recipes for your Laravel applications using MarkDown",
-            "keywords": [
-                "api",
-                "docs",
-                "documentation",
-                "laravel",
-                "markdown"
-            ],
-            "support": {
-                "issues": "https://github.com/saleem-hadad/larecipe/issues",
-                "source": "https://github.com/saleem-hadad/larecipe"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/saleem-hadad",
-                    "type": "github"
-                }
-            ],
-            "time": "2024-03-26T11:57:09+00:00"
         },
         {
             "name": "blade-ui-kit/blade-heroicons",
@@ -2058,107 +1983,6 @@
                 }
             ],
             "time": "2023-10-06T06:47:41+00:00"
-        },
-        {
-            "name": "erusev/parsedown",
-            "version": "1.7.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/erusev/parsedown.git",
-                "reference": "cb17b6477dfff935958ba01325f2e8a2bfa6dab3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/erusev/parsedown/zipball/cb17b6477dfff935958ba01325f2e8a2bfa6dab3",
-                "reference": "cb17b6477dfff935958ba01325f2e8a2bfa6dab3",
-                "shasum": ""
-            },
-            "require": {
-                "ext-mbstring": "*",
-                "php": ">=5.3.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^4.8.35"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Parsedown": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Emanuil Rusev",
-                    "email": "hello@erusev.com",
-                    "homepage": "http://erusev.com"
-                }
-            ],
-            "description": "Parser for Markdown.",
-            "homepage": "http://parsedown.org",
-            "keywords": [
-                "markdown",
-                "parser"
-            ],
-            "support": {
-                "issues": "https://github.com/erusev/parsedown/issues",
-                "source": "https://github.com/erusev/parsedown/tree/1.7.x"
-            },
-            "time": "2019-12-30T22:54:17+00:00"
-        },
-        {
-            "name": "erusev/parsedown-extra",
-            "version": "0.8.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/erusev/parsedown-extra.git",
-                "reference": "91ac3ff98f0cea243bdccc688df43810f044dcef"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/erusev/parsedown-extra/zipball/91ac3ff98f0cea243bdccc688df43810f044dcef",
-                "reference": "91ac3ff98f0cea243bdccc688df43810f044dcef",
-                "shasum": ""
-            },
-            "require": {
-                "erusev/parsedown": "^1.7.4"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^4.8.35"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "ParsedownExtra": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Emanuil Rusev",
-                    "email": "hello@erusev.com",
-                    "homepage": "http://erusev.com"
-                }
-            ],
-            "description": "An extension of Parsedown that adds support for Markdown Extra.",
-            "homepage": "https://github.com/erusev/parsedown-extra",
-            "keywords": [
-                "markdown",
-                "markdown extra",
-                "parsedown",
-                "parser"
-            ],
-            "support": {
-                "issues": "https://github.com/erusev/parsedown-extra/issues",
-                "source": "https://github.com/erusev/parsedown-extra/tree/0.8.x"
-            },
-            "time": "2019-12-30T23:20:37+00:00"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -5699,24 +5523,24 @@
         },
         {
             "name": "mchev/banhammer",
-            "version": "v1.2.1",
+            "version": "v2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mchev/banhammer.git",
-                "reference": "2a305a891d630f736a20356146835a1c4f096479"
+                "reference": "9821abe9a2be60742b43b880091481c2a113d938"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mchev/banhammer/zipball/2a305a891d630f736a20356146835a1c4f096479",
-                "reference": "2a305a891d630f736a20356146835a1c4f096479",
+                "url": "https://api.github.com/repos/mchev/banhammer/zipball/9821abe9a2be60742b43b880091481c2a113d938",
+                "reference": "9821abe9a2be60742b43b880091481c2a113d938",
                 "shasum": ""
             },
             "require": {
                 "php": "^8.0"
             },
             "require-dev": {
-                "orchestra/testbench": "^7.0|^8.0",
-                "phpunit/phpunit": "^9.5"
+                "orchestra/testbench": "^7.0|^8.0|^9.0",
+                "phpunit/phpunit": "^9.5|^10.5|^11.0"
             },
             "type": "library",
             "extra": {
@@ -5742,19 +5566,20 @@
                     "role": "Developer"
                 }
             ],
-            "description": "BanHamer for Laravel allows you to ban any Model by key and by IP.",
+            "description": "Banhammer for Laravel allows you to ban any Model by key and by IP.",
             "homepage": "https://github.com/mchev/banhammer",
             "keywords": [
                 "IP",
                 "ban",
                 "bannable",
                 "bans-for-laravel",
+                "country",
                 "laravel",
                 "mchev"
             ],
             "support": {
                 "issues": "https://github.com/mchev/banhammer/issues",
-                "source": "https://github.com/mchev/banhammer/tree/v1.2.1"
+                "source": "https://github.com/mchev/banhammer/tree/v2.3.0"
             },
             "funding": [
                 {
@@ -5762,7 +5587,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-06-10T16:46:08+00:00"
+            "time": "2024-05-24T10:09:58+00:00"
         },
         {
             "name": "mohamedsabil83/filament-forms-tinyeditor",

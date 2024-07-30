@@ -1,0 +1,40 @@
+<?php
+
+namespace App\Panel\Conference\Widgets;
+
+use App\Models\Enums\SubmissionStatus;
+use Filament\Widgets\Widget;
+
+class CurrentScheduledConferenceOverview extends Widget
+{
+    protected static bool $isLazy = false;
+
+    protected static string $view = 'panel.conference.widgets.current-scheduled-conference-overview';
+
+    /**
+     * @return array<string, mixed>
+     */
+    protected function getViewData(): array
+    {
+        $currentConference = app()->getCurrentConference();
+        $currentScheduledConference = $currentConference->currentScheduledConference;
+
+        $submissionTotal = $currentScheduledConference->submissions->count();
+        $submissionAcceptedTotal = $currentScheduledConference
+            ->submissions()
+            ->whereIn('status', [
+                SubmissionStatus::OnReview,
+                SubmissionStatus::OnPresentation,
+                SubmissionStatus::Editing,
+                SubmissionStatus::Published,
+            ])
+            ->count();
+
+        return [
+            'currentConference' => $currentConference,
+            'currentScheduledConference' => $currentScheduledConference,
+            'submissionTotal' => $submissionTotal,
+            'submissionAcceptedTotal' => $submissionAcceptedTotal,
+        ];
+    }
+}

@@ -21,7 +21,6 @@ class SubmissionsTableWidget extends BaseWidget
     {
         $submissionQuery = ManageSubmissions::generateQueryByCurrentUser('My Queue');
 
-
         return SubmissionResource::table($table)
             ->heading('My Submissions')
             ->query($submissionQuery);

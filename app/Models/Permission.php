@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
-use App\Models\Concerns\HasVirtualColumns;
+use App\Models\Enums\UserRole;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\Permission\Models\Permission as Model;
+use Spatie\Permission\PermissionRegistrar;
 
 class Permission extends Model
 {
@@ -38,9 +40,21 @@ class Permission extends Model
 
     public static function getProtectedPermissionContexts()
     {
-        return [
+        return !auth()->user()?->hasRole(UserRole::Admin) ? [
             'Administration',
             'Plugin',
-        ];
+            'Panel',
+        ] : [];
     }
+
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            config('permission.models.role'),
+            config('permission.table_names.role_has_permissions'),
+            app(PermissionRegistrar::class)->pivotPermission,
+            app(PermissionRegistrar::class)->pivotRole
+        )->withoutGlobalScopes();
+    }
+
 }

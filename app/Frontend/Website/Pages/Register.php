@@ -135,10 +135,8 @@ class Register extends Page
             foreach ($data['selfAssignRoles'] as $conferenceId => $roles) {
                 // get keys of roles where value is true
                 $roles = array_keys(array_filter($roles));
-                setPermissionsTeamId($conferenceId);
                 $user->assignRole($roles);
             }
-            setPermissionsTeamId(null);
         }
 
         Filament::auth()->login($user);

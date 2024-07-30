@@ -212,7 +212,5 @@ class AppServiceProvider extends ServiceProvider
                 Livewire::setUpdateRoute(fn ($handle) => Route::post($currentConference->path . '/livewire/update', $handle)->middleware('web'));
             }
         }
-        
-        setPermissionsTeamId($this->app->getCurrentConferenceId());
     }
 }

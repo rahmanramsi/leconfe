@@ -27,25 +27,29 @@ class UserSeeder extends Seeder
         $admin->assignRole(UserRole::Admin->value);
 
         $users = \App\Models\User::factory(100)->create();
-        
+
 
         $conferences = Conference::all();
+        $conferenceRoles = collect(UserRole::conferenceRoles());
         foreach ($conferences as $key => $conference) {
             app()->setCurrentConferenceId($conference->getKey());
 
-            $users->random(2)->each(fn ($user) => $user->assignRole(UserRole::conferenceRoles()));
+            $users->random(2)->each(fn ($user) => $user->assignRole($conferenceRoles->random(2)));
         }
 
         $scheduledConferences = ScheduledConference::all();
+        $scheduledConferenceRoles = collect([
+            UserRole::Reviewer,
+            UserRole::Author,
+            UserRole::Reader,
+            UserRole::ConferenceEditor,
+        ]);
+
         foreach ($scheduledConferences as $key => $scheduledConference) {
             app()->setCurrentConferenceId($scheduledConference->conference_id);
             app()->setCurrentScheduledConferenceId($scheduledConference->getKey());
 
-            $roles = collect(UserRole::scheduledConferenceRoles());
-
-
-            $users->random(50)->each(fn ($user) => $user->assignRole($roles->random(2)));
+            $users->random(50)->each(fn ($user) => $user->assignRole($scheduledConferenceRoles->random()));
         }
-
     }
 }
