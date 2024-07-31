@@ -15,6 +15,7 @@ class Track extends Model
     protected $fillable = [
         'title',
         'abbreviation',
+        'scheduled_conference_id',
     ];
 
     protected static function booted(): void

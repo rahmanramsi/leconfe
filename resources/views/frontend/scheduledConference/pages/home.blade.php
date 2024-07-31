@@ -2,7 +2,7 @@
     @if($currentSerie)
         <div class="space-y-8">
             <x-scheduledConference::alert-scheduled-conference :scheduled-conference="$currentSerie" />
-
+            @if ($currentSerie->hasMedia('cover')||$currentSerie->getMeta('about')||$currentSerie->getMeta('additional_content'))
             <section id="highlight-conference" class="space-y-4">
                 <div class="flex flex-col sm:flex-row flex-wrap space-y-4 sm:space-y-0 gap-4">
                     <div class="flex flex-col gap-4 flex-1">
@@ -26,6 +26,7 @@
                     </div>
                 </div>
             </section>
+            @endif
             @if ($currentSerie->sponsors->isNotEmpty())
                 <section id="conference-partner" class="space-y-4">
                     <div class="sponsors space-y-4" x-data="carousel">

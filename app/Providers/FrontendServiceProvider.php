@@ -83,9 +83,6 @@ class FrontendServiceProvider extends ServiceProvider
             ->id('scheduledConference')
             ->path('{conference:path}/scheduled/{serie:path}')
             ->layout('frontend.website.components.layouts.app')
-            ->bootUsing(function () {
-
-            })
             ->middleware([
                 'web',
                 IdentifyConference::class,

@@ -134,6 +134,10 @@ class ScheduledConferenceResource extends Resource
                         ->modalHeading('Move To Trash')
                         ->hidden(fn (ScheduledConference $record) => $record->isCurrent() || $record->trashed())
                         ->successNotificationTitle('Serie moved to trash'),
+                    Tables\Actions\ForceDeleteAction::make()
+                        ->label('Delete Permanently')
+                        ->hidden(fn (ScheduledConference $record) => ! $record->trashed())
+                        ->successNotificationTitle('Serie deleted permanently'),
                 ]),
             ]);
     }
