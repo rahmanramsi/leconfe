@@ -27,20 +27,23 @@ use Filament\Navigation\NavigationItem;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Enums\RegistrationPaymentState;
 use Filament\Forms\Components\TextInput;
 use Filament\Navigation\NavigationGroup;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Database\Eloquent\Builder;
+use App\Models\Enums\RegistrationPaymentType;
 use Filament\Tables\Actions\DeleteBulkAction;
+use App\Models\Enums\RegistrationPaymentState;
 use Filament\Forms\Components\Group as FormGroup;
 use AnourValar\EloquentSerialize\Tests\Models\Post;
-use App\Models\Enums\RegistrationPaymentType;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use App\Panel\ScheduledConference\Resources\RegistrantResource\Pages;
 use App\Panel\ScheduledConference\Resources\RegistrantResource\RelationManagers;
+use Filament\Tables\Actions\ForceDeleteAction;
+use Filament\Tables\Actions\RestoreAction;
 
 class RegistrantResource extends Resource
 {
@@ -71,9 +74,7 @@ class RegistrantResource extends Resource
                     ->relationship('registrationPayment')
                     ->schema([
                         Select::make('state')
-                            ->options(
-                                Arr::except(RegistrationPaymentState::array(), RegistrationPaymentState::Trashed->value)
-                            )
+                            ->options(RegistrationPaymentState::array())
                             ->native(false)
                             ->required()
                             ->live(),
@@ -146,14 +147,14 @@ class RegistrantResource extends Resource
                     }),
                 TextColumn::make('registrationPayment.state')
                     ->label('State')
-                    ->formatStateUsing(fn (Model $record) => $record->getStatus())
                     ->badge()
-                    ->color(fn (Model $record) => RegistrationPaymentState::from($record->getStatus())->getColor()),
-                TextColumn::make('registrationPayment.paid_at')
-                    ->label('Paid Date')
-                    ->placeholder('Not Paid')
-                    ->date('Y-M-d')
-                    ->sortable(),
+                    ->color(fn (Model $record) => RegistrationPaymentState::from($record->getState())->getColor()),
+                TextColumn::make('deleted_at')
+                    ->label('Status')
+                    ->placeholder('Valid')
+                    ->formatStateUsing(fn () => "Trashed")
+                    ->badge()
+                    ->color(Color::Red),
                 TextColumn::make('created_at')
                     ->label('Registration Date')
                     ->date('Y-M-d')
@@ -170,28 +171,14 @@ class RegistrantResource extends Resource
                     ->modalWidth('lg')
                     ->authorize('Registrant:edit'),
                 ActionGroup::make([
-                    Action::make('trash')
-                        ->color(Color::Red)
-                        ->icon('heroicon-m-trash')
-                        ->requiresConfirmation()
-                        ->action(function (Model $record) {
-                            $record->trashed = true;
-                            $record->save();
-                        })
-                        ->visible(fn (Model $record) => !$record->trashed)
-                        ->authorize('Registrant:delete'),
-                    Action::make('restore')
-                        ->color(Color::Green)
-                        ->icon('heroicon-m-arrow-uturn-left')
-                        ->requiresConfirmation()
-                        ->action(function (Model $record) {
-                            $record->trashed = false;
-                            $record->save();
-                        })
-                        ->hidden(fn (Model $record) => !$record->trashed)
-                        ->authorize('Registrant:edit'),
                     DeleteAction::make()
-                        ->hidden(fn (Model $record) => !$record->trashed)
+                        ->label('Trash')
+                        ->authorize('Registrant:delete'),
+                    RestoreAction::make()
+                        ->color(Color::Green)
+                        ->authorize('Registrant:delete'),
+                    ForceDeleteAction::make()
+                        ->label('Delete')
                         ->authorize('Registrant:delete'),
                 ]),
             ])
@@ -244,5 +231,13 @@ class RegistrantResource extends Resource
             'enroll' => Pages\EnrollUser::route('/enroll'),
             'type' => Pages\ListTypeSummary::route('/type'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
     }
 }

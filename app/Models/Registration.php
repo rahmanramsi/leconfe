@@ -2,20 +2,21 @@
 
 namespace App\Models;
 
-use App\Models\Enums\RegistrationPaymentState;
 use Illuminate\Database\Eloquent\Model;
 use Kra8\Snowflake\HasShortflakePrimary;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Enums\RegistrationPaymentState;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use App\Models\Concerns\BelongsToScheduledConference;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Registration extends Model
 {
-    use BelongsToScheduledConference, HasShortflakePrimary, Cachable, HasFactory;
+    use BelongsToScheduledConference, HasShortflakePrimary, Cachable, HasFactory, SoftDeletes;
 
-    public const TRASHED = 'Trashed';
+    public const STATUS_TRASHED = 'Trashed';
 
     protected $guarded = ['id', 'scheduled_conference_id'];
 
@@ -27,13 +28,13 @@ class Registration extends Model
 
     public function isTrashed()
     {
-        return $this->trashed;
+        return $this->trashed();
     }
 
     public function getStatus()
     {
         if ($this->isTrashed()) {
-            return RegistrationPaymentState::Trashed->value;
+            return self::STATUS_TRASHED;
         }
 
         return $this->getState();

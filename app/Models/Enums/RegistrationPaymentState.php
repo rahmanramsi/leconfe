@@ -14,7 +14,6 @@ enum RegistrationPaymentState: string implements HasLabel, HasColor
 
     case Paid = 'Paid';
     case Unpaid = 'Unpaid';
-    case Trashed = 'Trashed';
 
     public function getLabel(): ?string
     {
@@ -26,7 +25,6 @@ enum RegistrationPaymentState: string implements HasLabel, HasColor
         return match ($this) {
             self::Paid => Color::Green,
             self::Unpaid => Color::Yellow,
-            self::Trashed => Color::Red,
         };
     }
 }

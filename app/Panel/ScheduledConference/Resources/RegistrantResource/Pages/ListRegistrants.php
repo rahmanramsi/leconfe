@@ -32,14 +32,14 @@ class ListRegistrants extends ListRecords
             'paid' => Tab::make()
                 ->modifyQueryUsing(
                     fn (Builder $query) => $query
-                        ->where('trashed', false)
+                        ->WhereNull('deleted_at')  
                         ->whereHas('registrationPayment', function ($query) {
                             $query->where('state', RegistrationPaymentState::Paid->value);
                         })
                 )
                 ->badge(
                     fn () => static::$resource::getEloquentQuery()
-                        ->where('trashed', false)
+                        ->WhereNull('deleted_at')  
                         ->whereHas('registrationPayment', function ($query) {
                             $query->where('state', RegistrationPaymentState::Paid->value);
                         })
@@ -48,14 +48,14 @@ class ListRegistrants extends ListRecords
             'unpaid' => Tab::make()
                 ->modifyQueryUsing(
                     fn (Builder $query) => $query
-                        ->where('trashed', false)
+                        ->WhereNull('deleted_at') 
                         ->whereHas('registrationPayment', function ($query) {
                             $query->where('state', RegistrationPaymentState::Unpaid->value);
                         })
                 )
                 ->badge(
                     fn () => static::$resource::getEloquentQuery()
-                        ->where('trashed', false)
+                        ->WhereNull('deleted_at')    
                         ->whereHas('registrationPayment', function ($query) {
                             $query->where('state', RegistrationPaymentState::Unpaid->value);
                         })
@@ -65,11 +65,11 @@ class ListRegistrants extends ListRecords
             'trash' => Tab::make()
                 ->modifyQueryUsing(
                     fn (Builder $query) => $query
-                        ->where('trashed', true)
+                        ->whereNotNull('deleted_at')
                 )
                 ->badge(
                     fn () => static::$resource::getEloquentQuery()
-                        ->where('trashed', true)
+                        ->whereNotNull('deleted_at')    
                         ->count()
                 ),
             'all' => Tab::make()

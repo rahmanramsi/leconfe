@@ -133,7 +133,7 @@ class EnrollUser extends ListRecords
                 ->schema([
                     Select::make('registrationPayment.state')
                         ->options(
-                            Arr::except(RegistrationPaymentState::array(), RegistrationPaymentState::Trashed->value)
+                            RegistrationPaymentState::array()
                         )
                         ->default(RegistrationPaymentState::Unpaid->value)
                         ->native(false)

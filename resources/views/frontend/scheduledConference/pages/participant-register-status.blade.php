@@ -1,6 +1,7 @@
 @use('Illuminate\Support\Str')
 @use('Carbon\Carbon')
 @use('App\Models\Enums\RegistrationPaymentState')
+@use('App\Models\Registration')
 <x-website::layouts.main>
     @if ($isLogged)
         <div class="space-y-6">
@@ -22,10 +23,10 @@
                             'inline-flex items-center rounded-md px-2 py-1 text-xs font-medium text-white ring-1 ring-inset ring-gray-500/10', 
                             'bg-green-500' => $userRegistration->getStatus() === RegistrationPaymentState::Paid->value,
                             'bg-yellow-500' => $userRegistration->getStatus() === RegistrationPaymentState::Unpaid->value,
-                            'bg-red-500' => $userRegistration->getStatus() === RegistrationPaymentState::Trashed->value,
+                            'bg-red-500' => $userRegistration->getStatus() === Registration::STATUS_TRASHED,
                         ])>
                             {{ Str::headline(match($userRegistration->getStatus()) {
-                                RegistrationPaymentState::Trashed->value => 'Failed',
+                                Registration::STATUS_TRASHED => 'Failed',
                                 default => $userRegistration->getStatus(),
                             }) }}
                         </span>

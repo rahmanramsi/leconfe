@@ -31,7 +31,7 @@ class ParticipantRegister extends Page
     public function mount()
     {
         $isLogged = auth()->check();
-        $userRegistration = !$isLogged ? null : Registration::select('*')
+        $userRegistration = !$isLogged ? null : Registration::withTrashed()
             ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
             ->whereUserId(auth()->user()->id)
             ->first();
@@ -115,7 +115,7 @@ class ParticipantRegister extends Page
 
         $isLogged = auth()->check();
 
-        $userRegistration = !$isLogged ? null : Registration::select('*')
+        $userRegistration = !$isLogged ? null : Registration::withTrashed()
             ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
             ->whereUserId(auth()->user()->id)
             ->first();

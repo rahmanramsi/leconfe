@@ -35,7 +35,7 @@ return new class extends Migration
             $table->foreignIdFor(ScheduledConference::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(User::class);
             $table->foreignIdFor(RegistrationType::class);
-            $table->boolean('trashed')->default(false);
+            $table->softDeletes();
             $table->timestamps();
         });
 
@@ -48,7 +48,7 @@ return new class extends Migration
             $table->text('description');
             $table->integer('cost');
             $table->string('currency');
-            $table->enum('state', Arr::except(RegistrationPaymentState::array(), RegistrationPaymentState::Trashed->value))->default(RegistrationPaymentState::Unpaid->value);
+            $table->enum('state', RegistrationPaymentState::array())->default(RegistrationPaymentState::Unpaid->value);
             $table->timestamp('paid_at')->nullable();
             $table->timestamps();
         });
