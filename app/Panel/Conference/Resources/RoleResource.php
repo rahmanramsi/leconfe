@@ -24,7 +24,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 use App\Models\Permission;
 use Spatie\Permission\PermissionRegistrar;
-use Livewire\Component as Livewire;
 
 class RoleResource extends Resource
 {
@@ -41,6 +40,14 @@ class RoleResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return static::getModel()::query()->where('name', '!=', UserRole::Admin);
+    }
+
+    /**
+     * This Resource is only for development purposes.
+     */
+    public static function isDiscovered(): bool
+    {
+        return ! app()->isProduction();
     }
 
     public static function form(Form $form): Form

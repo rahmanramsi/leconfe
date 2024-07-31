@@ -66,6 +66,11 @@ class ScheduledConference extends Model implements HasMedia, HasAvatar, HasName
         return $this->belongsTo(Conference::class);
     }
 
+    public function submissions(): HasMany
+    {
+        return $this->hasMany(Submission::class);
+    }
+
     public function venues(): HasMany
     {
         return $this->hasMany(Venue::class);
@@ -118,7 +123,9 @@ class ScheduledConference extends Model implements HasMedia, HasAvatar, HasName
 
     public function getPanelUrl(): string
     {
-        return route('filament.scheduledConference.pages.dashboard', ['serie' => $this->path]);
+        $currentConference = app()->getCurrentConference() ?? $this->conference;
+
+        return route('filament.scheduledConference.pages.dashboard', ['serie' => $this->path, 'conference' => $currentConference]);
     }
 
     public function getFilamentAvatarUrl(): ?string

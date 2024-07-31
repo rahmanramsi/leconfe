@@ -19,11 +19,16 @@ class Overview extends BaseWidget
     protected function getStats(): array
     {
         return [
-            Stat::make('Submitted Submissions', Submission::count())
+            Stat::make('Submitted Papers', Submission::count())
                 ->icon('heroicon-o-document-text')
-                ->description('Total number of submissions'),
-            Stat::make('Published Submission', Submission::query()
-                ->where('status', SubmissionStatus::Published)
+                ->description('Total number of papers submitted'),
+            Stat::make('Accepted Papers', Submission::query()
+                ->whereIn('status', [
+                    SubmissionStatus::OnReview,
+                    SubmissionStatus::OnPresentation,
+                    SubmissionStatus::Editing,
+                    SubmissionStatus::Published,
+                ])
                 ->where('published_at', '>=', now()->subMonth())
                 ->count())
                 ->description('Published Submission in the last 30 days'),

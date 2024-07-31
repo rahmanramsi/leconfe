@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Http\Middleware\IdentifyConference;
+use App\Http\Middleware\IdentifyScheduledConference;
 use App\Http\Middleware\SetupConference;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
@@ -88,6 +89,7 @@ class FrontendServiceProvider extends ServiceProvider
             ->middleware([
                 'web',
                 IdentifyConference::class,
+                IdentifyScheduledConference::class,
             ], true)
             ->discoverPages(in: app_path('Frontend/ScheduledConference/Pages'), for: 'App\\Frontend\\ScheduledConference\\Pages');
     }

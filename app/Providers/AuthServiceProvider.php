@@ -28,12 +28,6 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if ($this->app->isProduction()) {
-            Gate::define('viewLarecipe', function ($user, $documentation) {
-                return false;
-            });
-        }
-
         if (! $this->app->isProduction()) {
             Gate::before(function (Authorizable $user, string $ability) {
                 if (! Str::contains($ability, ':')) {

@@ -96,6 +96,8 @@ class SetupDefaultData
 
     protected function setupScheduledConference(Request $request, $currentScheduledConference)
     {
+        View::share('currentConference', app()->getCurrentConference());
+        View::share('currentScheduledConference', $currentScheduledConference);
         View::share('homeUrl', route('livewirePageGroup.scheduledConference.pages.home'));
         View::share('headerLogo', $currentScheduledConference->getFirstMedia('logo')?->getAvailableUrl(['thumb', 'thumb-xl']));
         View::share('headerLogoAltText', $currentScheduledConference->title);

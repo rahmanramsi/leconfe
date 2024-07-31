@@ -27,6 +27,11 @@ class Dashboard extends Page implements HasInfolists
 
     protected static string $view = 'panel.administration.pages.dashboard';
 
+    public static function canAccess(): bool
+    {
+        return Auth::user()->can('Administration:view');
+    }
+
     public function infolist(Infolist $infolist): Infolist
     {
         return $infolist

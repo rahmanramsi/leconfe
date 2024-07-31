@@ -1,10 +1,3 @@
-@use('\App\Models\ScheduledConference')
-
-@php
-    $currentScheduledConference = app()->getCurrentScheduledConference();
-    $currentConference = app()->getCurrentConference();
-@endphp
-
 <x-filament::dropdown
     placement="bottom-start"
     teleport
@@ -62,24 +55,27 @@
         </div>
         
         @can('Administration:view')
-        <x-filament::dropdown.list.item
-            :href="route('filament.administration.home')"
-            icon="heroicon-s-cog"
-            tag="a"
-        >
-            {{ __('Administration') }}
-        </x-filament::dropdown.list.item>
+            <x-filament::dropdown.list.item
+                :href="route('filament.administration.home')"
+                icon="heroicon-s-cog"
+                tag="a"
+            >
+                {{ __('Administration') }}
+            </x-filament::dropdown.list.item>
         @endcan
 
-        <x-filament::dropdown.list.item
-            :href="$currentConference->getPanelUrl()"
-            icon="heroicon-m-arrow-uturn-left"
-            tag="a"
-        >
-            Back to Conference
-        </x-filament::dropdown.list.item>
-        <div class="max-h-64 overflow-y-scroll border-t">
-            @foreach (ScheduledConference::where('path', '!=', $currentScheduledConference->path)->latest()->get() as $scheduledConference)
+        @can('view', $currentConference)
+            <x-filament::dropdown.list.item
+                :href="$currentConference->getPanelUrl()"
+                icon="heroicon-m-arrow-uturn-left"
+                tag="a"
+            >
+                Back to Conference
+            </x-filament::dropdown.list.item>
+        @endcan
+        
+        <div class="max-h-64 overflow-y-scroll">
+            @foreach ($scheduledConferences as $scheduledConference)
                 <x-filament::dropdown.list.item
                     :href="$scheduledConference->getPanelUrl()"
                     :icon="filament()->getTenantAvatarUrl($scheduledConference)"
