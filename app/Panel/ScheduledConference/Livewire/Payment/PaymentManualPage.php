@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Panel\ScheduledConference\Livewire\Payment;
+namespace App\Panel\ScheduledConference\Pages;
 
 use Livewire\Component;
 use Filament\Forms\Form;
