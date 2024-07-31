@@ -23,7 +23,7 @@ use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Enums\RegistrationStatus;
+use App\Models\Enums\RegistrationPaymentState;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Resources\Pages\ListRecords;
@@ -64,7 +64,7 @@ class EnrollUser extends ListRecords
     {
         $registrationTypeOptions = [];
         $registrationTypes = RegistrationType::where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())->get();
-        foreach($registrationTypes as $registrationType) {
+        foreach ($registrationTypes as $registrationType) {
             if (!$registrationType->active) continue;
 
             $name = $registrationType->type;
@@ -133,9 +133,9 @@ class EnrollUser extends ListRecords
                 ->schema([
                     Select::make('registrationPayment.state')
                         ->options(
-                            Arr::except(RegistrationStatus::array(), RegistrationStatus::Trashed->value)
+                            Arr::except(RegistrationPaymentState::array(), RegistrationPaymentState::Trashed->value)
                         )
-                        ->default(RegistrationStatus::Unpaid->value)
+                        ->default(RegistrationPaymentState::Unpaid->value)
                         ->native(false)
                         ->required()
                         ->live(),
@@ -144,7 +144,7 @@ class EnrollUser extends ListRecords
                         ->placeholder('Select registration paid date..')
                         ->prefixIcon('heroicon-m-calendar')
                         ->formatStateUsing(fn () => now())
-                        ->visible(fn (Get $get) => $get('registrationPayment.state') === RegistrationStatus::Paid->value)
+                        ->visible(fn (Get $get) => $get('registrationPayment.state') === RegistrationPaymentState::Paid->value)
                         ->required()
                 ])
                 ->columns(1),
@@ -223,7 +223,7 @@ class EnrollUser extends ListRecords
                     ->modalSubmitActionLabel('Enroll')
                     ->mutateFormDataUsing(function (Model $record, $data) { // record are user model
                         $registrationType = RegistrationType::where('id', $data['registration_type_id'])->first();
-                        if($registrationType) {
+                        if ($registrationType) {
                             $data['user_id'] = $record->id;
                             return $data;
                         }
@@ -236,7 +236,7 @@ class EnrollUser extends ListRecords
                             'cost' => $registrationType->cost,
                             'currency' => $registrationType->currency,
                             'state' => $data['registrationPayment']['state'],
-                            'paid_at' => $data['registrationPayment']['state'] === RegistrationStatus::Paid->value ? $data['registrationPayment']['paid_at'] : null,
+                            'paid_at' => $data['registrationPayment']['state'] === RegistrationPaymentState::Paid->value ? $data['registrationPayment']['paid_at'] : null,
                         ]);
                     })
             ])

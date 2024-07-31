@@ -5,7 +5,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Plank\Metable\Metable;
 use App\Models\Concerns\BelongsToScheduledConference;
-use App\Models\Enums\RegistrationStatus;
+use App\Models\Enums\RegistrationPaymentState;
 use Illuminate\Database\Eloquent\Model;
 use Kra8\Snowflake\HasShortflakePrimary;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
@@ -27,7 +27,7 @@ class RegistrationType extends Model
     {
         return $this->registration()
             ->whereHas('registrationPayment', function ($query) {
-                $query->where('state', RegistrationStatus::Paid->value);
+                $query->where('state', RegistrationPaymentState::Paid->value);
             })
             ->count();
     }

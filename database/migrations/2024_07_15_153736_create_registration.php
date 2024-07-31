@@ -4,7 +4,7 @@ use App\Models\User;
 use App\Models\RegistrationType;
 use App\Models\ScheduledConference;
 use Illuminate\Support\Facades\Schema;
-use App\Models\Enums\RegistrationStatus;
+use App\Models\Enums\RegistrationPaymentState;
 use App\Models\Registration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -48,7 +48,7 @@ return new class extends Migration
             $table->text('description');
             $table->integer('cost');
             $table->string('currency');
-            $table->enum('state', Arr::except(RegistrationStatus::array(), RegistrationStatus::Trashed->value))->default(RegistrationStatus::Unpaid->value);
+            $table->enum('state', Arr::except(RegistrationPaymentState::array(), RegistrationPaymentState::Trashed->value))->default(RegistrationPaymentState::Unpaid->value);
             $table->timestamp('paid_at')->nullable();
             $table->timestamps();
         });

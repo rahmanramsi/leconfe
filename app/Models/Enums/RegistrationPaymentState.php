@@ -8,7 +8,7 @@ use App\Models\Enums\Concern\UsefulEnums;
 use Filament\Support\Colors\Color;
 use Filament\Support\Contracts\HasColor;
 
-enum RegistrationStatus: string implements HasLabel, HasColor
+enum RegistrationPaymentState: string implements HasLabel, HasColor
 {
     use UsefulEnums;
 

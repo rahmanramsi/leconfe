@@ -2,7 +2,7 @@
 
 namespace App\Panel\ScheduledConference\Resources\RegistrantResource\Pages;
 
-use App\Models\Enums\RegistrationStatus;
+use App\Models\Enums\RegistrationPaymentState;
 use App\Models\Registration;
 use App\Models\RegistrationPayment;
 use App\Models\RegistrationType;
@@ -34,14 +34,14 @@ class ListRegistrants extends ListRecords
                     fn (Builder $query) => $query
                         ->where('trashed', false)
                         ->whereHas('registrationPayment', function ($query) {
-                            $query->where('state', RegistrationStatus::Paid->value);
+                            $query->where('state', RegistrationPaymentState::Paid->value);
                         })
                 )
                 ->badge(
                     fn () => static::$resource::getEloquentQuery()
                         ->where('trashed', false)
                         ->whereHas('registrationPayment', function ($query) {
-                            $query->where('state', RegistrationStatus::Paid->value);
+                            $query->where('state', RegistrationPaymentState::Paid->value);
                         })
                         ->count()
                 ),
@@ -50,14 +50,14 @@ class ListRegistrants extends ListRecords
                     fn (Builder $query) => $query
                         ->where('trashed', false)
                         ->whereHas('registrationPayment', function ($query) {
-                            $query->where('state', RegistrationStatus::Unpaid->value);
+                            $query->where('state', RegistrationPaymentState::Unpaid->value);
                         })
                 )
                 ->badge(
                     fn () => static::$resource::getEloquentQuery()
                         ->where('trashed', false)
                         ->whereHas('registrationPayment', function ($query) {
-                            $query->where('state', RegistrationStatus::Unpaid->value);
+                            $query->where('state', RegistrationPaymentState::Unpaid->value);
                         })
                         ->count()
                 )

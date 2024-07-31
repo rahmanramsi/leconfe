@@ -1,16 +1,14 @@
 <?php
 
-namespace App\Panel\ScheduledConference\Pages;
+namespace App\Panel\ScheduledConference\Livewire\Payment;
 
 use Livewire\Component;
 use Filament\Forms\Form;
 use App\Forms\Components\TinyEditor;
 use Filament\Forms\Components\Actions;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Tables\Contracts\HasTable;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Tables\Concerns\InteractsWithTable;
 use App\Actions\ScheduledConferences\ScheduledConferenceUpdateAction;
 use Filament\Forms\Components\Section;
 

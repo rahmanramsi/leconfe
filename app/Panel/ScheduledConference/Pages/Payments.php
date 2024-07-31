@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Panel\ScheduledConference\Pages;
+namespace App\Panel\ScheduledConference\Pages;  
 
 use Filament\Forms\Form;
 use Filament\Pages\Page;
 use Filament\Infolists\Infolist;
 use Filament\Infolists\Components\Tabs;
 use App\Infolists\Components\LivewireEntry;
-use App\Panel\ScheduledConference\Pages\PaymentManualPage;
-use App\Panel\ScheduledConference\Pages\PaymentSettingPage;
 use App\Infolists\Components\VerticalTabs as InfolistsVerticalTabs;
+use App\Panel\ScheduledConference\Livewire\Payment\PaymentManualPage;
+use App\Panel\ScheduledConference\Livewire\Payment\PaymentSettingPage;
 
 class Payments extends Page
 {

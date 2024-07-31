@@ -1,6 +1,6 @@
 @use('Illuminate\Support\Str')
 @use('Carbon\Carbon')
-@use('App\Models\Enums\RegistrationStatus')
+@use('App\Models\Enums\RegistrationPaymentState')
 <x-website::layouts.main>
     @if ($isLogged)
         <div class="space-y-6">
@@ -20,12 +20,12 @@
                     <td class="pl-2">
                         <span @class([
                             'inline-flex items-center rounded-md px-2 py-1 text-xs font-medium text-white ring-1 ring-inset ring-gray-500/10', 
-                            'bg-green-500' => $userRegistration->getStatus() === RegistrationStatus::Paid->value,
-                            'bg-yellow-500' => $userRegistration->getStatus() === RegistrationStatus::Unpaid->value,
-                            'bg-red-500' => $userRegistration->getStatus() === RegistrationStatus::Trashed->value,
+                            'bg-green-500' => $userRegistration->getStatus() === RegistrationPaymentState::Paid->value,
+                            'bg-yellow-500' => $userRegistration->getStatus() === RegistrationPaymentState::Unpaid->value,
+                            'bg-red-500' => $userRegistration->getStatus() === RegistrationPaymentState::Trashed->value,
                         ])>
                             {{ Str::headline(match($userRegistration->getStatus()) {
-                                RegistrationStatus::Trashed->value => 'Failed',
+                                RegistrationPaymentState::Trashed->value => 'Failed',
                                 default => $userRegistration->getStatus(),
                             }) }}
                         </span>
@@ -59,7 +59,7 @@
                         {{ Carbon::parse($userRegistration->created_at)->format('Y-M-d') }}
                     </td>
                 </tr>
-                @if ($userRegistration->getStatus() === RegistrationStatus::Paid->value && $userRegistration->registrationType->currency !== 'free')
+                @if ($userRegistration->getStatus() === RegistrationPaymentState::Paid->value && $userRegistration->registrationType->currency !== 'free')
                     <tr>
                         <td class="align-text-top">Payment Date</td>
                         <td class="align-text-top pl-5">:</td>
@@ -69,7 +69,7 @@
                     </tr>
                 @endif
             </table>
-            @if ($userRegistration->getStatus() === RegistrationStatus::Unpaid->value)
+            @if ($userRegistration->getStatus() === RegistrationPaymentState::Unpaid->value)
                 <hr class="my-8">
                 <div class="w-full">
                     @foreach ($paymentList as $currency)

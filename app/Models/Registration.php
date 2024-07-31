@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Enums\RegistrationStatus;
+use App\Models\Enums\RegistrationPaymentState;
 use Illuminate\Database\Eloquent\Model;
 use Kra8\Snowflake\HasShortflakePrimary;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
@@ -32,8 +32,8 @@ class Registration extends Model
 
     public function getStatus()
     {
-        if($this->isTrashed()) {
-            return RegistrationStatus::Trashed->value;
+        if ($this->isTrashed()) {
+            return RegistrationPaymentState::Trashed->value;
         }
 
         return $this->getState();

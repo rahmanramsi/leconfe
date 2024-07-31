@@ -2,7 +2,7 @@
 
 namespace App\Frontend\ScheduledConference\Pages;
 
-use App\Models\Enums\RegistrationStatus;
+use App\Models\Enums\RegistrationPaymentState;
 use Squire\Models\Country;
 use App\Models\Registration;
 use App\Models\Enums\UserRole;
@@ -94,7 +94,7 @@ class ParticipantRegister extends Page
             'description' => $registrationType->getMeta('description'),
             'cost' => $registrationType->cost,
             'currency' => $registrationType->currency,
-            'state' => $isFree ? RegistrationStatus::Paid : RegistrationStatus::Unpaid,
+            'state' => $isFree ? RegistrationPaymentState::Paid : RegistrationPaymentState::Unpaid,
             'paid_at' => $isFree ? now() : null,
         ]);
 

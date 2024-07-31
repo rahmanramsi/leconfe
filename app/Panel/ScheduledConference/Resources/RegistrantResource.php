@@ -27,7 +27,7 @@ use Filament\Navigation\NavigationItem;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Enums\RegistrationStatus;
+use App\Models\Enums\RegistrationPaymentState;
 use Filament\Forms\Components\TextInput;
 use Filament\Navigation\NavigationGroup;
 use Filament\Tables\Actions\ActionGroup;
@@ -72,7 +72,7 @@ class RegistrantResource extends Resource
                     ->schema([
                         Select::make('state')
                             ->options(
-                                Arr::except(RegistrationStatus::array(), RegistrationStatus::Trashed->value)
+                                Arr::except(RegistrationPaymentState::array(), RegistrationPaymentState::Trashed->value)
                             )
                             ->native(false)
                             ->required()
@@ -82,11 +82,11 @@ class RegistrantResource extends Resource
                             ->placeholder('Select registration paid date..')
                             ->prefixIcon('heroicon-m-calendar')
                             ->formatStateUsing(fn () => now())
-                            ->visible(fn (Get $get): bool => $get('state') === RegistrationStatus::Paid->value)
+                            ->visible(fn (Get $get): bool => $get('state') === RegistrationPaymentState::Paid->value)
                             ->required(),
                     ])
                     ->mutateRelationshipDataBeforeSaveUsing(function (?array $data) {
-                        if($data['state'] !== RegistrationStatus::Paid->value) {
+                        if ($data['state'] !== RegistrationPaymentState::Paid->value) {
                             $data['paid_at'] = null;
                         } else {
                             $data['type'] = RegistrationPaymentType::Manual->value;
@@ -135,7 +135,7 @@ class RegistrantResource extends Resource
                 TextColumn::make('registrationPayment.name')
                     ->label('Type')
                     ->description(function (Model $record) {
-                        if($record->registrationPayment->currency === 'free') {
+                        if ($record->registrationPayment->currency === 'free') {
                             return 'Free';
                         }
 
@@ -148,7 +148,7 @@ class RegistrantResource extends Resource
                     ->label('State')
                     ->formatStateUsing(fn (Model $record) => $record->getStatus())
                     ->badge()
-                    ->color(fn (Model $record) => RegistrationStatus::from($record->getStatus())->getColor()),
+                    ->color(fn (Model $record) => RegistrationPaymentState::from($record->getStatus())->getColor()),
                 TextColumn::make('registrationPayment.paid_at')
                     ->label('Paid Date')
                     ->placeholder('Not Paid')
