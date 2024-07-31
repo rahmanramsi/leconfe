@@ -8,6 +8,8 @@ use App\Facades\SidebarFacade;
 use App\Models\ScheduledConference;
 use Livewire\Livewire;
 use App\Classes\Settings;
+use App\Console\Kernel as ConsoleKernel;
+use App\Http\Kernel as HttpKernel;
 use App\Listeners\SubmissionEventSubscriber;
 use App\Models\Conference;
 use Illuminate\Support\Str;
