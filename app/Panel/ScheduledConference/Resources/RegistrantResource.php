@@ -12,20 +12,22 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Squire\Models\Currency;
 use App\Models\Registration;
+use Filament\Facades\Filament;
 use App\Models\RegistrationType;
 use Filament\Resources\Resource;
 use Filament\Support\Colors\Color;
 use App\Models\ScheduledConference;
+use Filament\Forms\Components\Grid;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Grouping\Group;
 use Filament\Forms\Components\Select;
 use Filament\Resources\Components\Tab;
-use App\Models\Enums\RegistrationStatus;
 use Filament\Forms\Components\Checkbox;
 use Filament\Navigation\NavigationItem;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Enums\RegistrationStatus;
 use Filament\Forms\Components\TextInput;
 use Filament\Navigation\NavigationGroup;
 use Filament\Tables\Actions\ActionGroup;
@@ -33,7 +35,10 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Forms\Components\Group as FormGroup;
 use AnourValar\EloquentSerialize\Tests\Models\Post;
+use App\Models\Enums\RegistrationPaymentType;
+use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use App\Panel\ScheduledConference\Resources\RegistrantResource\Pages;
 use App\Panel\ScheduledConference\Resources\RegistrantResource\RelationManagers;
 
@@ -62,20 +67,32 @@ class RegistrantResource extends Resource
     {
         return $form
             ->schema([
-                Select::make('state')
-                    ->options(
-                        Arr::except(RegistrationStatus::array(), RegistrationStatus::Trashed->value)
-                    )
-                    ->native(false)
-                    ->required()
-                    ->live(),
-                DatePicker::make('paid_at')
-                    ->label('Paid Date')
-                    ->placeholder('Select registration paid date..')
-                    ->prefixIcon('heroicon-m-calendar')
-                    ->formatStateUsing(fn () => now())
-                    ->visible(fn (Get $get) => $get('state') === RegistrationStatus::Paid->value)
-                    ->required()
+                Grid::make(1)
+                    ->relationship('registrationPayment')
+                    ->schema([
+                        Select::make('state')
+                            ->options(
+                                Arr::except(RegistrationStatus::array(), RegistrationStatus::Trashed->value)
+                            )
+                            ->native(false)
+                            ->required()
+                            ->live(),
+                        DatePicker::make('paid_at')
+                            ->label('Paid Date')
+                            ->placeholder('Select registration paid date..')
+                            ->prefixIcon('heroicon-m-calendar')
+                            ->formatStateUsing(fn () => now())
+                            ->visible(fn (Get $get): bool => $get('state') === RegistrationStatus::Paid->value)
+                            ->required(),
+                    ])
+                    ->mutateRelationshipDataBeforeSaveUsing(function (?array $data) {
+                        if($data['state'] !== RegistrationStatus::Paid->value) {
+                            $data['paid_at'] = null;
+                        } else {
+                            $data['type'] = RegistrationPaymentType::Manual->value;
+                        }
+                        return $data;
+                    })
             ])
             ->columns(1);
     }
@@ -91,27 +108,48 @@ class RegistrantResource extends Resource
                     ->authorize('Registrant:enroll')
             ])
             ->columns([
-                TextColumn::make('user.given_name')
+                SpatieMediaLibraryImageColumn::make('user.profile')
+                    ->label('Avatar')
+                    ->grow(false)
+                    ->collection('profile')
+                    ->conversion('avatar')
+                    ->width(50)
+                    ->height(50)
+                    ->defaultImageUrl(function (Model $record): string {
+                        $name = Str::of(Filament::getUserName($record->user))
+                            ->trim()
+                            ->explode(' ')
+                            ->map(fn (string $segment): string => filled($segment) ? mb_substr($segment, 0, 1) : '')
+                            ->join(' ');
+
+                        return 'https://ui-avatars.com/api/?name=' . urlencode($name) . '&color=FFFFFF&background=111827&font-size=0.33';
+                    })
+                    ->extraCellAttributes([
+                        'style' => 'width: 1px',
+                    ])
+                    ->circular(),
+                TextColumn::make('user.full_name')
                     ->label('User')
-                    ->formatStateUsing(fn (Model $record) => $record->user->full_name)
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('name')
+                TextColumn::make('registrationPayment.name')
                     ->label('Type')
                     ->description(function (Model $record) {
-                        if($record->currency === 'free') {
+                        if($record->registrationPayment->currency === 'free') {
                             return 'Free';
                         }
-                        $code = Str::upper($record->currency);
-                        $cost = money($record->cost, $record->currency);
+
+                        $code = Str::upper($record->registrationPayment->currency);
+                        $cost = money($record->registrationPayment->cost, $record->registrationPayment->currency);
+
                         return "($code) $cost";
                     }),
-                TextColumn::make('state')
+                TextColumn::make('registrationPayment.state')
                     ->label('State')
                     ->formatStateUsing(fn (Model $record) => $record->getStatus())
                     ->badge()
                     ->color(fn (Model $record) => RegistrationStatus::from($record->getStatus())->getColor()),
-                TextColumn::make('paid_at')
+                TextColumn::make('registrationPayment.paid_at')
                     ->label('Paid Date')
                     ->placeholder('Not Paid')
                     ->date('Y-M-d')
@@ -130,12 +168,6 @@ class RegistrantResource extends Resource
                     ->label('Decision')
                     ->modalHeading('Paid Status Decision')
                     ->modalWidth('lg')
-                    ->mutateFormDataUsing(function ($data) {
-                        if ($data['state'] !== RegistrationStatus::Paid->value) {
-                            $data['paid_at'] = null;
-                        }
-                        return $data;
-                    })
                     ->authorize('Registrant:edit'),
                 ActionGroup::make([
                     Action::make('trash')
@@ -168,11 +200,11 @@ class RegistrantResource extends Resource
                     ->authorize('Registrant:delete'),
             ])
             ->groups([
-                Group::make('registrationType.type')
+                Group::make('registrationPayment.name')
                     ->label('Type')
                     ->collapsible(),
             ])
-            ->defaultGroup('registrationType.type');
+            ->defaultGroup('registrationPayment.name');
     }
 
     public static function getRelations(): array

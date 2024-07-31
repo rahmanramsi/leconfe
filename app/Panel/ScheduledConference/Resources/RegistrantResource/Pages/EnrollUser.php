@@ -131,7 +131,7 @@ class EnrollUser extends ListRecords
                 ]),
             Fieldset::make('Payment')
                 ->schema([
-                    Select::make('state')
+                    Select::make('registrationPayment.state')
                         ->options(
                             Arr::except(RegistrationStatus::array(), RegistrationStatus::Trashed->value)
                         )
@@ -139,12 +139,12 @@ class EnrollUser extends ListRecords
                         ->native(false)
                         ->required()
                         ->live(),
-                    DatePicker::make('paid_at')
+                    DatePicker::make('registrationPayment.paid_at')
                         ->label('Paid Date')
                         ->placeholder('Select registration paid date..')
                         ->prefixIcon('heroicon-m-calendar')
                         ->formatStateUsing(fn () => now())
-                        ->visible(fn (Get $get) => $get('state') === RegistrationStatus::Paid->value)
+                        ->visible(fn (Get $get) => $get('registrationPayment.state') === RegistrationStatus::Paid->value)
                         ->required()
                 ])
                 ->columns(1),
@@ -218,20 +218,26 @@ class EnrollUser extends ListRecords
                     ->color('gray')
                     ->button()
                     ->model(Registration::class)
-                    ->form(fn (Model $record) => static::enrollForm($record))
+                    ->form(fn (?Model $record) => static::enrollForm($record))
                     ->createAnother(false)
                     ->modalSubmitActionLabel('Enroll')
-                    ->mutateFormDataUsing(function (Model $record, $data) {
+                    ->mutateFormDataUsing(function (Model $record, $data) { // record are user model
                         $registrationType = RegistrationType::where('id', $data['registration_type_id'])->first();
-
-                        if (!$registrationType) return;
-
-                        $data['user_id'] = $record->id;
-                        $data['name'] = $registrationType->type;
-                        $data['cost'] = $registrationType->cost;
-                        $data['currency'] = $registrationType->currency;
-
-                        return $data;
+                        if($registrationType) {
+                            $data['user_id'] = $record->id;
+                            return $data;
+                        }
+                    })
+                    ->after(function (Model $record, $data) { // record are registration model
+                        $registrationType = RegistrationType::where('id', $record->registration_type_id)->first();
+                        $record->registrationPayment()->create([
+                            'name' => $registrationType->type,
+                            'description' => $registrationType->getMeta('description'),
+                            'cost' => $registrationType->cost,
+                            'currency' => $registrationType->currency,
+                            'state' => $data['registrationPayment']['state'],
+                            'paid_at' => $data['registrationPayment']['state'] === RegistrationStatus::Paid->value ? $data['registrationPayment']['paid_at'] : null,
+                        ]);
                     })
             ])
             ->extremePaginationLinks();

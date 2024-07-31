@@ -28,7 +28,7 @@ use App\Panel\ScheduledConference\Livewire\Registration\RegistrationTypePage;
 use Filament\Tables\Actions\ActionGroup;
 use Illuminate\Support\Collection;
 
-class ManualPaymentPage extends Component implements HasForms, HasTable
+class PaymentManualPage extends Component implements HasForms, HasTable
 {
     use InteractsWithForms, InteractsWithTable;
 
@@ -60,6 +60,7 @@ class ManualPaymentPage extends Component implements HasForms, HasTable
                 ->required(),
             TinyEditor::make('detail')
                 ->placeholder('Input payment details..')
+                ->hint('*Add instruction here.')
                 ->minHeight(450)
                 ->required(),
         ];

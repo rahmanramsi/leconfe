@@ -9,16 +9,20 @@ use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use App\Models\Concerns\BelongsToScheduledConference;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Registration extends Model
 {
     use BelongsToScheduledConference, HasShortflakePrimary, Cachable, HasFactory;
 
+    public const TRASHED = 'Trashed';
+
     protected $guarded = ['id', 'scheduled_conference_id'];
 
+    // payment state [paid, unpaid] from registration_payments table
     public function getState()
     {
-        return $this->state;
+        return $this->registrationPayment->state;
     }
 
     public function isTrashed()
@@ -28,9 +32,10 @@ class Registration extends Model
 
     public function getStatus()
     {
-        if ($this->isTrashed()) {
+        if($this->isTrashed()) {
             return RegistrationStatus::Trashed->value;
         }
+
         return $this->getState();
     }
 
@@ -42,5 +47,10 @@ class Registration extends Model
     public function registrationType(): BelongsTo
     {
         return $this->belongsTo(RegistrationType::class);
+    }
+
+    public function registrationPayment(): HasOne
+    {
+        return $this->hasOne(RegistrationPayment::class);
     }
 }

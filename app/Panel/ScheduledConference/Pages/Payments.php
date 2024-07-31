@@ -7,7 +7,7 @@ use Filament\Pages\Page;
 use Filament\Infolists\Infolist;
 use App\Infolists\Components\LivewireEntry;
 use App\Infolists\Components\VerticalTabs as InfolistsVerticalTabs;
-use App\Panel\ScheduledConference\Livewire\Payment\ManualPaymentPage;
+use App\Panel\ScheduledConference\Livewire\Payment\PaymentManualPage;
 use Filament\Navigation\NavigationGroup;
 use Filament\Navigation\NavigationItem;
 use Filament\Pages\SubNavigationPosition;
@@ -45,7 +45,7 @@ class Payments extends Page
                             ->icon('heroicon-o-credit-card')
                             ->schema([
                                 LivewireEntry::make('manual')
-                                    ->livewire(ManualPaymentPage::class)
+                                    ->livewire(PaymentManualPage::class)
                             ]),
                     ]),
             ]);

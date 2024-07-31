@@ -84,10 +84,14 @@ class ParticipantRegister extends Page
         $registrationType = RegistrationType::where('id', $data['type'])->first();
         $isFree = $registrationType->currency === 'free';
 
-        Registration::create([
+        $registration = Registration::create([
             'user_id' => auth()->user()->id,
             'registration_type_id' => $data['type'],
+        ]);
+
+        $registration->registrationPayment()->create([
             'name' => $registrationType->type,
+            'description' => $registrationType->getMeta('description'),
             'cost' => $registrationType->cost,
             'currency' => $registrationType->currency,
             'state' => $isFree ? RegistrationStatus::Paid : RegistrationStatus::Unpaid,

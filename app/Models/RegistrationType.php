@@ -5,6 +5,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Plank\Metable\Metable;
 use App\Models\Concerns\BelongsToScheduledConference;
+use App\Models\Enums\RegistrationStatus;
 use Illuminate\Database\Eloquent\Model;
 use Kra8\Snowflake\HasShortflakePrimary;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
@@ -24,7 +25,11 @@ class RegistrationType extends Model
 
     public function getPaidParticipantCount()
     {
-        return $this->registration()->where('paid_at', '!=', null)->count();
+        return $this->registration()
+            ->whereHas('registrationPayment', function ($query) {
+                $query->where('state', RegistrationStatus::Paid->value);
+            })
+            ->count();
     }
 
     public function getQuotaLeft()

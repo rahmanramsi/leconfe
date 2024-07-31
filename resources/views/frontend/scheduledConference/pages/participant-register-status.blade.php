@@ -35,21 +35,21 @@
                     <td class="align-text-top">Type</td>
                     <td class="align-text-top pl-5">:</td>
                     <td class="pl-2">
-                        <strong>{{ $userRegistration->name }}</strong>
+                        <strong>{{ $userRegistration->registrationPayment->name }}</strong>
                     </td>
                 </tr>
                 <tr>
                     <td class="align-text-top">Description</td>
                     <td class="align-text-top pl-5">:</td>
                     <td class="pl-2">
-                        {!! $userRegistration->registrationType->getMeta('description') !!}
+                        {!! $userRegistration->registrationPayment->description !!}
                     </td>
                 </tr>
                 <tr>
                     <td class="align-text-top">Cost</td>
                     <td class="align-text-top pl-5">:</td>
                     <td class="pl-2">
-                        {{ ($userRegistration->cost === 0 || $userRegistration->currency === 'free') ? 'Free' : '('.Str::upper($userRegistration->currency).') '.money($userRegistration->cost, $userRegistration->currency) }}
+                        {{ ($userRegistration->registrationPayment->cost === 0 || $userRegistration->registrationPayment->currency === 'free') ? 'Free' : '('.Str::upper($userRegistration->registrationPayment->currency).') '.money($userRegistration->registrationPayment->cost, $userRegistration->registrationPayment->currency) }}
                     </td>
                 </tr>
                 <tr>
@@ -64,7 +64,7 @@
                         <td class="align-text-top">Payment Date</td>
                         <td class="align-text-top pl-5">:</td>
                         <td class="pl-2">
-                            {{ Carbon::parse($userRegistration->paid_at)->format('Y-M-d') }}
+                            {{ Carbon::parse($userRegistration->registrationPayment->paid_at)->format('Y-M-d') }}
                         </td>
                     </tr>
                 @endif

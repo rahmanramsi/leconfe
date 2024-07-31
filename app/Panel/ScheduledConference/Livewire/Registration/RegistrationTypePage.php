@@ -2,26 +2,18 @@
 
 namespace App\Panel\ScheduledConference\Livewire\Registration;
 
-use Closure;
-use Carbon\Carbon;
-use App\Models\User;
-use App\Models\Speaker;
 use Filament\Forms\Get;
 use Livewire\Component;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
-use Squire\Models\Country;
-use Illuminate\Support\Str;
 use App\Models\RegistrationType;
 use Filament\Support\Colors\Color;
 use Filament\Forms\Components\Grid;
-use Filament\Tables\Actions\Action;
 use App\Forms\Components\TinyEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Fieldset;
-use Filament\Forms\Components\Textarea;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
@@ -33,21 +25,14 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Columns\ToggleColumn;
-use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\Placeholder;
-use Filament\Infolists\Components\TextEntry;
-use Akaunting\Money\View\Components\Currency;
-use Filament\Forms\Components\MarkdownEditor;
 use Filament\Tables\Actions\DeleteBulkAction;
-use Squire\Models\Currency as ModelsCurrency;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
-use Filament\Infolists\Components\RepeatableEntry;
 use App\Actions\RegistrationTypes\RegistrationTypeCreateAction;
 use App\Actions\RegistrationTypes\RegistrationTypeDeleteAction;
 use App\Actions\RegistrationTypes\RegistrationTypeUpdateAction;
-use Filament\Infolists\Components\Fieldset as ComponentsFieldset;
-use App\Panel\ScheduledConference\Livewire\Payment\ManualPaymentPage;
+use App\Panel\ScheduledConference\Livewire\Payment\PaymentManualPage;
 
 class RegistrationTypePage extends Component implements HasTable, HasForms
 {
@@ -164,7 +149,7 @@ class RegistrationTypePage extends Component implements HasTable, HasForms
                     Select::make('currency')
                         ->label('Currency')
                         ->formatStateUsing(fn ($state) => ($state !== null) ? ($state !== 'free' ? $state : null) : null)
-                        ->options(ManualPaymentPage::getCurrencyOptions())
+                        ->options(PaymentManualPage::getCurrencyOptions())
                         ->searchable()
                         ->required()
                         ->live(),
