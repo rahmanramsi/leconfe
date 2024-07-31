@@ -198,7 +198,7 @@ class PanelProvider extends ServiceProvider
     {
         Blade::anonymousComponentPath(resource_path('views/panel/conference/components'), 'panel');
         Blade::anonymousComponentPath(resource_path('views/panel/administration/components'), 'administration');
-        Blade::anonymousComponentPath(resource_path('views/panel/series/components'), 'series');
+        Blade::anonymousComponentPath(resource_path('views/panel/scheduledConference/components'), 'scheduledConference');
     }
 
     public static function getMiddleware(): array
