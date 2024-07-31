@@ -48,7 +48,7 @@ return new class extends Migration
             $table->text('description');
             $table->integer('cost');
             $table->string('currency');
-            $table->enum('state', RegistrationPaymentState::array())->default(RegistrationPaymentState::Unpaid->value);
+            $table->string('state')->default(RegistrationPaymentState::Unpaid->value);
             $table->timestamp('paid_at')->nullable();
             $table->timestamps();
         });
