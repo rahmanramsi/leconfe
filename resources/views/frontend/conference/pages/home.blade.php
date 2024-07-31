@@ -10,6 +10,7 @@
             {!! $conference->getMeta('about') !!}
         </div>
     @endif
+    @if($nextScheduledConference || $pastScheduledConferences->isNotEmpty())
     <div class="scheduled-conferences space-y-6">
         @if($nextScheduledConference)
             <div class="next-scheduled-conference">
@@ -68,4 +69,5 @@
             </div>
         @endif
     </div>
+    @endif
 </x-website::layouts.main>

@@ -19,22 +19,10 @@ class CurrentScheduledConferenceOverview extends Widget
         $currentConference = app()->getCurrentConference();
         $currentScheduledConference = $currentConference->currentScheduledConference;
 
-        $submissionTotal = $currentScheduledConference->submissions->count();
-        $submissionAcceptedTotal = $currentScheduledConference
-            ->submissions()
-            ->whereIn('status', [
-                SubmissionStatus::OnReview,
-                SubmissionStatus::OnPresentation,
-                SubmissionStatus::Editing,
-                SubmissionStatus::Published,
-            ])
-            ->count();
 
         return [
             'currentConference' => $currentConference,
             'currentScheduledConference' => $currentScheduledConference,
-            'submissionTotal' => $submissionTotal,
-            'submissionAcceptedTotal' => $submissionAcceptedTotal,
         ];
     }
 }

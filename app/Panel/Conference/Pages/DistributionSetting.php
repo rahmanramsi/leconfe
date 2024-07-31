@@ -70,9 +70,7 @@ class DistributionSetting extends Page implements HasForms, HasInfolists
                             ->icon('heroicon-o-magnifying-glass')
                             ->schema([
                                 LivewireEntry::make('sidebar-setting')
-                                    ->livewire(SearchEngineSetting::class, [
-                                        'conference' => App::getCurrentConference(),
-                                    ]),
+                                    ->livewire(SearchEngineSetting::class),
                             ]),
                     ])
                     ->contained(false),

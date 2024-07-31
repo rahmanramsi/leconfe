@@ -30,8 +30,6 @@ class ScheduledConferenceResource extends Resource
 {
     protected static ?string $model = ScheduledConference::class;
 
-    protected static ?int $navigationSort = 3;
-
     protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
 
     public static function form(Form $form): Form
