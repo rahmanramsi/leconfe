@@ -24,11 +24,6 @@ class Registration extends Model
         return $this->registrationPayment->state;
     }
 
-    public function isTrashed()
-    {
-        return $this->trashed();
-    }
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
