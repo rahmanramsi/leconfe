@@ -16,19 +16,13 @@ use Filament\Facades\Filament;
 use App\Models\RegistrationType;
 use Filament\Resources\Resource;
 use Filament\Support\Colors\Color;
-use App\Models\ScheduledConference;
 use Filament\Forms\Components\Grid;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Grouping\Group;
 use Filament\Forms\Components\Select;
-use Filament\Resources\Components\Tab;
-use Filament\Forms\Components\Checkbox;
-use Filament\Navigation\NavigationItem;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Model;
-use Filament\Forms\Components\TextInput;
-use Filament\Navigation\NavigationGroup;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Actions\DeleteAction;
@@ -36,12 +30,9 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Models\Enums\RegistrationPaymentType;
 use Filament\Tables\Actions\DeleteBulkAction;
 use App\Models\Enums\RegistrationPaymentState;
-use Filament\Forms\Components\Group as FormGroup;
-use AnourValar\EloquentSerialize\Tests\Models\Post;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use App\Panel\ScheduledConference\Resources\RegistrantResource\Pages;
-use App\Panel\ScheduledConference\Resources\RegistrantResource\RelationManagers;
 use Filament\Tables\Actions\ForceDeleteAction;
 use Filament\Tables\Actions\RestoreAction;
 
@@ -102,6 +93,7 @@ class RegistrantResource extends Resource
     {
         return $table
             ->modifyQueryUsing(fn (Builder $query) => $query->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId()))
+            ->reorderable('order_column')
             ->heading('Registrant List')
             ->headerActions([
                 Action::make('Enroll User')
@@ -110,7 +102,7 @@ class RegistrantResource extends Resource
             ])
             ->columns([
                 SpatieMediaLibraryImageColumn::make('user.profile')
-                    ->label('Avatar')
+                    ->label('Profile')
                     ->grow(false)
                     ->collection('profile')
                     ->conversion('avatar')
@@ -201,35 +193,11 @@ class RegistrantResource extends Resource
         ];
     }
 
-    public static function getSubNavigation(): array
-    {
-        $url = url()->current();
-
-        return [
-            NavigationGroup::make()
-                ->items([
-                    NavigationItem::make('Registration Type')
-                        ->icon('heroicon-o-list-bullet')
-                        ->badge(fn () => RegistrationType::where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())->count())
-                        ->isActiveWhen(fn () => $url === Pages\ListTypeSummary::getUrl())
-                        ->url(Pages\ListTypeSummary::getUrl()),
-                    NavigationItem::make('Registrant List')
-                        ->icon('heroicon-o-bars-3-bottom-left')
-                        ->isActiveWhen(fn () => $url === Pages\ListRegistrants::getUrl())
-                        ->url(Pages\ListRegistrants::getUrl()),
-                ])
-                ->extraSidebarAttributes([
-                    'class' => 'bg-white p-2 rounded-xl shadow-lg outline outline-1 outline-gray-200',
-                ], true)
-        ];
-    }
-
     public static function getPages(): array
     {
         return [
             'index' => Pages\ListRegistrants::route('/'),
             'enroll' => Pages\EnrollUser::route('/enroll'),
-            'type' => Pages\ListTypeSummary::route('/type'),
         ];
     }
 

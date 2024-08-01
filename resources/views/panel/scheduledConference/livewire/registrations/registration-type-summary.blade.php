@@ -1,4 +1,7 @@
-<x-filament-panels::page>
+@php
+    $registrationTypes = app()->getCurrentScheduledConference()->registrationType;
+@endphp
+<div>
     <div class="grid grid-cols-2 gap-4" wire:poll.2s>
         @foreach ($registrationTypes as $registrationType)
             <x-filament::section class=" shadow-xl outline outline-1 outline-gray-200">
@@ -36,4 +39,4 @@
             </x-filament::section>
         @endforeach
     </div>
-</x-filament-panels::page>
+</div>

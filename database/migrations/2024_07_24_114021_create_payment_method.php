@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('currency');
             $table->text('detail');
+            $table->unsignedInteger('order_column')->nullable();
             $table->timestamps();
         });
     }

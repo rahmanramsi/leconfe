@@ -17,14 +17,11 @@ use Filament\Navigation\NavigationItem;
 
 class ListRegistrants extends ListRecords
 {
+    // protected static string $view = 'panel.scheduledConference.resources.registrant-resource.pages.list-registrant';
+
     protected static string $resource = RegistrantResource::class;
 
     protected ?string $heading = 'Registrant';
-
-    public function getSubNavigation(): array
-    {
-        return static::$resource::getSubNavigation();
-    }
 
     public function getTabs(): array
     {

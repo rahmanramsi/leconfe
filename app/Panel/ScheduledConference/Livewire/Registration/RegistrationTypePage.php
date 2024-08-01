@@ -47,6 +47,7 @@ class RegistrationTypePage extends Component implements HasTable, HasForms
                     ->with('meta')
             )
             ->heading('Type')
+            ->reorderable('order_column')
             ->headerActions([
                 CreateAction::make()
                     ->label("Add Type")
@@ -65,13 +66,11 @@ class RegistrationTypePage extends Component implements HasTable, HasForms
                     ->authorize('RegistrationSetting:create'),
             ])
             ->columns([
-                TextColumn::make('index')
-                    ->label('#')
-                    ->rowIndex(),
                 TextColumn::make('type')
                     ->label('Name'),
                 TextColumn::make('quota')
                     ->label('Quota')
+                    ->formatStateUsing(fn (Model $record) => $record->getPaidParticipantCount() . '/' . $record->quota)
                     ->badge()
                     ->color(Color::Blue),
                 TextColumn::make('cost')
@@ -80,9 +79,11 @@ class RegistrationTypePage extends Component implements HasTable, HasForms
                     ->label('Currency')
                     ->formatStateUsing(fn (Model $record) => ($record->currency === 'free') ? 'None' : currency($record->currency)->getName() . ' (' . currency($record->currency)->getCurrency() . ')'),
                 TextColumn::make('opened_at')
-                    ->date('Y-M-d'),
+                    ->date('Y-M-d')
+                    ->color(fn (Model $record) => $record->isExpired() ? Color::Red : null),
                 TextColumn::make('closed_at')
-                    ->date('Y-M-d'),
+                    ->date('Y-M-d')
+                    ->color(fn (Model $record) => $record->isExpired() ? Color::Red : null),
                 ToggleColumn::make('active')
                     ->onColor(Color::Green)
                     ->offColor(Color::Red),

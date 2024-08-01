@@ -25,6 +25,7 @@ return new class extends Migration
             $table->integer('quota');
             $table->string('currency');
             $table->boolean('active')->default(true);
+            $table->unsignedInteger('order_column')->nullable();
             $table->timestamp('opened_at');
             $table->timestamp('closed_at');
             $table->timestamps();
@@ -35,6 +36,7 @@ return new class extends Migration
             $table->foreignIdFor(ScheduledConference::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(User::class);
             $table->foreignIdFor(RegistrationType::class);
+            $table->unsignedInteger('order_column')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

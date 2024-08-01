@@ -74,6 +74,7 @@ class PaymentManualPage extends Component implements HasForms, HasTable
                     ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
             )
             ->heading('Manual Payment List')
+            ->reorderable('order_column')
             ->headerActions([
                 CreateAction::make()
                     ->label("Add Manual Payment")
