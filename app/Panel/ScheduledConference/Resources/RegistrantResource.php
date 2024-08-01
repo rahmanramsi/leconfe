@@ -26,15 +26,16 @@ use Illuminate\Database\Eloquent\Model;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Actions\RestoreAction;
 use App\Models\Enums\RegistrationPaymentType;
 use Filament\Tables\Actions\DeleteBulkAction;
 use App\Models\Enums\RegistrationPaymentState;
+use Filament\Tables\Actions\ForceDeleteAction;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use App\Panel\ScheduledConference\Resources\RegistrantResource\Pages;
-use Filament\Tables\Actions\ForceDeleteAction;
-use Filament\Tables\Actions\RestoreAction;
 
 class RegistrantResource extends Resource
 {
@@ -154,7 +155,10 @@ class RegistrantResource extends Resource
             ])
             ->emptyStateHeading('No Registrant')
             ->filters([
-                //
+                SelectFilter::make('type')
+                    ->relationship('RegistrationType', 'type', modifyQueryUsing: fn ($query) => $query->where('active', '!=', false))
+                    ->multiple()
+                    ->preload(),
             ])
             ->actions([
                 EditAction::make()
