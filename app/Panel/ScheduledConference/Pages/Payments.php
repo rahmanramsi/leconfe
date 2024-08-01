@@ -8,8 +8,8 @@ use Filament\Infolists\Infolist;
 use Filament\Infolists\Components\Tabs;
 use App\Infolists\Components\LivewireEntry;
 use App\Infolists\Components\VerticalTabs as InfolistsVerticalTabs;
-use App\Panel\ScheduledConference\Livewire\Payment\PaymentManualPage;
-use App\Panel\ScheduledConference\Livewire\Payment\PaymentSettingPage;
+use App\Panel\ScheduledConference\Livewire\Payment\PaymentManuals;
+use App\Panel\ScheduledConference\Livewire\Payment\PaymentSettings;
 
 class Payments extends Page
 {
@@ -19,11 +19,11 @@ class Payments extends Page
 
     protected static ?string $navigationIcon = 'heroicon-o-banknotes';
 
-    protected static ?string $navigationLabel = 'Payment';
+    protected static ?string $navigationLabel = 'Payments';
 
     protected static ?int $navigationSort = 3;
 
-    protected static ?string $title = 'Payment Method';
+    protected static ?string $title = 'Payment Methods';
 
     public static function canAccess(): bool
     {
@@ -49,14 +49,14 @@ class Payments extends Page
                                             ->icon('heroicon-o-credit-card')
                                             ->schema([
                                                 LivewireEntry::make('manual')
-                                                    ->livewire(PaymentManualPage::class)
+                                                    ->livewire(PaymentManuals::class)
                                             ]),
                                     ]),
                             ]),
                         Tabs\Tab::make('Settings')
                             ->schema([
                                 LivewireEntry::make('settings')
-                                    ->livewire(PaymentSettingPage::class)
+                                    ->livewire(PaymentSettings::class)
                             ])
                     ])
             ]);

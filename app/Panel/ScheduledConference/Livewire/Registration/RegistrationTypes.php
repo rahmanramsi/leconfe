@@ -33,8 +33,9 @@ use App\Actions\RegistrationTypes\RegistrationTypeCreateAction;
 use App\Actions\RegistrationTypes\RegistrationTypeDeleteAction;
 use App\Actions\RegistrationTypes\RegistrationTypeUpdateAction;
 use App\Panel\ScheduledConference\Livewire\Payment\PaymentManualPage;
+use App\Panel\ScheduledConference\Livewire\Payment\PaymentManuals;
 
-class RegistrationTypePage extends Component implements HasTable, HasForms
+class RegistrationTypes extends Component implements HasTable, HasForms
 {
     use InteractsWithForms, InteractsWithTable;
 
@@ -74,7 +75,7 @@ class RegistrationTypePage extends Component implements HasTable, HasForms
                     Select::make('currency')
                         ->label('Currency')
                         ->formatStateUsing(fn ($state) => ($state !== null) ? ($state !== 'free' ? $state : null) : null)
-                        ->options(PaymentManualPage::getCurrencyOptions())
+                        ->options(PaymentManuals::getCurrencyOptions())
                         ->searchable()
                         ->required()
                         ->live(),
