@@ -38,6 +38,80 @@ class RegistrationTypePage extends Component implements HasTable, HasForms
 {
     use InteractsWithForms, InteractsWithTable;
 
+    public function form(Form $form): Form
+    {
+        return $form
+            ->schema([
+                Grid::make(4)
+                ->schema([
+                    TextInput::make('type')
+                        ->label('Name')
+                        ->placeholder('Input type name..')
+                        ->required()
+                        ->columnSpan(3)
+                        ->unique(
+                            ignorable: fn () => $form->getRecord(),
+                            modifyRuleUsing: fn (Unique $rule) => $rule->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId()),
+                        ),
+                    TextInput::make('quota')
+                        ->label('Participant Quota')
+                        ->placeholder('Input quota..')
+                        ->numeric()
+                        ->minValue(1)
+                        ->required(),
+                ]),
+            TinyEditor::make('meta.description')
+                ->label('Description')
+                ->placeholder('Input description..')
+                ->formatStateUsing(fn (string $operation, $record) => $operation === 'edit' ? $record->getMeta('description') : null)
+                ->minHeight(100),
+            Checkbox::make('free')
+                ->label('Set as free')
+                ->formatStateUsing(fn ($record) => isset($record->cost) ? $record->cost == 0 : false)
+                ->live(),
+            Fieldset::make('Registration Cost')
+                ->schema([
+                    Select::make('currency')
+                        ->label('Currency')
+                        ->formatStateUsing(fn ($state) => ($state !== null) ? ($state !== 'free' ? $state : null) : null)
+                        ->options(PaymentManualPage::getCurrencyOptions())
+                        ->searchable()
+                        ->required()
+                        ->live(),
+                    Grid::make(4)
+                        ->schema([
+                            TextInput::make('cost')
+                                ->label('Price')
+                                ->placeholder('Enter registration cost..')
+                                ->numeric()
+                                ->required()
+                                ->live()
+                                ->columnSpan(3)
+                                ->rules(['gte:1']),
+                            Placeholder::make('Price Preview')
+                                ->content(fn (Get $get) => ($get('currency') !== null && $get('currency') !== 'free' && !empty($get('cost'))) ? money($get('cost'), $get('currency')) : 'N/A')
+                        ])
+                ])
+                ->visible(fn (Get $get) => !$get('free'))
+                ->columns(1),
+            Grid::make(2)
+                ->schema([
+                    DatePicker::make('opened_at')
+                        ->label('Opened Date')
+                        ->placeholder('Select type opened date..')
+                        ->prefixIcon('heroicon-m-calendar-days')
+                        ->required()
+                        ->before('closed_at'),
+                    DatePicker::make('closed_at')
+                        ->label('Closed Date')
+                        ->placeholder('Select type closed date..')
+                        ->prefixIcon('heroicon-m-calendar-days')
+                        ->required()
+                        ->after('opened_at'),
+                ])
+        ]);
+    }
+
     public function table(Table $table): Table
     {
         return $table
@@ -113,79 +187,6 @@ class RegistrationTypePage extends Component implements HasTable, HasForms
                     ->authorize('RegistrationSetting:delete'),
             ])
             ->paginated(false);
-    }
-
-    public function form(Form $form): Form
-    {
-        return $form
-            ->schema([
-                Grid::make(4)
-                ->schema([
-                    TextInput::make('type')
-                        ->label('Name')
-                        ->placeholder('Input type name..')
-                        ->required()
-                        ->columnSpan(3)
-                        ->unique(
-                            ignorable: fn () => $form->getRecord(),
-                            modifyRuleUsing: fn (Unique $rule) => $rule->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId()),
-                        ),
-                    TextInput::make('quota')
-                        ->label('Participant Quota')
-                        ->placeholder('Input quota..')
-                        ->numeric()
-                        ->required(),
-                ]),
-            TinyEditor::make('meta.description')
-                ->label('Description')
-                ->placeholder('Input description..')
-                ->formatStateUsing(fn (string $operation, $record) => $operation === 'edit' ? $record->getMeta('description') : null)
-                ->minHeight(100),
-            Checkbox::make('free')
-                ->label('Set as free')
-                ->formatStateUsing(fn ($record) => isset($record->cost) ? $record->cost == 0 : false)
-                ->live(),
-            Fieldset::make('Registration Cost')
-                ->schema([
-                    Select::make('currency')
-                        ->label('Currency')
-                        ->formatStateUsing(fn ($state) => ($state !== null) ? ($state !== 'free' ? $state : null) : null)
-                        ->options(PaymentManualPage::getCurrencyOptions())
-                        ->searchable()
-                        ->required()
-                        ->live(),
-                    Grid::make(4)
-                        ->schema([
-                            TextInput::make('cost')
-                                ->label('Price')
-                                ->placeholder('Enter registration cost..')
-                                ->numeric()
-                                ->required()
-                                ->live()
-                                ->columnSpan(3)
-                                ->rules(['gte:1']),
-                            Placeholder::make('Price Preview')
-                                ->content(fn (Get $get) => ($get('currency') !== null && $get('currency') !== 'free' && !empty($get('cost'))) ? money($get('cost'), $get('currency')) : 'N/A')
-                        ])
-                ])
-                ->visible(fn (Get $get) => !$get('free'))
-                ->columns(1),
-            Grid::make(2)
-                ->schema([
-                    DatePicker::make('opened_at')
-                        ->label('Opened Date')
-                        ->placeholder('Select type opened date..')
-                        ->prefixIcon('heroicon-m-calendar-days')
-                        ->required()
-                        ->before('closed_at'),
-                    DatePicker::make('closed_at')
-                        ->label('Closed Date')
-                        ->placeholder('Select type closed date..')
-                        ->prefixIcon('heroicon-m-calendar-days')
-                        ->required()
-                        ->after('opened_at'),
-                ])
-        ]);
     }
 
     public function render()
