@@ -24,7 +24,6 @@
                             <tbody>
                                 @foreach ($registrationTypeList as $index => $type)
                                     @if ($type->active)
-                                        @php($elementID = Str::slug($type->type))
                                         <tr @class(['bg-red-100' => $type->isInvalid()])>
                                             <td>
                                                 <label>
@@ -44,9 +43,18 @@
                                                 </strong>
                                             </td>
                                             <td>
+                                                @php
+                                                    $typeCost = $type->cost;
+                                                    $typeCurrency = Str::upper($type->currency);
+                                                    $typeCostFormatted = money($typeCost, $typeCurrency);
+                                                    $elementID = Str::slug($type->type)
+                                                @endphp
                                                 <input @class(['cursor-pointer' => !$type->isInvalid()]) id="{{ $elementID }}" type="radio" wire:model="type" value="{{ $type->isInvalid() ? $index : $type->id }}" @disabled($type->isInvalid() || !$isLogged)>
                                                 <label @class(['cursor-pointer' => !$type->isInvalid()]) for="{{ $elementID }}">
-                                                    {{ ($type->currency === 'free' || $type->cost <= 0) ? 'Free' : '('.Str::upper($type->currency).') '.money($type->cost, $type->currency)}}
+                                                    {{ 
+                                                        ($typeCost <= 0 || $typeCurrency === 'FREE') ? 
+                                                        'Free' : "($typeCurrency) $typeCostFormatted"
+                                                    }}
                                                 </label>
                                             </td>
                                         </tr>

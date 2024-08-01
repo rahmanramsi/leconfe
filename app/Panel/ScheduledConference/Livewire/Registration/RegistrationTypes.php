@@ -152,7 +152,8 @@ class RegistrationTypes extends Component implements HasTable, HasForms
                     ->formatStateUsing(fn (Model $record) => ($record->cost === 0) ? 'Free' : money($record->cost, $record->currency)),
                 TextColumn::make('currency')
                     ->label('Currency')
-                    ->formatStateUsing(fn (Model $record) => ($record->currency === 'free') ? 'None' : currency($record->currency)->getName() . ' (' . currency($record->currency)->getCurrency() . ')'),
+                    ->formatStateUsing(fn (Model $record) => ($record->currency === 'free') ? 'None' : '(' . currency($record->currency)->getCurrency() . ') ' . currency($record->currency)->getName())
+                    ->wrap(),
                 TextColumn::make('opened_at')
                     ->date('Y-M-d')
                     ->color(fn (Model $record) => $record->isExpired() ? Color::Red : null),
@@ -166,18 +167,18 @@ class RegistrationTypes extends Component implements HasTable, HasForms
             ->emptyStateHeading('Type are empty')
             ->emptyStateDescription('Create a Type to get started.')
             ->actions([
+                EditAction::make()
+                    ->form(fn (Form $form) => $this->form($form))
+                    ->using(fn (Model $record, array $data) => RegistrationTypeUpdateAction::run($record, $data))
+                    ->mutateFormDataUsing(function ($data) {
+                        if ($data['free']) {
+                            $data['cost'] = 0;
+                            $data['currency'] = 'free';
+                        }
+                        return $data;
+                    })
+                    ->authorize('RegistrationSetting:edit'),
                 ActionGroup::make([
-                    EditAction::make()
-                        ->form(fn (Form $form) => $this->form($form))
-                        ->using(fn (Model $record, array $data) => RegistrationTypeUpdateAction::run($record, $data))
-                        ->mutateFormDataUsing(function ($data) {
-                            if ($data['free']) {
-                                $data['cost'] = 0;
-                                $data['currency'] = 'free';
-                            }
-                            return $data;
-                        })
-                        ->authorize('RegistrationSetting:edit'),
                     DeleteAction::make()
                         ->using(fn (Model $record) => RegistrationTypeDeleteAction::run($record))
                         ->authorize('RegistrationSetting:delete'),

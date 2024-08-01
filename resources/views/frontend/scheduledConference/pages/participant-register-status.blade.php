@@ -21,14 +21,15 @@
                     <td class="pl-2">
                         <span @class([
                             'inline-flex items-center rounded-md px-2 py-1 text-xs font-medium text-white ring-1 ring-inset ring-gray-500/10', 
-                            'bg-green-500' => $userRegistration->getStatus() === RegistrationPaymentState::Paid->value,
-                            'bg-yellow-500' => $userRegistration->getStatus() === RegistrationPaymentState::Unpaid->value,
-                            'bg-red-500' => $userRegistration->getStatus() === Registration::STATUS_TRASHED,
+                            'bg-green-500' => $userRegistration->getState() === RegistrationPaymentState::Paid->value,
+                            'bg-yellow-500' => $userRegistration->getState() === RegistrationPaymentState::Unpaid->value,
+                            '!bg-red-500' => $userRegistration->trashed(),
                         ])>
-                            {{ Str::headline(match($userRegistration->getStatus()) {
-                                Registration::STATUS_TRASHED => 'Failed',
-                                default => $userRegistration->getStatus(),
-                            }) }}
+                            {{ 
+                                $userRegistration->trashed() ? 
+                                'Failed' :
+                                $userRegistration->getState();
+                            }}
                         </span>
                     </td>
                 </tr>
@@ -50,7 +51,15 @@
                     <td class="align-text-top">Cost</td>
                     <td class="align-text-top pl-5">:</td>
                     <td class="pl-2">
-                        {{ ($userRegistration->registrationPayment->cost === 0 || $userRegistration->registrationPayment->currency === 'free') ? 'Free' : '('.Str::upper($userRegistration->registrationPayment->currency).') '.money($userRegistration->registrationPayment->cost, $userRegistration->registrationPayment->currency) }}
+                        @php
+                            $userRegistrationCost = $userRegistration->registrationPayment->cost;
+                            $userRegistrationCurrency = Str::upper($userRegistration->registrationPayment->currency);
+                            $userRegistrationCostFormatted = money($userRegistrationCost, $userRegistrationCurrency);
+                        @endphp
+                        {{ 
+                            ($userRegistrationCost === 0 || $userRegistrationCurrency === 'FREE') ? 
+                            'Free' : "($userRegistrationCurrency) $userRegistrationCostFormatted"
+                        }}
                     </td>
                 </tr>
                 <tr>
@@ -60,7 +69,7 @@
                         {{ Carbon::parse($userRegistration->created_at)->format('Y-M-d') }}
                     </td>
                 </tr>
-                @if ($userRegistration->getStatus() === RegistrationPaymentState::Paid->value && $userRegistration->registrationType->currency !== 'free')
+                @if ($userRegistration->getState() === RegistrationPaymentState::Paid->value && $userRegistration->registrationType->currency !== 'free')
                     <tr>
                         <td class="align-text-top">Payment Date</td>
                         <td class="align-text-top pl-5">:</td>
@@ -70,7 +79,7 @@
                     </tr>
                 @endif
             </table>
-            @if ($userRegistration->getStatus() === RegistrationPaymentState::Unpaid->value)
+            @if ($userRegistration->getState() === RegistrationPaymentState::Unpaid->value && !$userRegistration->trashed())
                 <hr class="my-8">
                 <div class="w-full">
                     @foreach ($paymentList as $currency)

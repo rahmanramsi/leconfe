@@ -16,8 +16,6 @@ class Registration extends Model
 {
     use BelongsToScheduledConference, HasShortflakePrimary, Cachable, HasFactory, SoftDeletes;
 
-    public const STATUS_TRASHED = 'Trashed';
-
     protected $guarded = ['id', 'scheduled_conference_id'];
 
     // payment state [paid, unpaid] from registration_payments table
@@ -29,15 +27,6 @@ class Registration extends Model
     public function isTrashed()
     {
         return $this->trashed();
-    }
-
-    public function getStatus()
-    {
-        if ($this->isTrashed()) {
-            return self::STATUS_TRASHED;
-        }
-
-        return $this->getState();
     }
 
     public function user(): BelongsTo
