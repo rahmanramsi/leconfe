@@ -95,21 +95,16 @@
                                     $payments = json_decode($currency->payments, true);
                                 @endphp
                                 @foreach ($payments as $payment)
-                                    @if (count($payments) === 1)
-                                        <div class="md:col-span-6 px-5 py-3 border border-gray-300 rounded">
-                                            <h1 class="font-bold text-left">{{ $payment['name'] }}</h1>
-                                            <p class="mt-2">
-                                                {{ new Illuminate\Support\HtmlString($payment['detail']) }}
-                                            </p>
-                                        </div>
-                                    @else
-                                        <div class="md:col-span-3 px-5 py-3 border border-gray-300 rounded">
-                                            <h1 class="font-bold text-left">{{ $payment['name'] }}</h1>
-                                            <p class="mt-2">
-                                                {{ new Illuminate\Support\HtmlString($payment['detail']) }}
-                                            </p>
-                                        </div>
-                                    @endif
+                                    <div @class([
+                                        'px-5 py-3 border border-gray-300 rounded',
+                                        'md:col-span-6' => count($payments) === 1,
+                                        'md:col-span-3' => count($payments) !== 1,
+                                    ])>
+                                        <h1 class="font-bold text-left">{{ $payment['name'] }}</h1>
+                                        <p class="mt-2">
+                                            {{ new Illuminate\Support\HtmlString($payment['detail']) }}
+                                        </p>
+                                    </div>
                                 @endforeach
                                 
                             </div>
@@ -122,14 +117,14 @@
                     @endif
                 </div>
             @endif
-            @empty(!$currentScheduledConference->getMeta('payment_policy'))
+            @if(!empty($currentScheduledConference->getMeta('payment_policy')))
                 <hr class="my-8">
                 <div class="w-full text-wrap ">
                     <p>
                         {{ new Illuminate\Support\HtmlString($currentScheduledConference->getMeta('payment_policy')) }}
                     </p>
                 </div>
-            @endempty
+            @endif
         </div>
         @endif
     @else
