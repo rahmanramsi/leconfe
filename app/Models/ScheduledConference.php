@@ -3,22 +3,23 @@
 namespace App\Models;
 
 use App\Frontend\ScheduledConference\Pages\Home;
+use Carbon\Carbon;
 use Plank\Metable\Metable;
 use Spatie\MediaLibrary\HasMedia;
+use Illuminate\Support\Facades\Vite;
 use Filament\Models\Contracts\HasName;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Models\Contracts\HasAvatar;
+use Kra8\Snowflake\HasShortflakePrimary;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use App\Models\Concerns\BelongsToConference;
-use App\Models\Enums\ScheduledConferenceState;
 use App\Models\Enums\ScheduledConferenceType;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Enums\ScheduledConferenceState;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Support\Facades\Vite;
-use Kra8\Snowflake\HasShortflakePrimary;
 
 class ScheduledConference extends Model implements HasMedia, HasAvatar, HasName
 {
@@ -108,6 +109,16 @@ class ScheduledConference extends Model implements HasMedia, HasAvatar, HasName
     public function getUrl(): string
     {
         return $this->getHomeUrl();
+    }
+
+    public function registration(): HasMany
+    {
+        return $this->hasMany(Registration::class);
+    }
+
+    public function registrationType(): HasMany
+    {
+        return $this->hasMany(RegistrationType::class);
     }
 
     public function getPanelUrl(): string
