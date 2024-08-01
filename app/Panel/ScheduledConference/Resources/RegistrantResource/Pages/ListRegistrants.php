@@ -24,6 +24,11 @@ class ListRegistrants extends ListRecords
     public function getTabs(): array
     {
         return [
+            'all' => Tab::make()
+                ->badge(fn () => static::$resource::getEloquentQuery()
+                    ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
+                    ->count()
+                ),
             'paid' => Tab::make()
                 ->modifyQueryUsing(
                     fn (Builder $query) => $query
@@ -34,6 +39,7 @@ class ListRegistrants extends ListRecords
                 )
                 ->badge(
                     fn () => static::$resource::getEloquentQuery()
+                        ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
                         ->WhereNull('deleted_at')  
                         ->whereHas('registrationPayment', function ($query) {
                             $query->where('state', RegistrationPaymentState::Paid->value);
@@ -50,6 +56,7 @@ class ListRegistrants extends ListRecords
                 )
                 ->badge(
                     fn () => static::$resource::getEloquentQuery()
+                        ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
                         ->WhereNull('deleted_at')    
                         ->whereHas('registrationPayment', function ($query) {
                             $query->where('state', RegistrationPaymentState::Unpaid->value);
@@ -64,11 +71,10 @@ class ListRegistrants extends ListRecords
                 )
                 ->badge(
                     fn () => static::$resource::getEloquentQuery()
+                        ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
                         ->whereNotNull('deleted_at')    
                         ->count()
                 ),
-            'all' => Tab::make()
-                ->badge(fn () => Registration::where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())->count()),
         ];
     }
 
