@@ -28,10 +28,11 @@
                                             {!! $conference->getMeta('summary') !!}
                                         </div>
                                     @endif
-
                                     <div class="flex items-center gap-2">
                                         <a href="{{ $conference->getHomeUrl() }}" class="link text-sm">View Conference</a>
-                                        <a href="{{ $conference->getHomeUrl() }}" class="link text-sm">Current Event</a>
+                                        @if($conference->currentScheduledConference)
+                                            <a href="{{ $conference->currentScheduledConference->getHomeUrl() }}" class="link text-sm">Current Event</a>
+                                        @endif
                                     </div>
                                 </div>
                             </div>

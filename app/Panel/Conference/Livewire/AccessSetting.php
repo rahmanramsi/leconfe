@@ -37,9 +37,6 @@ class AccessSetting extends Component implements HasForms
                         Checkbox::make('allow_registration')
                             ->label('Allow Registration')
                             ->helperText('Allow public to register on the site.'),
-                        Checkbox::make('must_verify_email')
-                            ->label('Must Verify Email')
-                            ->helperText('Require users to verify their email address before they can log in.'),
                     ])
                     ->columns(1),
                 Actions::make([

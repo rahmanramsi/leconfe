@@ -35,19 +35,13 @@ class Upgrader extends Installer
 
             $this->addNewApplicationVersion();
 
-            $this->optimize();
+            $this->configureOptimization();
         } catch (\Throwable $th) {
             if (! $th instanceof NoUpgradeScript) {
-                activity('leconfe')
-                    ->causedByAnonymous()
-                    ->event('upgrade')
-                    ->withProperties([
-                        'from' => $this->installedVersion,
-                        'to' => $this->codeVersion,
-                        'duration' => round(microtime(true) - $start, 2),
-                        'status' => 'failed',
-                    ])
-                    ->log($th->getMessage());
+                $this->log($th->getMessage(), [
+                    'duration' => round(microtime(true) - $start, 2),
+                    'status' => 'failed',
+                ]);
             }
 
             throw $th;
@@ -55,16 +49,10 @@ class Upgrader extends Installer
             return;
         }
 
-        activity('leconfe')
-            ->causedByAnonymous()
-            ->event('upgrade')
-            ->withProperties([
-                'from' => $this->installedVersion,
-                'to' => $this->codeVersion,
-                'duration' => round(microtime(true) - $start, 2),
-                'status' => 'success',
-            ])
-            ->log('Upgrade success');
+        $this->log('Upgrade success', [
+            'duration' => round(microtime(true) - $start, 2),
+            'status' => 'success',
+        ]);
     }
 
     public function log($message, $properties = [])

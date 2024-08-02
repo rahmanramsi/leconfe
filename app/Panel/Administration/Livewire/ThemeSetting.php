@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Panel\Conference\Livewire;
+namespace App\Panel\Administration\Livewire;
 
 
 use App\Actions\Conferences\ConferenceUpdateAction;
+use App\Actions\Site\SiteUpdateAction;
 use App\Forms\Components\CssFileUpload;
 use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\Actions\Action;
@@ -25,11 +26,11 @@ class ThemeSetting extends Component implements HasForms
 
     public function mount(): void
     {
-        $conference = app()->getCurrentConference();
+        $site = app()->getSite();
 
         $this->form->fill([
-            ...$conference->attributesToArray(),
-            'meta' => $conference->getAllMeta(),
+            ...$site->attributesToArray(),
+            'meta' => $site->getAllMeta(),
         ]);
     }
 
@@ -41,7 +42,7 @@ class ThemeSetting extends Component implements HasForms
     public function form(Form $form): Form
     {
         return $form
-            ->model(app()->getCurrentConference())
+            ->model(app()->getSite())
             ->schema([
                 Section::make()
                     ->schema([
@@ -66,8 +67,9 @@ class ThemeSetting extends Component implements HasForms
                         ->successNotificationTitle('Saved!')
                         ->failureNotificationTitle('Data could not be saved.')
                         ->action(function (Action $action) {
+                            $data = $this->form->getState();
                             try {
-                                ConferenceUpdateAction::run($this->form->getRecord(),  $this->form->getState());
+                                SiteUpdateAction::run($data);
                                 $action->sendSuccessNotification();
                             } catch (\Throwable $th) {
                                 throw $th;

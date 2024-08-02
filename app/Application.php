@@ -194,7 +194,7 @@ class Application extends LaravelApplication
     public function isReportingErrors(): bool
     {
         try {
-            if ($this->isProduction() && !$this->hasDebugModeEnabled() && Setting::set('send_error_report', true)) {
+            if ($this->isProduction() && !$this->hasDebugModeEnabled() && config('app.report_errors')) {
                 return true;
             }
         } catch (\Throwable $th) {
