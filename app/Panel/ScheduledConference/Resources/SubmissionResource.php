@@ -18,6 +18,7 @@ use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use PDO;
 
 class SubmissionResource extends Resource
 {
@@ -34,17 +35,16 @@ class SubmissionResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->with(['meta', 'user'])->orderBy('updated_at', 'desc');
+        return parent::getEloquentQuery()->with(['meta', 'user', 'reviews'])->orderBy('updated_at', 'desc');
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->recordUrl(function (Submission $record) {
-                $participantReviewer = $record->reviews()->where('user_id', auth()->id())->first();
-
-                if ($participantReviewer) {
-                    if ($participantReviewer->needConfirmation() || $participantReviewer->status == ReviewerStatus::DECLINED) {
+                $review = $record->reviews->where('user_id', auth()->id())->first();
+                if ($review) {
+                    if ($review->needConfirmation() || $review->status == ReviewerStatus::DECLINED) {
                         return static::getUrl('reviewer-invitation', [
                             'record' => $record->id,
                         ]);
@@ -90,15 +90,24 @@ class SubmissionResource extends Resource
                             ])
                             ->color('warning')
                             ->getStateUsing(function (Submission $record) {
-                                $editorAssigned = $record->participants()
-                                    ->whereHas(
-                                        'role',
-                                        fn (Builder $query) => $query->where('name', UserRole::ConferenceEditor)
-                                    )
-                                    ->count();
+                                $isEditorAssigned = $record->editors_count;
 
-                                if (! $editorAssigned && $record->stage != SubmissionStage::Wizard) {
+                                if (! $isEditorAssigned && $record->stage != SubmissionStage::Wizard) {
                                     return 'No Editor Assigned';
+                                }
+                            }),
+                        Tables\Columns\TextColumn::make('reviewed')
+                            ->badge()
+                            ->color('success')
+                            // ->hidden(fn() => !auth()->user()->hasRole(UserRole::Reviewer))
+                            ->getStateUsing(function(Submission $record){
+                                $review = $record->reviews->where('user_id', auth()->id())->first();
+                                if(!$review){
+                                   return '';
+                                }
+
+                                if($review->reviewSubmitted()){
+                                    return 'Reviewed';
                                 }
                             }),
                         Tables\Columns\TextColumn::make('withdrawn-notification')

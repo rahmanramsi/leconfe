@@ -158,6 +158,7 @@ class Application extends LaravelApplication
             NavigationMenu::class,
             SubmissionFileType::class,
             Track::class,
+            Submission::class,
         ];
 
         foreach ($models as $model) {

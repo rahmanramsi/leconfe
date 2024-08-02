@@ -80,22 +80,13 @@ class Submission extends Model implements HasMedia, HasPayment, Sortable
      */
     protected static function booted(): void
     {
-        static::addGlobalScope('user', function (Builder $builder) {
-            // $currentUser = auth()->user();
-            // if (
-            //     $currentUser->hasRole(UserRole::ConferenceEditor->value)
-            //     || $currentUser->hasRole(UserRole::Reviewer->value)
-            // ) {
-            //     $builder->where('user_id', auth()->id());
-            // }
-        });
 
         static::creating(function (Submission $submission) {
             $submission->user_id ??= Auth::id();
             $submission->conference_id ??= app()->getCurrentConferenceId();
             $submission->scheduled_conference_id ??= app()->getCurrentScheduledConferenceId();
 
-            if(!$submission->track_id){
+            if (!$submission->track_id) {
                 $submission->track_id = Track::first()?->getKey();
             }
         });
@@ -113,7 +104,7 @@ class Submission extends Model implements HasMedia, HasPayment, Sortable
                 'role_id' => Role::where('name', UserRole::Author->value)->first()->getKey(),
             ]);
 
-             // Current user as a author
+            // Current user as a author
             $author = $submission->authors()->create([
                 'author_role_id' => AuthorRole::where('name', UserRole::Author->value)->first()->getKey(),
                 ...$submission->user->only(['email', 'given_name', 'family_name', 'public_name']),
@@ -127,19 +118,19 @@ class Submission extends Model implements HasMedia, HasPayment, Sortable
         });
     }
 
-    public function proceeding() : BelongsTo
+    public function proceeding(): BelongsTo
     {
         return $this->belongsTo(Proceeding::class);
     }
 
-    public function track() : BelongsTo
+    public function track(): BelongsTo
     {
         return $this->belongsTo(Track::class);
     }
 
     public function assignProceeding(Proceeding|int $proceeding)
     {
-        if(is_int($proceeding)) {
+        if (is_int($proceeding)) {
             $proceeding = Proceeding::find($proceeding);
         }
 
@@ -201,6 +192,12 @@ class Submission extends Model implements HasMedia, HasPayment, Sortable
     public function participants()
     {
         return $this->hasMany(SubmissionParticipant::class);
+    }
+
+    public function editors()
+    {
+        return $this->participants()
+            ->whereHas('role', fn (Builder $query) => $query->where('name', UserRole::ConferenceEditor));
     }
 
     public function authors()

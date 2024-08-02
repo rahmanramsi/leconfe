@@ -150,7 +150,6 @@ Reviewer:
     - 'Submission:review'
     - 'Submission:viewAny'
 Author:
-    - 'Submission:create'
     - 'Submission:delete'
     - 'Submission:requestWithdraw'
     - 'Submission:uploadAbstract'

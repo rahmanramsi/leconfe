@@ -28,9 +28,7 @@ class ManageSubmissions extends ManageRecords
 
     protected const TAB_ACTIVE = 'Active';
 
-    protected const TAB_UNASSIGNED = 'Unassigned';
-
-    protected const TAB_PRESENTATION = 'Presentation';
+    protected const TAB_PUBLISHED = 'Published';
 
     protected const TAB_ARCHIVED = 'Archived';
 
@@ -60,71 +58,28 @@ class ManageSubmissions extends ManageRecords
         ];
     }
 
-    public static function generateQueryByCurrentUser(string $tab)
+    public static function generateQueryByCurrentUser(string $tabs)
     {
-        $user = Auth::user();
-        $query = static::getResource()::getEloquentQuery()
-            ->withCount('editors');
+        $statuses = match ($tabs) {
+            static::TAB_MYQUEUE => [
+                SubmissionStatus::Queued,
+            ],
+            static::TAB_ACTIVE => [
+                SubmissionStatus::OnReview,
+                SubmissionStatus::Editing,
+                SubmissionStatus::OnPresentation,
+            ],
+            static::TAB_PUBLISHED => [
+                SubmissionStatus::Published,
+            ],
+            static::TAB_ARCHIVED => [
+                SubmissionStatus::Declined,
+                SubmissionStatus::Withdrawn,
+            ],
+            default => null,
+        };
 
-        if ($user->hasAnyRole([
-            UserRole::ConferenceEditor,
-            UserRole::Admin,
-        ])) {
-            return $query
-                ->when($tab == static::TAB_PRESENTATION, fn ($query) =>  $query->whereIn('status', [
-                    SubmissionStatus::OnPresentation,
-                ]))
-                ->when($tab == static::TAB_MYQUEUE, fn ($query) =>  $query->whereIn('status', [
-                    SubmissionStatus::Queued,
-                    SubmissionStatus::Incomplete,
-                ]))
-                ->when($tab === static::TAB_ARCHIVED, fn ($query) => $query->whereIn('status', [
-                    SubmissionStatus::Published,
-                    SubmissionStatus::Declined,
-                    SubmissionStatus::Withdrawn,
-                ]))
-                ->when($tab === static::TAB_UNASSIGNED, fn ($query) => $query->having('editors_count', 0))
-                ->when($tab === static::TAB_ACTIVE, fn ($query) => $query->having('editors_count', '>', 0));
-        }
-
-
-        if ($user->hasRole(UserRole::Reviewer)) {
-            $query->orWhere(fn ($query) => $query->whereHas('reviews', fn (Builder $query) => $query->where('user_id', Auth::id())))
-                ->when($tab == static::TAB_MYQUEUE, fn ($query) =>  $query->whereIn('status', [
-                    SubmissionStatus::OnReview,
-                    SubmissionStatus::Editing,
-                    SubmissionStatus::OnPresentation,
-                ]))
-                ->when($tab == static::TAB_ARCHIVED, fn ($query) => $query->whereIn('status', [
-                    SubmissionStatus::Published,
-                    SubmissionStatus::Declined,
-                    SubmissionStatus::Withdrawn,
-                ]));
-        }
-
-
-        if ($user->hasRole(UserRole::Author)) {
-            $query->orWhere(fn ($query) => $query->where('user_id', $user->id)
-                ->when($tab == static::TAB_PRESENTATION, fn ($query) =>  $query->whereIn('status', [
-                    SubmissionStatus::OnPresentation,
-                ]))
-                ->when($tab == static::TAB_MYQUEUE, fn ($query) =>  $query->whereIn('status', [
-                    SubmissionStatus::Queued,
-                    SubmissionStatus::Incomplete,
-                    SubmissionStatus::OnReview,
-                    SubmissionStatus::Editing,
-                    SubmissionStatus::OnPresentation,
-                ]))
-                ->when($tab == static::TAB_ARCHIVED, fn ($query) => $query->whereIn('status', [
-                    SubmissionStatus::Published,
-                    SubmissionStatus::Declined,
-                    SubmissionStatus::Withdrawn,
-                ])));
-        }
-
-        return $query;
-
-
+        $query = static::getResource()::getEloquentQuery();
         // if (Auth::user()->hasAnyRole([
         //     UserRole::Admin->value,
         //     UserRole::ConferenceManager->value,
@@ -184,7 +139,7 @@ class ManageSubmissions extends ManageRecords
                 })->whereIn('status', $statuses);
             }
         )->when(
-            $tab == static::TAB_MYQUEUE,
+            $tabs == static::TAB_MYQUEUE,
             function (Builder $query) {
                 $query->orWhere([
                     ['user_id', '=', Auth::id()],
@@ -194,34 +149,21 @@ class ManageSubmissions extends ManageRecords
         );
     }
 
+    /** Need to be optimized */
     public function getTabs(): array
     {
-        $user = auth()->user();
-        $tabs = [
+        return [
             static::TAB_MYQUEUE => $this->createTab('My Queue', static::TAB_MYQUEUE),
+            static::TAB_ACTIVE => $this->createTab('Active', static::TAB_ACTIVE),
+            static::TAB_PUBLISHED => $this->createTab('Published', static::TAB_PUBLISHED),
+            static::TAB_ARCHIVED => $this->createTab('Archived', static::TAB_ARCHIVED),
         ];
-
-        if ($user->hasAnyRole([
-            UserRole::Admin,
-            UserRole::ConferenceManager,
-            UserRole::ConferenceEditor,
-        ])) {
-            $tabs[static::TAB_UNASSIGNED] = $this->createTab('Unassigned', static::TAB_UNASSIGNED);
-            $tabs[static::TAB_ACTIVE] = $this->createTab('Active', static::TAB_ACTIVE);
-        }
-
-        if($user->hasRole(UserRole::Author)){
-            $tabs[static::TAB_PRESENTATION] = $this->createTab('Presentation', static::TAB_PRESENTATION);
-        }
-
-        $tabs[static::TAB_ARCHIVED] = $this->createTab('Archived', static::TAB_ARCHIVED);
-
-        return $tabs;
     }
 
     private function createTab(string $label, string $tabType): Tab
     {
         $query = static::generateQueryByCurrentUser($tabType);
+        dd($query->toRawSql());
 
         $count = $query->count();
 
