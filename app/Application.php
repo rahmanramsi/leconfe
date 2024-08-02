@@ -34,7 +34,7 @@ use Illuminate\Support\Collection;
 
 class Application extends LaravelApplication
 {
-    public const APP_VERSION = '1.0.0-alpha.2';
+    public const APP_VERSION = '1.0.0-alpha.3';
 
     public const PHP_MIN_VERSION = '8.1';
 
