@@ -6,6 +6,7 @@ use Filament\Forms;
 use App\Models\User;
 use Filament\Tables;
 use Filament\Forms\Get;
+use App\Facades\Setting;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Illuminate\Support\Arr;
@@ -156,7 +157,7 @@ class RegistrantResource extends Resource
                     ->visible(fn () => app()->getCurrentScheduledConference()->isAttendanceEnabled()),
                 TextColumn::make('created_at')
                     ->label('Registration Date')
-                    ->date('Y-M-d')
+                    ->date(Setting::get('format_date'))
                     ->sortable(),
             ])
             ->emptyStateHeading('No Registrant')

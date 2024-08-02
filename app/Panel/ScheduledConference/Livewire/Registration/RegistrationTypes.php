@@ -4,6 +4,7 @@ namespace App\Panel\ScheduledConference\Livewire\Registration;
 
 use Filament\Forms\Get;
 use Livewire\Component;
+use App\Facades\Setting;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\RegistrationType;
@@ -32,8 +33,8 @@ use Filament\Tables\Concerns\InteractsWithTable;
 use App\Actions\RegistrationTypes\RegistrationTypeCreateAction;
 use App\Actions\RegistrationTypes\RegistrationTypeDeleteAction;
 use App\Actions\RegistrationTypes\RegistrationTypeUpdateAction;
-use App\Panel\ScheduledConference\Livewire\Payment\PaymentManualPage;
 use App\Panel\ScheduledConference\Livewire\Payment\PaymentManuals;
+use App\Panel\ScheduledConference\Livewire\Payment\PaymentManualPage;
 
 class RegistrationTypes extends Component implements HasTable, HasForms
 {
@@ -155,10 +156,10 @@ class RegistrationTypes extends Component implements HasTable, HasForms
                     ->formatStateUsing(fn (Model $record) => ($record->currency === 'free') ? 'None' : '(' . currency($record->currency)->getCurrency() . ') ' . currency($record->currency)->getName())
                     ->wrap(),
                 TextColumn::make('opened_at')
-                    ->date('Y-M-d')
+                    ->date(Setting::get('format_date'))
                     ->color(fn (Model $record) => $record->isExpired() ? Color::Red : null),
                 TextColumn::make('closed_at')
-                    ->date('Y-M-d')
+                    ->date(Setting::get('format_date'))
                     ->color(fn (Model $record) => $record->isExpired() ? Color::Red : null),
                 ToggleColumn::make('active')
                     ->onColor(Color::Green)

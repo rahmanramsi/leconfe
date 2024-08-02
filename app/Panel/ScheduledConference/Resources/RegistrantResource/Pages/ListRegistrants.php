@@ -19,7 +19,7 @@ class ListRegistrants extends ListRecords
 {
     protected static string $resource = RegistrantResource::class;
 
-    protected ?string $heading = 'Registrant';
+    protected ?string $heading = 'Registrants';
 
     public function getTabs(): array
     {
