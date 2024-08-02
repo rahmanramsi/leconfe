@@ -26,13 +26,13 @@ class UpgradeAction
         $installedVersion = app()->getInstalledVersion();
         $codeVersion = app()->getCodeVersion();
 
-        warning('This action will run upgrade scripts your application. Please make sure you have a backup of your database and files before proceeding.');
 
         table(['Name', 'Version'], [
             ['Installed version', $installedVersion],
             ['Upgrade version', $codeVersion],
         ]);
 
+        warning('This action will run upgrade scripts your application. Please make sure you have a backup of your database and files before proceeding.');
         $confirmUpgrade = $command->option('confirm') ?: confirm('Are you sure you want to upgrade? This action cannot be undone. (y/n)');
 
         if (! $confirmUpgrade) {
@@ -46,6 +46,7 @@ class UpgradeAction
 
             $command->callSilently('optimize:clear');
             $command->callSilently('icons:clear');
+            $command->callSilently('icons:cache');
             $command->callSilently('modelCache:clear');
 
             $upgrader = new \App\Utils\Upgrader(command: $command);

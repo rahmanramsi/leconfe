@@ -37,13 +37,6 @@ class Upgrader extends Installer
 
             $this->configureOptimization();
         } catch (\Throwable $th) {
-            if (! $th instanceof NoUpgradeScript) {
-                $this->log($th->getMessage(), [
-                    'duration' => round(microtime(true) - $start, 2),
-                    'status' => 'failed',
-                ]);
-            }
-
             throw $th;
 
             return;
@@ -79,7 +72,7 @@ class Upgrader extends Installer
     public function startActions()
     {
         if (empty($this->actions)) {
-            throw new NoUpgradeScript($this->installedVersion, $this->codeVersion);
+            return;
         }
 
         // Sort by priority
