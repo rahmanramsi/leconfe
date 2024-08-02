@@ -14,7 +14,7 @@ use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Concerns\InteractsWithForms;
 use App\Forms\Components\TinyEditor;
 
-class RegistrationPolicies extends Component implements HasForms
+class RegistrationSettings extends Component implements HasForms
 {
     use InteractsWithForms;
 

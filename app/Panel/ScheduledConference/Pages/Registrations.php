@@ -7,10 +7,10 @@ use Filament\Pages\Page;
 use Filament\Infolists\Infolist;
 use App\Infolists\Components\LivewireEntry;
 use App\Infolists\Components\VerticalTabs as InfolistsVerticalTabs;
-use App\Panel\ScheduledConference\Livewire\Registration\RegistrationPolicies;
+use App\Panel\ScheduledConference\Livewire\Registration\RegistrationSettings;
 use App\Panel\ScheduledConference\Livewire\Registration\RegistrationTypes;
 
-class RegistrationSettings extends Page
+class Registrations extends Page
 {
     protected static string $view = 'panel.scheduledConference.pages.registration-setting';
 
@@ -49,7 +49,7 @@ class RegistrationSettings extends Page
                             ->icon('heroicon-o-cog-6-tooth')
                             ->schema([
                                 LivewireEntry::make('registrationPolicy')
-                                    ->livewire(RegistrationPolicies::class)
+                                    ->livewire(RegistrationSettings::class)
                             ]),
                     ]),
             ]);
