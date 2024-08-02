@@ -178,6 +178,11 @@ class ScheduledConference extends Model implements HasMedia, HasAvatar, HasName
         return $this->state == ScheduledConferenceState::Archived;
     }
 
+    public function isAttendanceEnabled(): bool
+    {
+        return $this->getMeta('registration_attend');
+    }
+
     public function scopeType($query, ScheduledConferenceType $type)
     {
         return $query->where('type', $type);

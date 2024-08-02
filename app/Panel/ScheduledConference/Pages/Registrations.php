@@ -48,7 +48,7 @@ class Registrations extends Page
                         InfolistsVerticalTabs\Tab::make('Settings')
                             ->icon('heroicon-o-cog-6-tooth')
                             ->schema([
-                                LivewireEntry::make('registrationPolicy')
+                                LivewireEntry::make('registrationSettings')
                                     ->livewire(RegistrationSettings::class)
                             ]),
                     ]),

@@ -13,6 +13,8 @@ use App\Actions\ScheduledConferences\ScheduledConferenceUpdateAction;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Concerns\InteractsWithForms;
 use App\Forms\Components\TinyEditor;
+use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\Toggle;
 
 class RegistrationSettings extends Component implements HasForms
 {
@@ -33,6 +35,9 @@ class RegistrationSettings extends Component implements HasForms
             ->schema([
                 Section::make(null)
                     ->schema([
+                        Toggle::make('meta.registration_attend')
+                            ->label('Attendance Feature')
+                            ->inline(false),
                         TinyEditor::make('meta.registration_policy')
                             ->label('Registration Policy')
                             ->minHeight(300)
