@@ -180,6 +180,9 @@ class ScheduledConference extends Model implements HasMedia, HasAvatar, HasName
 
     public function isAttendanceEnabled(): bool
     {
+        if(!$this->getMeta('registration_attend')) {
+            return false;
+        }
         return $this->getMeta('registration_attend');
     }
 

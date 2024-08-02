@@ -24,6 +24,11 @@ class Registration extends Model
         return $this->registrationPayment->state;
     }
 
+    public function getAttendance()
+    {
+        return $this->attend;
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
