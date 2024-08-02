@@ -95,7 +95,6 @@ class RegistrantResource extends Resource
     {
         return $table
             ->modifyQueryUsing(fn (Builder $query) => $query->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId()))
-            ->reorderable('order_column')
             ->heading('Registrant List')
             ->headerActions([
                 Action::make('Enroll User')

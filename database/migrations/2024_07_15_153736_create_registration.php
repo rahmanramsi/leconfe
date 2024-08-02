@@ -37,7 +37,6 @@ return new class extends Migration
             $table->foreignIdFor(User::class);
             $table->foreignIdFor(RegistrationType::class);
             $table->boolean('attend')->default(false);
-            $table->unsignedInteger('order_column')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
