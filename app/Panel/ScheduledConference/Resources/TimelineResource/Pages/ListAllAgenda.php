@@ -119,6 +119,12 @@ class ListAllAgenda extends Page implements HasTable, HasForms
                 Group::make('timeline.name')
                     ->label('Timeline')
                     ->getDescriptionFromRecordUsing(fn (Model $record): string => Carbon::parse($record->timeline->date)->format(Setting::get('format_date')))
+                    ->orderQueryUsing(function (Builder $query, string $direction) {
+                        return $query
+                            ->select(['agendas.*', 'timelines.date'])
+                            ->leftJoin('timelines', 'timelines.id', '=', 'agendas.timeline_id')
+                            ->orderBy('date', $direction);
+                    })
                     ->collapsible(),
             ])
             ->defaultGroup('timeline.name')
