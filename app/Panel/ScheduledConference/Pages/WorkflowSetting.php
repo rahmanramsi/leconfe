@@ -17,7 +17,6 @@ use App\Panel\ScheduledConference\Livewire\ReviewGuidance;
 use App\Panel\ScheduledConference\Livewire\ReviewSetupSetting;
 use App\Panel\ScheduledConference\Livewire\SubmissionFileTypeTable;
 use App\Panel\ScheduledConference\Livewire\SubmissionPaymentItemTable;
-use App\Panel\ScheduledConference\Livewire\TimelineTable;
 use App\Panel\ScheduledConference\Livewire\TopicTable;
 use App\Panel\ScheduledConference\Livewire\TrackTable;
 
@@ -94,11 +93,6 @@ class WorkflowSetting extends Page
                                                     ->livewire(ReviewGuidance::class),
                                             ]),
                                     ]),
-                            ]),
-                        Tabs\Tab::make('Timeline')
-                            ->schema([
-                                LivewireEntry::make('timeline-table')
-                                    ->livewire(TimelineTable::class),
                             ]),
                         Tabs\Tab::make('Emails')
                             ->schema([
