@@ -21,20 +21,12 @@
                                 @endif
                             </div>
                         </div>
-                        @if ($committee->hasMeta('expertise'))
-                            <div class="inline-flex flex-wrap gap-2">
-                                @foreach ($committee->getMeta('expertise') as $expertise)
-                                    <div class="h-6 text-xs border border-gray-300 badge badge-outline">
-                                        {{ $expertise }}</div>
-                                @endforeach
-                            </div>
-                        @endif
                     </div>
                 </div>
             </div>
         @endforeach
         <div class="flex justify-end w-full pt-1">
-            <a href="{{ route('livewirePageGroup.conference.pages.committees') }}" class="btn btn-primary btn-sm">
+            <a href="{{ route('livewirePageGroup.scheduledConference.pages.committees') }}" class="btn btn-primary btn-sm">
                 More
             </a>
         </div>

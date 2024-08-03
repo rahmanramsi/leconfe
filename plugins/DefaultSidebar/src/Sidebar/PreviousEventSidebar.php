@@ -4,7 +4,7 @@ namespace DefaultSidebar\Sidebar;
 
 use App\Classes\Sidebar;
 use App\Models\Committee;
-use ScheduledConferenceState;
+use App\Models\Enums\ScheduledConferenceState;
 use App\Models\ScheduledConference;
 use App\Models\Topic;
 use Illuminate\Contracts\View\View;
@@ -35,6 +35,7 @@ class PreviousEventSidebar extends Sidebar
             'id' => $this->getId(),
             'name' => $this->getName(),
             'previousEvents' => ScheduledConference::query()
+                ->withoutGlobalScopes()
                 ->with('conference')
                 ->where('id', '!=', app()->getCurrentScheduledConferenceId())
                 ->where('state', ScheduledConferenceState::Archived)

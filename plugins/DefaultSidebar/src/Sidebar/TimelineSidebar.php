@@ -31,14 +31,14 @@ class TimelineSidebar extends Sidebar
     {
 
         $timelines = Timeline::all();
-
+        
         $formattedTimelines = [];
+        $today = now()->format('Y-m-d');
+        $tommorow = now()->addDay()->format('Y-m-d');
 
         foreach ($timelines as $timeline) {
             $timelineDate = $timeline->date->format('Y-m-d');
 
-            $today = now()->format('Y-m-d');
-            $tommorow = now()->addDay()->format('Y-m-d');
 
             $modifier = match (true) {
                 $timelineDate === $today => 'current_timeline',
@@ -48,7 +48,7 @@ class TimelineSidebar extends Sidebar
 
             $formattedTimelines[$timeline->date->format('Y-m-d')] = [
                 'modifier' => $modifier,
-                'html' => $timeline->title,
+                'html' => $timeline->name,
             ];
         }
 

@@ -17,12 +17,7 @@ class DefaultSidebarPlugin extends Plugin
         $conference = app()->getCurrentConference();
         $scheduledConference = app()->getCurrentScheduledConference();
         $sidebars = [];
-
-        if($conference){
-            return [
-            ];
-        }
-
+        
         if($scheduledConference){
             return [
                 new Sidebar\SubmitNowSidebar,
@@ -30,8 +25,12 @@ class DefaultSidebarPlugin extends Plugin
                 new Sidebar\TopicsSidebar,
                 new Sidebar\TimelineSidebar,
                 new Sidebar\PreviousEventSidebar,
-
             ];
+        }
+
+
+        if($conference){
+            return [];
         }
 
         return $sidebars;

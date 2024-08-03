@@ -4,6 +4,7 @@ namespace DefaultSidebar\Sidebar;
 
 use App\Classes\Sidebar;
 use App\Panel\ScheduledConference\Resources\SubmissionResource\Pages\ManageSubmissions;
+use App\Providers\PanelProvider;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\HtmlString;
 
@@ -30,7 +31,7 @@ class SubmitNowSidebar extends Sidebar
     {
         return [
             'id' => $this->getId(),
-            'submissionUrl' => ManageSubmissions::getUrl(),
+            'submissionUrl' => route(ManageSubmissions::getRouteName(PanelProvider::PANEL_SCHEDULED_CONFERENCE)),
         ];
     }
 }

@@ -5,9 +5,9 @@
             <div class="card-body">
                 <div class="inline-flex w-full flex-wrap gap-2">
                     @foreach ($topics as $topic)
-                        <a href="#" class="badge badge-ghost badge-sm">
+                        <div class="badge badge-ghost badge-sm">
                             {{ $topic->name }}
-                        </a>
+                        </div>
                     @endforeach
                 </div>
             </div>
