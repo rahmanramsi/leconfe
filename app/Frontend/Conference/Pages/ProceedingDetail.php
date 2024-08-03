@@ -3,7 +3,9 @@
 namespace App\Frontend\Conference\Pages;
 
 use App\Frontend\Conference\Pages\Proceedings as PagesProceedings;
+use App\Models\Enums\SubmissionStatus;
 use App\Models\Proceeding;
+use App\Models\Track;
 use Illuminate\Support\Facades\Route;
 use Rahmanramsi\LivewirePageGroup\PageGroup;
 use Rahmanramsi\LivewirePageGroup\Pages\Page;
@@ -27,7 +29,7 @@ class ProceedingDetail extends Page
 
     public function canPreview(): bool
     {
-        return ! $this->proceeding->isPublished();
+        return !$this->proceeding->isPublished();
     }
 
     public function getBreadcrumbs(): array
@@ -50,9 +52,19 @@ class ProceedingDetail extends Page
 
     public function getViewData(): array
     {
+        $tracks = Track::query()
+            ->with(['submissions' => fn ($query) => $query
+                ->where('proceeding_id', $this->proceeding->id)
+                ->where('status', SubmissionStatus::Published)
+                ->with(['authors', 'doi', 'galleys.file.media', 'meta'])])
+            ->whereHas('submissions', fn ($query) => $query
+                ->where('proceeding_id', $this->proceeding->id)
+                ->where('status', SubmissionStatus::Published))
+            ->get();
+
         return [
             'proceeding' => $this->proceeding,
-            'articles' => $this->proceeding->submissions()->published(),
+            'tracks' => $tracks,
         ];
     }
 }

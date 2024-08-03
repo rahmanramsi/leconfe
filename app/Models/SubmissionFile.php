@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class SubmissionFile extends Model
 {
-    use HasFactory, Cachable;
+    use HasFactory;
 
     protected $fillable = [
         'submission_id',

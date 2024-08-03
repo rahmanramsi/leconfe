@@ -32,4 +32,9 @@ class DOI extends Model
     {
         return $this->morphTo(__FUNCTION__, 'doiable_type', 'doiable_id');
     }
+
+    public function getUrl(): string
+    {
+        return 'https://doi.org/' . $this->doi;
+    }
 }

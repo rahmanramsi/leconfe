@@ -94,7 +94,7 @@
                     @foreach ($currentScheduledConference->speakerRoles as $role)
                         @if ($role->speakers->isNotEmpty())
                             <div class="space-y-4">
-                                <h3 class="text-base">{{ $role->name }}</h3>
+                                <h3 class="text-lg">{{ $role->name }}</h3>
                                 <div class="cf-speaker-list grid gap-2 sm:grid-cols-2">
                                     @foreach ($role->speakers as $role)
                                         <div class="cf-speaker flex items-center h-full gap-2">
@@ -102,16 +102,11 @@
                                                 src="{{ $role->getFilamentAvatarUrl() }}"
                                                 alt="{{ $role->fullName }}" />
                                             <div class="cf-speaker-information">
-                                                <div class="cf-speaker-name text-sm text-gray-900">
+                                                <div class="cf-speaker-name text-gray-900">
                                                     {{ $role->fullName }}
                                                 </div>
-                                                @if ($role->getMeta('expertise'))
-                                                    <div class="cf-speaker-expertise text-2xs text-primary">
-                                                        {{ implode(', ', $role->getMeta('expertise') ?? []) }}
-                                                    </div>
-                                                @endif
                                                 @if ($role->getMeta('affiliation'))
-                                                    <div class="cf-speaker-affiliation text-2xs text-secondary">
+                                                    <div class="cf-speaker-affiliation text-xs text-gray-700">
                                                         {{ $role->getMeta('affiliation') }}</div>
                                                 @endif
                                             </div>

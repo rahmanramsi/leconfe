@@ -12,8 +12,6 @@ use Spatie\Permission\Models\Role as Model;
 
 class Role extends Model
 {
-    use Cachable;
-
     protected $fillable = [
         'name',
         'conference_id',
