@@ -6,6 +6,7 @@ use App\Models\Concerns\BelongsToScheduledConference;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Timeline extends Model
 {
@@ -71,5 +72,10 @@ class Timeline extends Model
         }
 
         return false;
+    }
+
+    public function agendas(): HasMany
+    {
+        return $this->hasMany(Agenda::class);
     }
 }
