@@ -2,6 +2,7 @@
 
 namespace App\Panel\ScheduledConference\Resources\TimelineResource\Pages;
 
+use Carbon\Carbon;
 use Filament\Actions;
 use App\Models\Agenda;
 use App\Facades\Setting;
@@ -10,12 +11,15 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
 use Filament\Resources\Pages\Page;
+use Filament\Tables\Grouping\Group;
 use App\Forms\Components\TinyEditor;
 use Filament\Support\Enums\MaxWidth;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Forms\Components\TimePicker;
@@ -26,7 +30,7 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
 use App\Panel\ScheduledConference\Resources\TimelineResource;
 
-class ListAgenda extends Page implements HasTable, HasForms
+class ListAllAgenda extends Page implements HasTable, HasForms
 {
     use InteractsWithTable, InteractsWithForms;
 
@@ -36,27 +40,7 @@ class ListAgenda extends Page implements HasTable, HasForms
 
     protected static string $view = 'panel.scheduledConference.resources.timeline-resource.pages.list-agenda';
 
-    protected static ?string $title = 'Timeline Details';
-
-    public ?Timeline $timeline = null;
-
-    public function mount(?Timeline $record): void
-    {
-        $this->timeline = $record;
-    }
-
-    public function getBreadcrumbs(): array
-    {
-        $resource = static::getResource();
-
-        $breadcrumbs = [
-            $resource::getUrl() => $resource::getBreadcrumb(),
-            'List',
-            static::$title,
-        ];
-
-        return $breadcrumbs;
-    }
+    protected static ?string $title = 'Agenda list';
 
     protected function getHeaderActions(): array
     {
@@ -66,10 +50,6 @@ class ListAgenda extends Page implements HasTable, HasForms
                 ->modalHeading('Add Agenda')
                 ->model(static::$model)
                 ->form(fn (Form $form) => $this->form($form))
-                ->mutateFormDataUsing(function (?array $data) {
-                    $data['timeline_id'] = $this->timeline->id;
-                    return $data;
-                })
                 ->authorize('Timeline:create'),
         ];
     }
@@ -89,6 +69,11 @@ class ListAgenda extends Page implements HasTable, HasForms
                 TimePicker::make('time_end')
                     ->required()
                     ->after('time_start'),
+                Select::make('timeline_id')
+                    ->label('Belong to timeline')
+                    ->options(Timeline::get()->pluck('name', 'id')->toArray())
+                    ->searchable()
+                    ->required(),
             ])
             ->columns(1);
     }
@@ -98,7 +83,6 @@ class ListAgenda extends Page implements HasTable, HasForms
         return $table
             ->query(
                 static::$model::query()
-                    ->where('timeline_id', $this->timeline->id)
             )
             ->columns([
                 TextColumn::make('time_span')
@@ -124,13 +108,20 @@ class ListAgenda extends Page implements HasTable, HasForms
                     ->authorize('Timeline:edit'),
                 ActionGroup::make([
                     DeleteAction::make()
-                        ->authorize('Timeline:delete'),
+                    ->authorize('Timeline:delete'),
                 ])
             ])
             ->bulkActions([
                 DeleteBulkAction::make()
                     ->authorize('Timeline:delete'),
             ])
+            ->groups([
+                Group::make('timeline.name')
+                    ->label('Timeline')
+                    ->getDescriptionFromRecordUsing(fn (Model $record): string => Carbon::parse($record->timeline->date)->format(Setting::get('format_date')))
+                    ->collapsible(),
+            ])
+            ->defaultGroup('timeline.name')
             ->paginated(false);
     }
 }

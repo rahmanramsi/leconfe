@@ -96,6 +96,7 @@ class TimelineResource extends Resource
     {
         return [
             'index' => Pages\ManageTimeline::route('/'),
+            'all-agenda' => Pages\ListAllAgenda::route('/agenda'),
             'agenda' => Pages\ListAgenda::route('/{record}/agenda'),
         ];
     }
