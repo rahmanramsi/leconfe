@@ -231,7 +231,6 @@ class ContributorList extends \Livewire\Component implements HasForms, HasTable
 
     public static function renderSelectAuthor(Author $author): string
     {
-        $author->load('submission');
         return view('forms.select-contributor-submission', ['contributor' => $author])->render();
     }
 

@@ -23,9 +23,7 @@ export default {
                   css: {
                     a: {
                         'text-decoration': 'none',
-                    }
-
-                    // ...
+                    },
                   },
                 },
               }),
@@ -45,8 +43,9 @@ export default {
                     primary: '#1c3569',
                     'primary-content': '#ffffff',
                     'base-100': '#F1F6FA',
+                    'base-content' : '#000000',
                     '--rounded-box': '0px',
-                    "--rounded-btn": "0.25rem",
+                    '--rounded-btn': '0.25rem',
                     '--btn-text-case': 'none',
                 },
             },

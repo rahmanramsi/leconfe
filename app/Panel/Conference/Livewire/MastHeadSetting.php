@@ -53,6 +53,9 @@ class MastHeadSetting extends Component implements HasForms
                                     ->autofocus()
                                     ->autocomplete()
                                     ->required(),
+                                TextInput::make('meta.issn')
+                                    ->label('ISSN')
+                                    ->helperText('The ISSN of the conference'),
                                 Textarea::make('meta.description')
                                     ->rows(3)
                                     ->autosize()

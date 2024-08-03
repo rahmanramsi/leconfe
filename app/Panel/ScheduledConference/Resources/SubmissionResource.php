@@ -17,8 +17,6 @@ use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
-use PDO;
 
 class SubmissionResource extends Resource
 {
@@ -35,7 +33,7 @@ class SubmissionResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->with(['meta', 'user', 'reviews'])->orderBy('updated_at', 'desc');
+        return parent::getEloquentQuery()->with(['meta', 'user', 'reviews','participants'])->orderBy('updated_at', 'desc');
     }
 
     public static function table(Table $table): Table

@@ -87,13 +87,13 @@ class Submission extends Model implements HasMedia, HasPayment, Sortable
             $submission->scheduled_conference_id ??= app()->getCurrentScheduledConferenceId();
 
             if (!$submission->track_id) {
-                $submission->track_id = Track::first()?->getKey();
+                $submission->track_id = Track::withoutGlobalScopes()->where('scheduled_conference_id', $submission->scheduled_conference_id)->first()->getKey();
             }
         });
 
         static::deleting(function (Submission $submission) {
+            $submission->authors()->delete();
             $submission->participants()->delete();
-            $submission->contributors()->delete();
             $submission->reviews()->delete();
             $submission->media()->delete();
         });
@@ -101,19 +101,13 @@ class Submission extends Model implements HasMedia, HasPayment, Sortable
         static::created(function (Submission $submission) {
             $submission->participants()->create([
                 'user_id' => $submission->user_id,
-                'role_id' => Role::where('name', UserRole::Author->value)->first()->getKey(),
+                'role_id' => Role::withoutGlobalScopes()->where('conference_id', $submission->conference_id)->where('name', UserRole::Author->value)->first()->getKey(),
             ]);
 
             // Current user as a author
             $author = $submission->authors()->create([
                 'author_role_id' => AuthorRole::where('name', UserRole::Author->value)->first()->getKey(),
                 ...$submission->user->only(['email', 'given_name', 'family_name', 'public_name']),
-            ]);
-
-            // Current user as a contributors
-            $submission->contributors()->create([
-                'contributor_id' => $author->id,
-                'contributor_type' => Author::class,
             ]);
         });
     }
@@ -203,11 +197,6 @@ class Submission extends Model implements HasMedia, HasPayment, Sortable
     public function authors()
     {
         return $this->hasMany(Author::class);
-    }
-
-    public function contributors()
-    {
-        return $this->hasMany(SubmissionContributor::class);
     }
 
     public function scopePublished(Builder $query)

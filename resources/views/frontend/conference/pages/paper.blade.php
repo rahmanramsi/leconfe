@@ -34,16 +34,15 @@
                 <h2 class="pb-1 mb-3 text-xl font-medium border-b border-b-slate-200">
                     {{ __('Contributors') }}
                 </h2>
-                {{-- Contributors --}}
                 <div
                     class="grid grid-cols-2 gap-4 p-5 mt-3 border rounded-md shadow-sm bg-slate-100 border-slate-200 text-slate-700">
-                    @foreach ($submission->contributors()->with(['contributor.role'])->get() as $contributor)
+                    @foreach ($submission->authors as $contributor)
                         <div class="col-span-2 sm:col-span-1">
                             <div class="flex items-center">
                                 <x-lineawesome-user class="w-5 h-5 mr-1" />
-                                {{ $contributor->contributor->fullName }}
+                                {{ $contributor->fullName }}
                             </div>
-                            <span class="ml-[25px] text-sm text-slate-500">{{ $contributor->contributor->role->name }}</span>
+                            <span class="ml-[25px] text-sm text-slate-500">{{ $contributor->role->name }}</span>
                         </div>
                     @endforeach
                 </div>
@@ -90,14 +89,14 @@
             @if($galleys->isNotEmpty())
                 <section class="downloads">
                     <div class="mt-4 text-slate-800">
-                        <h2 class="text-xl">
+                        <h2 class="pb-1 mb-3 text-xl font-medium border-b border-b-slate-200">
                             {{ __('Downloads') }}
                         </h2>
-                            <div class="flex flex-wrap gap-1.5 mt-2">
-                                @foreach ($galleys as $galley)
-                                    <x-scheduledConference::galley-link :galley="$galley"/>
-                                @endforeach
-                            </div>
+                        <div class="flex flex-wrap gap-1.5 mt-2">
+                            @foreach ($galleys as $galley)
+                                <x-scheduledConference::galley-link :galley="$galley"/>
+                            @endforeach
+                        </div>
                     </div>
                 </section>
             @endif

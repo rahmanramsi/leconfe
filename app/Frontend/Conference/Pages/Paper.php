@@ -19,6 +19,7 @@ class Paper extends Page
 
     public function mount(Submission $submission)
     {
+        $this->submission->load(['galleys.file.media', 'authors.role']);
         if (!$this->canAccess()) {
             abort(404);
         }

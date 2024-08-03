@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Concerns\BelongsToConference;
 use App\Models\Concerns\BelongsToScheduledConference;
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\Permission\Models\Permission;
@@ -11,6 +12,8 @@ use Spatie\Permission\Models\Role as Model;
 
 class Role extends Model
 {
+    use Cachable;
+
     protected $fillable = [
         'name',
         'conference_id',

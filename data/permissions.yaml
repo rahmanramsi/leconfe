@@ -73,6 +73,7 @@
 - 'Submission:uploadPaper'
 - 'Submission:uploadPresentation'
 - 'Submission:uploadRevisionFiles'
+- 'Submission:view'
 - 'Submission:viewAny'
 - 'Submission:withdraw'
 - 'SubmissionParticipant:delete'

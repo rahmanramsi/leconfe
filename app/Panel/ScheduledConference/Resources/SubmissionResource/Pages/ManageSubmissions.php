@@ -68,15 +68,17 @@ class ManageSubmissions extends ManageRecords
 
         if ($user->hasAnyRole([
             UserRole::ConferenceEditor,
+            UserRole::ConferenceManager,
             UserRole::Admin,
         ])) {
             return $query
-                ->when($tab == static::TAB_PRESENTATION, fn ($query) =>  $query->whereIn('status', [
-                    SubmissionStatus::OnPresentation,
-                ]))
-                ->when($tab == static::TAB_MYQUEUE, fn ($query) =>  $query->whereIn('status', [
+            ->when($tab == static::TAB_MYQUEUE, fn ($query) =>  $query->whereIn('status', [
                     SubmissionStatus::Queued,
                     SubmissionStatus::Incomplete,
+                ]))
+                ->when($tab == static::TAB_PRESENTATION, fn ($query) =>  $query->whereIn('status', [
+                    SubmissionStatus::OnPresentation,
+                    SubmissionStatus::Editing,
                 ]))
                 ->when($tab === static::TAB_ARCHIVED, fn ($query) => $query->whereIn('status', [
                     SubmissionStatus::Published,
@@ -84,7 +86,10 @@ class ManageSubmissions extends ManageRecords
                     SubmissionStatus::Withdrawn,
                 ]))
                 ->when($tab === static::TAB_UNASSIGNED, fn ($query) => $query->having('editors_count', 0))
-                ->when($tab === static::TAB_ACTIVE, fn ($query) => $query->having('editors_count', '>', 0));
+                ->when($tab === static::TAB_ACTIVE, fn ($query) => $query->having('editors_count', '>', 0)
+                    ->whereIn('status', [
+                        SubmissionStatus::OnReview,
+                    ]));
         }
 
 
@@ -107,13 +112,13 @@ class ManageSubmissions extends ManageRecords
             $query->orWhere(fn ($query) => $query->where('user_id', $user->id)
                 ->when($tab == static::TAB_PRESENTATION, fn ($query) =>  $query->whereIn('status', [
                     SubmissionStatus::OnPresentation,
+                    SubmissionStatus::Editing,
                 ]))
                 ->when($tab == static::TAB_MYQUEUE, fn ($query) =>  $query->whereIn('status', [
                     SubmissionStatus::Queued,
                     SubmissionStatus::Incomplete,
                     SubmissionStatus::OnReview,
                     SubmissionStatus::Editing,
-                    SubmissionStatus::OnPresentation,
                 ]))
                 ->when($tab == static::TAB_ARCHIVED, fn ($query) => $query->whereIn('status', [
                     SubmissionStatus::Published,
@@ -123,75 +128,6 @@ class ManageSubmissions extends ManageRecords
         }
 
         return $query;
-
-
-        // if (Auth::user()->hasAnyRole([
-        //     UserRole::Admin->value,
-        //     UserRole::ConferenceManager->value,
-        //     UserRole::ConferenceEditor->value,
-        // ])) {
-        //     return $query->whereIn('status', $statuses)->when(
-        //         $tabs == static::TAB_MYQUEUE,
-        //         function (Builder $query) {
-        //             $query->orWhere([
-        //                 ['user_id', '=', Auth::id()],
-        //                 ['status', '=', SubmissionStatus::Incomplete],
-        //             ]);
-        //         }
-        //     );
-        // }
-
-        // Digunakan untuk menentukan mengetahui kondisi sebelumnya sudah ada atau belum
-        $conditionBeforeExist = false;
-
-        return $query->when(
-            Auth::user()->hasRole(UserRole::Author->value),
-            function (Builder $query) use ($statuses, &$conditionBeforeExist) {
-                $query->where('user_id', Auth::id())->whereIn('status', $statuses);
-                $conditionBeforeExist = true;
-            }
-        )->when(
-            Auth::user()->hasRole(UserRole::Reviewer->value),
-            function (Builder $query) use (&$conditionBeforeExist, $tabs, $statuses) {
-                $query->when(
-                    $conditionBeforeExist,
-                    function (Builder $query) {
-                        $query->orWhereHas('reviews', function (Builder $query) {
-                            return $query->where('user_id', Auth::id());
-                        });
-                    },
-                    function (Builder $query) {
-                        $query->whereHas('reviews', function (Builder $query) {
-                            return $query->where('user_id', Auth::id());
-                        });
-                    }
-                )->when($tabs != static::TAB_MYQUEUE, function (Builder $query) use ($statuses) {
-                    $query->whereIn('status', $statuses);
-                });
-                $conditionBeforeExist = true;
-            }
-        )->when(
-            Auth::user()->hasRole(UserRole::ConferenceEditor->value),
-            function (Builder $query) use ($statuses, &$conditionBeforeExist) {
-                $query->when($conditionBeforeExist, function (Builder $query) {
-                    $query->orWhereHas('participants', function (Builder $query) {
-                        return $query->where('user_id', Auth::id());
-                    });
-                }, function (Builder $query) {
-                    $query->whereHas('participants', function (Builder $query) {
-                        return $query->where('user_id', Auth::id());
-                    });
-                })->whereIn('status', $statuses);
-            }
-        )->when(
-            $tab == static::TAB_MYQUEUE,
-            function (Builder $query) {
-                $query->orWhere([
-                    ['user_id', '=', Auth::id()],
-                    ['status', '=', SubmissionStatus::Incomplete],
-                ]);
-            }
-        );
     }
 
     public function getTabs(): array
@@ -210,7 +146,12 @@ class ManageSubmissions extends ManageRecords
             $tabs[static::TAB_ACTIVE] = $this->createTab('Active', static::TAB_ACTIVE);
         }
 
-        if($user->hasRole(UserRole::Author)){
+        if ($user->hasAnyRole([
+            UserRole::Author,
+            UserRole::Admin,
+            UserRole::ConferenceManager,
+            UserRole::ConferenceEditor,
+        ])) {
             $tabs[static::TAB_PRESENTATION] = $this->createTab('Presentation', static::TAB_PRESENTATION);
         }
 
