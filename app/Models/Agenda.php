@@ -2,13 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Timeline;
 use Illuminate\Database\Eloquent\Model;
+use Kra8\Snowflake\HasShortflakePrimary;
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
+use App\Models\Concerns\BelongsToScheduledConference;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Agenda extends Model
 {
-    use HasFactory;
+    use BelongsToScheduledConference, Cachable, HasFactory;
 
     protected $guarded = ['id', 'scheduled_conference_id'];
 

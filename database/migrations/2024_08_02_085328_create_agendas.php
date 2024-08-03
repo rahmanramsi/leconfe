@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(ScheduledConference::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Timeline::class)->constrained()->cascadeOnDelete();
-            $table->string('string');
+            $table->string('name');
             $table->text('details');
             $table->time('time_start');
             $table->time('time_end');

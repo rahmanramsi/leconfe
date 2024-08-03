@@ -2,21 +2,29 @@
 
 namespace App\Panel\ScheduledConference\Resources;
 
-use App\Facades\Setting;
 use App\Models\Role;
+use App\Facades\Setting;
 use App\Models\Timeline;
-use App\Panel\ScheduledConference\Resources\TimelineResource\Pages;
-use Filament\Forms\Components\CheckboxList;
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Tables\Table;
 use Filament\Resources\Resource;
-use Filament\Tables\Actions\ActionGroup;
-use Filament\Tables\Actions\DeleteAction;
+use App\Tables\Columns\IndexColumn;
+use Filament\Forms\Components\Grid;
+use Filament\Support\Enums\MaxWidth;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Validation\Rules\Unique;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Actions\ActionGroup;
+use Filament\Forms\Components\DatePicker;
+use Filament\Tables\Actions\CreateAction;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Columns\ToggleColumn;
+use Filament\Forms\Components\CheckboxList;
+use App\Panel\ScheduledConference\Resources\TimelineResource\Pages;
 
 class TimelineResource extends Resource
 {
@@ -28,57 +36,53 @@ class TimelineResource extends Resource
 
     public static function form(Form $form): Form
     {
-        return $form->schema(static::formSchemas());
-    }
-
-    public static function formSchemas(): array
-    {
-        return [
-            Grid::make(1)
-                ->schema([
-                    TextInput::make('title')
-                        ->required(),
-                    TextInput::make('subtitle'),
-                    DatePicker::make('date')
-                        ->rule('date')
-                        ->required(),
-                    Grid::make(2)
-                        ->schema([
-                            CheckboxList::make('roles')
-                                ->options(Role::all()->pluck('name', 'name'))
-                                ->columns(2),
-                        ]),
-                ]),
-
-        ];
+        return $form
+            ->schema([
+                TextInput::make('name')
+                    ->required(),
+                Textarea::make('description')
+                    ->maxLength(255),
+                DatePicker::make('date')
+                    ->required(),
+                Select::make('type')
+                    ->options(Timeline::getTypes())
+                    ->helperText('Type that integrates with the workflow process.')
+                    ->unique(
+                        ignorable: fn () => $form->getRecord(),
+                        modifyRuleUsing: fn (Unique $rule) => $rule->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId()),
+                    )
+                    ->native(false),
+            ])
+            ->columns(1);
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->query(Timeline::query())
+            ->heading('Timeline')
+            ->defaultSort('date')
             ->columns([
-                TextColumn::make('title'),
+                IndexColumn::make('no')
+                    ->label('No.'),
+                TextColumn::make('name'),
                 TextColumn::make('date')
                     ->dateTime(Setting::get('format_date'))
                     ->sortable(),
-                TextColumn::make('roles')
-                    ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'Author' => 'warning',
-                        'Reviewer' => 'gray',
-                        'Participant' => 'primary',
-                        'Editor' => 'gray',
-                        default => 'primary'
-                    }),
+                ToggleColumn::make('hide')
+                    ->label('Hidden'),
+            ])
+            ->recordUrl(fn (Model $record) => static::getUrl('agenda', ['record' => $record]))
+            ->filters([
+                // ...
             ])
             ->actions([
+                EditAction::make()
+                    ->modalWidth(MaxWidth::ExtraLarge),
                 ActionGroup::make([
-                    EditAction::make(),
                     DeleteAction::make(),
                 ]),
-            ])
-            ->filters([]);
+            ]);
     }
 
     public static function getRelations(): array
@@ -92,6 +96,7 @@ class TimelineResource extends Resource
     {
         return [
             'index' => Pages\ManageTimeline::route('/'),
+            'agenda' => Pages\ListAgenda::route('/{record}/agenda'),
         ];
     }
 }

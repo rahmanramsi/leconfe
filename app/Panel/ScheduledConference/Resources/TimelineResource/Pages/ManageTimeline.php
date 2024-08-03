@@ -2,11 +2,12 @@
 
 namespace App\Panel\ScheduledConference\Resources\TimelineResource\Pages;
 
-use App\Panel\ScheduledConference\Resources\TimelineResource;
 use Filament\Actions;
-use Filament\Resources\Pages\ManageRecords;
+use Filament\Support\Enums\MaxWidth;
+use Filament\Resources\Pages\ListRecords;
+use App\Panel\ScheduledConference\Resources\TimelineResource;
 
-class ManageTimeline extends ManageRecords
+class ManageTimeline extends ListRecords
 {
     protected static string $resource = TimelineResource::class;
 
@@ -15,13 +16,7 @@ class ManageTimeline extends ManageRecords
         return [
             Actions\CreateAction::make()
                 ->modalHeading('Add Timeline')
-                ->form(fn () => TimelineResource::formSchemas())
-                ->mutateFormDataUsing(function (array $data) {
-                    $dateFormat = date('Y-m-d', strtotime($data['date']));
-                    $data['date'] = $dateFormat;
-
-                    return $data;
-                }),
+                ->modalWidth(MaxWidth::ExtraLarge),
         ];
     }
 }
