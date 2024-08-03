@@ -14,11 +14,9 @@ use App\Models\Sponsor;
 use App\Models\NavigationMenu;
 use App\Models\PaymentItem;
 use App\Models\Proceeding;
-use App\Models\Role;
 use App\Models\Scopes\ConferenceScope;
 use App\Models\Scopes\ScheduledConferenceScope;
 use App\Models\ScheduledConference;
-use App\Models\Setting;
 use App\Models\Site;
 use App\Models\SpeakerRole;
 use App\Models\StaticPage;
@@ -27,7 +25,6 @@ use App\Models\SubmissionFileType;
 use App\Models\Timeline;
 use App\Models\Topic;
 use App\Models\Track;
-use App\Models\Venue;
 use App\Models\Version;
 use Illuminate\Foundation\Application as LaravelApplication;
 use Illuminate\Support\Collection;
@@ -146,7 +143,6 @@ class Application extends LaravelApplication
     public function scopeCurrentScheduledConference(): void
     {
         $models = [
-            Venue::class,
             Timeline::class,
             CommitteeRole::class,
             SpeakerRole::class,

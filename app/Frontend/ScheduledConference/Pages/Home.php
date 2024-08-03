@@ -2,8 +2,6 @@
 
 namespace App\Frontend\ScheduledConference\Pages;
 
-use App\Models\Venue;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Route;
 use Rahmanramsi\LivewirePageGroup\PageGroup;
 use Rahmanramsi\LivewirePageGroup\Pages\Page;
