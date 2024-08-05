@@ -8,7 +8,9 @@ use Kra8\Snowflake\HasShortflakePrimary;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\Concerns\BelongsToScheduledConference;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
 
 class Timeline extends Model
 {
@@ -74,6 +76,30 @@ class Timeline extends Model
         }
 
         return false;
+    }
+
+    public function getEarliestTime(): Carbon
+    {
+        return $this
+            ->agendas()
+            ->orderBy('time_start', 'ASC')
+            ->limit(1)
+            ->first()
+            ->date_start;
+    }
+    public function getLatestTime(): Carbon
+    {
+        return $this
+            ->agendas()
+            ->orderBy('time_end', 'DESC')
+            ->limit(1)
+            ->first()
+            ->date_end;
+    }
+
+    public function isOngoing(): bool
+    {
+        return !$this->getEarliestTime()->isFuture() && !$this->getLatestTime()->isPast();
     }
 
     public function agendas(): HasMany

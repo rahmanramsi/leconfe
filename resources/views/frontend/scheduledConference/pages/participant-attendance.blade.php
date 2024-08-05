@@ -2,95 +2,137 @@
 @use('Carbon\Carbon')
 @use('App\Facades\Setting')
 <x-website::layouts.main>
-    <div class="space-y-6 text-center">
-        <h1 class="text-2xl font-bold">
-            Participant Attendance
-        </h1>
+    <div class="space-y-6">
+        <x-website::breadcrumbs :breadcrumbs="$this->getBreadcrumbs()" />
     </div>
-    <div class="mt-5 px-6 py-4 margin-2 border text-center">
-        <h1 class="text-base text-black font-semibold">
-            {{ $currentScheduledConference->title }}
-        </h1>
-        @if (!empty($currentScheduledConference->getMeta('description')))
-            <p class="mt-2 text-sm">
-                {{ $currentScheduledConference->getMeta('description') }}
-            </p>
-        @endif
-    </div>
-    <p class="mt-4 text-sm">
-        Please select the event below to confirm your attendance.
-    </p>
-    <div class="mt-4 relative overflow-x-auto">
-        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 border" lazy>
-            <tbody>
-                @foreach ($timelines as $timeline)
-                    @if ($timeline->hide)
-                        @continue
-                    @endif
-                    <tr class="cursor-pointer bg-white border-b dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600" wire:click="openModal">
-                        <td class="px-6 py-4" colspan="3">
-                            <strong class="block font-medium text-gray-900 dark:text-white">
-                                {{ $timeline->name }}
-                            </strong>
-                            <p class="text-gray-500">
-                                {{ Carbon::parse($timeline->date)->format(Setting::get('format_date')) }}
-                            </p>
-                        </td>
-                    </tr>
-                    {{-- 
-                        TODO: Optimize this 
-                    --}}
-                    @php
-                        $agendas = $timeline
-                            ->agendas()
-                            ->orderBy('time_start', 'ASC')
-                            ->get();
-                    @endphp
-                    @foreach ($agendas as $agenda)
-                        @if ($agenda->hide)
+    <div class="mt-6">
+        <div class="flex mb-5 space-x-4">
+            <h1 class="text-xl font-semibold min-w-fit">Participant Attendance</h1>
+            <hr class="w-full h-px my-auto bg-gray-200 border-0 dark:bg-gray-700">
+        </div>
+        <div class="mt-5 px-6 py-4 margin-2 border text-center">
+            <h1 class="text-base text-gray-800 font-semibold">
+                {{ $currentScheduledConference->title }}
+            </h1>
+            @if (!empty($currentScheduledConference->getMeta('description')))
+                <p class="mt-2 text-sm">
+                    {{ $currentScheduledConference->getMeta('description') }}
+                </p>
+            @endif
+        </div>
+        <p class="mt-4 text-sm">
+            Please select the event below to confirm your attendance.
+        </p>
+        <div class="mt-4 relative overflow-x-auto">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 border" lazy>
+                <tbody>
+                    @foreach ($timelines as $timeline)
+                        @if ($timeline->hide)
                             @continue
                         @endif
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                            <td class="px-6 py-4">
-                                {{ $agenda->time_span }}
-                            </td>
-                            <th scope="row" class="px-6 py-4 whitespace-nowrap">
-                                <strong class="font-medium text-gray-900 dark:text-white">
-                                    {{ $agenda->name }}
+                        <tr class="cursor-pointer bg-gray-100 border-b dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-400 transition-all ease-in-out" wire:click="attend({{ $timeline->id }})">
+                            <td class="px-6 py-4" colspan="2">
+                                <strong class="block font-medium text-gray-900 dark:text-white">
+                                    {{ $timeline->name }}
                                 </strong>
-                                <p class="font-normal text-gray-500">
-                                    {{ new Illuminate\Support\HtmlString($agenda->details) }}
+                                <p class="text-gray-500">
+                                    {{ Carbon::parse($timeline->date)->format(Setting::get('format_date')) }}
                                 </p>
-                            </th>
-                            <td class="px-6 py-4">
-                                {{-- {{ $agenda->isFuture() ? 'future' : 'not future' }}
-                                <br>
-                                {{ $agenda->isPast() ? 'past' : 'not past' }} --}}
+                            </td>
+                            <td class="px-6 py-4 text-right font-bold">
+                                @if ($timeline->isOngoing())
+                                    <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+                                        Ongoing
+                                    </span>
+                                @elseif ($timeline->getEarliestTime()->isFuture())
+                                    <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
+                                        Not started
+                                    </span>
+                                @elseif ($timeline->getLatestTime()->isPast())
+                                    <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">
+                                        Over
+                                    </span>
+                                @endif
                             </td>
                         </tr>
+                        {{-- 
+                            TODO: Optimize this 
+                        --}}
+                        @php
+                            $agendas = $timeline
+                                ->agendas()
+                                ->orderBy('time_start', 'ASC')
+                                ->get();
+                        @endphp
+                        @foreach ($agendas as $agenda)
+                            @if ($agenda->hide)
+                                @continue
+                            @endif
+                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                <td class="px-6 pl-8 py-4 text-left">
+                                    {{ $agenda->time_span }}
+                                </td>
+                                <th scope="row" class="px-6 py-4 whitespace-nowrap text-left">
+                                    <strong class="font-medium text-gray-900 dark:text-white">
+                                        {{ $agenda->name }}
+                                    </strong>
+                                    <p class="font-normal text-gray-500">
+                                        {{ new Illuminate\Support\HtmlString($agenda->details) }}
+                                    </p>
+                                </th>
+                                <td class="px-6 pr-8 py-4 text-right">
+                                    @if ($agenda->isOngoing())
+                                        <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+                                            Ongoing
+                                        </span>
+                                    @elseif ($agenda->isFuture())
+                                        <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
+                                            Not started
+                                        </span>
+                                    @elseif ($agenda->isPast())
+                                        <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">
+                                            Over
+                                        </span>
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
                     @endforeach
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-
-    {{-- modal --}}
-    <div x-data="{ open: @entangle('isOpen') }" @keydown.escape.window="open = false" x-show="open" class="fixed inset-0 flex items-center justify-center z-50">
-        <div class="fixed inset-0 bg-gray-800 opacity-75"></div>
-        <div x-show="open" class="bg-white rounded shadow-lg p-6 w-1/3 mx-auto z-50 transform transition-all duration-300 ease-in-out" @click.away="open = false">
-            <div class="flex justify-between items-center border-b pb-3">
-                <h2 class="text-lg font-semibold">
-                    Attendance Confirmation
-                </h2>
-            </div>
-            <div class="mt-4">
-                <p class="text-gray-600">Modal content goes here...</p>
-            </div>
-            <div class="mt-6 flex justify-end space-x-2 text-sm">
-                <button @click="open = false" class="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300">Cancel</button>
-                <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Confirm</button>
-            </div>
+                </tbody>
+            </table>
         </div>
     </div>
+    
+
+    {{-- modal --}}
+    @if (!empty($timelineData))
+        <div x-data="{ open: @entangle('isOpen') }" x-show="open" class="fixed inset-0 flex items-center justify-center z-50">
+            <div wire:click="cancel" class="fixed inset-0 bg-gray-800 opacity-75"></div>
+            <div x-show="open" class="bg-white rounded shadow-lg p-6 w-1/3 mx-auto z-50 transform transition-all duration-300 ease-in-out">
+                <div class="flex justify-between items-center border-b pb-3">
+                    <h2 class="text-lg font-semibold">
+                        Attendance Confirmation
+                    </h2>
+                </div>
+                <div class="mt-4">
+                    <p class="text-gray-600">
+                        Are you sure you want attend on <strong>{{ $timelineData->name }}</strong> in <strong>{{ $currentScheduledConference->title }}</strong>?
+                        @if (!empty($errorMessage))
+                            <small class="block text-red-500">
+                                *{{ $errorMessage }}
+                            </small>
+                        @endif
+                    </p>
+                </div>
+                <div class="mt-6 flex justify-end space-x-2 text-sm">
+                    <button wire:click="cancel" class="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300">Cancel</button>
+                    <button wire:click="confirm" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" wire:loading.attr="disabled">
+                        <span class="loading loading-spinner loading-xs" wire:loading></span>
+                        Confirm
+                    </button>
+                </div>
+            </div>
+        </div>
+    @endif
 </x-website::layouts.main>
                         

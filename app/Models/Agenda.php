@@ -38,21 +38,26 @@ class Agenda extends Model
         );
     }
 
-    protected function deteEnd(): Attribute
+    protected function dateEnd(): Attribute
     {
         return Attribute::make(
             get: fn () => Carbon::parse($this->date)->setTimeFromTimeString($this->time_end),
         );
     }
 
-    public function isFuture()
+    public function isFuture(): bool
     {
-        return $this->date_start->isAfter(now());
+        return $this->date_start->isFuture();
     }
 
-    public function isPast()
+    public function isPast(): bool
     {
-        return $this->date_end->isBefore(now());
+        return $this->date_end->isPast();
+    }
+
+    public function isOngoing(): bool
+    {
+        return !$this->isFuture() && !$this->isPast();
     }
 
     public function timeline(): BelongsTo

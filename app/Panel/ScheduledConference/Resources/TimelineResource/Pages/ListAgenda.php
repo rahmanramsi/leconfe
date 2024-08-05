@@ -82,8 +82,7 @@ class ListAgenda extends Page implements HasTable, HasForms
             TextInput::make('name')
                 ->required(),
             TinyEditor::make('details')
-                ->minHeight(200)
-                ->required(),
+                ->minHeight(200),
             TimePicker::make('time_start')
                 ->required()
                 ->before('time_end'),
