@@ -51,10 +51,12 @@ class ListAllAgenda extends Page implements HasTable, HasForms
                 ->modalHeading('Add Agenda')
                 ->model(static::$model)
                 ->form(fn (Form $form) => $this->form($form))
-                ->mutateFormDataUsing(function (?array $data) {
+                ->mutateFormDataUsing(function (array $data) {
                     $timeline = Timeline::where('id', $data['timeline_id'])->first();
-                    if(!$timeline) return;
-                    $data['date'] = $timeline->date;
+                    if($timeline) {
+                        $data['date'] = $timeline->date;
+                    }
+                    return $data;
                 })
                 ->authorize('Timeline:create'),
         ];
@@ -64,17 +66,7 @@ class ListAllAgenda extends Page implements HasTable, HasForms
     {
         return $form
             ->schema([
-                TextInput::make('name')
-                    ->required(),
-                TinyEditor::make('details')
-                    ->minHeight(200)
-                    ->required(),
-                TimePicker::make('time_start')
-                    ->required()
-                    ->before('time_end'),
-                TimePicker::make('time_end')
-                    ->required()
-                    ->after('time_start'),
+                ...ListAgenda::getAgendaForm(),
                 Select::make('timeline_id')
                     ->label('Belong to timeline')
                     ->options(Timeline::get()->pluck('name', 'id')->toArray())
@@ -98,7 +90,10 @@ class ListAllAgenda extends Page implements HasTable, HasForms
                             ->orderBy('time_start', $direction);
                     }),
                 TextColumn::make('name')
-                    ->searchable()
+                    ->searchable(query: function (Builder $query, string $search): Builder {
+                        return $query
+                            ->where('agendas.name', 'like', "%{$search}%");
+                    })
                     ->sortable(),
                 TextColumn::make('details')
                     ->formatStateUsing(fn ($state) => Str::limit(strip_tags($state), 50))

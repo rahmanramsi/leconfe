@@ -76,21 +76,28 @@ class ListAgenda extends Page implements HasTable, HasForms
         ];
     }
 
+    public static function getAgendaForm(): array
+    {
+        return [
+            TextInput::make('name')
+                ->required(),
+            TinyEditor::make('details')
+                ->minHeight(200)
+                ->required(),
+            TimePicker::make('time_start')
+                ->required()
+                ->before('time_end'),
+            TimePicker::make('time_end')
+                ->required()
+                ->after('time_start'),
+        ];
+    }
+
     public function form(Form $form): Form
     {
         return $form
             ->schema([
-                TextInput::make('name')
-                    ->required(),
-                TinyEditor::make('details')
-                    ->minHeight(200)
-                    ->required(),
-                TimePicker::make('time_start')
-                    ->required()
-                    ->before('time_end'),
-                TimePicker::make('time_end')
-                    ->required()
-                    ->after('time_start'),
+                ...static::getAgendaForm()
             ])
             ->columns(1);
     }
