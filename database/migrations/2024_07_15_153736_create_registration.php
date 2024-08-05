@@ -26,8 +26,8 @@ return new class extends Migration
             $table->string('currency');
             $table->boolean('active')->default(true);
             $table->unsignedInteger('order_column')->nullable();
-            $table->timestamp('opened_at');
-            $table->timestamp('closed_at');
+            $table->timestamp('opened_at')->nullable();
+            $table->timestamp('closed_at')->nullable();
             $table->timestamps();
         });
 
