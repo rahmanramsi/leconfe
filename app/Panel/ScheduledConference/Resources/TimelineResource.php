@@ -12,6 +12,7 @@ use App\Tables\Columns\IndexColumn;
 use Filament\Forms\Components\Grid;
 use Filament\Support\Enums\MaxWidth;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Textarea;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
@@ -25,6 +26,7 @@ use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Forms\Components\CheckboxList;
 use App\Panel\ScheduledConference\Resources\TimelineResource\Pages;
+use Filament\Forms\Components\Checkbox;
 
 class TimelineResource extends Resource
 {
@@ -52,6 +54,7 @@ class TimelineResource extends Resource
                         modifyRuleUsing: fn (Unique $rule) => $rule->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId()),
                     )
                     ->native(false),
+                Checkbox::make('requires_attendance'),
             ])
             ->columns(1);
     }
@@ -78,7 +81,9 @@ class TimelineResource extends Resource
             ])
             ->actions([
                 EditAction::make()
-                    ->modalWidth(MaxWidth::ExtraLarge),
+                    ->modalWidth(MaxWidth::ExtraLarge)
+                    ->model(Timeline::class)
+                    ->before(fn (Model $record) => dd($record)),
                 ActionGroup::make([
                     DeleteAction::make(),
                 ]),

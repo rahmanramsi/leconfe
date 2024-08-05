@@ -60,6 +60,14 @@ class Agenda extends Model
         return !$this->isFuture() && !$this->isPast();
     }
 
+    public function isRequiresAttendance()
+    {
+        if($this->timeline->isRequiresAttendance()) {
+            return false;
+        }
+        return $this->requires_attendance;
+    }
+
     public function timeline(): BelongsTo
     {
         return $this->belongsTo(Timeline::class);

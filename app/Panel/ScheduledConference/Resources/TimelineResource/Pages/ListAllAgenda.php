@@ -43,6 +43,19 @@ class ListAllAgenda extends Page implements HasTable, HasForms
 
     protected static ?string $title = 'Agenda list';
 
+    public function getBreadcrumbs(): array
+    {
+        $resource = static::getResource();
+
+        $breadcrumbs = [
+            $resource::getUrl() => $resource::getBreadcrumb(),
+            'List',
+            $this->getTitle(),
+        ];
+
+        return $breadcrumbs;
+    }
+
     protected function getHeaderActions(): array
     {
         return [
@@ -96,9 +109,12 @@ class ListAllAgenda extends Page implements HasTable, HasForms
                     })
                     ->sortable(),
                 TextColumn::make('details')
+                    ->placeholder('Empty')
                     ->formatStateUsing(fn ($state) => Str::limit(strip_tags($state), 50))
                     ->limit(100)
                     ->searchable(),
+                ToggleColumn::make('requires_attendance')
+                    ->label('Requires Attendance'),
             ])
             ->defaultSort('time_span')
             ->actions([
@@ -129,6 +145,6 @@ class ListAllAgenda extends Page implements HasTable, HasForms
                     ->collapsible(),
             ])
             ->defaultGroup('timeline.name')
-            ->paginated(false);
+            ->paginated(true);
     }
 }

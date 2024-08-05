@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
 use Filament\Resources\Pages\Page;
 use App\Forms\Components\TinyEditor;
 use Filament\Support\Enums\MaxWidth;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
@@ -22,10 +23,12 @@ use Filament\Forms\Components\TimePicker;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Columns\ToggleColumn;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Contracts\Support\Htmlable;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
 use App\Panel\ScheduledConference\Resources\TimelineResource;
+use Filament\Forms\Components\Checkbox;
 
 class ListAgenda extends Page implements HasTable, HasForms
 {
@@ -37,13 +40,17 @@ class ListAgenda extends Page implements HasTable, HasForms
 
     protected static string $view = 'panel.scheduledConference.resources.timeline-resource.pages.list-agenda';
 
-    protected static ?string $title = 'Timeline Details';
-
     public ?Timeline $timeline = null;
 
     public function mount(?Timeline $record): void
     {
         $this->timeline = $record;
+    }
+
+    public function getTitle(): string | Htmlable
+    {
+        $timeline = $this->timeline->name;
+        return "Timeline: $timeline";
     }
 
     public function getBreadcrumbs(): array
@@ -53,7 +60,7 @@ class ListAgenda extends Page implements HasTable, HasForms
         $breadcrumbs = [
             $resource::getUrl() => $resource::getBreadcrumb(),
             'List',
-            static::$title,
+            $this->getTitle(),
         ];
 
         return $breadcrumbs;
@@ -89,6 +96,7 @@ class ListAgenda extends Page implements HasTable, HasForms
             TimePicker::make('time_end')
                 ->required()
                 ->after('time_start'),
+            Checkbox::make('requires_attendance'),
         ];
     }
 
@@ -119,9 +127,12 @@ class ListAgenda extends Page implements HasTable, HasForms
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('details')
+                    ->placeholder('Empty')
                     ->formatStateUsing(fn ($state) => Str::limit(strip_tags($state), 50))
                     ->limit(100)
                     ->searchable(),
+                ToggleColumn::make('requires_attendance')
+                    ->label('Requires Attendance'),
             ])
             ->defaultSort('time_span')
             ->actions([

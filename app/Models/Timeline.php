@@ -102,6 +102,11 @@ class Timeline extends Model
         return !$this->getEarliestTime()->isFuture() && !$this->getLatestTime()->isPast();
     }
 
+    public function isRequiresAttendance()
+    {
+        return $this->requires_attendance;
+    }
+
     public function agendas(): HasMany
     {
         return $this->hasMany(Agenda::class);
