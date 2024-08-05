@@ -2,15 +2,17 @@
 
 namespace App\Models;
 
-use App\Models\Concerns\BelongsToScheduledConference;
-use GeneaLabs\LaravelModelCaching\Traits\Cachable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Agenda;
 use Illuminate\Database\Eloquent\Model;
+use Kra8\Snowflake\HasShortflakePrimary;
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\Concerns\BelongsToScheduledConference;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Timeline extends Model
 {
-    use BelongsToScheduledConference, Cachable, HasFactory;
+    use BelongsToScheduledConference, HasShortflakePrimary, Cachable, HasFactory;
 
     public const TYPE_SUBMISSION_OPEN = 1;
     public const TYPE_SUBMISSION_CLOSE = 2;
