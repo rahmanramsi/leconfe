@@ -34,25 +34,28 @@
                             <td class="px-6 py-4" colspan="2">
                                 <strong class="block font-medium text-gray-900 dark:text-white">
                                     {{ $timeline->name }}
+                                    @if ($timeline->isOngoing())
+                                        <span class="bg-green-100 text-green-800 text-xs font-semibold mx-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+                                            Ongoing
+                                        </span>
+                                    @elseif ($timeline->getEarliestTime()->isFuture())
+                                        <span class="bg-blue-100 text-blue-800 text-xs font-semibold mx-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
+                                            Not started
+                                        </span>
+                                    @elseif ($timeline->getLatestTime()->isPast())
+                                        <span class="bg-gray-100 text-gray-800 text-xs font-semibold mx-2 px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">
+                                            Over
+                                        </span>
+                                    @endif
                                 </strong>
                                 <p class="text-gray-500">
                                     {{ Carbon::parse($timeline->date)->format(Setting::get('format_date')) }}
                                 </p>
                             </td>
-                            <td class="px-6 py-4 text-right text-sm font-bold">
-                                @if ($timeline->isOngoing())
-                                    <span class="bg-green-200 text-green-600 px-3 py-1 rounded-full dark:bg-green-900 dark:text-green-300">
-                                        Ongoing
-                                    </span>
-                                @elseif ($timeline->getEarliestTime()->isFuture())
-                                    <span class="bg-blue-200 text-blue-600 px-3 py-1 rounded-full dark:bg-blue-900 dark:text-blue-300">
-                                        Not started
-                                    </span>
-                                @elseif ($timeline->getLatestTime()->isPast())
-                                    <span class="bg-gray-300 text-gray-600 px-3 py-1 rounded-full dark:bg-gray-700 dark:text-gray-300">
-                                        Over
-                                    </span>
-                                @endif
+                            <td class="px-6 py-4 text-right">
+                                <small class="text-blue-600 cursor-pointer hover:underline">
+                                    Attend
+                                </small>
                             </td>
                         </tr>
                         {{-- 
@@ -71,6 +74,19 @@
                             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                 <td class="px-6 pl-8 py-4 text-left">
                                     {{ $agenda->time_span }}
+                                    @if ($agenda->isOngoing())
+                                        <span class="bg-green-100 text-green-800 text-xs font-medium mx-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+                                            Ongoing
+                                        </span>
+                                    @elseif ($agenda->isFuture())
+                                        <span class="bg-blue-100 text-blue-800 text-xs font-medium mx-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
+                                            Not started
+                                        </span>
+                                    @elseif ($agenda->isPast())
+                                        <span class="bg-gray-100 text-gray-800 text-xs font-medium mx-2 px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">
+                                            Over
+                                        </span>
+                                    @endif
                                 </td>
                                 <th scope="row" class="px-6 py-4 whitespace-nowrap text-left">
                                     <strong class="font-medium text-gray-900 dark:text-white">
@@ -81,19 +97,9 @@
                                     </p>
                                 </th>
                                 <td class="px-6 py-4 text-right">
-                                    @if ($agenda->isOngoing())
-                                        <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
-                                            Ongoing
-                                        </span>
-                                    @elseif ($agenda->isFuture())
-                                        <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
-                                            Not started
-                                        </span>
-                                    @elseif ($agenda->isPast())
-                                        <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">
-                                            Over
-                                        </span>
-                                    @endif
+                                    <small class="text-blue-600 cursor-pointer hover:underline">
+                                        Attend
+                                    </small>
                                 </td>
                             </tr>
                         @endforeach
