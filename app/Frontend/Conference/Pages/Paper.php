@@ -80,6 +80,15 @@ class Paper extends Page
             }
         });
 
+
+        MetaTag::add('og:title', e($this->paper->getMeta('title')));
+        MetaTag::add('og:type', 'article');
+        MetaTag::add('og:url', route(static::getRouteName(), ['submission' => $this->paper->getKey()]));
+        if($this->paper->getFirstMedia('cover')){
+            MetaTag::add('og:image', $this->paper->getFirstMedia('cover')->getAvailableUrl(['thumb']));
+        }
+
+
     }
 
     public function canAccess(): bool

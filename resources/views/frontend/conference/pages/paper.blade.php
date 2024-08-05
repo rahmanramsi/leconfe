@@ -20,9 +20,9 @@
                 {{ __('Date Published') . ': ' . ($paper->published_at && $paper->isPublished() ? $paper->published_at->format(Setting::get('format_date')) : '-')  }}
             </span>
         </div>
-        @if($paper->getFirstMediaUrl('article_cover'))
+        @if($paper->getFirstMedia('cover'))
             <div class="mb-4 max-w-[48rem]">
-                <img class="w-full" src="{{ $paper->getFirstMediaUrl('cover') }}" alt="paper-cover">
+                <img class="w-auto" src="{{ $paper->getFirstMedia('cover')->getAvailableUrl(['thumb']) }}" alt="paper-cover">
             </div>
         @endif
         <div class="submission-detail space-y-7">
@@ -31,14 +31,14 @@
                     {{ __('Contributors') }}
                 </h2>
                 <div
-                    class="grid grid-cols-2 gap-4 p-5 mt-3 border rounded-md shadow-sm bg-slate-100 border-slate-200 text-slate-700">
+                    class="grid grid-cols-2 gap-4 p-4 mt-3 border rounded-md shadow-sm bg-slate-100 border-slate-200 text-slate-700">
                     @foreach ($paper->authors as $contributor)
                         <div class="col-span-2 sm:col-span-1">
                             <div class="flex items-center">
                                 <x-lineawesome-user class="w-5 h-5 mr-1" />
-                                {{ $contributor->fullName }}
+                                <span>{{ $contributor->fullName }}</span>
                             </div>
-                            <span class="ml-[25px] text-sm text-slate-500">{{ $contributor->role->name }}</span>
+                            <div class="ml-[25px] text-sm text-slate-500">{{ $contributor->role->name }}</div>
                         </div>
                     @endforeach
                 </div>
@@ -52,7 +52,7 @@
                         <div class="flex flex-wrap gap-3">
                             @foreach ($paper->getMeta('keywords') as $keyword)
                                 <span 
-                                    class="flex items-center px-2 py-1 transition duration-200 ease-in-out border rounded-md shadow-sm bg-slate-100 border-slate-200 link-primary hover:bg-slate-200 hover:border-slate-300">
+                                    class="flex text-xs items-center px-2 py-1 border rounded-md shadow-sm bg-slate-100 border-slate-200 link-primary">
                                     {{ $keyword }}
                                 </span>
                             @endforeach

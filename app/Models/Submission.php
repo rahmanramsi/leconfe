@@ -34,6 +34,7 @@ use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Tags\HasTags;
 
 class Submission extends Model implements HasMedia, HasPayment, Sortable
@@ -278,5 +279,13 @@ class Submission extends Model implements HasMedia, HasPayment, Sortable
             'submission' => $this,
             'conference' => $this->conference
         ]);
+    }
+
+    public function registerMediaConversions(Media $media = null): void
+    {
+        $this->addMediaConversion('thumb')
+            ->keepOriginalImageFormat()
+            ->width(500)
+            ->height(500);
     }
 }

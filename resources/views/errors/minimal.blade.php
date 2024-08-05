@@ -1,4 +1,4 @@
-@if(config('app.installed'))
+@if(config('app.installed') && !app()->isDownForMaintenance())
     <x-website::layouts.app title="{{ $title }}">
         <x-website::layouts.main>
             <div class="text-center">

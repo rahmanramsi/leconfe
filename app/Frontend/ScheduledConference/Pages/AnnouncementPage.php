@@ -17,7 +17,7 @@ class AnnouncementPage extends Page
 
     public function getTitle(): string|Htmlable
     {
-        return 'Announcement';
+        return $this->announcement->title;
     }
 
 
