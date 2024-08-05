@@ -99,8 +99,6 @@ class ListAllAgenda extends Page implements HasTable, HasForms
                     ->formatStateUsing(fn ($state) => Str::limit(strip_tags($state), 50))
                     ->limit(100)
                     ->searchable(),
-                ToggleColumn::make('hide')
-                    ->label('Hidden'),
             ])
             ->defaultSort('time_span')
             ->actions([
