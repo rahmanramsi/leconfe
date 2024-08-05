@@ -11,8 +11,10 @@
 
     {{ MetaTag::render() }}
 
-    @if (isset($favicon))
+    @if (isset($favicon) && !empty($favicon))
         <link rel="icon" type="image/x-icon" href="{{ $favicon }}" />
+    @else 
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     @endif
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -29,10 +31,9 @@
 
     @livewireStyles
     @vite(['resources/frontend/css/frontend.css', 'resources/frontend/js/frontend.js'])
-
-    @isset($styleSheet)
+    @if(isset($styleSheet) && !empty($styleSheet))
         <link rel="stylesheet" type="text/css" href="{{ $styleSheet }}" />
-    @endisset
+    @endif
 
     @if (isset($appearanceColor))
         <style>
