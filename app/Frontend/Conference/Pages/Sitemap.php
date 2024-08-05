@@ -21,7 +21,7 @@ class Sitemap extends Page
     {
         $sitemap = Cache::remember(
             'sitemap_' . app()->getCurrentConferenceId(),
-            Carbon::now()->addDay(),
+            Carbon::now()->addHour(),
             fn () => $this->generateSitemap(),
         );
 
@@ -36,6 +36,11 @@ class Sitemap extends Page
         $sitemap = SpatieSitemap::create()
             ->add(
                 Url::create(route(Home::getRouteName()))
+                    ->setLastModificationDate($currentConference->updated_at)
+                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
+            )
+            ->add(
+                Url::create(route(AboutSystem::getRouteName()))
                     ->setLastModificationDate($currentConference->updated_at)
                     ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
             )
@@ -90,6 +95,18 @@ class Sitemap extends Page
 
                 $sitemap->add(
                     Url::create(route(ScheduledConferencePages\About::getRouteName('scheduledConference'), ['serie' => $scheduledConference]))
+                        ->setLastModificationDate($scheduledConference->updated_at)
+                        ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
+                );
+
+                $sitemap->add(
+                    Url::create(route(ScheduledConferencePages\AboutSystem::getRouteName('scheduledConference'), ['serie' => $scheduledConference]))
+                        ->setLastModificationDate($scheduledConference->updated_at)
+                        ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
+                );
+             
+                $sitemap->add(
+                    Url::create(route(ScheduledConferencePages\EditorialTeam::getRouteName('scheduledConference'), ['serie' => $scheduledConference]))
                         ->setLastModificationDate($scheduledConference->updated_at)
                         ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
                 );

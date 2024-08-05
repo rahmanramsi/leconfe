@@ -48,6 +48,7 @@ class ThemeSetting extends Component implements HasForms
                 Section::make()
                     ->schema([
                         ColorPicker::make('meta.appearance_color')
+                            ->regex('/^#?(([a-f0-9]{3}){1,2})$/i')  
                             ->label('Appearance Color'),
                         CssFileUpload::make('styleSheet')
                             ->label('Custom Stylesheet')

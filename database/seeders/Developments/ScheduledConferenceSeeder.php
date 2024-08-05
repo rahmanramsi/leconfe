@@ -16,10 +16,10 @@ class ScheduledConferenceSeeder extends Seeder
     public function run(): void
     {
         Conference::lazy()->each(function (Conference $conference) {
-            $date = now()->subYear(3);
+            $date = now()->subYear(2);
 
             ScheduledConference::factory()
-                ->count(5)
+                ->count(3)
                 ->for($conference)
                 ->state(new Sequence(
                     function (Sequence $sequence) use ($conference, $date) {

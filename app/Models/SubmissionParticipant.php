@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use App\Models\Enums\UserRole;
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class SubmissionParticipant extends Model
 {
-    use HasFactory;
+    use Cachable, HasFactory;
 
     protected $table = 'submission_has_participants';
 

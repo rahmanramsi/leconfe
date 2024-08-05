@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Constants\SubmissionFileCategory;
 use App\Notifications\SubmissionFileUploaded;
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -25,7 +26,7 @@ class SubmissionFile extends Model
     public static function booted()
     {
         static::creating(function (SubmissionFile $record) {
-            $record->user_id = auth()->id();
+            $record->user_id ??= auth()->id();
         });
 
         static::created(function (SubmissionFile $createdModel) {

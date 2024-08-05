@@ -3,6 +3,7 @@
 namespace App\Panel\ScheduledConference\Resources\SubmissionResource\Pages;
 
 use App\Actions\Submissions\SubmissionCreateAction;
+use App\Models\Enums\UserRole;
 use App\Models\Submission;
 use App\Models\Timeline;
 use App\Models\Track;
@@ -12,7 +13,6 @@ use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -112,6 +112,10 @@ class CreateSubmission extends Page implements HasForms
     public function submit()
     {
         $data = $this->form->getState();
+
+        if(!auth()->user()->roles->isEmpty()){
+            auth()->user()->assignRole(UserRole::Author);
+        }
 
         $submission = SubmissionCreateAction::run($data);
 

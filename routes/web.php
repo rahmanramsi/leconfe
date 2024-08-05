@@ -65,8 +65,4 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
     return redirect()->route('livewirePageGroup.website.pages.home');
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
-Route::get('phpmyinfo', function () {
-    phpinfo();
-})->middleware('admin')->name('phpmyinfo');
-
 Route::any('logout', LogoutController::class)->name('logout');

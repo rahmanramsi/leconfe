@@ -38,9 +38,13 @@ class MetaTagManager
     {
         return new HtmlString(
             $this->all()
-                ->map(fn ($content, $name) => <<<HTML
-                    <meta name="{$name}" content="{$content}">
-                HTML)
+                ->map(function ($content, $name){
+                    $content = htmlspecialchars($content, ENT_QUOTES, 'UTF-8', false);
+
+                    return <<<HTML
+                        <meta name="{$name}" content="$content">
+                    HTML;
+                })
                 ->implode("\n")
         );
     }

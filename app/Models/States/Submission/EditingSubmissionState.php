@@ -16,10 +16,12 @@ class EditingSubmissionState extends BaseSubmissionState
 
     public function publish(): void
     {
+        $publishedAt = $this->submission->published_at ?? now();
+
         SubmissionUpdateAction::run([
             'stage' => SubmissionStage::Proceeding,
             'status' => SubmissionStatus::Published,
-            'published_at' => now(),
+            'published_at' => $publishedAt,
         ], $this->submission);
 
         Published::dispatch($this->submission);

@@ -34,6 +34,7 @@ use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Tags\HasTags;
 
 class Submission extends Model implements HasMedia, HasPayment, Sortable
@@ -80,29 +81,20 @@ class Submission extends Model implements HasMedia, HasPayment, Sortable
      */
     protected static function booted(): void
     {
-        static::addGlobalScope('user', function (Builder $builder) {
-            // $currentUser = auth()->user();
-            // if (
-            //     $currentUser->hasRole(UserRole::ConferenceEditor->value)
-            //     || $currentUser->hasRole(UserRole::Reviewer->value)
-            // ) {
-            //     $builder->where('user_id', auth()->id());
-            // }
-        });
 
         static::creating(function (Submission $submission) {
             $submission->user_id ??= Auth::id();
             $submission->conference_id ??= app()->getCurrentConferenceId();
             $submission->scheduled_conference_id ??= app()->getCurrentScheduledConferenceId();
 
-            if(!$submission->track_id){
-                $submission->track_id = Track::first()?->getKey();
+            if (!$submission->track_id) {
+                $submission->track_id = Track::withoutGlobalScopes()->where('scheduled_conference_id', $submission->scheduled_conference_id)->first()->getKey();
             }
         });
 
         static::deleting(function (Submission $submission) {
+            $submission->authors()->delete();
             $submission->participants()->delete();
-            $submission->contributors()->delete();
             $submission->reviews()->delete();
             $submission->media()->delete();
         });
@@ -110,36 +102,30 @@ class Submission extends Model implements HasMedia, HasPayment, Sortable
         static::created(function (Submission $submission) {
             $submission->participants()->create([
                 'user_id' => $submission->user_id,
-                'role_id' => Role::where('name', UserRole::Author->value)->first()->getKey(),
+                'role_id' => Role::withoutGlobalScopes()->where('conference_id', $submission->conference_id)->where('name', UserRole::Author->value)->first()->getKey(),
             ]);
 
-             // Current user as a author
+            // Current user as a author
             $author = $submission->authors()->create([
                 'author_role_id' => AuthorRole::where('name', UserRole::Author->value)->first()->getKey(),
                 ...$submission->user->only(['email', 'given_name', 'family_name', 'public_name']),
             ]);
-
-            // Current user as a contributors
-            $submission->contributors()->create([
-                'contributor_id' => $author->id,
-                'contributor_type' => Author::class,
-            ]);
         });
     }
 
-    public function proceeding() : BelongsTo
+    public function proceeding(): BelongsTo
     {
         return $this->belongsTo(Proceeding::class);
     }
 
-    public function track() : BelongsTo
+    public function track(): BelongsTo
     {
         return $this->belongsTo(Track::class);
     }
 
     public function assignProceeding(Proceeding|int $proceeding)
     {
-        if(is_int($proceeding)) {
+        if (is_int($proceeding)) {
             $proceeding = Proceeding::find($proceeding);
         }
 
@@ -203,14 +189,15 @@ class Submission extends Model implements HasMedia, HasPayment, Sortable
         return $this->hasMany(SubmissionParticipant::class);
     }
 
+    public function editors()
+    {
+        return $this->participants()
+            ->whereHas('role', fn (Builder $query) => $query->where('name', UserRole::ConferenceEditor));
+    }
+
     public function authors()
     {
         return $this->hasMany(Author::class);
-    }
-
-    public function contributors()
-    {
-        return $this->hasMany(SubmissionContributor::class);
     }
 
     public function scopePublished(Builder $query)
@@ -292,5 +279,13 @@ class Submission extends Model implements HasMedia, HasPayment, Sortable
             'submission' => $this,
             'conference' => $this->conference
         ]);
+    }
+
+    public function registerMediaConversions(Media $media = null): void
+    {
+        $this->addMediaConversion('thumb')
+            ->keepOriginalImageFormat()
+            ->width(500)
+            ->height(500);
     }
 }

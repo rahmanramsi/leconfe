@@ -14,11 +14,9 @@ use App\Models\Sponsor;
 use App\Models\NavigationMenu;
 use App\Models\PaymentItem;
 use App\Models\Proceeding;
-use App\Models\Role;
 use App\Models\Scopes\ConferenceScope;
 use App\Models\Scopes\ScheduledConferenceScope;
 use App\Models\ScheduledConference;
-use App\Models\Setting;
 use App\Models\Site;
 use App\Models\SpeakerRole;
 use App\Models\StaticPage;
@@ -27,14 +25,13 @@ use App\Models\SubmissionFileType;
 use App\Models\Timeline;
 use App\Models\Topic;
 use App\Models\Track;
-use App\Models\Venue;
 use App\Models\Version;
 use Illuminate\Foundation\Application as LaravelApplication;
 use Illuminate\Support\Collection;
 
 class Application extends LaravelApplication
 {
-    public const APP_VERSION = '1.0.0-alpha.1';
+    public const APP_VERSION = '1.0.0-alpha.3';
 
     public const PHP_MIN_VERSION = '8.1';
 
@@ -146,7 +143,6 @@ class Application extends LaravelApplication
     public function scopeCurrentScheduledConference(): void
     {
         $models = [
-            Venue::class,
             Timeline::class,
             CommitteeRole::class,
             SpeakerRole::class,
@@ -158,6 +154,7 @@ class Application extends LaravelApplication
             NavigationMenu::class,
             SubmissionFileType::class,
             Track::class,
+            Submission::class,
         ];
 
         foreach ($models as $model) {
@@ -194,7 +191,7 @@ class Application extends LaravelApplication
     public function isReportingErrors(): bool
     {
         try {
-            if ($this->isProduction() && !$this->hasDebugModeEnabled() && Setting::set('send_error_report', true)) {
+            if ($this->isProduction() && !$this->hasDebugModeEnabled() && config('app.report_errors')) {
                 return true;
             }
         } catch (\Throwable $th) {

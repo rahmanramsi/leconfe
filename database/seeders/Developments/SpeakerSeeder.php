@@ -12,6 +12,6 @@ class SpeakerSeeder extends Seeder
      */
     public function run(): void
     {
-        Speaker::factory(300)->create();
+        Speaker::factory(10)->create();
     }
 }

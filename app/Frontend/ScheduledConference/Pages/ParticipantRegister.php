@@ -152,7 +152,7 @@ class ParticipantRegister extends Page
     {
         return [
             route(Home::getRouteName()) => 'Home',
-            'Audience Registration',
+            'Participant Registration',
         ];
     }
 

@@ -39,16 +39,6 @@ class Dashboard extends Page implements HasInfolists
                 Section::make('')
                     ->schema([
                         Actions::make([
-                            Action::make('System Information')
-                                ->icon('heroicon-m-cog-8-tooth')
-                                ->color('primary')
-                                ->requiresConfirmation()
-                                ->outlined()
-                                ->extraAttributes(['class' => 'w-48'])
-                                ->url(route('phpmyinfo')),
-
-                        ]),
-                        Actions::make([
                             Action::make('Expire User Session')
                                 ->icon('heroicon-m-user')
                                 ->color('primary')
@@ -97,7 +87,6 @@ class Dashboard extends Page implements HasInfolists
                                 ->extraAttributes(['class' => 'w-48'])
                                 ->action(function (Action $action) {
                                     $this->runArtisanCommand('view:clear', $action);
-                                    $this->runArtisanCommand('icons:clear', $action);
                                     $this->runArtisanCommand('icons:cache', $action);
                                 }),
                         ]),

@@ -17,11 +17,6 @@ class SiteCreateAction
 
             $site = Site::create();
 
-            $site->setManyMeta([
-                'name' => 'Leconfe',
-                'page_footer' => view('frontend.examples.footer')->render(),
-            ]);
-
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();

@@ -8,6 +8,8 @@ use App\Facades\SidebarFacade;
 use App\Models\ScheduledConference;
 use Livewire\Livewire;
 use App\Classes\Settings;
+use App\Console\Kernel as ConsoleKernel;
+use App\Http\Kernel as HttpKernel;
 use App\Listeners\SubmissionEventSubscriber;
 use App\Models\Conference;
 use Illuminate\Support\Str;
@@ -178,20 +180,24 @@ class AppServiceProvider extends ServiceProvider
         $this->app->scopeCurrentConference();
 
         $pathInfos = explode('/', request()->getPathInfo());
-        // Detect conference from URL path
-        if (isset($pathInfos[1]) && !blank($pathInfos[1])) {
+        $conferencePath = $pathInfos[1] ?? null;
 
-            $conference = Conference::where('path', $pathInfos[1])->first();
+        $isOnScheduledPath = isset($pathInfos[2]) && $pathInfos[2] == 'scheduled' && isset($pathInfos[3]) && !blank($pathInfos[3]);
+        $scheduledConferencePath = $pathInfos[3] ?? null;
+
+        // Detect conference from URL path
+        if ($conferencePath) {
+
+            $conference = Conference::query()
+                ->with(['media', 'meta'])
+                ->where('path', $pathInfos[1])->first();
 
             $conference ? $this->app->setCurrentConferenceId($conference->getKey()) : $this->app->setCurrentConferenceId(Application::CONTEXT_WEBSITE);
 
-            // Detect serie from URL path when conference is set
+            // Detect scheduledConference from URL path when conference is set
             if ($conference) {
 
-                // Eager load conference relations
-                $conference->load(['media', 'meta']);
-
-                if(isset($pathInfos[3]) && !blank($pathInfos[3]) && $scheduledConference = ScheduledConference::where('path', $pathInfos[3])->first()){
+                if($isOnScheduledPath && $scheduledConference = ScheduledConference::where('path', $scheduledConferencePath)->first()){
                     $this->app->setCurrentScheduledConferenceId($scheduledConference->getKey());
                     $this->app->scopeCurrentScheduledConference();
                 }
@@ -203,10 +209,10 @@ class AppServiceProvider extends ServiceProvider
         $currentConference = $this->app->getCurrentConference();
         if ($currentConference) {
             // Scope livewire update path to current serie
-            $currentSerie = $this->app->getCurrentScheduledConference();
-            if (isset($pathInfos[3]) && $currentSerie && $currentSerie->path === $pathInfos[3]) {
+            $currentScheduledConference = $this->app->getCurrentScheduledConference();
+            if ($isOnScheduledPath && $currentScheduledConference && $currentScheduledConference->path === $scheduledConferencePath) {
                 Livewire::setUpdateRoute(
-                    fn ($handle) => Route::post($currentConference->path . '/series/' . $currentSerie->path . '/livewire/update', $handle)->middleware('web')
+                    fn ($handle) => Route::post($currentConference->path . '/scheduled/' . $currentScheduledConference->path . '/livewire/update', $handle)->middleware('web')
                 );
             } else {
                 Livewire::setUpdateRoute(fn ($handle) => Route::post($currentConference->path . '/livewire/update', $handle)->middleware('web'));

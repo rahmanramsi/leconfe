@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\EloquentSortable\Sortable;
@@ -12,7 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class SubmissionGalley extends Model implements HasMedia, Sortable
 {
-    use SortableTrait, InteractsWithMedia;
+    use Cachable, SortableTrait, InteractsWithMedia;
 
     protected $table = 'submission_galleys';
 

@@ -31,10 +31,9 @@ tasks:
     - artisan:down
     - artisan:optimize:clear
     - artisan:storage:link
-    - artisan:view:cache
     - artisan:config:cache
-    - artisan:optimize
     - pnpm:build
+    - node:delete
     - artisan:up
     - deploy:publish
     - php-fpm:reload
@@ -55,6 +54,8 @@ tasks:
     - run : "cd {{release_path}} && php artisan leconfe:upgrade --confirm"
   node:delete:
     - run: "rm -rf {{release_path}}/node_modules"
+  artisan:package:discover:
+    - run: "php {{release_path}}/artisan package:discover --ansi"
   
 after:
   deploy:failed: deploy:unlock

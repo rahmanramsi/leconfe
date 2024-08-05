@@ -39,6 +39,9 @@ class ManageScheduledConferences extends ManageRecords
             'archived' => Tab::make()
                 ->badge(fn () => ScheduledConferenceResource::getEloquentQuery()->where('state', ScheduledConferenceState::Archived)->count())
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('state', ScheduledConferenceState::Archived)),
+            'trash' => Tab::make()
+                ->badge(fn () => ScheduledConferenceResource::getEloquentQuery()->onlyTrashed()->count())
+                ->modifyQueryUsing(fn (Builder $query) => $query->onlyTrashed()),
         ];
     }
 }

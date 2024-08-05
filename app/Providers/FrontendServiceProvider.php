@@ -47,6 +47,7 @@ class FrontendServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Blade::anonymousComponentPath(resource_path('views/frontend/website/components'), 'website');
+        Blade::anonymousComponentPath(resource_path('views/frontend/conference/components'), 'conference');
         Blade::anonymousComponentPath(resource_path('views/frontend/scheduledConference/components'), 'scheduledConference'); 
     }
 
@@ -83,9 +84,6 @@ class FrontendServiceProvider extends ServiceProvider
             ->id('scheduledConference')
             ->path('{conference:path}/scheduled/{serie:path}')
             ->layout('frontend.website.components.layouts.app')
-            ->bootUsing(function () {
-
-            })
             ->middleware([
                 'web',
                 IdentifyConference::class,

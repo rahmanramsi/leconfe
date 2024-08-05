@@ -3,7 +3,7 @@
 namespace App\Panel\ScheduledConference\Livewire;
 
 use App\Actions\Topics\TopicCreateAction;
-use App\Actions\User\TopicUpdateAction;
+use App\Actions\Topics\TopicUpdateAction;
 use App\Models\Topic;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -39,10 +39,10 @@ class TopicTable extends Component implements HasForms, HasTable
                     ->searchable(),
             ])
             ->headerActions([
-                CreateAction::make()
+                CreateAction::make('createtopic')
                     ->modalWidth(MaxWidth::ExtraLarge)
                     ->form(fn (Form $form) => $this->form($form))
-                    ->action(fn (array $data) => TopicCreateAction::run($data))
+                    ->using(fn (array $data) => TopicCreateAction::run($data))
             ])
             ->filters([
                 // ...

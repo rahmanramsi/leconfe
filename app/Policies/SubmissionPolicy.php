@@ -11,19 +11,21 @@ class SubmissionPolicy
 {
     public function create(User $user)
     {
-        if ($user->can('Submission:create')) {
-            return true;
-        }
+        return true;
     }
 
     public function viewAny(User $user)
     {
-        return $user->can('Submission:viewAny');
+        return true;
     }
 
     public function view(User $user, Submission $submission)
     {
-        if ($submission->participants()->where('user_id', $user->getKey())->exists()) {
+        if($user->is($submission->user)) {
+            return true;
+        }
+        
+        if ($submission->participants->where('user_id', $user->getKey())->isNotEmpty()) {
             return true;
         }
 

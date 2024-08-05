@@ -35,6 +35,7 @@ class PluginManager
 
     public function boot()
     {
+        // TODO Add support for plugin in console 
         if (app()->runningInConsole()) {
             return;
         }

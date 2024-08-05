@@ -38,7 +38,6 @@ class GalleyList extends \Livewire\Component implements HasForms, HasTable
 
     public Submission $submission;
     public bool $viewOnly = false;
-    public const ACCEPTED_FILE_TYPES = ['pdf', 'docx', 'xls', 'png', 'jpg', 'jpeg'];
 
     public function render()
     {
@@ -101,11 +100,6 @@ class GalleyList extends \Livewire\Component implements HasForms, HasTable
                 ->downloadable()
                 ->reorderable()
                 ->disk('private-files')
-                ->acceptedFileTypes(
-                    fn (): array => collect(static::ACCEPTED_FILE_TYPES)
-                        ->map(fn ($ext) => MimeType::fromExtension($ext))
-                        ->toArray()
-                )
                 ->preserveFilenames()
                 ->live()
                 ->collection(SubmissionFileCategory::GALLEY_FILES)

@@ -30,8 +30,6 @@ class ScheduledConferenceResource extends Resource
 {
     protected static ?string $model = ScheduledConference::class;
 
-    protected static ?int $navigationSort = 3;
-
     protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
 
     public static function form(Form $form): Form
@@ -136,6 +134,10 @@ class ScheduledConferenceResource extends Resource
                         ->modalHeading('Move To Trash')
                         ->hidden(fn (ScheduledConference $record) => $record->isCurrent() || $record->trashed())
                         ->successNotificationTitle('Serie moved to trash'),
+                    Tables\Actions\ForceDeleteAction::make()
+                        ->label('Delete Permanently')
+                        ->hidden(fn (ScheduledConference $record) => ! $record->trashed())
+                        ->successNotificationTitle('Serie deleted permanently'),
                 ]),
             ]);
     }

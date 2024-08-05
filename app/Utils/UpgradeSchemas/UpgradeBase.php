@@ -2,9 +2,11 @@
 
 namespace App\Utils\UpgradeSchemas;
 
+use Illuminate\Console\Command;
+
 abstract class UpgradeBase
 {
-    public function __invoke()
+    public function __invoke(?Command $command = null)
     {
         $this->run();
     }

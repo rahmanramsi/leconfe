@@ -31,7 +31,7 @@ class Overview extends BaseWidget
                 ])
                 ->where('published_at', '>=', now()->subMonth())
                 ->count())
-                ->description('Published Submission in the last 30 days'),
+                ->description('Accepted paper in the last 30 days'),
             Stat::make('New Authors', User::query()
                 ->where('created_at', '>=', now()->subMonth())
                 ->whereHas('roles', fn($query) => $query->where('name', UserRole::Author->value))

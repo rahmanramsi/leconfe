@@ -13,6 +13,7 @@ use Database\Seeders\Developments\ScheduledConferenceSeeder;
 use Database\Seeders\Developments\SerieSeeder;
 use Database\Seeders\Developments\SponsorSeeder;
 use Database\Seeders\Developments\SubmissionSeeder;
+use Database\Seeders\Developments\TimelineSeeder;
 use Database\Seeders\Developments\TopicSeeder;
 use Database\Seeders\Developments\UserSeeder;
 use Illuminate\Database\Seeder;
@@ -30,10 +31,11 @@ class DevelopmentSeeder extends Seeder
         $this->call(SponsorSeeder::class);
         $this->call(TopicSeeder::class);
         $this->call(ProceedingSeeder::class);
-        $this->call(SubmissionSeeder::class);
+        $this->call(TimelineSeeder::class);
         $this->call(CommitteeSeeder::class);
         $this->call(SpeakerSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(RegistrationSeeder::class);
+        // $this->call(SubmissionSeeder::class);
     }
 }

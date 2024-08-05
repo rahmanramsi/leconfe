@@ -24,7 +24,7 @@ class RegisterPluginVersion
         $plugin = $event->plugin;
 
         // Parse plugin index.yaml
-        $pluginIndex = Yaml::parseFile($plugin->getPluginFullPath().DIRECTORY_SEPARATOR.'index.yaml');
+        $pluginIndex = Yaml::parseFile($plugin->getPluginFullPath() . DIRECTORY_SEPARATOR . 'index.yaml');
 
         // Save plugin version
         Version::firstOrCreate([
