@@ -30,7 +30,7 @@
                         @if ($timeline->hide)
                             @continue
                         @endif
-                        <tr class="cursor-pointer bg-gray-100 border-b dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-400 transition-all ease-in-out" wire:click="attend({{ $timeline->id }})">
+                        <tr class="cursor-pointer bg-gray-50 border-b dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-400 transition-all ease-in-out" wire:click="attend({{ $timeline->id }})">
                             <td class="px-6 py-4" colspan="2">
                                 <strong class="block font-medium text-gray-900 dark:text-white">
                                     {{ $timeline->name }}
@@ -39,17 +39,17 @@
                                     {{ Carbon::parse($timeline->date)->format(Setting::get('format_date')) }}
                                 </p>
                             </td>
-                            <td class="px-6 py-4 text-right font-bold">
+                            <td class="px-6 py-4 text-right text-sm font-bold">
                                 @if ($timeline->isOngoing())
-                                    <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+                                    <span class="bg-green-200 text-green-600 px-3 py-1 rounded-full dark:bg-green-900 dark:text-green-300">
                                         Ongoing
                                     </span>
                                 @elseif ($timeline->getEarliestTime()->isFuture())
-                                    <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
+                                    <span class="bg-blue-200 text-blue-600 px-3 py-1 rounded-full dark:bg-blue-900 dark:text-blue-300">
                                         Not started
                                     </span>
                                 @elseif ($timeline->getLatestTime()->isPast())
-                                    <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">
+                                    <span class="bg-gray-300 text-gray-600 px-3 py-1 rounded-full dark:bg-gray-700 dark:text-gray-300">
                                         Over
                                     </span>
                                 @endif
@@ -80,7 +80,7 @@
                                         {{ new Illuminate\Support\HtmlString($agenda->details) }}
                                     </p>
                                 </th>
-                                <td class="px-6 pr-8 py-4 text-right">
+                                <td class="px-6 py-4 text-right">
                                     @if ($agenda->isOngoing())
                                         <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
                                             Ongoing
