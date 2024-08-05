@@ -3,6 +3,7 @@
 namespace App\Frontend\ScheduledConference\Pages;
 
 use App\Models\Announcement;
+use Illuminate\Contracts\Support\Htmlable;
 use Livewire\Attributes\Title;
 use Illuminate\Support\Facades\Route;
 use Rahmanramsi\LivewirePageGroup\PageGroup;
@@ -13,6 +14,12 @@ class AnnouncementPage extends Page
     protected static string $view = 'frontend.scheduledConference.pages.announcement';
 
     public Announcement $announcement;
+
+    public function getTitle(): string|Htmlable
+    {
+        return 'Announcement';
+    }
+
 
     public function getBreadcrumbs(): array
     {

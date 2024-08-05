@@ -10,14 +10,12 @@ class SetLocale
 {
     public function handle($request, Closure $next)
     {
-        $locale = session('locale');
+        $sessionLocale = session('locale');
         $supportedLocales = Setting::get('languages', ['en']);
         
-        if ($locale && in_array($locale, $supportedLocales)) {
-            App::setLocale($locale);
-        } else {
-            App::setLocale(Setting::get('default_language', 'en'));
-        }
+        $locale = $sessionLocale && in_array($sessionLocale, $supportedLocales) ? $sessionLocale : Setting::get('default_language', 'en');
+
+        App::setLocale($locale);
 
         return $next($request);
     }

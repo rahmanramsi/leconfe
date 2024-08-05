@@ -81,7 +81,7 @@ class Upgrader extends Installer
         foreach ($this->actions as $actions) {
             foreach ($actions as $key => $action) {
                 $this->command?->info("Running upgrade actions : $key");
-                $action();
+                $action($this->command);
             }
         }
     }

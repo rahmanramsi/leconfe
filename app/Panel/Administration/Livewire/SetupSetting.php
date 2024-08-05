@@ -56,6 +56,7 @@ class SetupSetting extends Component implements HasForms
                             ->helperText('A short description of the website. This will used to help search engines understand the website.'),
                         TinyEditor::make('meta.about')
                             ->label('About Site')
+                            ->profile('advanced')
                             ->minHeight(300)
                             ->dehydrateStateUsing(fn (?string $state) => Purify::clean($state)),
                         TinyEditor::make('meta.page_footer')
