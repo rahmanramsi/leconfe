@@ -20,6 +20,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Forms\Components\TimePicker;
 use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Columns\ToggleColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -68,6 +69,7 @@ class ListAgenda extends Page implements HasTable, HasForms
                 ->form(fn (Form $form) => $this->form($form))
                 ->mutateFormDataUsing(function (?array $data) {
                     $data['timeline_id'] = $this->timeline->id;
+                    $data['date'] = $this->timeline->date;
                     return $data;
                 })
                 ->authorize('Timeline:create'),
@@ -114,6 +116,8 @@ class ListAgenda extends Page implements HasTable, HasForms
                     ->formatStateUsing(fn ($state) => Str::limit(strip_tags($state), 50))
                     ->limit(100)
                     ->searchable(),
+                ToggleColumn::make('hide')
+                    ->label('Hidden')
             ])
             ->defaultSort('time_span')
             ->actions([

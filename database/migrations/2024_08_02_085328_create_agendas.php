@@ -19,8 +19,10 @@ return new class extends Migration
             $table->foreignIdFor(Timeline::class)->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->text('details');
+            $table->date('date');
             $table->time('time_start');
             $table->time('time_end');
+            $table->boolean('hide')->default(false);
             $table->timestamps();
         });
     }

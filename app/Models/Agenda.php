@@ -31,6 +31,30 @@ class Agenda extends Model
         );
     }
 
+    protected function dateStart(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => Carbon::parse($this->date)->setTimeFromTimeString($this->time_start),
+        );
+    }
+
+    protected function deteEnd(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => Carbon::parse($this->date)->setTimeFromTimeString($this->time_end),
+        );
+    }
+
+    public function isFuture()
+    {
+        return $this->date_start->isAfter(now());
+    }
+
+    public function isPast()
+    {
+        return $this->date_end->isBefore(now());
+    }
+
     public function timeline(): BelongsTo
     {
         return $this->belongsTo(Timeline::class);
