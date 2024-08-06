@@ -130,8 +130,8 @@ class CustomSidebarManagerPage extends Page implements HasForms, HasTable
             TinyEditor::make('content')
                 ->label('Content')
                 ->minHeight(300)
-                ->plugins('advlist autoresize codesample directionality emoticons fullscreen hr image imagetools link lists media table toc wordcount')
-                ->toolbar('undo redo removeformat | formatselect fontsizeselect | bold italic | rtl ltr | alignjustify alignright aligncenter alignleft | numlist bullist | blockquote table hr | image link fullscreen')
+                ->plugins('advlist autoresize codesample directionality emoticons fullscreen hr image imagetools link lists media table toc wordcount code')
+                ->toolbar('undo redo removeformat | formatselect fontsizeselect | bold italic | rtl ltr | alignjustify alignright aligncenter alignleft | numlist bullist | blockquote table hr | image link fullscreen | code')
                 ->helperText('Content of the sidebar.'),
         ];
     }
