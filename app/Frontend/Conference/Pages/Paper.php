@@ -21,10 +21,10 @@ class Paper extends Page
     {
         $this->paper = Submission::query()
             ->where('id', $submission)
-            ->with(['media','meta', 'galleys.file.media', 'authors' => fn($query) => $query->with(['role', 'meta'])])
+            ->with(['track', 'media', 'meta', 'galleys.file.media', 'authors' => fn ($query) => $query->with(['role', 'meta'])])
             ->first();
 
-        if(!$this->paper){
+        if (!$this->paper) {
             return abort(404);
         }
 
@@ -40,55 +40,80 @@ class Paper extends Page
         return $this->paper->getMeta('title');
     }
 
-    public function addMetadata() : void
+    public function addMetadata(): void
     {
-        MetaTag::add('citation_conference_title', app()->getCurrentConference()->name);
+        $conference = $this->paper->conference;
+        $scheduledConference = $this->paper->scheduledConference;
+
+        MetaTag::add('gs_meta_revision', '1.1');
         MetaTag::add('citation_title', e($this->paper->getMeta('title')));
 
         $this->paper->authors->each(function ($author) {
             MetaTag::add('citation_author', $author->fullName);
-            if($author->getMeta('affiliation')){
-                MetaTag::add('citation_author_affiliation', $author->getMeta('affiliation'));
+            if ($author->getMeta('affiliation')) {
+                MetaTag::add('citation_author_affiliation', e($author->getMeta('affiliation')));
             }
         });
 
-        if($this->paper->isPublished()){
+        if ($this->paper->isPublished()) {
             MetaTag::add('citation_publication_date', $this->paper->published_at?->format('Y/m/d'));
+            MetaTag::add('citation_date', $this->paper->published_at?->format('Y/m/d'));
+        }
+
+        if($this->paper->doi?->doi){
+            MetaTag::add('citation_doi', $this->paper->doi->doi);
+        }
+
+        if($scheduledConference->getMeta('publisher_name')){
+            MetaTag::add('citation_publisher', e($scheduledConference->getMeta('publisher_name')));
         }
 
         $proceeding = $this->paper->proceeding;
-        MetaTag::add('citation_volume', $proceeding->volume);
-        MetaTag::add('citation_issue', $proceeding->number);
 
-        if($this->paper->getMeta('article_pages')){
+        MetaTag::add('citation_conference_title', e($conference->name));
+        if($conference->getMeta('issn')){
+            MetaTag::add('citation_issn', e($conference->getMeta('issn')));
+        }
+        MetaTag::add('citation_volume', e($proceeding->volume));
+        MetaTag::add('citation_issue', e($proceeding->number));
+        if($this->paper){
+            MetaTag::add('citation_section', e($this->paper->track->title));
+        }
+
+        if ($this->paper->getMeta('article_pages')) {
             [$start, $end] = explode('-', $this->paper->getMeta('article_pages'));
 
-            if($start){
+            if ($start) {
                 MetaTag::add('citation_firstpage', $start);
             }
 
-            if($end){
+            if ($end) {
                 MetaTag::add('citation_lastpage', $end);
             }
         }
 
         MetaTag::add('citation_abstract_html_url', route(static::getRouteName(), ['submission' => $this->paper->getKey()]));
-        
+
         $this->paper->galleys->each(function ($galley) {
-            if($galley->isPdf()){
+            if ($galley->isPdf()) {
                 MetaTag::add('citation_pdf_url', $galley->getUrl());
             }
         });
 
+        collect($this->paper->getMeta('keywords'))
+            ->each(fn($keyword) => MetaTag::add('citation_keywords', $keyword));
+
+        collect(explode(PHP_EOL, $this->paper->getMeta('references')))
+            ->filter()
+            ->values()
+            ->each(fn ($reference) => MetaTag::add('citation_reference', $reference));
 
         MetaTag::add('og:title', e($this->paper->getMeta('title')));
-        MetaTag::add('og:type', 'article');
+        MetaTag::add('og:type', 'paper');
         MetaTag::add('og:url', route(static::getRouteName(), ['submission' => $this->paper->getKey()]));
-        if($this->paper->getFirstMedia('cover')){
+        if ($this->paper->getFirstMedia('cover')) {
             MetaTag::add('og:image', $this->paper->getFirstMedia('cover')->getAvailableUrl(['thumb']));
         }
-
-
     }
 
     public function canAccess(): bool
@@ -131,9 +156,10 @@ class Paper extends Page
             route(Home::getRouteName()) => 'Home',
             route(Proceedings::getRouteName()) => 'Proceedings',
             route(ProceedingDetail::getRouteName(), [$this->paper->proceeding->id]) => Str::limit(
-                $this->paper->proceeding->seriesTitle(), 70
+                $this->paper->proceeding->seriesTitle(),
+                70
             ),
-            'Article'
+            'Paper'
         ];
     }
 

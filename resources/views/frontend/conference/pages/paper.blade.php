@@ -15,9 +15,9 @@
             {{ $paper->getMeta('title') }}
         </h1>
         <div class="mb-4 text-sm text-slate-400">
-            <span class="flex items-center">
+            <span class=" flex items-center">
                 <x-lineawesome-calendar-check-solid class="w-3 h-3 mr-0.5" />
-                {{ __('Date Published') . ': ' . ($paper->published_at && $paper->isPublished() ? $paper->published_at->format(Setting::get('format_date')) : '-')  }}
+                <span class="citation_publication_date">{{ __('Date Published') . ': ' . ($paper->published_at && $paper->isPublished() ? $paper->published_at->format(Setting::get('format_date')) : '-')  }}</span>
             </span>
         </div>
         @if($paper->getFirstMedia('cover'))
@@ -31,12 +31,12 @@
                     {{ __('Contributors') }}
                 </h2>
                 <div
-                    class="grid grid-cols-2 gap-4 p-4 mt-3 border rounded-md shadow-sm bg-slate-100 border-slate-200 text-slate-700">
+                    class="content grid grid-cols-2 gap-4 p-4 mt-3 border rounded-md shadow-sm bg-slate-100 border-slate-200 text-slate-700">
                     @foreach ($paper->authors as $contributor)
                         <div class="col-span-2 sm:col-span-1">
                             <div class="flex items-center">
                                 <x-lineawesome-user class="w-5 h-5 mr-1" />
-                                <span>{{ $contributor->fullName }}</span>
+                                <h3 class="citation_author">{{ $contributor->fullName }}</h3>
                             </div>
                             <div class="ml-[25px] text-sm text-slate-500">{{ $contributor->role->name }}</div>
                         </div>
@@ -44,11 +44,11 @@
                 </div>
             </section>
             @if($paper->getMeta('keywords'))
-                <section class="keywords">
-                    <div class="mt-4 text-slate-800">
-                        <h2 class="pb-1 mb-3 text-xl font-medium border-b border-b-slate-200">
-                            {{ __('Keywords') }}
-                        </h2>
+                <section class="keywords mt-4">
+                    <h2 class="pb-1 mb-3 text-xl font-medium border-b border-b-slate-200">
+                        {{ __('Keywords') }}
+                    </h2>
+                    <div class="content text-slate-800">
                         <div class="flex flex-wrap gap-3">
                             @foreach ($paper->getMeta('keywords') as $keyword)
                                 <span 
@@ -60,35 +60,37 @@
                     </div>
                 </section>
             @endif
-            <section clas="abstract">
-                <div class="mt-4 text-slate-800">
-                    <h2 class="pb-1 mb-3 text-xl font-medium border-b border-b-slate-200">
-                        {{ __('Abstract') }}
-                    </h2>
+            <section clas="abstract mt-4">
+                <h2 class="pb-1 mb-3 text-xl font-medium border-b border-b-slate-200">
+                    {{ __('Abstract') }}
+                </h2>
+                <div class="citation_abstract content text-slate-800">
                     {!! $paper->getMeta('abstract') !!}
                 </div>
             </section>
-            <section class="references">
-                <div class="mt-4 text-slate-800" id="references">
-                    <h2 class="pb-1 mb-3 text-xl font-medium border-b border-b-slate-200">
-                        {{ __('References') }}
-                    </h2>
-                    @if ($references = $paper->getMeta('references'))
-                        {!! $references !!}
+            <section class="references mt-4">
+                <h2 class="pb-1 mb-3 text-xl font-medium border-b border-b-slate-200">
+                    {{ __('References') }}
+                </h2>
+                <ol class="content text-slate-800">
+                    @if ($paper->getMeta('references'))
+                        @foreach(collect(explode(PHP_EOL, $this->paper->getMeta('references')))->filter()->values() as $reference)
+                            <li class="reference">{{ $reference }}</li>
+                        @endforeach
                     @else
                         <span class=" text-slate-400">
                             {{ __('No References') }}
                         </span>
                     @endif
-                </div>
+                </ol>
             </section>
             @if($paper->galleys->isNotEmpty())
-                <section class="downloads">
-                    <div class="mt-4 text-slate-800">
-                        <h2 class="pb-1 mb-3 text-xl font-medium border-b border-b-slate-200">
-                            {{ __('Downloads') }}
-                        </h2>
-                        <div class="flex flex-wrap gap-1.5 mt-2">
+                <section class="downloads mt-4">
+                    <h2 class="pb-1 mb-3 text-xl font-medium border-b border-b-slate-200">
+                        {{ __('Downloads') }}
+                    </h2>
+                    <div class="content mt-4 text-slate-800">
+                        <div class="download flex flex-wrap gap-1.5 mt-2">
                             @foreach ($paper->galleys as $galley)
                                 <x-scheduledConference::galley-link :galley="$galley"/>
                             @endforeach

@@ -127,7 +127,7 @@ class MastHeadSetting extends Component implements HasForms
                             ->description('Include any information about your conference which may be of interest to readers, authors or reviewers.')
                             ->schema([
                                 TinyEditor::make('meta.about')
-                                    ->label('About the Conference')
+                                    ->label('About the Scheduled Conference')
                                     ->profile('basic'),
                             ])
                     ]),
