@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Http\Middleware\IdentifyConference;
 use App\Http\Middleware\IdentifyScheduledConference;
+use App\Http\Middleware\SetLocale;
 use App\Http\Middleware\SetupConference;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
@@ -33,8 +34,10 @@ class FrontendServiceProvider extends ServiceProvider
 
             Livewire::addPersistentMiddleware([
                 'web',
+                SetLocale::class,
                 IdentifyConference::class,
             ]);
+
         });
 
         $this->app->bind(LogoutResponseContract::class, LogoutResponse::class);
@@ -46,6 +49,8 @@ class FrontendServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+
+
         Blade::anonymousComponentPath(resource_path('views/frontend/website/components'), 'website');
         Blade::anonymousComponentPath(resource_path('views/frontend/conference/components'), 'conference');
         Blade::anonymousComponentPath(resource_path('views/frontend/scheduledConference/components'), 'scheduledConference'); 
