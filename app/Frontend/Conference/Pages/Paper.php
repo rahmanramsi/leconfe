@@ -109,7 +109,7 @@ class Paper extends Page
             ->each(fn ($reference) => MetaTag::add('citation_reference', $reference));
 
         MetaTag::add('og:title', e($this->paper->getMeta('title')));
-        MetaTag::add('og:type', 'article');
+        MetaTag::add('og:type', 'paper');
         MetaTag::add('og:url', route(static::getRouteName(), ['submission' => $this->paper->getKey()]));
         if ($this->paper->getFirstMedia('cover')) {
             MetaTag::add('og:image', $this->paper->getFirstMedia('cover')->getAvailableUrl(['thumb']));
@@ -159,7 +159,7 @@ class Paper extends Page
                 $this->paper->proceeding->seriesTitle(),
                 70
             ),
-            'Article'
+            'Paper'
         ];
     }
 
