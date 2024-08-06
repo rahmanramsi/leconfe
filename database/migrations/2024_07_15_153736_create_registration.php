@@ -36,7 +36,6 @@ return new class extends Migration
             $table->foreignIdFor(ScheduledConference::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(User::class);
             $table->foreignIdFor(RegistrationType::class);
-            $table->boolean('attend')->default(false);
             $table->softDeletes();
             $table->timestamps();
         });

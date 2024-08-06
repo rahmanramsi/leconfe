@@ -148,12 +148,6 @@ class RegistrantResource extends Resource
                     ->formatStateUsing(fn () => "Trashed")
                     ->badge()
                     ->color(Color::Red),
-                TextColumn::make('attend')
-                    ->label('Attend')
-                    ->formatStateUsing(fn (Model $record) => $record->getAttendance() ? 'Yes' : 'No')
-                    ->badge()
-                    ->color(fn (Model $record) => $record->getAttendance() ? Color::Green : Color::Red)
-                    ->visible(fn () => app()->getCurrentScheduledConference()->isAttendanceEnabled()),
                 TextColumn::make('created_at')
                     ->label('Registration Date')
                     ->date(Setting::get('format_date'))
@@ -173,26 +167,6 @@ class RegistrantResource extends Resource
                     ->modalWidth('lg')
                     ->authorize('Registrant:edit'),
                 ActionGroup::make([
-                    // ---[ Attendance Action ]---
-                    Action::make('attend')
-                        ->icon('heroicon-m-finger-print')
-                        ->color(Color::Green)
-                        ->requiresConfirmation()
-                        ->action(function (Model $record) {
-                            $record->attend = true;
-                            $record->save();
-                        })
-                        ->visible(fn (Model $record) => !$record->getAttendance()),
-                    Action::make('unattend')
-                        ->icon('heroicon-m-finger-print')
-                        ->color(Color::Red)
-                        ->requiresConfirmation()
-                        ->action(function (Model $record) {
-                            $record->attend = false;
-                            $record->save();
-                        })
-                        ->visible(fn (Model $record) => $record->getAttendance()),
-                    //---[ General Action ]---
                     DeleteAction::make()
                         ->label('Trash')
                         ->authorize('Registrant:delete'),
