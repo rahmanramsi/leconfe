@@ -10,7 +10,6 @@ config:
   shared_dirs: 
     - storage
     - public/.well-known
-    - plugins
 
 hosts:
   demo:
@@ -28,14 +27,14 @@ tasks:
   deploy:
     - deploy:prepare
     - deploy:vendors
-    - artisan:down
     - artisan:optimize:clear
     - artisan:storage:link
     - artisan:config:cache
     - pnpm:build
     - node:delete
-    - artisan:up
+    - artisan:down
     - deploy:publish
+    - artisan:up
     - php-fpm:reload
     - supervisor:restart
   build:
