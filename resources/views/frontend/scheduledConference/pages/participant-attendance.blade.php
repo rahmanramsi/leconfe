@@ -47,7 +47,7 @@
                                                     Not started
                                                 </span>
                                             @elseif ($timeline->getLatestTime()->isPast())
-                                                <span class="bg-gray-100 text-gray-800 text-xs font-semibold mx-2 px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">
+                                                <span class="bg-gray-200 text-gray-800 text-xs font-semibold mx-2 px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">
                                                     Over
                                                 </span>
                                             @endif
@@ -59,12 +59,13 @@
                                     <td class="px-6 py-4 text-right">
                                         @if ($timeline->canAttend())
                                             @if ($timeline->isUserAttended(auth()->user()))
-                                                <button class="text-xs text-gray-600 cursor-pointer">
-                                                    Attended
+                                                <button class="py-1 px-4 text-xs font-medium text-green-700 focus:outline-none bg-white rounded-full border border-gray-200 focus:z-10 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 cursor-default">
+                                                    Attendance Confirmed
                                                 </button>
                                             @else
-                                                <button class="text-xs text-blue-600 cursor-pointer hover:underline" wire:click="attend({{ $timeline->id }}, '{{ static::ATTEND_TYPE_TIMELINE }}')">
-                                                    Attend
+                                                <button class="py-1 px-4 text-xs font-medium text-blue-700 focus:outline-none bg-white rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-600 focus:z-10 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" 
+                                                wire:click="attend({{ $timeline->id }}, '{{ static::ATTEND_TYPE_TIMELINE }}')">
+                                                    Confirm Attendance
                                                 </button>
                                             @endif
                                         @endif
@@ -76,58 +77,51 @@
                                         ->orderBy('time_start', 'ASC')
                                         ->get();
                                 @endphp
-                                @if ($agendas->isNotEmpty())
-                                    @foreach ($agendas as $agenda)
-                                        @if ($agenda->hide)
-                                            @continue
-                                        @endif
-                                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                            <td class="px-6 pl-8 py-4 text-left">
-                                                {{ $agenda->time_span }}
-                                                @if ($agenda->isOngoing())
-                                                    <span class="bg-green-100 text-green-800 text-xs font-medium mx-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
-                                                        Ongoing
-                                                    </span>
-                                                @elseif ($agenda->isFuture())
-                                                    <span class="bg-blue-100 text-blue-800 text-xs font-medium mx-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
-                                                        Not started
-                                                    </span>
-                                                @elseif ($agenda->isPast())
-                                                    <span class="bg-gray-100 text-gray-800 text-xs font-medium mx-2 px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">
-                                                        Over
-                                                    </span>
-                                                @endif
-                                            </td>
-                                            <th scope="row" class="px-6 py-4 whitespace-nowrap text-left">
-                                                <strong class="font-medium text-gray-900 dark:text-white">
-                                                    {{ $agenda->name }}
-                                                </strong>
-                                                <p class="font-normal text-gray-500">
-                                                    {{ new Illuminate\Support\HtmlString($agenda->details) }}
-                                                </p>
-                                            </th>
-                                            <td class="px-6 py-4 text-right">
-                                                @if ($agenda->canAttend() && !$timeline->canAttend())
-                                                    @if ($agenda->isUserAttended(auth()->user()))
-                                                        <button class="text-xs text-gray-600 cursor-pointer">
-                                                            Attended
-                                                        </button>
-                                                    @else
-                                                        <button class="text-xs text-blue-600 cursor-pointer hover:underline" wire:click="attend({{ $agenda->id }}, '{{ static::ATTEND_TYPE_AGENDA }}')">
-                                                            Attend
-                                                        </button>
-                                                    @endif
-                                                @endif
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                @else
+                                @foreach ($agendas as $agenda)
+                                    @if ($agenda->hide)
+                                        @continue
+                                    @endif
                                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <td class="text-center px-6 py-4" colspan="3">
-                                            Event empty.
+                                        <td class="px-6 pl-8 py-4 text-left w-fit text-nowrap">
+                                            {{ $agenda->time_span }}
+                                            @if ($agenda->isOngoing())
+                                                <span class="bg-green-100 text-green-800 text-xs font-medium mx-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+                                                    Ongoing
+                                                </span>
+                                            @elseif ($agenda->isFuture())
+                                                <span class="bg-blue-100 text-blue-800 text-xs font-medium mx-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
+                                                    Not started
+                                                </span>
+                                            @elseif ($agenda->isPast())
+                                                <span class="bg-gray-100 text-gray-800 text-xs font-medium mx-2 px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">
+                                                    Over
+                                                </span>
+                                            @endif
+                                        </td>
+                                        <th scope="row" class="px-6 py-4 whitespace-nowrap text-left text-wrap">
+                                            <strong class="font-medium text-gray-900 dark:text-white">
+                                                {{ $agenda->name }}
+                                            </strong>
+                                            <p class="font-normal text-gray-500">
+                                                {{ new Illuminate\Support\HtmlString($agenda->details) }}
+                                            </p>
+                                        </th>
+                                        <td class="px-4 py-4 text-right align-top">
+                                            @if ($agenda->canAttend() && !$timeline->canAttend())
+                                                @if ($agenda->isUserAttended(auth()->user()))
+                                                    <button class="py-1 px-4 text-xs font-medium text-green-700 focus:outline-none bg-white rounded-full border border-gray-200 focus:z-10 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 cursor-default">
+                                                        Attendance Confirmed
+                                                    </button>
+                                                @else
+                                                    <button class="py-1 px-4 text-xs font-medium text-blue-700 focus:outline-none bg-white rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-600 focus:z-10 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" 
+                                                    wire:click="attend({{ $agenda->id }}, '{{ static::ATTEND_TYPE_AGENDA }}')">
+                                                        Confirm Attendance
+                                                    </button>
+                                                @endif
+                                            @endif
                                         </td>
                                     </tr>
-                                @endif
+                                @endforeach
                             @endforeach
                         </tbody>
                     </table>
@@ -164,9 +158,10 @@
                             @endif
                         </div>
                         <div class="mt-6 flex justify-end space-x-2 text-sm">
-                            <button wire:click="cancel" class="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300">Cancel</button>
+                            <button wire:click="cancel" class="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300" wire:loading.attr="disabled">
+                                Cancel
+                            </button>
                             <button wire:click="confirm" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" wire:loading.attr="disabled">
-                                <span class="loading loading-spinner loading-xs" wire:loading></span>
                                 Confirm
                             </button>
                         </div>
