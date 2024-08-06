@@ -27,6 +27,8 @@ use Filament\Tables\Columns\ToggleColumn;
 use Filament\Forms\Components\CheckboxList;
 use App\Panel\ScheduledConference\Resources\TimelineResource\Pages;
 use Filament\Forms\Components\Checkbox;
+use Filament\Support\Colors\Color;
+use Filament\Tables\Columns\IconColumn;
 
 class TimelineResource extends Resource
 {
@@ -46,6 +48,8 @@ class TimelineResource extends Resource
                     ->maxLength(255),
                 DatePicker::make('date')
                     ->required(),
+                Checkbox::make('requires_attendance')
+                    ->helperText('By turning this on, participants only need to attend here.'),
                 Select::make('type')
                     ->options(Timeline::getTypes())
                     ->helperText('Type that integrates with the workflow process.')
@@ -54,7 +58,6 @@ class TimelineResource extends Resource
                         modifyRuleUsing: fn (Unique $rule) => $rule->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId()),
                     )
                     ->native(false),
-                Checkbox::make('requires_attendance'),
             ])
             ->columns(1);
     }
@@ -74,6 +77,12 @@ class TimelineResource extends Resource
                     ->sortable(),
                 ToggleColumn::make('hide')
                     ->label('Hidden'),
+                IconColumn::make('requires_attendance')
+                    ->boolean()
+                    ->trueIcon('heroicon-o-check-circle')
+                    ->trueColor(Color::Green)
+                    ->falseIcon('heroicon-o-x-circle')
+                    ->falseColor(Color::Red),
             ])
             ->recordUrl(fn (Model $record) => static::getUrl('agenda', ['record' => $record]))
             ->filters([
@@ -82,8 +91,7 @@ class TimelineResource extends Resource
             ->actions([
                 EditAction::make()
                     ->modalWidth(MaxWidth::ExtraLarge)
-                    ->model(Timeline::class)
-                    ->before(fn (Model $record) => dd($record)),
+                    ->model(Timeline::class),
                 ActionGroup::make([
                     DeleteAction::make(),
                 ]),

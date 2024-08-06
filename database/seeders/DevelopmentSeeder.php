@@ -8,7 +8,6 @@ use Database\Seeders\Developments\CommitteeSeeder;
 use Database\Seeders\Developments\ConferenceSeeder;
 use Database\Seeders\Developments\SpeakerSeeder;
 use Database\Seeders\Developments\ProceedingSeeder;
-use Database\Seeders\Developments\RegistrationSeeder;
 use Database\Seeders\Developments\ScheduledConferenceSeeder;
 use Database\Seeders\Developments\SerieSeeder;
 use Database\Seeders\Developments\SponsorSeeder;
@@ -34,6 +33,5 @@ class DevelopmentSeeder extends Seeder
         $this->call(CommitteeSeeder::class);
         $this->call(SpeakerSeeder::class);
         $this->call(UserSeeder::class);
-        $this->call(RegistrationSeeder::class);
     }
 }

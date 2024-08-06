@@ -17,67 +17,119 @@ class ParticipantAttendance extends Page
 
     protected static ?string $slug = 'attendance';
 
-    protected $listeners = ['attend'];
+    public ?string $typeData = null;
 
     public ?Timeline $timelineData = null;
+
+    public ?Agenda $agendaData = null;
 
     public bool $isOpen = false;
 
     public ?string $errorMessage = null;
 
+    public const ATTEND_TYPE_TIMELINE = 'timeline';
+    public const ATTEND_TYPE_AGENDA = 'agenda';
+
     public function mount()
     {
     }
 
-    public function attend($timeline_id): void
+    public function attend($data_id, $data_type): void
     {
-        $timeline = Timeline::where('id', $timeline_id)->first();
-        if(!$timeline) return;
+        if($data_type === self::ATTEND_TYPE_TIMELINE) {
+            $timeline = Timeline::where('id', $data_id)->first();
 
-        $this->timelineData = $timeline;
+            if(!$timeline) return;
+
+            $this->timelineData = $timeline;
+        } else {
+            $agenda = Agenda::where('id', $data_id)->first();
+
+            if(!$agenda) return;
+
+            $this->agendaData = $agenda;
+        }
+        $this->typeData = $data_type;
         $this->isOpen = true;
     }
 
     public function cancel(): void
     {
+        $this->typeData = null;
         $this->timelineData = null;
+        $this->agendaData = null;
+        $this->errorMessage = false;
         $this->isOpen = false;
     }
 
     public function confirm(): void
     {
+        // belum login
         if(!auth()->check()) {
-            // belum login
             $this->errorMessage = "You're not logged in";
             return;
         }
 
-        $timeline = $this->timelineData;
-        $registration = Registration::withTrashed()
-            ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
-            ->whereUserId(auth()->user()->id)
-            ->first();
+        $typeData = $this->typeData;
+        if($typeData === self::ATTEND_TYPE_TIMELINE) {
 
-        if(!$timeline) {
+            $timeline = $this->timelineData;
+            
+            $registration = Registration::withTrashed()
+                ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
+                ->whereUserId(auth()->user()->id)
+                ->first();
+
             // timeline yang dipilih tidak valid
-            $this->errorMessage = "Invalid event selection";
-            return;
-        }
-        if(!$registration) {
+            if(!$timeline) {
+                $this->errorMessage = "Invalid event selection";
+                return;
+            }
             // tidak melakukan registrasi
-            $this->errorMessage = "You're not registrant of " . app()->getCurrentScheduledConference()->title;
-            return;
-        }
-        if($registration->registrationPayment->state !== RegistrationPaymentState::Paid->value) { 
+            if(!$registration) {
+                $this->errorMessage = "You're not registrant of " . app()->getCurrentScheduledConference()->title;
+                return;
+            }
             // belum melakukan pembayaran
-            $this->errorMessage = "You're not participant of " . app()->getCurrentScheduledConference()->title;
-            return;
-        }
+            if($registration->registrationPayment->state !== RegistrationPaymentState::Paid->value) { 
+                $this->errorMessage = "You're not participant of " . app()->getCurrentScheduledConference()->title;
+                return;
+            }
 
-        RegistrationAttendance::create([
-            'timeline_id' => $timeline->id,
-            'registration_id' => $registration->id,
-        ]);
+            RegistrationAttendance::create([
+                'timeline_id' => $timeline->id,
+                'registration_id' => $registration->id,
+            ]);
+        } else {
+            
+            $agenda = $this->agendaData;
+            
+            $registration = Registration::withTrashed()
+                ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
+                ->whereUserId(auth()->user()->id)
+                ->first();
+
+            // agenda yang dipilih tidak valid
+            if(!$agenda) {
+                $this->errorMessage = "Invalid event selection";
+                return;
+            }
+            // tidak melakukan registrasi
+            if(!$registration) {
+                $this->errorMessage = "You're not registrant of " . app()->getCurrentScheduledConference()->title;
+                return;
+            }
+            // belum melakukan pembayaran
+            if($registration->registrationPayment->state !== RegistrationPaymentState::Paid->value) { 
+                $this->errorMessage = "You're not participant of " . app()->getCurrentScheduledConference()->title;
+                return;
+            }
+
+            RegistrationAttendance::create([
+                'agenda_id' => $agenda->id,
+                'registration_id' => $registration->id,
+            ]);
+        }
 
         $this->cancel();
     }
@@ -92,17 +144,18 @@ class ParticipantAttendance extends Page
             ->orderBy('date', 'ASC')
             ->get();
 
-        $timelineData = null;
-        if(!empty($this->timelineData)) {
-            $timelineData = $this->timelineData;
-        }
+        $typeData = $this->typeData ?? null;
+        $timelineData = $this->timelineData ?? null;
+        $agendaData = $this->agendaData ?? null;
 
         return [
             'currentScheduledConference' => $currentScheduledConference,
             'isLogged' => $isLogged,
             'timelines' => $timelines,
             // data confirmation
+            'typeData' => $typeData,
             'timelineData' => $timelineData,
+            'agendaData' => $agendaData,
             'errorMessage' => $this->errorMessage,
         ];
     }

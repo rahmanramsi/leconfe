@@ -11,12 +11,14 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
 use Filament\Resources\Pages\Page;
+use Filament\Support\Colors\Color;
 use Filament\Tables\Grouping\Group;
 use App\Forms\Components\TinyEditor;
 use Filament\Support\Enums\MaxWidth;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
 use Illuminate\Database\Eloquent\Model;
@@ -24,12 +26,12 @@ use Filament\Forms\Components\TextInput;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Forms\Components\TimePicker;
 use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Columns\ToggleColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
 use App\Panel\ScheduledConference\Resources\TimelineResource;
-use Filament\Tables\Columns\ToggleColumn;
 
 class ListAllAgenda extends Page implements HasTable, HasForms
 {
@@ -103,6 +105,7 @@ class ListAllAgenda extends Page implements HasTable, HasForms
                             ->orderBy('time_start', $direction);
                     }),
                 TextColumn::make('name')
+                    ->label('Agenda name')
                     ->searchable(query: function (Builder $query, string $search): Builder {
                         return $query
                             ->where('agendas.name', 'like', "%{$search}%");
@@ -113,8 +116,20 @@ class ListAllAgenda extends Page implements HasTable, HasForms
                     ->formatStateUsing(fn ($state) => Str::limit(strip_tags($state), 50))
                     ->limit(100)
                     ->searchable(),
-                ToggleColumn::make('requires_attendance')
-                    ->label('Requires Attendance'),
+                IconColumn::make('requires_attendance')
+                    ->icon(fn (Model $record) => match($record->getRequiresAttendanceStatus()) {
+                        'timeline' => 'heroicon-o-stop-circle',
+                        'not-required' => 'heroicon-o-x-circle',
+                        'required' => 'heroicon-o-check-circle',
+                    })
+                    ->color(fn (Model $record) => match($record->getRequiresAttendanceStatus()) {
+                        'timeline' => Color::Blue,
+                        'not-required' => Color::Red,
+                        'required' => Color::Green,
+                    })
+                    ->tooltip(fn (Model $record) => $record->getRequiresAttendanceStatus() === 'timeline' ?
+                        "Attendance are'nt required because the timeline had it active." : null
+                    ),
             ])
             ->defaultSort('time_span')
             ->actions([

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Agenda;
 use App\Models\Registration;
 use App\Models\Timeline;
 use App\Models\ScheduledConference;
@@ -17,7 +18,8 @@ return new class extends Migration
         Schema::create('registration_attendances', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(ScheduledConference::class)->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(Timeline::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Timeline::class)->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Agenda::class)->nullable()->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Registration::class)->constrained()->cascadeOnDelete();
             $table->timestamps();
         });

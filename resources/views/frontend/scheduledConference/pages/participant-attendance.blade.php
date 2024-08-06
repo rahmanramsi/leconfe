@@ -30,7 +30,7 @@
                         @if ($timeline->hide)
                             @continue
                         @endif
-                        <tr class="cursor-pointer bg-gray-50 border-b dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-400 transition-all ease-in-out" wire:click="attend({{ $timeline->id }})">
+                        <tr class="bg-gray-50 border-b dark:bg-gray-800">
                             <td class="px-6 py-4" colspan="2">
                                 <strong class="block font-medium text-gray-900 dark:text-white">
                                     {{ $timeline->name }}
@@ -53,65 +53,85 @@
                                 </p>
                             </td>
                             <td class="px-6 py-4 text-right">
-                                <small class="text-blue-600 cursor-pointer hover:underline">
-                                    Attend
-                                </small>
+                                @if ($timeline->canAttend())
+                                    @if ($timeline->isUserAttended())
+                                        <button class="text-xs text-gray-600 cursor-pointer">
+                                            Attended
+                                        </button>
+                                    @else
+                                        <button class="text-xs text-blue-600 cursor-pointer hover:underline" wire:click="attend({{ $timeline->id }}, '{{ static::ATTEND_TYPE_TIMELINE }}')">
+                                            Attend
+                                        </button>
+                                    @endif
+                                @endif
                             </td>
                         </tr>
-                        {{-- 
-                            TODO: Optimize this 
-                        --}}
                         @php
                             $agendas = $timeline
                                 ->agendas()
                                 ->orderBy('time_start', 'ASC')
                                 ->get();
                         @endphp
-                        @foreach ($agendas as $agenda)
-                            @if ($agenda->hide)
-                                @continue
-                            @endif
+                        @if ($agendas->isNotEmpty())
+                            @foreach ($agendas as $agenda)
+                                @if ($agenda->hide)
+                                    @continue
+                                @endif
+                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                    <td class="px-6 pl-8 py-4 text-left">
+                                        {{ $agenda->time_span }}
+                                        @if ($agenda->isOngoing())
+                                            <span class="bg-green-100 text-green-800 text-xs font-medium mx-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
+                                                Ongoing
+                                            </span>
+                                        @elseif ($agenda->isFuture())
+                                            <span class="bg-blue-100 text-blue-800 text-xs font-medium mx-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
+                                                Not started
+                                            </span>
+                                        @elseif ($agenda->isPast())
+                                            <span class="bg-gray-100 text-gray-800 text-xs font-medium mx-2 px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">
+                                                Over
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <th scope="row" class="px-6 py-4 whitespace-nowrap text-left">
+                                        <strong class="font-medium text-gray-900 dark:text-white">
+                                            {{ $agenda->name }}
+                                        </strong>
+                                        <p class="font-normal text-gray-500">
+                                            {{ new Illuminate\Support\HtmlString($agenda->details) }}
+                                        </p>
+                                    </th>
+                                    <td class="px-6 py-4 text-right">
+                                        @if ($agenda->canAttend() && !$timeline->canAttend())
+                                            @if ($agenda->isUserAttended())
+                                                <button class="text-xs text-gray-600 cursor-pointer">
+                                                    Attended
+                                                </button>
+                                            @else
+                                                <button class="text-xs text-blue-600 cursor-pointer hover:underline" wire:click="attend({{ $agenda->id }}, '{{ static::ATTEND_TYPE_AGENDA }}')">
+                                                    Attend
+                                                </button>
+                                            @endif
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @else
                             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                <td class="px-6 pl-8 py-4 text-left">
-                                    {{ $agenda->time_span }}
-                                    @if ($agenda->isOngoing())
-                                        <span class="bg-green-100 text-green-800 text-xs font-medium mx-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
-                                            Ongoing
-                                        </span>
-                                    @elseif ($agenda->isFuture())
-                                        <span class="bg-blue-100 text-blue-800 text-xs font-medium mx-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
-                                            Not started
-                                        </span>
-                                    @elseif ($agenda->isPast())
-                                        <span class="bg-gray-100 text-gray-800 text-xs font-medium mx-2 px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">
-                                            Over
-                                        </span>
-                                    @endif
-                                </td>
-                                <th scope="row" class="px-6 py-4 whitespace-nowrap text-left">
-                                    <strong class="font-medium text-gray-900 dark:text-white">
-                                        {{ $agenda->name }}
-                                    </strong>
-                                    <p class="font-normal text-gray-500">
-                                        {{ new Illuminate\Support\HtmlString($agenda->details) }}
-                                    </p>
-                                </th>
-                                <td class="px-6 py-4 text-right">
-                                    <small class="text-blue-600 cursor-pointer hover:underline">
-                                        Attend
-                                    </small>
+                                <td class="text-center px-6 py-4" colspan="3">
+                                    Event empty.
                                 </td>
                             </tr>
-                        @endforeach
+                        @endif
                     @endforeach
                 </tbody>
             </table>
         </div>
     </div>
     
-
     {{-- modal --}}
-    @if (!empty($timelineData))
+    @if ($timelineData || $agendaData)
         <div x-data="{ open: @entangle('isOpen') }" x-show="open" class="fixed inset-0 flex items-center justify-center z-50">
             <div wire:click="cancel" class="fixed inset-0 bg-gray-800 opacity-75"></div>
             <div x-show="open" class="bg-white rounded shadow-lg p-6 w-1/3 mx-auto z-50 transform transition-all duration-300 ease-in-out">
@@ -121,14 +141,23 @@
                     </h2>
                 </div>
                 <div class="mt-4">
-                    <p class="text-gray-600">
-                        Are you sure you want attend on <strong>{{ $timelineData->name }}</strong> in <strong>{{ $currentScheduledConference->title }}</strong>?
-                        @if (!empty($errorMessage))
-                            <small class="block text-red-500">
-                                *{{ $errorMessage }}
-                            </small>
-                        @endif
-                    </p>
+                    @if ($typeData === self::ATTEND_TYPE_TIMELINE)
+                        <p class="text-gray-600">
+                            Are you sure you want attend on <strong>{{ $timelineData->name }}</strong> in <strong>{{ $currentScheduledConference->title }}</strong>?
+                        </p>
+                    @elseif($typeData === self::ATTEND_TYPE_AGENDA)
+                        <p class="text-gray-600">
+                            Are you sure you want attend on <strong>{{ $agendaData->name }}</strong> from <strong>{{ $agendaData->timeline->name }}</strong> in <strong>{{ $currentScheduledConference->title }}</strong>?
+                        </p>
+                    @else
+                        INVALID!
+                    @endif
+
+                    @if (!empty($errorMessage))
+                        <small class="block text-red-500">
+                            *{{ $errorMessage }}
+                        </small>
+                    @endif
                 </div>
                 <div class="mt-6 flex justify-end space-x-2 text-sm">
                     <button wire:click="cancel" class="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300">Cancel</button>

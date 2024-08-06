@@ -16,9 +16,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Agenda extends Model
 {
-    use BelongsToScheduledConference, Cachable, HasFactory;
+    use BelongsToScheduledConference, HasShortflakePrimary, Cachable, HasFactory;
 
     protected $guarded = ['id', 'scheduled_conference_id'];
+
+    public const ATTENDANCE_STATUS_TIMELINE = 'timeline';
+    public const ATTENDANCE_STATUS_REQUIRED = 'required';
+    public const ATTENDANCE_STATUS_NOT_REQUIRED = 'not-required';
 
     protected function timeSpan(): Attribute
     {
@@ -60,12 +64,52 @@ class Agenda extends Model
         return !$this->isFuture() && !$this->isPast();
     }
 
-    public function isRequiresAttendance()
+    public function isRequiresAttendance(): bool
     {
-        if($this->timeline->isRequiresAttendance()) {
+        return $this->requires_attendance;
+    }
+
+    public function canAttend(): bool
+    {
+        if(!$this->isRequiresAttendance()) {
             return false;
         }
-        return $this->requires_attendance;
+
+        if(!$this->isOngoing()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function getRequiresAttendanceStatus(): string
+    {
+        if($this->timeline->isRequiresAttendance()) {
+            return self::ATTENDANCE_STATUS_TIMELINE;
+        }
+        if(!$this->requires_attendance) {
+            return self::ATTENDANCE_STATUS_NOT_REQUIRED;
+        }
+        return self::ATTENDANCE_STATUS_REQUIRED;
+    }
+
+    public function isUserAttended()
+    {
+        $registration = auth()->user()->registration()
+            ->select('id')
+            ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
+            ->first();
+            
+        $attendance = RegistrationAttendance::select('id')
+            ->where('registration_id', $registration->id)
+            ->where('agenda_id', $this->id)
+            ->first();
+
+        if(!$attendance) {
+            return false;
+        }
+
+        return true;
     }
 
     public function timeline(): BelongsTo

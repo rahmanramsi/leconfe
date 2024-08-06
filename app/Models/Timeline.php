@@ -28,6 +28,7 @@ class Timeline extends Model
         'date',
         'type',
         'hide',
+        'requires_attendance',
     ];
 
     protected $casts = [
@@ -80,21 +81,29 @@ class Timeline extends Model
 
     public function getEarliestTime(): Carbon
     {
-        return $this
+        $earliest_agenda = $this
             ->agendas()
             ->orderBy('time_start', 'ASC')
             ->limit(1)
-            ->first()
-            ->date_start;
+            ->first();
+
+        if(!$earliest_agenda) {
+            return now()->subDays(30);
+        }
+        return $earliest_agenda->date_start;
     }
     public function getLatestTime(): Carbon
     {
-        return $this
+        $latest_agenda = $this
             ->agendas()
             ->orderBy('time_end', 'DESC')
             ->limit(1)
-            ->first()
-            ->date_end;
+            ->first();
+
+        if(!$latest_agenda) {
+            return now()->subDays(30);
+        }
+        return $latest_agenda->date_end;
     }
 
     public function isOngoing(): bool
@@ -102,9 +111,46 @@ class Timeline extends Model
         return !$this->getEarliestTime()->isFuture() && !$this->getLatestTime()->isPast();
     }
 
-    public function isRequiresAttendance()
+    public function isRequiresAttendance(): bool
     {
         return $this->requires_attendance;
+    }
+
+    public function canAttend(): bool
+    {
+        if(!$this->isRequiresAttendance()) {
+            return false;
+        }
+
+        if(!$this->isOngoing()) {
+            return false;
+        }
+
+        if($this->hide) {
+            return false;
+        }
+
+        return true;
+    }
+
+    // TODO: optimize this (work for now)
+    public function isUserAttended()
+    {
+        $registration = auth()->user()->registration()
+            ->select('id')
+            ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
+            ->first();
+            
+        $attendance = RegistrationAttendance::select('id')
+            ->where('registration_id', $registration->id)
+            ->where('timeline_id', $this->id)
+            ->first();
+
+        if(!$attendance) {
+            return false;
+        }
+
+        return true;
     }
 
     public function agendas(): HasMany
