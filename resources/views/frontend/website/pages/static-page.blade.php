@@ -13,7 +13,7 @@
             </div>
         @else
             <div>
-                No content provided.
+                {{ __('general.no_content_provided') }}
             </div>
         @endif
     </div>

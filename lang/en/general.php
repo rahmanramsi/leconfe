@@ -25,5 +25,36 @@ return [
 	'pagination' => [
 		'previous' => '&laquo; Previous',
     	'next' => 'Next &raquo;',
-	]
+	],
+	'auth' => [
+        'failed' => 'These credentials do not match our records.',
+        'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
+    ],
+    'email' => [
+        'verification' => [
+            'throttle' => 'Please try again in :seconds seconds.',
+        ],
+    ],
+	'view_conference' => 'View Conference',
+	'current_event' => 'Current Event',
+    'login' => 'Login',
+	'home' => 'Home',
+    'remember_me' => 'Remember me',
+    'register' => 'Register',
+    'registration_complete' => 'Registration Complete',
+    'given_name' => 'Given Name',
+    'family_name' => 'Family Name',
+    'affiliation' => 'Affiliation',
+	'country' => 'Country',
+	'email' => 'Email',
+	'password' => 'Password',
+	'password_confirmation' => 'Password Confirmation',
+	'register_as' => 'Register as',
+	'which_conference_interested_for' => 'Which conferences listed on this website are you interested in registering for?',
+	'privacy_statement_agree' => 'I accept and approve according to <a class="link link-primary link-hover" href=":url">Privacy Statement.</a>',
+	'registration_closed' => 'This conference is currently closing user registrations',
+	'registration_complete_message' => 'Thank you for completing the registration! What would you like to proceed with next?',
+	'edit_my_profile' => 'Edit My Profile',
+	'continue_browsing' => 'Continue Browsing',
+	'no_content_provided' => 'No content provided.',
 ];

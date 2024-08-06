@@ -29,9 +29,9 @@
                                         </div>
                                     @endif
                                     <div class="flex items-center gap-2 text-sm">
-                                        <a href="{{ $conference->getHomeUrl() }}" class="link link-primary">View Conference</a>
+                                        <a href="{{ $conference->getHomeUrl() }}" class="link link-primary">{{ __('general.view_conference') }}</a>
                                         @if($conference->currentScheduledConference)
-                                            <a href="{{ $conference->currentScheduledConference->getHomeUrl() }}" class="link link-primary">Current Event</a>
+                                            <a href="{{ $conference->currentScheduledConference->getHomeUrl() }}" class="link link-primary">{{ __('general.current_event') }}</a>
                                         @endif
                                     </div>
                                 </div>

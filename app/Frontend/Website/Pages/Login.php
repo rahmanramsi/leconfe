@@ -9,6 +9,7 @@ use Rahmanramsi\LivewirePageGroup\Pages\Page;
 use Illuminate\Validation\ValidationException;
 use DanHarrin\LivewireRateLimiting\WithRateLimiting;
 use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
+use Illuminate\Contracts\Support\Htmlable;
 
 class Login extends Page
 {
@@ -32,6 +33,11 @@ class Login extends Page
         }
     }
 
+    public function getTitle(): string|Htmlable
+    {
+        return __('general.login');
+    }
+
     public function getRedirectUrl(): string
     {
         return route('filament.administration.home');
@@ -47,8 +53,8 @@ class Login extends Page
     public function getBreadcrumbs(): array
     {
         return [
-            url('/') => 'Home',
-            'Login',
+            url('/') => __('general.home'),
+            __('general.login'),
         ];
     }
 
@@ -57,7 +63,7 @@ class Login extends Page
         try {
             $this->rateLimit(5, 300);
         } catch (TooManyRequestsException $exception) {
-            $this->addError('email', __('frontend.auth.throttle', [
+            $this->addError('email', __('general.auth.throttle', [
                 'seconds' => $exception->secondsUntilAvailable,
                 'minutes' => ceil($exception->secondsUntilAvailable / 60),
             ]));
@@ -72,7 +78,7 @@ class Login extends Page
             'password' => $this->password,
         ], $this->remember)) {
             throw ValidationException::withMessages([
-                'email' => __('frontend.auth.failed'),
+                'email' => __('general.auth.failed'),
             ]);
         }
 
