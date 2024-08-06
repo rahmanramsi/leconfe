@@ -3,6 +3,7 @@
 namespace App\Frontend\Website\Pages;
 
 use App\Facades\MetaTag;
+use App\Http\Middleware\SetLocale;
 use App\Utils\Installer;
 use Livewire\Attributes\Title;
 use App\Utils\PermissionChecker;
@@ -11,12 +12,14 @@ use App\Livewire\Forms\InstallationForm;
 use App\Http\Middleware\SetupDefaultData;
 use Rahmanramsi\LivewirePageGroup\Pages\Page;
 use Jackiedo\Timezonelist\Facades\Timezonelist;
+use Livewire\Mechanisms\ComponentRegistry;
 
 class Installation extends Page
 {
     protected static string $view = 'frontend.website.pages.installation';
 
     protected static string|array $withoutRouteMiddleware = [
+        SetLocale::class,
         SetupDefaultData::class,
     ];
 

@@ -10,6 +10,10 @@ class SetLocale
 {
     public function handle($request, Closure $next)
     {
+        if(!app()->isInstalled()){
+            return $next($request);
+        }
+
         $sessionLocale = session('locale');
         $supportedLocales = Setting::get('languages', ['en']);
         
