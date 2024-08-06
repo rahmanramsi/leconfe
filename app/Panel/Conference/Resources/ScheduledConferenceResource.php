@@ -109,7 +109,7 @@ class ScheduledConferenceResource extends Resource
                         ->requiresConfirmation()
                         ->icon('heroicon-o-check-circle')
                         ->color('success')
-                        ->hidden(fn (ScheduledConference $record) => $record->isArchived() || $record->isCurrent() || $record->isDraft() || $record->trashed())
+                        ->hidden(fn (ScheduledConference $record) => $record->isCurrent() || $record->isDraft() || $record->trashed())
                         ->action(fn (ScheduledConference $record, Tables\Actions\Action $action) => $record->update(['state' => ScheduledConferenceState::Current]) && $action->success())
                         ->successNotificationTitle(fn (ScheduledConference $scheduledConference) => $scheduledConference->title . ' is set as current'),    
                     Tables\Actions\Action::make('move_to_archive')
