@@ -40,4 +40,6 @@
             {!! $appearanceColor !!}
         </style>
     @endif
+
+    @hook('frontend:head')
 </head>
