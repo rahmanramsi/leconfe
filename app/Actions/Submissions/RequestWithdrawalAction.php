@@ -17,7 +17,7 @@ class RequestWithdrawalAction
         Log::make(
             name: 'submission',
             subject: $submission,
-            description: __('log.submission.requested_withdrawal'),
+            description: __('general.log.submission.requested_withdrawal'),
         )
             ->by(auth()->user())
             ->save();

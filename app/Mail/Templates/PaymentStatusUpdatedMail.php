@@ -27,7 +27,7 @@ class PaymentStatusUpdatedMail extends TemplateMailable
         $this->log = Log::make(
             name: 'email',
             subject: $payment->payable,
-            description: __('log.email.sent', ['name' => 'Payment Status Updated']),
+            description: __('general.log.email.sent', ['name' => 'Payment Status Updated']),
         );
     }
 

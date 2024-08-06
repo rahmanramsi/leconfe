@@ -38,7 +38,7 @@ class NewPaymentMail extends TemplateMailable
         $this->log = Log::make(
             name: 'email',
             subject: $submission,
-            description: __('log.email.sent', ['name' => 'Abstract Accepted']),
+            description: __('general.log.email.sent', ['name' => 'Abstract Accepted']),
         );
 
         $this->loginLink = route('livewirePageGroup.website.pages.login');
@@ -46,7 +46,7 @@ class NewPaymentMail extends TemplateMailable
         $this->log = Log::make(
             name: 'email',
             subject: $submission,
-            description: __('log.email.sent', ['name' => 'New Payment']),
+            description: __('general.log.email.sent', ['name' => 'New Payment']),
         );
     }
 

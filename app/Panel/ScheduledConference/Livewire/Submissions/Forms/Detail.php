@@ -68,7 +68,7 @@ class Detail extends \Livewire\Component implements HasForms
         Log::make(
             name: 'submission',
             subject: $this->submission,
-            description: __('log.submission.metadata_updated')
+            description: __('general.log.submission.metadata_updated')
         )
             ->by(auth()->user())
             ->save();

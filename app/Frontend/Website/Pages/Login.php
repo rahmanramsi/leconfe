@@ -57,7 +57,7 @@ class Login extends Page
         try {
             $this->rateLimit(5, 300);
         } catch (TooManyRequestsException $exception) {
-            $this->addError('email', __('auth.throttle', [
+            $this->addError('email', __('frontend.auth.throttle', [
                 'seconds' => $exception->secondsUntilAvailable,
                 'minutes' => ceil($exception->secondsUntilAvailable / 60),
             ]));
@@ -72,7 +72,7 @@ class Login extends Page
             'password' => $this->password,
         ], $this->remember)) {
             throw ValidationException::withMessages([
-                'email' => __('auth.failed'),
+                'email' => __('frontend.auth.failed'),
             ]);
         }
 

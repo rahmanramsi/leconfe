@@ -195,7 +195,7 @@ class ParticipantList extends Component implements HasForms, HasTable
                         Log::make(
                             name: 'submission',
                             subject: $this->submission,
-                            description: __('log.participant.assigned', [
+                            description: __('general.log.participant.assigned', [
                                 'name' => $submissionParticipant->user->fullName,
                                 'role' => $submissionParticipant->role->name,
                             ])
