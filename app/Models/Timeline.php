@@ -134,9 +134,9 @@ class Timeline extends Model
     }
 
     // TODO: optimize this (work for now)
-    public function isUserAttended()
+    public function isUserAttended(User $user)
     {
-        $registration = auth()->user()->registration()
+        $registration = $user->registration()
             ->select('id')
             ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
             ->first();

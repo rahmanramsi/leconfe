@@ -32,6 +32,9 @@ class ParticipantAttendance extends Page
 
     public function mount()
     {
+        if(!auth()->check()) {
+            return redirect(app()->getLoginUrl());
+        }
     }
 
     public function attend($data_id, $data_type): void
@@ -71,14 +74,15 @@ class ParticipantAttendance extends Page
         }
 
         $typeData = $this->typeData;
+
+        $registration = Registration::withTrashed()
+            ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
+            ->where('user_id', auth()->user()->id)
+            ->first();
+
         if($typeData === self::ATTEND_TYPE_TIMELINE) {
 
             $timeline = $this->timelineData;
-            
-            $registration = Registration::withTrashed()
-                ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
-                ->whereUserId(auth()->user()->id)
-                ->first();
 
             // timeline yang dipilih tidak valid
             if(!$timeline) {
@@ -103,11 +107,6 @@ class ParticipantAttendance extends Page
         } else {
             
             $agenda = $this->agendaData;
-            
-            $registration = Registration::withTrashed()
-                ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
-                ->whereUserId(auth()->user()->id)
-                ->first();
 
             // agenda yang dipilih tidak valid
             if(!$agenda) {
@@ -136,21 +135,27 @@ class ParticipantAttendance extends Page
 
     protected function getViewData(): array
     {
-        $currentScheduledConference = app()->getCurrentScheduledConference();
-
         $isLogged = auth()->check();
+
+        $currentScheduledConference = app()->getCurrentScheduledConference();
 
         $timelines = Timeline::where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
             ->orderBy('date', 'ASC')
             ->get();
+
+        $userRegistration = Registration::withTrashed()
+            ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
+            ->where('user_id', auth()->user()->id)
+            ->first();
 
         $typeData = $this->typeData ?? null;
         $timelineData = $this->timelineData ?? null;
         $agendaData = $this->agendaData ?? null;
 
         return [
-            'currentScheduledConference' => $currentScheduledConference,
             'isLogged' => $isLogged,
+            'currentScheduledConference' => $currentScheduledConference,
+            'userRegistration' => $userRegistration,
             'timelines' => $timelines,
             // data confirmation
             'typeData' => $typeData,

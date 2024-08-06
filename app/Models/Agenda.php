@@ -93,9 +93,9 @@ class Agenda extends Model
         return self::ATTENDANCE_STATUS_REQUIRED;
     }
 
-    public function isUserAttended()
+    public function isUserAttended(User $user)
     {
-        $registration = auth()->user()->registration()
+        $registration = $user->registration()
             ->select('id')
             ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
             ->first();

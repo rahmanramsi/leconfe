@@ -33,7 +33,7 @@ class ParticipantRegister extends Page
         $isLogged = auth()->check();
         $userRegistration = !$isLogged ? null : Registration::withTrashed()
             ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
-            ->whereUserId(auth()->user()->id)
+            ->where('user_id', auth()->user()->id)
             ->first();
         if ($userRegistration)
             return redirect(route(ParticipantRegisterStatus::getRouteName()));
@@ -117,7 +117,7 @@ class ParticipantRegister extends Page
 
         $userRegistration = !$isLogged ? null : Registration::withTrashed()
             ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
-            ->whereUserId(auth()->user()->id)
+            ->where('user_id', auth()->user()->id)
             ->first();
 
         $userModel = !$isLogged ? null : auth()->user();
