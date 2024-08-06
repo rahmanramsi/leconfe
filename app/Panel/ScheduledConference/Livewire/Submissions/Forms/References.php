@@ -10,6 +10,7 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use App\Forms\Components\TinyEditor;
+use Filament\Forms\Components\Textarea;
 
 class References extends \Livewire\Component implements HasForms
 {
@@ -51,10 +52,10 @@ class References extends \Livewire\Component implements HasForms
     {
         return $form
             ->schema([
-                TinyEditor::make('meta.references')
+                Textarea::make('meta.references')
                     ->label('References')
                     ->hiddenLabel()
-                    ->minHeight(300),
+                    ->autosize(),
             ]);
     }
 
