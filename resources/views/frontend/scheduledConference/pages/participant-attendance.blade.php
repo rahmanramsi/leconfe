@@ -33,7 +33,7 @@
                             @continue
                         @endif
                         <tr class="bg-gray-50 border-b dark:bg-gray-800">
-                            <td class="px-6 py-4" colspan="2">
+                            <td class="px-6 py-4" {!! (!$timeline->canShown() || !$isParticipant) ? "colspan='3'" : "colspan='2'" !!}>
                                 <strong class="block font-medium text-gray-900 dark:text-white">
                                     {{ $timeline->name }}
                                     @if ($timeline->isOngoing())
@@ -54,8 +54,8 @@
                                     {{ Carbon::parse($timeline->date)->format(Setting::get('format_date')) }}
                                 </p>
                             </td>
-                            <td class="px-6 py-4 text-right">
-                                @if ($timeline->canShown() && $isParticipant)
+                            @if ($timeline->canShown() && $isParticipant)
+                                <td class="px-6 py-4 text-right">
                                     @if ($timeline->canAttend())
                                         @if ($userRegistration->isAttended($timeline))
                                             <button class="py-1 px-4 text-xs font-medium text-green-700 focus:outline-none bg-white rounded-full border border-gray-200 focus:z-10 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 cursor-default">
@@ -78,8 +78,8 @@
                                             </button>
                                         @endif
                                     @endif
-                                @endif
-                            </td>
+                                </td>
+                            @endif
                         </tr>
                         @php
                             $agendas = $timeline
