@@ -144,11 +144,14 @@ class ListAgenda extends Page implements HasTable, HasForms
                             ->where('agendas.name', 'like', "%{$search}%");
                     })
                     ->sortable(),
-                TextColumn::make('details')
+                TextColumn::make('public_details')
+                    ->label('Public Details')
                     ->placeholder('Empty')
-                    ->formatStateUsing(fn ($state) => Str::limit(strip_tags($state), 50))
-                    ->limit(100)
-                    ->searchable(),
+                    ->formatStateUsing(fn () => 'Not Empty'),
+                TextColumn::make('details')
+                    ->label('Participant Details')
+                    ->placeholder('Empty')
+                    ->formatStateUsing(fn () => 'Not Empty'),
                 IconColumn::make('requires_attendance')
                     ->icon(fn (Model $record) => match($record->getRequiresAttendanceStatus()) {
                         'timeline' => 'heroicon-o-stop-circle',
@@ -162,7 +165,8 @@ class ListAgenda extends Page implements HasTable, HasForms
                     })
                     ->tooltip(fn (Model $record) => $record->getRequiresAttendanceStatus() === 'timeline' ?
                         "Attendance are'nt required because the timeline had it active." : null
-                    ),
+                    )
+                    ->alignCenter(),
             ])
             ->defaultSort('time_span')
             ->actions([

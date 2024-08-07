@@ -92,6 +92,7 @@ class Timeline extends Model
         }
         return $earliest_agenda->date_start;
     }
+    
     public function getLatestTime(): Carbon
     {
         $latest_agenda = $this

@@ -28,6 +28,7 @@ use Filament\Forms\Components\CheckboxList;
 use App\Panel\ScheduledConference\Resources\TimelineResource\Pages;
 use Filament\Forms\Components\Checkbox;
 use Filament\Support\Colors\Color;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\IconColumn;
 
 class TimelineResource extends Resource
@@ -69,20 +70,31 @@ class TimelineResource extends Resource
             ->heading('Timeline')
             ->defaultSort('date')
             ->columns([
-                IndexColumn::make('no')
-                    ->label('No.'),
-                TextColumn::make('name'),
                 TextColumn::make('date')
+                    ->description(function (Model $record) {
+                        $time_start = $record->getEarliestTime()->format(Setting::get('format_time'));
+                        $time_end = $record->getLatestTime()->format(Setting::get('format_time'));
+
+                        return "$time_start -  $time_end";
+                    })
                     ->dateTime(Setting::get('format_date'))
                     ->sortable(),
-                ToggleColumn::make('hide')
-                    ->label('Hidden'),
+                TextColumn::make('name'),
+                TextColumn::make('agendas_count')
+                    ->label('Agenda')
+                    ->counts('agendas')
+                    ->badge()
+                    ->color(Color::Blue)
+                    ->alignCenter(),
                 IconColumn::make('requires_attendance')
                     ->boolean()
                     ->trueIcon('heroicon-o-check-circle')
                     ->trueColor(Color::Green)
                     ->falseIcon('heroicon-o-x-circle')
-                    ->falseColor(Color::Red),
+                    ->falseColor(Color::Red)
+                    ->alignCenter(),
+                ToggleColumn::make('hide')
+                    ->label('Hidden'),
             ])
             ->recordUrl(fn (Model $record) => static::getUrl('agenda', ['record' => $record]))
             ->filters([
@@ -93,6 +105,11 @@ class TimelineResource extends Resource
                     ->modalWidth(MaxWidth::ExtraLarge)
                     ->model(Timeline::class),
                 ActionGroup::make([
+                    Action::make('agenda')
+                        ->label('Agendas')
+                        ->icon('heroicon-m-calendar-days')
+                        ->color(Color::Blue)
+                        ->url(fn (Model $record) => static::getUrl('agenda', ['record' => $record])),
                     DeleteAction::make(),
                 ]),
             ]);
