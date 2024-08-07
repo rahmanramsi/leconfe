@@ -101,20 +101,6 @@ class Agenda extends Model
         return self::ATTENDANCE_STATUS_REQUIRED;
     }
 
-    public function isUserAttended(Registration $registration)
-    {
-        $attendance = RegistrationAttendance::select('id')
-            ->where('registration_id', $registration->id)
-            ->where('agenda_id', $this->id)
-            ->first();
-
-        if(!$attendance) {
-            return false;
-        }
-
-        return true;
-    }
-
     public function timeline(): BelongsTo
     {
         return $this->belongsTo(Timeline::class);

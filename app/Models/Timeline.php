@@ -148,21 +148,6 @@ class Timeline extends Model
         return true;
     }
 
-    // TODO: optimize this (work for now)
-    public function isUserAttended(Registration $registration)
-    {
-        $attendance = RegistrationAttendance::select('id')
-            ->where('registration_id', $registration->id)
-            ->where('timeline_id', $this->id)
-            ->first();
-
-        if(!$attendance) {
-            return false;
-        }
-
-        return true;
-    }
-
     public function agendas(): HasMany
     {
         return $this->hasMany(Agenda::class);
