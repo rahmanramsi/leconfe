@@ -93,8 +93,12 @@ class ListAgenda extends Page implements HasTable, HasForms
             TextInput::make('name')
                 ->label('Agenda name')
                 ->required(),
+            TinyEditor::make('public_details')
+                ->minHeight(200)
+                ->hint('Detail that visible to all user'),
             TinyEditor::make('details')
-                ->minHeight(200),
+                ->minHeight(200)
+                ->hint('Detail that visible only to participant'),
             Grid::make(2)
                 ->schema([
                     TimePicker::make('time_start')

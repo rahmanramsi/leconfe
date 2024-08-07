@@ -84,12 +84,14 @@ class Agenda extends Model
 
     public function getRequiresAttendanceStatus(): string
     {
-        if($this->timeline->isRequiresAttendance()) {
+        if($this->timeline()->first()->isRequiresAttendance()) {
             return self::ATTENDANCE_STATUS_TIMELINE;
         }
+
         if(!$this->requires_attendance) {
             return self::ATTENDANCE_STATUS_NOT_REQUIRED;
         }
+
         return self::ATTENDANCE_STATUS_REQUIRED;
     }
 

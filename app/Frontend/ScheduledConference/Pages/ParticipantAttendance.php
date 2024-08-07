@@ -148,6 +148,8 @@ class ParticipantAttendance extends Page
             ->where('user_id', auth()->user()->id)
             ->first();
 
+        $isParticipant = $userRegistration && ($userRegistration->registrationPayment->state === RegistrationPaymentState::Paid->value) ;
+
         $typeData = $this->typeData ?? null;
         $timelineData = $this->timelineData ?? null;
         $agendaData = $this->agendaData ?? null;
@@ -155,9 +157,8 @@ class ParticipantAttendance extends Page
         return [
             'isLogged' => $isLogged,
             'currentScheduledConference' => $currentScheduledConference,
-            'userRegistration' => $userRegistration,
+            'isParticipant' => $isParticipant,
             'timelines' => $timelines,
-            // data confirmation
             'typeData' => $typeData,
             'timelineData' => $timelineData,
             'agendaData' => $agendaData,
