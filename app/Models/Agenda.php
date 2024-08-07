@@ -66,6 +66,12 @@ class Agenda extends Model
 
     public function isRequiresAttendance(): bool
     {
+        if($this->timeline()
+            ->first()
+            ->isRequiresAttendance()) {
+            return false;
+        }
+
         return $this->requires_attendance;
     }
 
@@ -95,13 +101,8 @@ class Agenda extends Model
         return self::ATTENDANCE_STATUS_REQUIRED;
     }
 
-    public function isUserAttended(User $user)
+    public function isUserAttended(Registration $registration)
     {
-        $registration = $user->registration()
-            ->select('id')
-            ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
-            ->first();
-            
         $attendance = RegistrationAttendance::select('id')
             ->where('registration_id', $registration->id)
             ->where('agenda_id', $this->id)

@@ -167,6 +167,13 @@ class RegistrantResource extends Resource
                     ->modalWidth('lg')
                     ->authorize('Registrant:edit'),
                 ActionGroup::make([
+                    Action::make('attendance')
+                        ->label('Attendance')
+                        ->icon('heroicon-m-calendar-days')
+                        ->color(Color::Blue)
+                        ->url(fn (Model $record) => static::getUrl('attendance', ['record' => $record]))
+                        ->visible(fn (Model $record) => $record->registrationPayment->state === RegistrationPaymentState::Paid->value)
+                        ->authorize('Registrant:edit'),
                     DeleteAction::make()
                         ->label('Trash')
                         ->authorize('Registrant:delete'),
@@ -202,6 +209,7 @@ class RegistrantResource extends Resource
         return [
             'index' => Pages\ListRegistrants::route('/'),
             'enroll' => Pages\EnrollUser::route('/enroll'),
+            'attendance' => Pages\ParticipantAttendance::route('/{record}/attendance'),
         ];
     }
 

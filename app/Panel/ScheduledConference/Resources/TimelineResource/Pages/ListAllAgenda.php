@@ -102,7 +102,8 @@ class ListAllAgenda extends Page implements HasTable, HasForms
                     ->label('Time')
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query
-                            ->orderBy('time_start', $direction);
+                            ->orderBy('time_start', $direction)
+                            ->orderBy('time_end', $direction);
                     }),
                 TextColumn::make('name')
                     ->label('Agenda name')

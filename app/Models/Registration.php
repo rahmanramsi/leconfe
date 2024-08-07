@@ -20,14 +20,37 @@ class Registration extends Model
     protected $guarded = ['id', 'scheduled_conference_id'];
 
     // payment state [paid, unpaid] from registration_payments table
-    public function getState()
+    public function getState(): string
     {
         return $this->registrationPayment->state;
     }
 
-    public function getAttendance()
+    public function getAttendance(null | Timeline | Agenda $data): ?RegistrationAttendance
     {
-        return $this->attend;
+        if(!$data) {
+            return null;
+        }
+        
+        $attendance = RegistrationAttendance::where('registration_id', $this->id);
+
+        if($data instanceof Timeline) {
+            $attendance = $attendance->where('timeline_id', $data->id);
+        }
+
+        if($data instanceof Agenda) {
+            $attendance = $attendance->where('agenda_id', $data->id);
+        }
+
+        return $attendance->first();
+    }
+
+    public function isAttended(null | Timeline | Agenda $data): bool
+    {
+        if(!$this->getAttendance($data)) {
+            return false;
+        }
+
+        return true;
     }
 
     public function user(): BelongsTo

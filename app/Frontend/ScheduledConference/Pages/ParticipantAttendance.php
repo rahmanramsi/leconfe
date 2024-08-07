@@ -80,6 +80,18 @@ class ParticipantAttendance extends Page
             ->where('user_id', auth()->user()->id)
             ->first();
 
+        // tidak melakukan registrasi
+        if(!$registration) {
+            $this->errorMessage = "You're not registrant of " . app()->getCurrentScheduledConference()->title;
+            return;
+        }
+
+        // belum melakukan pembayaran
+        if($registration->registrationPayment->state !== RegistrationPaymentState::Paid->value) { 
+            $this->errorMessage = "You're not participant of " . app()->getCurrentScheduledConference()->title;
+            return;
+        }
+
         if($typeData === self::ATTEND_TYPE_TIMELINE) {
 
             $timeline = $this->timelineData;
@@ -87,16 +99,6 @@ class ParticipantAttendance extends Page
             // timeline yang dipilih tidak valid
             if(!$timeline) {
                 $this->errorMessage = "Invalid event selection";
-                return;
-            }
-            // tidak melakukan registrasi
-            if(!$registration) {
-                $this->errorMessage = "You're not registrant of " . app()->getCurrentScheduledConference()->title;
-                return;
-            }
-            // belum melakukan pembayaran
-            if($registration->registrationPayment->state !== RegistrationPaymentState::Paid->value) { 
-                $this->errorMessage = "You're not participant of " . app()->getCurrentScheduledConference()->title;
                 return;
             }
 
@@ -111,16 +113,6 @@ class ParticipantAttendance extends Page
             // agenda yang dipilih tidak valid
             if(!$agenda) {
                 $this->errorMessage = "Invalid event selection";
-                return;
-            }
-            // tidak melakukan registrasi
-            if(!$registration) {
-                $this->errorMessage = "You're not registrant of " . app()->getCurrentScheduledConference()->title;
-                return;
-            }
-            // belum melakukan pembayaran
-            if($registration->registrationPayment->state !== RegistrationPaymentState::Paid->value) { 
-                $this->errorMessage = "You're not participant of " . app()->getCurrentScheduledConference()->title;
                 return;
             }
 
@@ -157,6 +149,7 @@ class ParticipantAttendance extends Page
         return [
             'isLogged' => $isLogged,
             'currentScheduledConference' => $currentScheduledConference,
+            'userRegistration' => $userRegistration,
             'isParticipant' => $isParticipant,
             'timelines' => $timelines,
             'typeData' => $typeData,

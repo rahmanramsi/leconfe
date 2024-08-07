@@ -2,15 +2,18 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use App\Models\Agenda;
+use App\Facades\Setting;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Kra8\Snowflake\HasShortflakePrimary;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\Concerns\BelongsToScheduledConference;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Support\Facades\DB;
 
 class Timeline extends Model
 {
@@ -79,6 +82,17 @@ class Timeline extends Model
         return false;
     }
 
+    protected function timeSpan(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => Str::squish(
+                $this->getEarliestTime()->format(Setting::get('format_time')) . 
+                ' - ' . 
+                $this->getLatestTime()->format(Setting::get('format_time'))
+            ),
+        );
+    }
+
     public function getEarliestTime(): Carbon
     {
         $earliest_agenda = $this
@@ -92,7 +106,7 @@ class Timeline extends Model
         }
         return $earliest_agenda->date_start;
     }
-    
+
     public function getLatestTime(): Carbon
     {
         $latest_agenda = $this
@@ -135,13 +149,8 @@ class Timeline extends Model
     }
 
     // TODO: optimize this (work for now)
-    public function isUserAttended(User $user)
+    public function isUserAttended(Registration $registration)
     {
-        $registration = $user->registration()
-            ->select('id')
-            ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
-            ->first();
-            
         $attendance = RegistrationAttendance::select('id')
             ->where('registration_id', $registration->id)
             ->where('timeline_id', $this->id)

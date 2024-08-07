@@ -56,7 +56,7 @@
                             </td>
                             <td class="px-6 py-4 text-right">
                                 @if ($timeline->canAttend() && $isParticipant)
-                                    @if ($timeline->isUserAttended(auth()->user()))
+                                    @if ($timeline->isUserAttended($userRegistration))
                                         <button class="py-1 px-4 text-xs font-medium text-green-700 focus:outline-none bg-white rounded-full border border-gray-200 focus:z-10 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 cursor-default">
                                             Attendance Confirmed
                                         </button>
@@ -141,7 +141,7 @@
                                 </th>
                                 <td class="px-4 py-4 text-right align-middle">
                                     @if ($agenda->canAttend() && !$timeline->canAttend() && $isParticipant)
-                                        @if ($agenda->isUserAttended(auth()->user()))
+                                        @if ($agenda->isUserAttended($userRegistration))
                                             <button class="py-1 px-4 text-xs font-medium text-green-700 focus:outline-none bg-white rounded-full border border-gray-200 focus:z-10 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 cursor-default">
                                                 Attendance Confirmed
                                             </button>
