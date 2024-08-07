@@ -22,21 +22,6 @@ use Illuminate\Support\Facades\Storage;
 //     return view('welcome');
 // });
 
-Route::get('view/files/{uuid}', function ($uuid) {
-    $media = Media::findByUuid($uuid);
-
-    abort_if(! $media, 404);
-
-    return response()
-        ->file($media->getPath(), [
-            'Content-Type' => $media->mime_type,
-            'Content-Disposition' => 'inline; filename="'.$media->file_name.'"',
-            'Content-Length' => $media->size,
-            'Content-Transfer-Encoding' => 'binary',
-            'Accept-Ranges' => 'bytes',
-        ]);
-})->name('submission-files.view');
-
 Route::get('private/files/{uuid}', function ($uuid, Request $request) {
     $media = Media::findByUuid($uuid);
 
