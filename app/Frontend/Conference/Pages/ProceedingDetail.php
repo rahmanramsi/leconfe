@@ -6,6 +6,7 @@ use App\Frontend\Conference\Pages\Proceedings as PagesProceedings;
 use App\Models\Enums\SubmissionStatus;
 use App\Models\Proceeding;
 use App\Models\Track;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Route;
 use Rahmanramsi\LivewirePageGroup\PageGroup;
 use Rahmanramsi\LivewirePageGroup\Pages\Page;
@@ -16,6 +17,11 @@ class ProceedingDetail extends Page
     protected static string $view = 'frontend.conference.pages.proceeding-detail';
 
     public Proceeding $proceeding;
+
+    public function getTitle(): string|Htmlable
+    {
+        return $this->proceeding->seriesTitle();
+    }
 
     public function mount(Proceeding $proceeding)
     {

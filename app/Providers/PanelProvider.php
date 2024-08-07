@@ -263,7 +263,7 @@ class PanelProvider extends ServiceProvider
         TinyEditor::configureUsing(function (TinyEditor $tinyEditor): void {
             $tinyEditor
                 ->setRelativeUrls(false)
-                ->setRemoveScriptHost(false)
+                ->setRemoveScriptHost(true)
                 ->toolbarSticky(false);
         });
     }

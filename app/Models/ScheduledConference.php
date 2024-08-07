@@ -86,11 +86,6 @@ class ScheduledConference extends Model implements HasMedia, HasAvatar, HasName
         return $this->hasMany(SpeakerRole::class);
     }
 
-    public function sponsors(): HasMany
-    {
-        return $this->hasMany(Sponsor::class);
-    }
-
     public function announcements(): HasMany
     {
         return $this->hasMany(Announcement::class);

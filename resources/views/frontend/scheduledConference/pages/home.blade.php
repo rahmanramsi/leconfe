@@ -2,7 +2,7 @@
     <div class="space-y-8">
         <x-scheduledConference::alert-scheduled-conference :scheduled-conference="$currentScheduledConference" />
         @if ($currentScheduledConference->hasMedia('cover')||$currentScheduledConference->getMeta('about')||$currentScheduledConference->getMeta('additional_content'))
-        <section id="highlight-conference" class="space-y-4">
+        <section id="highlight" class="space-y-4">
             <div class="flex flex-col sm:flex-row flex-wrap space-y-4 sm:space-y-0 gap-4">
                 <div class="flex flex-col gap-4 flex-1">
                     @if ($currentScheduledConference->hasMedia('cover'))
@@ -26,69 +26,8 @@
             </div>
         </section>
         @endif
-        @if ($currentScheduledConference->sponsors->isNotEmpty())
-            <section id="conference-partner" class="space-y-4">
-                <div class="sponsors space-y-4" x-data="carousel">
-                    <h2 class="text-xl text-center font-semibold">Conference Partners</h2>
-                    <div class="sponsors-carousel flex items-center w-full gap-4" x-bind="carousel">
-                        <button x-on:click="toLeft"
-                            role="button"
-                            class="hidden bg-gray-400 hover:bg-gray-500 h-10 w-10 rounded-full md:flex items-center justify-center">
-                            <x-heroicon-m-chevron-left class="h-6 w-fit text-white" />
-                            <span class="sr-only">To Left</span>
-                        </button>
-                        <ul x-ref="slider"
-                            class="flex-1 flex w-full snap-x snap-mandatory overflow-x-scroll gap-3 py-4">
-                            @foreach ($currentScheduledConference->sponsors as $sponsor)
-                                <li @class([
-                                    'flex shrink-0 snap-start flex-col items-center justify-center',
-                                    'ml-auto' => $loop->first,
-                                    'mr-auto' => $loop->last,
-                                ])>
-                                    <img class="max-h-24 w-fit"
-                                        src="{{ $sponsor->getFirstMedia('logo')?->getAvailableUrl(['thumb']) }}"
-                                        alt="{{ $sponsor->name }}">
-                                </li>
-                            @endforeach
-                        </ul>
-                        <button x-on:click="toRight"
-                            role="button"
-                            class="hidden bg-gray-400 hover:bg-gray-500 h-10 w-10 rounded-full md:flex items-center justify-center">
-                            <x-heroicon-m-chevron-right class="h-6 w-fit text-white" />
-                            <span class="sr-only">To Right</span>
-                        </button>
-                    </div>
-                </div>
-            </section>
-        @endif
-        
-        {{-- @if($additionalInformations->isNotEmpty())
-            <section id="conference-additional-informations" class="space-y-4">
-                <div x-data="{ activeTab: '{{ $additionalInformations[0]['slug'] }}' }" class="bg-white">
-                    <div class="border border-t-0 border-x-0 border-gray-300 flex space-x-1 sm:space-x-2 overflow-x-auto overflow-y-hidden">
-                        @foreach ($additionalInformations as $info)
-                            <button x-on:click="activeTab = '{{ $info['slug'] }}'"
-                                :class="{ 'text-primary bg-white': activeTab === '{{ $info['slug'] }}', 'bg-gray-100': activeTab !== '{{ $info['slug'] }}' }"
-                                class="px-4 py-2 text-sm hover:text-primary border border-b-white border-gray-300 text-nowrap">{{ $info['title'] }}</button>
-                        @endforeach
-                    </div>
-                    @foreach ($additionalInformations as $info)
-                        <div 
-                            x-show="activeTab === '{{ $info['slug'] }}'"
-                            class="p-4 border border-t-0 border-gray-300" 
-                            @if(!$loop->first) x-cloak @endif
-                            >
-                            <div class="user-content overflow-x-auto">
-                                {{ new Illuminate\Support\HtmlString($info['content']) }}
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            </section>
-        @endif --}}
-
-        @if ($currentScheduledConference?->speakers()->exists())
-            <section id="conference-speakers" class="flex flex-col gap-y-0">
+        @if ($currentScheduledConference?->speakers->isNotEmpty())
+            <section id="speakers" class="flex flex-col gap-y-0">
                 <x-website::heading-title title="Speakers" />
                 <div class="cf-speakers space-y-6">
                     @foreach ($currentScheduledConference->speakerRoles as $role)
@@ -115,6 +54,64 @@
                                 </div>
                             </div>
                         @endif
+                    @endforeach
+                </div>
+            </section>
+        @endif
+
+        @if($sponsorLevels->isNotEmpty() || $sponsorsWithoutLevel->isNotEmpty())
+            <section class="sponsors">
+                <x-website::heading-title title="Sponsors" />
+                <div class="conference-sponsor-levels space-y-6">
+                    @if($sponsorsWithoutLevel->isNotEmpty())
+                        <div class="conference-sponsor-level">
+                            <div class="conference-sponsors flex flex-wrap items-center gap-4">
+                                @foreach($sponsorsWithoutLevel as $sponsor)
+                                    @if(!$sponsor->getFirstMedia('logo'))
+                                        @continue
+                                    @endif
+                                    <div class="conference-sponsor">
+                                        <img class="conference-sponsor-logo max-h-32"
+                                                src="{{ $sponsor->getFirstMedia('logo')?->getAvailableUrl(['thumb', 'thumb-xl']) }}"
+                                                alt="{{ $sponsor->name }}" />
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+                    @foreach ($sponsorLevels as $sponsorLevel)
+                        <div class="conference-sponsor-level">
+                            <h3 class="text-lg mb-4">{{ $sponsorLevel->name }}</h3>
+                            <div class="conference-sponsors flex flex-wrap items-center gap-4">
+                                @foreach($sponsorLevel->stakeholders as $sponsor)
+                                    @if(!$sponsor->getFirstMedia('logo'))
+                                        @continue
+                                    @endif
+                                    <div class="conference-sponsor">
+                                        <img class="conference-sponsor-logo max-h-32"
+                                                src="{{ $sponsor->getFirstMediaUrl('logo') }}"
+                                                alt="{{ $sponsor->name }}" />
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </section>
+        @endif
+        @if($partners->isNotEmpty())
+            <section class="partners">
+                <x-website::heading-title title="Partners" />
+                <div class="conference-partners flex flex-wrap items-center gap-4">
+                    @foreach($partners as $partner)
+                        @if(!$partner->getFirstMedia('logo'))
+                            @continue
+                        @endif
+                        <div class="conference-partner">
+                            <img class="conference-partner-logo max-h-32"
+                                    src="{{ $partner->getFirstMediaUrl('logo') }}"
+                                    alt="{{ $partner->name }}" />
+                        </div>
                     @endforeach
                 </div>
             </section>

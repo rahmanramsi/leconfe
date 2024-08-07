@@ -10,4 +10,6 @@
 
         @livewireScriptConfig
     </body>
+
+    @hook('frontend:footer')
 </html>
