@@ -72,7 +72,7 @@
                                     @endif
                                     <div class="conference-sponsor">
                                         <img class="conference-sponsor-logo max-h-32"
-                                                src="{{ $sponsor->getFirstMedia('logo')?->getAvailableUrl(['thumb', 'thumb-xl']) }}"
+                                                src="{{ $sponsor->getFirstMediaUrl('logo') }}"
                                                 alt="{{ $sponsor->name }}" />
                                     </div>
                                 @endforeach
