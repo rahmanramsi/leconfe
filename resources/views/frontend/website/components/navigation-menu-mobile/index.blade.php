@@ -5,8 +5,8 @@
 
 <aside class="flex items-center lg:hidden" x-slide-over>
     <button @@click="toggleSlideOver" class="btn btn-square btn-sm btn-ghost">
-        <x-heroicon-o-bars-3 x-show="!slideOverOpen" x-cloak />
-        <x-heroicon-o-x-mark x-show="slideOverOpen" x-cloak />
+        <x-heroicon-o-bars-3 class="h-6 w-6" x-show="!slideOverOpen" x-cloak />
+        <x-heroicon-o-x-mark class="h-6 w-6" x-show="slideOverOpen" x-cloak />
     </button>
     <template x-teleport="body">
         <div x-show="slideOverOpen" @@keydown.window.escape="closeSlideOver" class="relative z-50">

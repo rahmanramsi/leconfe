@@ -10,7 +10,6 @@ use App\Models\Committee;
 use App\Models\CommitteeRole;
 use App\Models\Conference;
 use App\Models\MailTemplate;
-use App\Models\Sponsor;
 use App\Models\NavigationMenu;
 use App\Models\PaymentItem;
 use App\Models\Proceeding;
@@ -19,6 +18,8 @@ use App\Models\Scopes\ScheduledConferenceScope;
 use App\Models\ScheduledConference;
 use App\Models\Site;
 use App\Models\SpeakerRole;
+use App\Models\Stakeholder;
+use App\Models\StakeholderLevel;
 use App\Models\StaticPage;
 use App\Models\Submission;
 use App\Models\SubmissionFileType;
@@ -133,6 +134,8 @@ class Application extends LaravelApplication
             ScheduledConference::class,
             Proceeding::class,
             MailTemplate::class,
+            Stakeholder::class,
+            StakeholderLevel::class,
         ];
 
         foreach ($models as $model) {
@@ -147,7 +150,6 @@ class Application extends LaravelApplication
             CommitteeRole::class,
             SpeakerRole::class,
             StaticPage::class,
-            Sponsor::class,
             Committee::class,
             Announcement::class,
             Topic::class,
@@ -155,6 +157,8 @@ class Application extends LaravelApplication
             SubmissionFileType::class,
             Track::class,
             Submission::class,
+            Stakeholder::class,
+            StakeholderLevel::class,
         ];
 
         foreach ($models as $model) {
