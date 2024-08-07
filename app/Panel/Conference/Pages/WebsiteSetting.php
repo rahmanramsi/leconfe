@@ -7,11 +7,13 @@ use Filament\Pages\Page;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Filament\Infolists\Components\Tabs;
-use App\Infolists\Components\VerticalTabs as VerticalTabs;
+use App\Infolists\Components\VerticalTabs;
 use App\Infolists\Components\LivewireEntry;
 use App\Panel\Administration\Livewire\SidebarSetting;
 use App\Panel\Conference\Livewire\DateAndTimeSetting;
 use App\Panel\Administration\Livewire\LanguageSetting;
+use App\Panel\Administration\Livewire\SponsorLevelTable;
+use App\Panel\Administration\Livewire\SponsorTable;
 use App\Panel\Conference\Livewire\NavigationMenuSetting;
 use App\Panel\Conference\Livewire\SetupSetting;
 use App\Panel\Conference\Livewire\ThemeSetting;
@@ -84,12 +86,12 @@ class WebsiteSetting extends Page
 													->livewire(LanguageSetting::class),
 											]),
 										VerticalTabs\Tab::make('Date & Time')
-                                            ->icon('heroicon-o-clock')
-                                            ->schema([
-                                                LivewireEntry::make('date_and_time')
-                                                    ->livewire(DateAndTimeSetting::class)
-                                                    ->lazy(),
-                                            ]),
+											->icon('heroicon-o-clock')
+											->schema([
+												LivewireEntry::make('date_and_time')
+													->livewire(DateAndTimeSetting::class)
+													->lazy(),
+											]),
 									]),
 							]),
 					]),

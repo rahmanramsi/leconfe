@@ -3,8 +3,6 @@
 namespace Database\Seeders\Developments;
 
 use App\Models\Conference;
-use App\Models\ScheduledConference;
-use App\Models\Sponsor;
 use App\Models\Topic;
 use Illuminate\Database\Seeder;
 

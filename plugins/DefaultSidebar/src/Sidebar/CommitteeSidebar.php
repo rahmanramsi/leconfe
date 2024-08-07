@@ -31,7 +31,7 @@ class CommitteeSidebar extends Sidebar
         return [
             'id' => $this->getId(),
             'name' => $this->getName(),
-            'committees' => Committee::query()->orderBy('order_column')->take(3)->get(),
+            'committees' => Committee::query()->with(['meta'])->orderBy('order_column')->take(3)->get(),
         ];
     }
 }

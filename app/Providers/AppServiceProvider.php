@@ -25,6 +25,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Event;
 
 class AppServiceProvider extends ServiceProvider
@@ -69,7 +70,6 @@ class AppServiceProvider extends ServiceProvider
                 $app['config']['app.asset_url']
             );
         });
-
     }
 
     /**
@@ -80,18 +80,26 @@ class AppServiceProvider extends ServiceProvider
         $this->setupModel();
         $this->setupStorage();
         $this->extendStr();
+        $this->extendBlade();
         $this->detectConference();
 
         Event::subscribe(SubmissionEventSubscriber::class);
     }
 
-    protected function extendStr()
+    protected function extendBlade(): void
+    {
+        Blade::directive('hook', function (string $name) {
+            return "<?php echo \App\Facades\Hook::call($name) ?>";
+        });
+    }
+
+    protected function extendStr(): void
     {
         /**
          * Add macro to Str class to mask email address.
          */
         Str::macro('maskEmail', function ($email) {
-            if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 return $email;
             }
 
@@ -107,7 +115,7 @@ class AppServiceProvider extends ServiceProvider
         });
     }
 
-    protected function setupModel()
+    protected function setupModel(): void
     {
         // As these are concerned with application correctness,
         // leave them enabled all the time.
@@ -119,14 +127,14 @@ class AppServiceProvider extends ServiceProvider
         Model::preventLazyLoading(!$this->app->isProduction());
     }
 
-    protected function setupMorph()
+    protected function setupMorph(): void
     {
         Relation::enforceMorphMap([
             //
         ]);
     }
 
-    protected function setupLog()
+    protected function setupLog(): void
     {
         if ($this->app->isProduction()) {
             return;
@@ -160,7 +168,7 @@ class AppServiceProvider extends ServiceProvider
         }
     }
 
-    protected function setupStorage()
+    protected function setupStorage(): void
     {
         // Create a temporary URL for a file in the local storage disk.
         Storage::disk('local')->buildTemporaryUrlsUsing(function ($path, $expiration, $options) {
@@ -172,7 +180,7 @@ class AppServiceProvider extends ServiceProvider
         });
     }
 
-    protected function detectConference()
+    protected function detectConference(): void
     {
         if ($this->app->runningInConsole() || !$this->app->isInstalled()) {
             return;
@@ -197,11 +205,10 @@ class AppServiceProvider extends ServiceProvider
             // Detect scheduledConference from URL path when conference is set
             if ($conference) {
 
-                if($isOnScheduledPath && $scheduledConference = ScheduledConference::where('path', $scheduledConferencePath)->first()){
+                if ($isOnScheduledPath && $scheduledConference = ScheduledConference::where('path', $scheduledConferencePath)->first()) {
                     $this->app->setCurrentScheduledConferenceId($scheduledConference->getKey());
                     $this->app->scopeCurrentScheduledConference();
                 }
-
             }
         }
 
