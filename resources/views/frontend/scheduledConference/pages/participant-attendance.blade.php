@@ -55,16 +55,28 @@
                                 </p>
                             </td>
                             <td class="px-6 py-4 text-right">
-                                @if ($timeline->canAttend() && $isParticipant)
-                                    @if ($userRegistration->isAttended($timeline))
-                                        <button class="py-1 px-4 text-xs font-medium text-green-700 focus:outline-none bg-white rounded-full border border-gray-200 focus:z-10 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 cursor-default">
-                                            Attendance Confirmed
-                                        </button>
+                                @if ($timeline->canShown() && $isParticipant)
+                                    @if ($timeline->canAttend())
+                                        @if ($userRegistration->isAttended($timeline))
+                                            <button class="py-1 px-4 text-xs font-medium text-green-700 focus:outline-none bg-white rounded-full border border-gray-200 focus:z-10 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 cursor-default">
+                                                Attendance Confirmed
+                                            </button>
+                                        @else
+                                            <button class="py-1 px-4 text-xs font-medium text-blue-700 focus:outline-none bg-white rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-600 focus:z-10 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" 
+                                            wire:click="attend({{ $timeline->id }}, '{{ static::ATTEND_TYPE_TIMELINE }}')">
+                                                Confirm Attendance
+                                            </button>
+                                        @endif
                                     @else
-                                        <button class="py-1 px-4 text-xs font-medium text-blue-700 focus:outline-none bg-white rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-600 focus:z-10 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" 
-                                        wire:click="attend({{ $timeline->id }}, '{{ static::ATTEND_TYPE_TIMELINE }}')">
-                                            Confirm Attendance
-                                        </button>
+                                        @if ($userRegistration->isAttended($timeline))
+                                            <button class="py-1 px-4 text-xs font-medium text-green-700 focus:outline-none bg-white rounded-full border border-gray-200 focus:z-10 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 cursor-default">
+                                                Attendance Confirmed
+                                            </button>
+                                        @else
+                                            <button class="py-1 px-4 text-xs font-medium text-red-700 focus:outline-none bg-white rounded-full border border-gray-200 focus:z-10 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 cursor-default">
+                                                Attendance Expired
+                                            </button>
+                                        @endif
                                     @endif
                                 @endif
                             </td>
@@ -140,16 +152,28 @@
                                     @endif
                                 </th>
                                 <td class="px-4 py-4 text-right align-middle">
-                                    @if ($agenda->canAttend() && !$timeline->canAttend() && $isParticipant)
-                                        @if ($userRegistration->isAttended($agenda))
-                                            <button class="py-1 px-4 text-xs font-medium text-green-700 focus:outline-none bg-white rounded-full border border-gray-200 focus:z-10 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 cursor-default">
-                                                Attendance Confirmed
-                                            </button>
+                                    @if ($agenda->isRequiresAttendance() && $isParticipant)
+                                        @if ($agenda->canAttend() && $isParticipant)
+                                            @if ($userRegistration->isAttended($agenda))
+                                                <button class="py-1 px-3 text-xs font-medium text-green-700 focus:outline-none bg-white rounded-full border border-gray-200 focus:z-10 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 cursor-default">
+                                                    Attendance Confirmed
+                                                </button>
+                                            @else
+                                                <button class="py-1 px-3 text-xs font-medium text-blue-700 focus:outline-none bg-white rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-600 focus:z-10 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" 
+                                                wire:click="attend({{ $agenda->id }}, '{{ static::ATTEND_TYPE_AGENDA }}')">
+                                                    Confirm Attendance
+                                                </button>
+                                            @endif
                                         @else
-                                            <button class="py-1 px-4 text-xs font-medium text-blue-700 focus:outline-none bg-white rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-600 focus:z-10 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" 
-                                            wire:click="attend({{ $agenda->id }}, '{{ static::ATTEND_TYPE_AGENDA }}')">
-                                                Confirm Attendance
-                                            </button>
+                                            @if ($userRegistration->isAttended($agenda))
+                                                <button class="py-1 px-3 text-xs font-medium text-green-700 focus:outline-none bg-white rounded-full border border-gray-200 focus:z-10 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 cursor-default">
+                                                    Attendance Confirmed
+                                                </button>
+                                            @else
+                                                <button class="py-1 px-3 text-xs font-medium text-red-700 focus:outline-none bg-white rounded-full border border-gray-200 focus:z-10 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 cursor-default">
+                                                    Attendance Expired
+                                                </button>
+                                            @endif
                                         @endif
                                     @endif
                                 </td>

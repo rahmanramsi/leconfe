@@ -66,9 +66,7 @@ class Agenda extends Model
 
     public function isRequiresAttendance(): bool
     {
-        if($this->timeline()
-            ->first()
-            ->isRequiresAttendance()) {
+        if($this->timeline()->first()->isRequiresAttendance()) {
             return false;
         }
 

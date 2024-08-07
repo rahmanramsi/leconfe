@@ -131,17 +131,26 @@ class Timeline extends Model
         return $this->requires_attendance;
     }
 
-    public function canAttend(): bool
+    public function canShown(): bool
     {
         if(!$this->isRequiresAttendance()) {
             return false;
         }
 
-        if(!$this->isOngoing()) {
+        if($this->hide) {
             return false;
         }
 
-        if($this->hide) {
+        return true;
+    }
+
+    public function canAttend(): bool
+    {
+        if(!$this->canShown()) {
+            return false;
+        }
+
+        if(!$this->isOngoing()) {
             return false;
         }
 
