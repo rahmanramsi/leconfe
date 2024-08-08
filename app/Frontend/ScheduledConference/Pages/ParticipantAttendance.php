@@ -35,6 +35,10 @@ class ParticipantAttendance extends Page
         if(!auth()->check()) {
             return redirect(app()->getLoginUrl());
         }
+        
+        if(!app()->getCurrentScheduledConference()->isAttendanceEnabled()) {
+            return abort(404);
+        }
     }
 
     public function attend($data_id, $data_type): void

@@ -82,22 +82,6 @@ class Timeline extends Model
         return false;
     }
 
-    public static function isAttendanceOpen(): bool
-    {
-        $firstTimeline = self::orderBy('date', 'ASC')->limit(1)->first();
-        $lastTimeline = self::orderBy('date', 'DESC')->limit(1)->first();
-
-        if (!$firstTimeline) {
-            return false;
-        }
-
-        if ($firstTimeline->date->subDays(7)->isPast() && (!$lastTimeline || $lastTimeline->date->subDays(-1)->isFuture())) {
-            return true;
-        }
-
-        return false;
-    }
-
     protected function timeSpan(): Attribute
     {
         return Attribute::make(

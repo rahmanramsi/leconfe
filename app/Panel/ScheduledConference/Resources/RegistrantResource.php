@@ -110,7 +110,7 @@ class RegistrantResource extends Resource
                                 'attendanceRedirectUrl' => route('livewirePageGroup.scheduledConference.pages.attendance'),
                             ])
                     ])
-                    ->visible(fn () => Timeline::isAttendanceOpen()),
+                    ->visible(fn () => app()->getCurrentScheduledConference()->isAttendanceEnabled()),
                 Action::make('enroll_user')
                     ->label('Enroll User')
                     ->url(fn () => RegistrantResource::getUrl('enroll'))
@@ -187,7 +187,7 @@ class RegistrantResource extends Resource
                         ->icon('heroicon-m-calendar-days')
                         ->color(Color::Blue)
                         ->url(fn (Model $record) => static::getUrl('attendance', ['record' => $record]))
-                        ->visible(fn (Model $record) => $record->registrationPayment->state === RegistrationPaymentState::Paid->value)
+                        ->visible(fn (Model $record) => ($record->registrationPayment->state === RegistrationPaymentState::Paid->value) && app()->getCurrentScheduledConference()->isAttendanceEnabled())
                         ->authorize('Registrant:edit'),
                     DeleteAction::make()
                         ->label('Trash')
