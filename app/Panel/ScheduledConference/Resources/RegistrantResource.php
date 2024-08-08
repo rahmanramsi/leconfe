@@ -9,18 +9,16 @@ use Filament\Forms\Get;
 use App\Facades\Setting;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Squire\Models\Currency;
 use App\Models\Registration;
 use Filament\Facades\Filament;
-use App\Models\RegistrationType;
 use Filament\Resources\Resource;
 use Filament\Support\Colors\Color;
 use Filament\Forms\Components\Grid;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Grouping\Group;
 use Filament\Forms\Components\Select;
+use Filament\Infolists\Components\View;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Model;
@@ -37,6 +35,7 @@ use Filament\Tables\Actions\ForceDeleteAction;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use App\Panel\ScheduledConference\Resources\RegistrantResource\Pages;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class RegistrantResource extends Resource
 {
@@ -97,7 +96,19 @@ class RegistrantResource extends Resource
             ->modifyQueryUsing(fn (Builder $query) => $query->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId()))
             ->heading('Registrant List')
             ->headerActions([
-                Action::make('Enroll User')
+                Action::make('attendance_qr_code')
+                    ->label('Attendance QR Code')
+                    ->color('gray')
+                    ->infolist([
+                        View::make('blade')
+                            ->view('panel.scheduledConference.resources.registrant-resource.pages.attendance-qr-code', [
+                                'currentScheduledConference' => app()->getCurrentScheduledConference(),
+                                'attendanceRedirectUrl' => route('livewirePageGroup.scheduledConference.pages.attendance'),
+                            ])
+                    ])
+                    ->modalSubmitAction(false),
+                Action::make('enroll_user')
+                    ->label('Enroll User')
                     ->url(fn () => RegistrantResource::getUrl('enroll'))
                     ->authorize('Registrant:enroll')
             ])

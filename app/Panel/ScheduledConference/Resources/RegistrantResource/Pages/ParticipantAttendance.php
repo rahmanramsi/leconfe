@@ -3,8 +3,11 @@
 namespace App\Panel\ScheduledConference\Resources\RegistrantResource\Pages;
 
 use Carbon\Carbon;
+use Filament\Actions;
 use App\Models\Agenda;
+use Filament\Forms\Get;
 use App\Facades\Setting;
+use App\Models\Timeline;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\Registration;
@@ -12,6 +15,7 @@ use Filament\Resources\Pages\Page;
 use Filament\Support\Colors\Color;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Grouping\Group;
+use Filament\Forms\Components\Select;
 use App\Models\RegistrationAttendance;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Components\Fieldset;
@@ -23,6 +27,7 @@ use Filament\Forms\Components\TimePicker;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\Placeholder;
 use Illuminate\Contracts\Support\Htmlable;
+use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
 use App\Panel\ScheduledConference\Resources\RegistrantResource;
@@ -38,6 +43,9 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
     protected static string $view = 'panel.scheduledConference.resources.registrant-resource.pages.participant-attendance';
     
     public Registration $registration;
+
+    public const DAY_ATTENDANCE_MARK_TYPE_IN = 0;
+    public const DAY_ATTENDANCE_MARK_TYPE_OUT = 1;
 
     public function mount(?Registration $record): void
     {
@@ -60,6 +68,136 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
         ];
 
         return $breadcrumbs;
+    }
+
+    public function getHeaderActions(): array
+    {
+        return [
+            Actions\Action::make('mark_in_day')
+                ->label('Mark in (Day)')
+                ->icon('heroicon-m-finger-print')
+                ->color(Color::Green)
+                ->modalWidth('2xl')
+                ->form(function (Form $form) {
+                    return $form
+                        ->schema([
+                            Select::make('timeline_id')
+                                ->label('Timeline')
+                                ->options(static::getTimelineListOption(self::DAY_ATTENDANCE_MARK_TYPE_IN, $this->registration))
+                                ->searchable()
+                                ->required()
+                                ->live(),
+                            Fieldset::make('Attendance date')
+                                ->schema([
+                                    Placeholder::make('attendance_date')
+                                        ->label('')
+                                        ->content(function (Get $get) {
+                                            if(!$get('timeline_id')) {
+                                                return 'Select the timeline first.';
+                                            }
+
+                                            $timeline = Timeline::where('id', $get('timeline_id'))->first();
+                                            if(!$timeline) {
+                                                return 'Select valid timeline.';
+                                            }
+                                            
+                                            return Carbon::parse($timeline->date)->format(Setting::get('format_date'));
+                                        }),
+                                ]),
+                            TimePicker::make('attendance_time')
+                                ->helperText('Input participant attendance time.')
+                                ->hint(function (Get $get) {
+                                    if(!$get('timeline_id')) {
+                                        return null;
+                                    }
+
+                                    $timeline = Timeline::where('id', $get('timeline_id'))->first();
+                                    if(!$timeline) {
+                                        return null;
+                                    }  
+
+                                    return $timeline->time_span;
+                                })
+                                ->required(),
+                        ])
+                        ->columns(1);
+                })
+                ->action(function (array $data, Actions\Action $action) {
+                    try {
+                        $timeline = Timeline::where('id', $data['timeline_id'])->first();
+                        $time = (string) Carbon::parse($timeline->date)->setTimeFromTimeString($data['attendance_time']);
+                        
+                        RegistrationAttendance::create([
+                            'timeline_id' => $timeline->id,
+                            'registration_id' => $this->registration->id,
+                            'created_at' => $time,
+                            'updated_at' => $time,
+                        ]);
+                    } catch (\Throwable $th) {
+                        $action->sendFailureNotification();
+                    }
+                    $action->sendSuccessNotification();
+                }),
+            Actions\Action::make('mark_out_day')
+                ->label('Mark out (Day)')
+                ->icon('heroicon-m-finger-print')
+                ->color(Color::Red)
+                ->requiresConfirmation()
+                ->modalWidth('2xl')
+                ->form(function (Form $form) {
+                    return $form
+                        ->schema([
+                            Select::make('timeline_id')
+                                ->label('Timeline')
+                                ->options(static::getTimelineListOption(self::DAY_ATTENDANCE_MARK_TYPE_OUT, $this->registration))
+                                ->searchable()
+                                ->required(),
+                        ])
+                        ->columns(1);
+                })
+                ->action(function (?array $data, Actions\Action $action) {
+                    try {
+                        $timeline = Timeline::where('id', $data['timeline_id'])->first();
+                        $attendance = $this->registration->getAttendance($timeline);
+
+                        if(!$attendance) $action->sendFailureNotification();
+
+                        $attendance->delete();
+                    } catch (\Throwable $th) {
+                        $action->sendFailureNotification();
+                    }
+                    $action->sendSuccessNotification();
+                }),
+        ];
+    }
+
+    public static function getTimelineListOption(int $type, Registration $registration): array
+    {
+        $timelinesOption = [];
+        $timelines = Timeline::where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
+            ->orderBy('date', 'ASC')
+            ->get();
+
+        foreach ($timelines as $timeline) {
+            if($type === self::DAY_ATTENDANCE_MARK_TYPE_IN && $registration->isAttended($timeline)) {
+                continue;
+            }
+
+            if($type === self::DAY_ATTENDANCE_MARK_TYPE_IN && !$timeline->canAttend()) {
+                continue;
+            }
+
+            if($type === self::DAY_ATTENDANCE_MARK_TYPE_OUT && !$registration->isAttended($timeline)) {
+                continue;
+            }
+
+            $timelineName = $timeline->name;
+            $timelineDate = Carbon::parse($timeline->date)->format(Setting::get('format_date'));
+            $timelineTimeSpan = $timeline->time_span;
+
+            $timelinesOption[$timeline->id] = "($timelineDate, $timelineTimeSpan) $timelineName ";
+        }
+        return $timelinesOption;
     }
 
     public function table(Table $table): Table
@@ -135,7 +273,7 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
             ->defaultSort('time_span')
             ->groups([
                 Group::make('timeline.name')
-                    ->label('Timeline')
+                    ->label('')
                     ->getDescriptionFromRecordUsing(function (Model $record): string { 
                         $date = Carbon::parse($record->timeline->date)->format(Setting::get('format_date'));
                         $isRequiresAttendance = $record->timeline->isRequiresAttendance() ? "(Per-day attendance are required)" : null;
@@ -148,63 +286,11 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
                             ->leftJoin('timelines', 'timelines.id', '=', 'agendas.timeline_id')
                             ->orderBy('timelines.date', $direction);
                     })
-                    ->collapsible(),
+                    ->collapsible()
             ])
             ->defaultGroup('timeline.name')
+            ->groupingSettingsHidden()
             ->actions([
-                // ---[ Timeline ]---
-                Action::make('mark_in_day')
-                    ->label('Mark in (Day)')
-                    ->icon('heroicon-m-finger-print')
-                    ->color(Color::Green)
-                    ->modalWidth('xl')
-                    ->form(function (Form $form, Model $record) {
-                        return $form
-                            ->schema([
-                                Fieldset::make('Attendance date')
-                                    ->schema([
-                                        Placeholder::make('attendance_date')
-                                            ->label('')
-                                            ->content(fn () => Carbon::parse($record->date)->format(Setting::get('format_date'))),
-                                    ]),
-                                TimePicker::make('attendance_time')
-                                    ->helperText('Input participant attendance time.')
-                                    ->hint(fn () => $record->timeline->time_span)
-                                    ->required(),
-                            ])
-                            ->columns(1);
-                    })
-                    ->action(function (Model $record, array $data, Action $action) {
-                        try {
-                            $time = (string) Carbon::parse($record->date)->setTimeFromTimeString($data['attendance_time']);
-                            
-                            RegistrationAttendance::create([
-                                'timeline_id' => $record->timeline->id,
-                                'registration_id' => $this->registration->id,
-                                'created_at' => $time,
-                                'updated_at' => $time,
-                            ]);
-                        } catch (\Throwable $th) {
-                            throw $th;
-                            
-                            $action->sendFailureNotification();
-                        }
-                    })
-                    ->visible(fn (Model $record) => !$this->registration->isAttended($record->timeline) && $record->timeline->isRequiresAttendance()),
-                Action::make('mark_out_day')
-                    ->label('Mark out (Day)')
-                    ->icon('heroicon-m-finger-print')
-                    ->color(Color::Red)
-                    ->requiresConfirmation()
-                    ->action(function (Model $record) {
-                        $attendance = $this->registration->getAttendance($record->timeline);
-
-                        if(!$attendance) return;
-
-                        $attendance->delete();
-                    })
-                    ->visible(fn (Model $record) => $this->registration->isAttended($record->timeline) && $record->timeline->isRequiresAttendance()),
-                // ---[ Agenda ]---
                 Action::make('mark_in')
                     ->icon('heroicon-m-finger-print')
                     ->color(Color::Green)
@@ -254,6 +340,10 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
                         $attendance->delete();
                     })
                     ->visible(fn (Model $record) => $this->registration->isAttended($record) && $record->isRequiresAttendance()),
+            ])
+            ->bulkActions([
+                DeleteBulkAction::make()
+                    ->authorize('Timeline:delete'),
             ])
             ->paginated(false);
     }
