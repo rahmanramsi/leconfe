@@ -8,6 +8,7 @@ use App\Models\Timeline;
 use App\Models\Registration;
 use Illuminate\Support\Facades\Route;
 use App\Models\RegistrationAttendance;
+use Illuminate\Support\Arr;
 use Rahmanramsi\LivewirePageGroup\PageGroup;
 use Rahmanramsi\LivewirePageGroup\Pages\Page;
 
@@ -33,7 +34,7 @@ class ParticipantAttendance extends Page
     public function mount()
     {
         if(!auth()->check()) {
-            return redirect(app()->getLoginUrl());
+            return redirect(app()->getLoginUrl() . '?' . http_build_query(['redirect' => 'attendance']));
         }
         
         if(!app()->getCurrentScheduledConference()->isAttendanceEnabled()) {

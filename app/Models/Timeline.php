@@ -93,24 +93,23 @@ class Timeline extends Model
         );
     }
 
-    public function getEarliestTime(): Carbon
+    public function getEarliestTime(): ?Carbon
     {
-        $earliest_agenda = $this
-            ->agendas()
+        $earliest_agenda = $this->agendas()
             ->orderBy('time_start', 'ASC')
             ->limit(1)
             ->first();
 
         if(!$earliest_agenda) {
-            return now()->subDays(30);
+            return now()->subDays(60);
         }
+
         return $earliest_agenda->date_start;
     }
 
-    public function getLatestTime(): Carbon
+    public function getLatestTime(): ?Carbon
     {
-        $latest_agenda = $this
-            ->agendas()
+        $latest_agenda = $this->agendas()
             ->orderBy('time_end', 'DESC')
             ->limit(1)
             ->first();
@@ -118,6 +117,7 @@ class Timeline extends Model
         if(!$latest_agenda) {
             return now()->subDays(30);
         }
+
         return $latest_agenda->date_end;
     }
 
