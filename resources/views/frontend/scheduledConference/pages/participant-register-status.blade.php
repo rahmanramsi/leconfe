@@ -1,7 +1,4 @@
-@use('Illuminate\Support\Str')
-@use('Carbon\Carbon')
 @use('App\Models\Enums\RegistrationPaymentState')
-@use('App\Models\Registration')
 <x-website::layouts.main>
     @if ($isLogged)
         <div class="space-y-6">
@@ -54,11 +51,11 @@
                         @php
                             $userRegistrationCost = $userRegistration->registrationPayment->cost;
                             $userRegistrationCurrency = Str::upper($userRegistration->registrationPayment->currency);
-                            $userRegistrationCostFormatted = money($userRegistrationCost, $userRegistrationCurrency);
+                            $userRegistrationCostFormatted = money($userRegistrationCost, $userRegistrationCurrency, true);
                         @endphp
                         {{ 
                             ($userRegistrationCost === 0 || $userRegistrationCurrency === 'FREE') ? 
-                            'Free' : "($userRegistrationCurrency) $userRegistrationCostFormatted"
+                            'Free' : "$userRegistrationCostFormatted"
                         }}
                     </td>
                 </tr>
@@ -66,7 +63,7 @@
                     <td class="align-text-top">Registration Date</td>
                     <td class="align-text-top pl-5">:</td>
                     <td class="pl-2">
-                        {{ Carbon::parse($userRegistration->created_at)->format('Y-M-d') }}
+                        {{ $userRegistration->created_at->format(Setting::get('format_date')) }}
                     </td>
                 </tr>
                 @if ($userRegistration->getState() === RegistrationPaymentState::Paid->value && $userRegistration->registrationType->currency !== 'free')
@@ -74,7 +71,7 @@
                         <td class="align-text-top">Payment Date</td>
                         <td class="align-text-top pl-5">:</td>
                         <td class="pl-2">
-                            {{ Carbon::parse($userRegistration->registrationPayment->paid_at)->format('Y-M-d') }}
+                            {{ $userRegistration->registrationPayment->paid_at->format(Setting::get('format_date')) }}
                         </td>
                     </tr>
                 @endif
@@ -101,9 +98,9 @@
                                         'md:col-span-3' => count($payments) !== 1,
                                     ])>
                                         <h1 class="font-bold text-left">{{ $payment['name'] }}</h1>
-                                        <p class="mt-2">
+                                        <div class="user-content">
                                             {{ new Illuminate\Support\HtmlString($payment['detail']) }}
-                                        </p>
+                                        </div>
                                     </div>
                                 @endforeach
                                 

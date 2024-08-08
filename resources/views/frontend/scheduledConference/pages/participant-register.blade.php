@@ -8,7 +8,7 @@
         <div class="mt-6 w-full">
             <div class="flex mb-5 space-x-4">
                 <h1 class="text-xl font-semibold min-w-fit">Participant Registration</h1>
-                <hr class="w-full h-px my-auto bg-gray-200 border-0 dark:bg-gray-700">
+                <hr class="w-full h-px my-auto bg-gray-200 border-0">
             </div>
             @if (!$isSubmit)
                 <form wire:submit='register'>
@@ -26,12 +26,10 @@
                                     @if ($type->active)
                                         <tr @class(['bg-red-100' => $type->isInvalid()])>
                                             <td>
-                                                <label>
-                                                    <strong>{{ $type->type }}</strong>
-                                                    <ul class="text-sm">
-                                                        {{ new Illuminate\Support\HtmlString($type->getMeta('description')) }}
-                                                    </ul>
-                                                </label>
+                                                <strong>{{ $type->type }}</strong>
+                                                <p class="text-sm">
+                                                    {{ $type->getMeta('description') }}
+                                                </p>
                                             </td>
                                             <td>
                                                 <strong>
@@ -46,16 +44,18 @@
                                                 @php
                                                     $typeCost = $type->cost;
                                                     $typeCurrency = Str::upper($type->currency);
-                                                    $typeCostFormatted = money($typeCost, $typeCurrency);
+                                                    $typeCostFormatted = money($typeCost, $typeCurrency, true);
                                                     $elementID = Str::slug($type->type)
                                                 @endphp
-                                                <input @class(['cursor-pointer' => !$type->isInvalid()]) id="{{ $elementID }}" type="radio" wire:model="type" value="{{ $type->isInvalid() ? $index : $type->id }}" @disabled($type->isInvalid() || !$isLogged)>
-                                                <label @class(['cursor-pointer' => !$type->isInvalid()]) for="{{ $elementID }}">
-                                                    {{ 
-                                                        ($typeCost <= 0 || $typeCurrency === 'FREE') ? 
-                                                        'Free' : "($typeCurrency) $typeCostFormatted"
-                                                    }}
-                                                </label>
+                                                <div class="flex items-center gap-2">
+                                                    <input @class(['cursor-pointer radio radio-xs radio-primary' => !$type->isInvalid()]) id="{{ $elementID }}" type="radio" wire:model="type" value="{{ $type->isInvalid() ? $index : $type->id }}" @disabled($type->isInvalid() || !$isLogged)>
+                                                    <label @class(['cursor-pointer' => !$type->isInvalid()]) for="{{ $elementID }}">
+                                                        {{ 
+                                                            ($typeCost <= 0 || $typeCurrency === 'FREE') ? 
+                                                            'Free' : "$typeCostFormatted"
+                                                        }}
+                                                    </label>
+                                                </div>
                                             </td>
                                         </tr>
                                     @endif
@@ -97,18 +97,18 @@
                                 <tr>
                                     <td>Affiliation</td>
                                     <td>:</td>
-                                    <td>{{ $userModel->getMeta('affiliation', '-') }}</td>
+                                    <td>{{ $userModel->getMeta('affiliation') ?? '-' }}</td>
                                 </tr>
                                 <tr>
                                     <td>Phone</td>
                                     <td>:</td>
-                                    <td>{{ $userModel->getMeta('phone', '-') }}</td>
+                                    <td>{{ $userModel->getMeta('phone',) ?? '-'  }}</td>
                                 </tr>
                                 @if($userCountry)
                                     <tr>
                                         <td>Country</td>
                                         <td>:</td>
-                                        <td>{{ $userCountry->name }} {{ $userCountry->flag }}</td>
+                                        <td>{{ $userCountry->flag . ' ' . $userCountry->name }}</td>
                                     </tr>
                                 @endif
                             </table>
@@ -154,7 +154,7 @@
                             <td class="align-text-top">Cost</td>
                             <td class="align-text-top pl-5">:</td>
                             <td class="pl-2">
-                                {{ ($registrationType->cost === 0 || $registrationType->currency === 'free') ? 'Free' : '('.Str::upper($registrationType->currency).') '.money($registrationType->cost, $registrationType->currency) }}
+                                {{ ($registrationType->cost === 0 || $registrationType->currency === 'free') ? 'Free' : '('.Str::upper($registrationType->currency).') '.money($registrationType->cost, $registrationType->currency, true) }}
                             </td>
                         </tr>
                     </table>
@@ -216,7 +216,7 @@
     @else
         <div class="my-6 w-full">
             <p class="text-lg">
-                this conference registration are not open.
+                Registration currently closed.
             </p>
         </div>
     @endif

@@ -61,7 +61,7 @@ class PaymentManuals extends Component implements HasForms, HasTable
             TinyEditor::make('detail')
                 ->placeholder('Input payment details..')
                 ->hint('*Add instruction here.')
-                ->minHeight(450)
+                ->profile('basic')
                 ->required(),
         ];
     }
@@ -93,17 +93,11 @@ class PaymentManuals extends Component implements HasForms, HasTable
                     ->badge()
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('detail')
-                    ->formatStateUsing(fn ($state) => Str::limit(strip_tags($state), 50))
-                    ->wrap()
-                    ->searchable()
-                    ->sortable(),
             ])
             ->groups([
                 Group::make('currency')
                     ->getTitleFromRecordUsing(fn (Model $record): string => Str::upper($record->currency))
-                    ->getDescriptionFromRecordUsing(fn (Model $record): string => currency($record->currency)->getName())
-                    ->label('Code')
+                    ->label('Currency')
                     ->collapsible()
             ])
             ->emptyStateHeading('Manual payment are empty')

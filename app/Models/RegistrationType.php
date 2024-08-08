@@ -16,7 +16,22 @@ class RegistrationType extends Model
 {
     use BelongsToScheduledConference, HasShortflakePrimary, Cachable, Metable, HasFactory;
 
-    protected $guarded = ['id', 'scheduled_conference_id'];
+    protected $fillable = [
+        'type',
+        'cost',
+        'quota',
+        'currency',
+        'active',
+        'order_column',
+        'opened_at',
+        'closed_at',
+    ];
+
+    protected $casts = [
+        'active' => 'boolean',
+        'opened_at' => 'date',
+        'closed_at' => 'date',
+    ];
 
     public function getRegisteredUserCount()
     {

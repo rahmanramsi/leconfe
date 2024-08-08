@@ -132,21 +132,14 @@ class RegistrantResource extends Resource
                             return 'Free';
                         }
 
-                        $code = Str::upper($record->registrationPayment->currency);
-                        $cost = money($record->registrationPayment->cost, $record->registrationPayment->currency);
+                        $cost = money($record->registrationPayment->cost, $record->registrationPayment->currency, true);
 
-                        return "($code) $cost";
+                        return $cost;
                     }),
                 TextColumn::make('registrationPayment.state')
                     ->label('State')
                     ->badge()
                     ->color(fn (Model $record) => RegistrationPaymentState::from($record->getState())->getColor()),
-                TextColumn::make('deleted_at')
-                    ->label('Status')
-                    ->placeholder('Valid')
-                    ->formatStateUsing(fn () => "Trashed")
-                    ->badge()
-                    ->color(Color::Red),
                 TextColumn::make('created_at')
                     ->label('Registration Date')
                     ->date('Y-M-d')
@@ -161,6 +154,7 @@ class RegistrantResource extends Resource
                     ->label('Decision')
                     ->modalHeading('Paid Status Decision')
                     ->modalWidth('lg')
+                    ->hidden(fn(Model $record) => $record->trashed())
                     ->authorize('Registrant:edit'),
                 ActionGroup::make([
                     DeleteAction::make()
