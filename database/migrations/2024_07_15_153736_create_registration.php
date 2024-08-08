@@ -47,7 +47,7 @@ return new class extends Migration
             $table->foreignIdFor(Registration::class)->constrained()->cascadeOnDelete();
             $table->string('type')->nullable();
             $table->string('name');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->integer('cost');
             $table->string('currency');
             $table->string('state')->default(RegistrationPaymentState::Unpaid->value);

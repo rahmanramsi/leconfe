@@ -53,18 +53,18 @@ class RegistrationType extends Model
     }
 
     public function isQuotaFull()
-    {
+    {   
         return $this->getQuotaLeft() <= 0;
     }
 
+    public function isOpen()
+    {
+        return (now()->greaterThanOrEqualTo($this->opened_at) && !$this->isExpired()) &&  !$this->isQuotaFull();
+    }
+    
     public function isExpired()
     {
-        return Carbon::parse($this->closed_at)->diffInDays(now(), false) > 0;
-    }
-
-    public function isInvalid()
-    {
-        return $this->isQuotaFull() || $this->isExpired();
+        return now()->greaterThan($this->closed_at);
     }
 
     public function registration(): HasMany

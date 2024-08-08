@@ -116,7 +116,6 @@ class RegistrationTypes extends Component implements HasTable, HasForms
         return $table
             ->query(
                 RegistrationType::query()
-                    ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
                     ->with('meta')
             )
             ->heading('Type')

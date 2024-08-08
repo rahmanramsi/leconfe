@@ -13,6 +13,7 @@ use App\Models\MailTemplate;
 use App\Models\NavigationMenu;
 use App\Models\PaymentItem;
 use App\Models\Proceeding;
+use App\Models\RegistrationType;
 use App\Models\Scopes\ConferenceScope;
 use App\Models\Scopes\ScheduledConferenceScope;
 use App\Models\ScheduledConference;
@@ -159,6 +160,7 @@ class Application extends LaravelApplication
             Submission::class,
             Stakeholder::class,
             StakeholderLevel::class,
+            RegistrationType::class,
         ];
 
         foreach ($models as $model) {
