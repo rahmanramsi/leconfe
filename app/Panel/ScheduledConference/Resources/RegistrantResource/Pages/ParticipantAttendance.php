@@ -229,21 +229,24 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
                     ->sortable(),
                 IconColumn::make('requires_attendance')
                     ->icon(fn (Model $record) => match ($record->getRequiresAttendanceStatus()) {
-                        'timeline' => 'heroicon-o-stop-circle',
-                        'not-required' => 'heroicon-o-x-circle',
-                        'required' => 'heroicon-o-check-circle',
+                        'required' => 'heroicon-o-check',
+                        default => 'heroicon-o-x-mark',
                     })
                     ->color(fn (Model $record) => match ($record->getRequiresAttendanceStatus()) {
-                        'timeline' => Color::Blue,
-                        'not-required' => Color::Red,
                         'required' => Color::Green,
+                        'not-required' => Color::Gray,
+                        'timeline' => Color::Blue,
                     })
                     ->tooltip(
-                        fn (Model $record) => $record->getRequiresAttendanceStatus() === 'timeline' ?
-                            "Attendance are'nt required because the timeline had it active." : null
+                        fn (Model $record) => match($record->getRequiresAttendanceStatus()) {
+                            'not-required' => "Attendance are'nt required.",
+                            'timeline' => "Attendance are'nt required because per day attendance are required.",
+                            default => null,
+                        }
                     )
                     ->alignCenter(),
                 IconColumn::make('attended')
+                    ->label('Attendance Status')
                     ->getStateUsing(function (Model $record) {
                         if ($this->registration->isAttended($record->timeline)) {
                             return true;
@@ -255,10 +258,15 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
 
                         return false;
                     })
-                    ->trueIcon('heroicon-o-check-circle')
+                    ->trueIcon('heroicon-o-check')
                     ->trueColor(Color::Green)
-                    ->falseIcon('heroicon-o-x-circle')
+                    ->falseIcon('heroicon-o-x-mark')
                     ->falseColor(Color::Red)
+                    ->tooltip(function (Model $record) {
+                        if ($record->timeline->isRequiresAttendance()) {
+                            return 'Per day attendance are required, mark in and out on top of the page.';
+                        }
+                    })
                     ->boolean()
                     ->alignCenter(),
                 TextColumn::make('attend_at')
@@ -274,7 +282,7 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
                         return null;
                     })
                     ->label('Attendance Time')
-                    ->placeholder('Not Attended')
+                    ->placeholder('-')
                     ->dateTime(Setting::get('format_time')),
             ])
             ->defaultSort('time_span')
@@ -283,7 +291,7 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
                     ->label('')
                     ->getDescriptionFromRecordUsing(function (Model $record): string {
                         $date = Carbon::parse($record->timeline->date)->format(Setting::get('format_date'));
-                        $isRequiresAttendance = $record->timeline->isRequiresAttendance() ? "(Per-day attendance are required)" : null;
+                        $isRequiresAttendance = $record->timeline->isRequiresAttendance() ? "(Per day attendance are required)" : null;
 
                         return "$date $isRequiresAttendance";
                     })
@@ -293,7 +301,6 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
                             ->leftJoin('timelines', 'timelines.id', '=', 'agendas.timeline_id')
                             ->orderBy('timelines.date', $direction);
                     })
-                    ->collapsible()
             ])
             ->defaultGroup('timeline.name')
             ->groupingSettingsHidden()
