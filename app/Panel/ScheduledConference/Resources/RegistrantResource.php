@@ -99,14 +99,16 @@ class RegistrantResource extends Resource
                 Action::make('attendance_qr_code')
                     ->label('Attendance QR Code')
                     ->color('gray')
+                    ->modalHeading(app()->getCurrentScheduledConference()->title)
+                    ->modalDescription('Attendance QR Code')
+                    ->modalSubmitAction(false)
                     ->infolist([
                         View::make('blade')
                             ->view('panel.scheduledConference.resources.registrant-resource.pages.attendance-qr-code', [
                                 'currentScheduledConference' => app()->getCurrentScheduledConference(),
                                 'attendanceRedirectUrl' => route('livewirePageGroup.scheduledConference.pages.attendance'),
                             ])
-                    ])
-                    ->modalSubmitAction(false),
+                    ]),
                 Action::make('enroll_user')
                     ->label('Enroll User')
                     ->url(fn () => RegistrantResource::getUrl('enroll'))
