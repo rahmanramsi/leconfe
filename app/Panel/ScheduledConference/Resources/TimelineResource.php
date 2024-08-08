@@ -106,7 +106,7 @@ class TimelineResource extends Resource
                     ->model(Timeline::class),
                 ActionGroup::make([
                     Action::make('agenda')
-                        ->label('Agendas')
+                        ->label('Agenda List')
                         ->icon('heroicon-m-calendar-days')
                         ->color(Color::Blue)
                         ->url(fn (Model $record) => static::getUrl('agenda', ['record' => $record])),
