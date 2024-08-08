@@ -7,7 +7,11 @@ This project is created to make the conference management seamless including the
 
 ## Features ✨
 
-WIP
+- Manage Multiple Conference Series.
+- Publish Conference Proceedings and Paper.
+- Held scheduled conferences repeatedly easily.
+- Paper Submission Workflow
+- Participant Registration & Attendance
 
 ## Why is this open-source? 🔓
 
