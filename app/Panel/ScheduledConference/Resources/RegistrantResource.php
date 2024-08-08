@@ -7,6 +7,7 @@ use App\Models\User;
 use Filament\Tables;
 use Filament\Forms\Get;
 use App\Facades\Setting;
+use App\Models\Timeline;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
@@ -28,15 +29,20 @@ use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Actions\RestoreAction;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Models\Enums\RegistrationPaymentType;
 use Filament\Tables\Actions\DeleteBulkAction;
 use App\Models\Enums\RegistrationPaymentState;
-use App\Models\Timeline;
 use Filament\Tables\Actions\ForceDeleteAction;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Infolists\Components\Grid as InfolistGrid;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use App\Panel\ScheduledConference\Resources\RegistrantResource\Pages;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Filament\Infolists\Components\Fieldset;
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\Split;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
 
 class RegistrantResource extends Resource
 {
@@ -99,17 +105,43 @@ class RegistrantResource extends Resource
             ->headerActions([
                 Action::make('attendance_qr_code')
                     ->label('Attendance QR Code')
+                    ->icon('heroicon-m-qr-code')
                     ->color('gray')
                     ->modalHeading(app()->getCurrentScheduledConference()->title)
                     ->modalDescription('Attendance QR Code')
                     ->modalSubmitAction(false)
-                    ->infolist([
-                        View::make('blade')
-                            ->view('panel.scheduledConference.resources.registrant-resource.pages.attendance-qr-code', [
-                                'currentScheduledConference' => app()->getCurrentScheduledConference(),
-                                'attendanceRedirectUrl' => route('livewirePageGroup.scheduledConference.pages.attendance'),
+                    ->infolist(function (Infolist $infolist): Infolist {
+                        return $infolist
+                            ->record(app()->getCurrentScheduledConference())
+                            ->schema([
+                                Split::make([
+                                    View::make('blade')
+                                        ->view('panel.scheduledConference.resources.registrant-resource.pages.attendance-qr-code', [
+                                            'currentScheduledConference' => app()->getCurrentScheduledConference(),
+                                            'attendanceRedirectUrl' => route('livewirePageGroup.scheduledConference.pages.attendance'),
+                                            'QrCodeImageSize' => 400,
+                                            'QrCodeFooterText' => 'Please scan this QR Code to confirm your attendance.',
+                                        ]),
+                                    Fieldset::make('')
+                                        ->schema([
+                                            TextEntry::make('title'),
+                                            TextEntry::make('description')
+                                                ->getStateUsing(fn (Model $record) => $record->getMeta('description'))
+                                                ->placeholder('Description Empty')
+                                                ->lineClamp(8),
+                                            InfolistGrid::make(2)
+                                                ->schema([
+                                                    TextEntry::make('date_start')
+                                                        ->date(Setting::get('format_date')),
+                                                    TextEntry::make('date_end')
+                                                        ->date(Setting::get('format_date')),
+                                                ]),
+                                        ])
+                                        ->columns(1),
+                                ])
                             ])
-                    ])
+                            ->columns(1);
+                    })
                     ->visible(fn () => app()->getCurrentScheduledConference()->isAttendanceEnabled()),
                 Action::make('enroll_user')
                     ->label('Enroll User')
