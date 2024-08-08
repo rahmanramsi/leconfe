@@ -2,7 +2,7 @@
 <div>
     <div class="flex justify-center">
         {!! 
-            QrCode::format('png')
+            QrCode::format('svg')
                 ->size(600)
                 ->generate($attendanceRedirectUrl) 
         !!}
