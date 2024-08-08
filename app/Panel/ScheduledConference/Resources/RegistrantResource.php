@@ -31,6 +31,7 @@ use Filament\Tables\Actions\RestoreAction;
 use App\Models\Enums\RegistrationPaymentType;
 use Filament\Tables\Actions\DeleteBulkAction;
 use App\Models\Enums\RegistrationPaymentState;
+use App\Models\Timeline;
 use Filament\Tables\Actions\ForceDeleteAction;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
@@ -108,7 +109,8 @@ class RegistrantResource extends Resource
                                 'currentScheduledConference' => app()->getCurrentScheduledConference(),
                                 'attendanceRedirectUrl' => route('livewirePageGroup.scheduledConference.pages.attendance'),
                             ])
-                    ]),
+                    ])
+                    ->visible(fn () => Timeline::isAttendanceOpen()),
                 Action::make('enroll_user')
                     ->label('Enroll User')
                     ->url(fn () => RegistrantResource::getUrl('enroll'))
