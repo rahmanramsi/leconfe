@@ -40,6 +40,7 @@ class RegistrationSettings extends Component implements HasForms
                             ->inline(false),
                         TinyEditor::make('meta.registration_policy')
                             ->label('Registration Policy')
+                            ->profile('basic')
                             ->minHeight(300)
                             ->disabled(fn () =>  auth()->user()->cannot('RegistrationSetting:edit')),
                     ]),

@@ -49,9 +49,11 @@ class TimelineResource extends Resource
                 ->required(),
             TinyEditor::make('public_details')
                 ->minHeight(200)
+                ->profile('basic')
                 ->hint('Detail that visible to all user'),
             TinyEditor::make('details')
                 ->minHeight(200)
+                ->profile('basic')
                 ->hint('Detail that visible only to participant'),
             Grid::make(2)
                 ->schema([

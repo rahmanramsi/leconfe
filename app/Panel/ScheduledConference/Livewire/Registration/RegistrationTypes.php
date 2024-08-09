@@ -65,6 +65,7 @@ class RegistrationTypes extends Component implements HasTable, HasForms
             TinyEditor::make('meta.description')
                 ->label('Description')
                 ->placeholder('Input description..')
+                ->profile('basic')
                 ->formatStateUsing(fn (string $operation, $record) => $operation === 'edit' ? $record->getMeta('description') : null)
                 ->minHeight(100),
             Checkbox::make('free')

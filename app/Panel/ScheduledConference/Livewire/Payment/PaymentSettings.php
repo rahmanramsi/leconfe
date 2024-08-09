@@ -29,6 +29,7 @@ class PaymentSettings extends Component implements HasForms
                 Section::make()
                     ->schema([
                         TinyEditor::make('meta.payment_policy')
+                            ->profile('basic')
                             ->minHeight(450)
                             ->disabled(fn () =>  auth()->user()->cannot('RegistrationSetting:edit')),
                         Actions::make([

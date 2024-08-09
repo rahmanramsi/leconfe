@@ -61,6 +61,7 @@ class PaymentManuals extends Component implements HasForms, HasTable
             TinyEditor::make('detail')
                 ->placeholder('Input payment details..')
                 ->hint('*Add instruction here.')
+                ->profile('basic')
                 ->minHeight(450)
                 ->required(),
         ];
