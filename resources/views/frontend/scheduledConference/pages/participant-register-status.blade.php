@@ -17,15 +17,13 @@
                     <td class="align-text-top pl-5">:</td>
                     <td class="pl-2">
                         <span @class([
-                            'inline-flex items-center rounded-md px-2 py-1 text-xs font-medium text-white ring-1 ring-inset ring-gray-500/10', 
-                            'bg-green-500' => $userRegistration->getState() === RegistrationPaymentState::Paid->value,
-                            'bg-yellow-500' => $userRegistration->getState() === RegistrationPaymentState::Unpaid->value,
-                            '!bg-red-500' => $userRegistration->trashed(),
+                            'badge', 
+                            'badge-success' => $userRegistration->getState() === RegistrationPaymentState::Paid->value,
+                            'badge-warning' => $userRegistration->getState() === RegistrationPaymentState::Unpaid->value,
+                            'badge-error' => $userRegistration->trashed(),
                         ])>
                             {{ 
-                                $userRegistration->trashed() ? 
-                                'Failed' :
-                                $userRegistration->getState();
+                                $userRegistration->trashed() ?  'Failed' : $userRegistration->getState();
                             }}
                         </span>
                     </td>
@@ -76,6 +74,16 @@
                     </tr>
                 @endif
             </table>
+            <div class="mt-4" x-data="{ isCancelling: false }">
+                <button class="btn btn-error btn-sm" x-show="!isCancelling" x-on:click="isCancelling = true">Cancel Registration</button>
+                <div class="space-y-2" x-show="isCancelling" x-cloak>
+                    <p class="mr-2">Are you sure you want to cancel your registration?</p>
+                    <div class="flex items-center gap-2">
+                        <button class="btn btn-sm btn-outline" x-on:click="isCancelling = false">No</button>
+                        <button class="btn btn-error btn-sm" wire:click="cancel">Yes</button>
+                    </div>
+                </div>
+            </div>
             @if ($userRegistration->getState() === RegistrationPaymentState::Unpaid->value && !$userRegistration->trashed())
                 <hr class="my-8">
                 <div class="w-full">

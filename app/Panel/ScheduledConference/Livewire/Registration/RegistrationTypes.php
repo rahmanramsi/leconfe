@@ -63,6 +63,10 @@ class RegistrationTypes extends Component implements HasTable, HasForms
                             ->minValue(1)
                             ->required(),
                     ]),
+                Select::make('level')
+                    ->label('Level')
+                    ->options(RegistrationType::getLevelOptions())
+                    ->required(),
                 Textarea::make('meta.description')
                     ->label('Description')
                     ->autosize()

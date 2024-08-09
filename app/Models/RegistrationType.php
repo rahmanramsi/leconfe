@@ -16,10 +16,14 @@ class RegistrationType extends Model
 {
     use BelongsToScheduledConference, HasShortflakePrimary, Cachable, Metable, HasFactory;
 
+    public const LEVEL_PARTICIPANT = 1; 
+    public const LEVEL_AUTHOR = 2;
+
     protected $fillable = [
         'type',
         'cost',
         'quota',
+        'level',
         'currency',
         'active',
         'order_column',
@@ -70,5 +74,13 @@ class RegistrationType extends Model
     public function registration(): HasMany
     {
         return $this->hasMany(Registration::class, 'registration_type_id', 'id');
+    }
+
+    public static function getLevelOptions() : array 
+    {
+        return [
+            self::LEVEL_PARTICIPANT => 'Participant',
+            self::LEVEL_AUTHOR => 'Author',
+        ];
     }
 }
