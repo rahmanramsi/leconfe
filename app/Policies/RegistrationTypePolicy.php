@@ -13,15 +13,9 @@ class RegistrationTypePolicy
      */
     public function viewAny(User $user): bool
     {
-        //
-    }
-
-    /**
-     * Determine whether the user can view the model.
-     */
-    public function view(User $user, RegistrationType $registrationType): bool
-    {
-        //
+        if ($user->can('RegistrationSetting:viewAny')) {
+            return true;
+        }
     }
 
     /**
@@ -29,7 +23,9 @@ class RegistrationTypePolicy
      */
     public function create(User $user): bool
     {
-        //
+        if ($user->can('RegistrationSetting:create')) {
+            return true;
+        }
     }
 
     /**
@@ -37,7 +33,9 @@ class RegistrationTypePolicy
      */
     public function update(User $user, RegistrationType $registrationType): bool
     {
-        //
+        if ($user->can('RegistrationSetting:update')) {
+            return true;
+        }
     }
 
     /**
@@ -45,22 +43,8 @@ class RegistrationTypePolicy
      */
     public function delete(User $user, RegistrationType $registrationType): bool
     {
-        //
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, RegistrationType $registrationType): bool
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, RegistrationType $registrationType): bool
-    {
-        //
+        if ($user->can('RegistrationSetting:delete')) {
+            return true;
+        }
     }
 }

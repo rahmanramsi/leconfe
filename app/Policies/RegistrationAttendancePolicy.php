@@ -13,15 +13,9 @@ class RegistrationAttendancePolicy
      */
     public function viewAny(User $user): bool
     {
-        //
-    }
-
-    /**
-     * Determine whether the user can view the model.
-     */
-    public function view(User $user, RegistrationAttendance $registrationAttendance): bool
-    {
-        //
+        if ($user->can('Attendance:viewAny')) {
+            return true;
+        }
     }
 
     /**
@@ -29,7 +23,9 @@ class RegistrationAttendancePolicy
      */
     public function create(User $user): bool
     {
-        //
+        if ($user->can('Attendance:create')) {
+            return true;
+        }
     }
 
     /**
@@ -37,7 +33,9 @@ class RegistrationAttendancePolicy
      */
     public function update(User $user, RegistrationAttendance $registrationAttendance): bool
     {
-        //
+        if ($user->can('Attendance:update')) {
+            return true;
+        }
     }
 
     /**
@@ -45,22 +43,8 @@ class RegistrationAttendancePolicy
      */
     public function delete(User $user, RegistrationAttendance $registrationAttendance): bool
     {
-        //
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, RegistrationAttendance $registrationAttendance): bool
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, RegistrationAttendance $registrationAttendance): bool
-    {
-        //
+        if ($user->can('Attendance:delete')) {
+            return true;
+        }
     }
 }

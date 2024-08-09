@@ -13,23 +13,19 @@ class RegistrationPolicy
      */
     public function viewAny(User $user): bool
     {
-        //
+        if ($user->can('Registration:viewAny')) {
+            return true;
+        }
     }
 
     /**
-     * Determine whether the user can view the model.
+     * Determine whether the user can enroll models.
      */
-    public function view(User $user, Registration $registration): bool
+    public function enroll(User $user): bool
     {
-        //
-    }
-
-    /**
-     * Determine whether the user can create models.
-     */
-    public function create(User $user): bool
-    {
-        //
+        if ($user->can('Registration:enroll')) {
+            return true;
+        }
     }
 
     /**
@@ -37,7 +33,9 @@ class RegistrationPolicy
      */
     public function update(User $user, Registration $registration): bool
     {
-        //
+        if ($user->can('Registration:update')) {
+            return true;
+        }
     }
 
     /**
@@ -45,22 +43,8 @@ class RegistrationPolicy
      */
     public function delete(User $user, Registration $registration): bool
     {
-        //
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, Registration $registration): bool
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Registration $registration): bool
-    {
-        //
+        if ($user->can('Registration:delete')) {
+            return true;
+        }
     }
 }

@@ -59,7 +59,7 @@ class RegistrantResource extends Resource
     public static function canAccess(): bool
     {
         $user = auth()->user();
-        if ($user->can('Registrant:viewAny')) {
+        if ($user->can('Registration:viewAny')) {
             return true;
         }
         return false;
@@ -81,8 +81,8 @@ class RegistrantResource extends Resource
                             ->label('Paid Date')
                             ->placeholder('Select registration paid date..')
                             ->prefixIcon('heroicon-m-calendar')
-                            ->formatStateUsing(fn () => now())
-                            ->visible(fn (Get $get): bool => $get('state') === RegistrationPaymentState::Paid->value)
+                            ->formatStateUsing(fn() => now())
+                            ->visible(fn(Get $get): bool => $get('state') === RegistrationPaymentState::Paid->value)
                             ->required(),
                     ])
                     ->mutateRelationshipDataBeforeSaveUsing(function (?array $data) {
@@ -100,7 +100,7 @@ class RegistrantResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn (Builder $query) => $query->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId()))
+            ->modifyQueryUsing(fn(Builder $query) => $query->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId()))
             ->heading('Registrant List')
             ->headerActions([
                 Action::make('attendance_qr_code')
@@ -126,7 +126,7 @@ class RegistrantResource extends Resource
                                         ->schema([
                                             TextEntry::make('title'),
                                             TextEntry::make('description')
-                                                ->getStateUsing(fn (Model $record) => $record->getMeta('description'))
+                                                ->getStateUsing(fn(Model $record) => $record->getMeta('description'))
                                                 ->placeholder('Description Empty')
                                                 ->lineClamp(8),
                                             InfolistGrid::make(2)
@@ -142,11 +142,11 @@ class RegistrantResource extends Resource
                             ])
                             ->columns(1);
                     })
-                    ->visible(fn () => app()->getCurrentScheduledConference()->isAttendanceEnabled()),
+                    ->visible(fn() => app()->getCurrentScheduledConference()->isAttendanceEnabled()),
                 Action::make('enroll_user')
                     ->label('Enroll User')
-                    ->url(fn () => RegistrantResource::getUrl('enroll'))
-                    ->authorize('Registrant:enroll')
+                    ->url(fn() => RegistrantResource::getUrl('enroll'))
+                    ->authorize('Registration:enroll')
             ])
             ->columns([
                 SpatieMediaLibraryImageColumn::make('user.profile')
@@ -160,7 +160,7 @@ class RegistrantResource extends Resource
                         $name = Str::of(Filament::getUserName($record->user))
                             ->trim()
                             ->explode(' ')
-                            ->map(fn (string $segment): string => filled($segment) ? mb_substr($segment, 0, 1) : '')
+                            ->map(fn(string $segment): string => filled($segment) ? mb_substr($segment, 0, 1) : '')
                             ->join(' ');
 
                         return 'https://ui-avatars.com/api/?name=' . urlencode($name) . '&color=FFFFFF&background=111827&font-size=0.33';
@@ -188,11 +188,11 @@ class RegistrantResource extends Resource
                 TextColumn::make('registrationPayment.state')
                     ->label('State')
                     ->badge()
-                    ->color(fn (Model $record) => RegistrationPaymentState::from($record->getState())->getColor()),
+                    ->color(fn(Model $record) => RegistrationPaymentState::from($record->getState())->getColor()),
                 TextColumn::make('deleted_at')
                     ->label('Status')
                     ->placeholder('Valid')
-                    ->formatStateUsing(fn () => "Trashed")
+                    ->formatStateUsing(fn() => "Trashed")
                     ->badge()
                     ->color(Color::Red),
                 TextColumn::make('created_at')
@@ -203,7 +203,7 @@ class RegistrantResource extends Resource
             ->emptyStateHeading('No Registrant')
             ->filters([
                 SelectFilter::make('type')
-                    ->relationship('RegistrationType', 'type', modifyQueryUsing: fn ($query) => $query->where('active', '!=', false))
+                    ->relationship('RegistrationType', 'type', modifyQueryUsing: fn($query) => $query->where('active', '!=', false))
                     ->multiple()
                     ->preload(),
             ])
@@ -212,29 +212,29 @@ class RegistrantResource extends Resource
                     ->label('Decision')
                     ->modalHeading('Paid Status Decision')
                     ->modalWidth('lg')
-                    ->authorize('Registrant:edit'),
+                    ->authorize('Registration:edit'),
                 ActionGroup::make([
                     Action::make('attendance')
                         ->label('Attendance')
                         ->icon('heroicon-m-calendar-days')
                         ->color(Color::Blue)
-                        ->url(fn (Model $record) => static::getUrl('attendance', ['record' => $record]))
-                        ->visible(fn (Model $record) => ($record->registrationPayment->state === RegistrationPaymentState::Paid->value) && app()->getCurrentScheduledConference()->isAttendanceEnabled())
-                        ->authorize('Registrant:edit'),
+                        ->url(fn(Model $record) => static::getUrl('attendance', ['record' => $record]))
+                        ->visible(fn(Model $record) => ($record->registrationPayment->state === RegistrationPaymentState::Paid->value) && app()->getCurrentScheduledConference()->isAttendanceEnabled())
+                        ->authorize('Registration:edit'),
                     DeleteAction::make()
                         ->label('Trash')
-                        ->authorize('Registrant:delete'),
+                        ->authorize('Registration:delete'),
                     RestoreAction::make()
                         ->color(Color::Green)
-                        ->authorize('Registrant:delete'),
+                        ->authorize('Registration:delete'),
                     ForceDeleteAction::make()
                         ->label('Delete')
-                        ->authorize('Registrant:delete'),
+                        ->authorize('Registration:delete'),
                 ]),
             ])
             ->bulkActions([
                 DeleteBulkAction::make()
-                    ->authorize('Registrant:delete'),
+                    ->authorize('Registration:delete'),
             ])
             ->groups([
                 Group::make('registrationPayment.name')

@@ -44,7 +44,7 @@ class EnrollUser extends ListRecords
     public static function canAccess(array $parameters = []): bool
     {
         $user = auth()->user();
-        if ($user->can('Registrant:enroll')) {
+        if ($user->can('Registration:enroll')) {
             return true;
         }
         return false;
@@ -119,7 +119,7 @@ class EnrollUser extends ListRecords
                 ->searchable()
                 ->required()
                 ->rules([
-                    fn (): Closure => function (string $attribute, $value, Closure $fail) {
+                    fn(): Closure => function (string $attribute, $value, Closure $fail) {
                         $registrationType = RegistrationType::findOrFail($value);
                         if ($registrationType->getQuotaLeft() <= 0) {
                             $fail($registrationType->type . ' quota has ran out!');
@@ -143,8 +143,8 @@ class EnrollUser extends ListRecords
                         ->label('Paid Date')
                         ->placeholder('Select registration paid date..')
                         ->prefixIcon('heroicon-m-calendar')
-                        ->formatStateUsing(fn () => now())
-                        ->visible(fn (Get $get) => $get('registrationPayment.state') === RegistrationPaymentState::Paid->value)
+                        ->formatStateUsing(fn() => now())
+                        ->visible(fn(Get $get) => $get('registrationPayment.state') === RegistrationPaymentState::Paid->value)
                         ->required()
                 ])
                 ->columns(1),
@@ -172,7 +172,7 @@ class EnrollUser extends ListRecords
                             $name = Str::of(Filament::getUserName($record))
                                 ->trim()
                                 ->explode(' ')
-                                ->map(fn (string $segment): string => filled($segment) ? mb_substr($segment, 0, 1) : '')
+                                ->map(fn(string $segment): string => filled($segment) ? mb_substr($segment, 0, 1) : '')
                                 ->join(' ');
 
                             return 'https://ui-avatars.com/api/?name=' . urlencode($name) . '&color=FFFFFF&background=111827&font-size=0.33';
@@ -185,12 +185,12 @@ class EnrollUser extends ListRecords
                         TextColumn::make('full_name')
                             ->weight(FontWeight::Medium)
                             ->searchable(
-                                query: fn ($query, $search) => $query
+                                query: fn($query, $search) => $query
                                     ->where('given_name', 'LIKE', "%{$search}%")
                                     ->orWhere('family_name', 'LIKE', "%{$search}%")
                             )
                             ->sortable(
-                                query: fn ($query, $direction) => $query
+                                query: fn($query, $direction) => $query
                                     ->orderBy('given_name', $direction)
                                     ->orderBy('family_name', $direction)
                             ),
@@ -206,7 +206,7 @@ class EnrollUser extends ListRecords
                             ->wrap()
                             ->color('gray')
                             ->icon('heroicon-s-building-library')
-                            ->getStateUsing(fn (User $record) => $record->getMeta('affiliation')),
+                            ->getStateUsing(fn(User $record) => $record->getMeta('affiliation')),
                     ]),
                 ])
             ])
@@ -218,7 +218,7 @@ class EnrollUser extends ListRecords
                     ->color('gray')
                     ->button()
                     ->model(Registration::class)
-                    ->form(fn (?Model $record) => static::enrollForm($record))
+                    ->form(fn(?Model $record) => static::enrollForm($record))
                     ->createAnother(false)
                     ->modalSubmitActionLabel('Enroll')
                     ->mutateFormDataUsing(function (Model $record, $data) { // record are user model
