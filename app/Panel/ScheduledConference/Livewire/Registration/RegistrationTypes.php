@@ -4,7 +4,6 @@ namespace App\Panel\ScheduledConference\Livewire\Registration;
 
 use Filament\Forms\Get;
 use Livewire\Component;
-use App\Facades\Setting;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\RegistrationType;

@@ -7,7 +7,6 @@
   - 'DiscussionTopic:create'
   - 'DiscussionTopic:delete'
   - 'DiscussionTopic:update'
-  - 'Payment:update'
   - 'Permission:assign'
   - 'Plugin:create'
   - 'Plugin:delete'
@@ -88,7 +87,7 @@
   - 'Session:create'
   - 'Session:update'
   - 'Session:delete'
-'Conference updateor':
+'Conference Editor':
   - 'Announcement:create'
   - 'Announcement:delete'
   - 'Announcement:update'
@@ -114,8 +113,8 @@
   - 'Submission:declineAbstract'
   - 'Submission:declinePaper'
   - 'Submission:delete'
-  - 'Submission:updateing'
-  - 'Submission:updateReviewer'
+  - 'Submission:editing'
+  - 'Submission:editReviewer'
   - 'Submission:emailReviewer'
   - 'Submission:publish'
   - 'Submission:reinstateReviewer'
