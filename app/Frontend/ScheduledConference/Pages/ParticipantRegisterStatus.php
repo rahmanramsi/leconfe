@@ -24,9 +24,9 @@ class ParticipantRegisterStatus extends Page
     {
         $isLogged = auth()->check();
         $userRegistration = !$isLogged ? null : Registration::withTrashed()
-            ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
-            ->where('user_id', auth()->user()->id)
+            ->whereUserId(auth()->user()->id)
             ->first();
+
         if (!$userRegistration)
             return redirect(route(ParticipantRegister::getRouteName()));
     }
@@ -69,6 +69,16 @@ class ParticipantRegisterStatus extends Page
             route(Home::getRouteName()) => 'Home',
             'Registration Status',
         ];
+    }
+
+    public function cancel()
+    {
+        Registration::withTrashed()
+            ->whereUserId(auth()->user()->id)
+            ->first()
+            ->forceDelete();
+
+        return redirect(route(ParticipantRegister::getRouteName()));
     }
 
     public static function routes(PageGroup $pageGroup): void

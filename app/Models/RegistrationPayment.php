@@ -16,7 +16,6 @@ class RegistrationPayment extends Model
     use BelongsToScheduledConference, HasShortflakePrimary, Cachable, Metable, HasFactory;
 
     protected $fillable = [
-        'registration_id',
         'type',
         'name',
         'description',
@@ -24,6 +23,10 @@ class RegistrationPayment extends Model
         'currency',
         'state',
         'paid_at',
+    ];
+
+    protected $casts = [
+        'paid_at' => 'date',
     ];
 
     public static function getTypes()

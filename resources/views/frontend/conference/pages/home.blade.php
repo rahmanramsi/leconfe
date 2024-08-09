@@ -72,7 +72,7 @@
                                         {!! $scheduledConference->getMeta('summary') !!}
                                     </div>
                                 @endif
-                                <a href="{{ $currentScheduledConference->getHomeUrl() }}" class="link link-primary text-sm">View Current Event</a>
+                                <a href="{{ $scheduledConference->getHomeUrl() }}" class="link link-primary text-sm">View Current Event</a>
                             </div>
                         </div>
                     @endforeach

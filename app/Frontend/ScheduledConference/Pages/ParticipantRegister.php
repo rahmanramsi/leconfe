@@ -61,14 +61,10 @@ class ParticipantRegister extends Page
 
         $data = $this->validate();
         $registrationType = RegistrationType::where('id', $data['type'])->first();
-        $registrationTypeList = RegistrationType::select('*')
-            ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
-            ->get();
 
-        if ($registrationTypeList->isEmpty()) return;
         if (!$registrationType) return;
-        if ($registrationType->isExpired()) return;
-        if ($registrationType->getQuotaLeft() <= 0) return;
+
+        if (!$registrationType->isOpen()) return;
 
         $this->formData = Arr::only($data, 'type');
         $this->isSubmit = true;
