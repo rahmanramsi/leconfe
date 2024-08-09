@@ -13,7 +13,11 @@ class RegistrationAttendance extends Model
 {
     use BelongsToScheduledConference, HasShortflakePrimary, Cachable, HasFactory;
 
-    protected $guarded = ['id', 'scheduled_conference_id'];
+    protected $fillable = [
+        'timeline_id',
+        'session_id',
+        'registration_id',
+    ];
 
     public function registration(): BelongsTo
     {

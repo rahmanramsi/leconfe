@@ -17,9 +17,11 @@ class Registration extends Model
 {
     use BelongsToScheduledConference, HasShortflakePrimary, Cachable, HasFactory, SoftDeletes;
 
-    protected $guarded = ['id', 'scheduled_conference_id'];
+    protected $fillable = [
+        'user_id',
+        'registration_type_id',
+    ];
 
-    // payment state [paid, unpaid] from registration_payments table
     public function getState(): string
     {
         return $this->registrationPayment->state;

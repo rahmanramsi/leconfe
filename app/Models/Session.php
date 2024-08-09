@@ -18,7 +18,16 @@ class Session extends Model
 {
     use BelongsToScheduledConference, HasShortflakePrimary, Cachable, HasFactory;
 
-    protected $guarded = ['id', 'scheduled_conference_id'];
+    protected $fillable = [
+        'timeline_id',
+        'name',
+        'public_details',
+        'details',
+        'requires_attendance',
+        'date',
+        'time_start',
+        'time_end',
+    ];
 
     public const ATTENDANCE_STATUS_TIMELINE = 'timeline';
     public const ATTENDANCE_STATUS_REQUIRED = 'required';
