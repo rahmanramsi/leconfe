@@ -5,11 +5,9 @@ namespace App\Models;
 use App\Frontend\Conference\Pages\Paper;
 use App\Models\Concerns\HasDOI;
 use App\Models\Concerns\HasTopics;
-use App\Models\Concerns\InteractsWithPayment;
 use App\Models\Enums\SubmissionStage;
 use App\Models\Enums\SubmissionStatus;
 use App\Models\Enums\UserRole;
-use App\Models\Interfaces\HasPayment;
 use App\Models\States\Submission\BaseSubmissionState;
 use App\Models\States\Submission\DeclinedSubmissionState;
 use App\Models\States\Submission\EditingSubmissionState;
@@ -37,9 +35,9 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Tags\HasTags;
 
-class Submission extends Model implements HasMedia, HasPayment, Sortable
+class Submission extends Model implements HasMedia, Sortable
 {
-    use Cachable, HasFactory, HasShortflakePrimary, HasTags, HasTopics, InteractsWithMedia, InteractsWithPayment, Metable, SortableTrait, HasDOI;
+    use Cachable, HasFactory, HasShortflakePrimary, HasTags, HasTopics, InteractsWithMedia, Metable, SortableTrait, HasDOI;
 
     /**
      * The attributes that are mass assignable.
@@ -256,15 +254,6 @@ class Submission extends Model implements HasMedia, HasPayment, Sortable
             SubmissionStatus::Declined => new DeclinedSubmissionState($this),
             SubmissionStatus::Withdrawn => new WithdrawnSubmissionState($this),
             default => throw new \Exception('Invalid submission status'),
-        };
-    }
-
-    public function hasPaymentProcess(): bool
-    {
-        return $this->conference->getMeta('payment.enabled') && match ($this->status) {
-            SubmissionStatus::OnReview, SubmissionStatus::Editing, SubmissionStatus::Published => true,
-            SubmissionStatus::Incomplete, SubmissionStatus::Queued, SubmissionStatus::Withdrawn, SubmissionStatus::Declined => false,
-            default => false,
         };
     }
 
