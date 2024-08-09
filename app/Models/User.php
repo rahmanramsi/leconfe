@@ -133,7 +133,8 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasMedia,
     {
         return $this->hasMany(Registration::class);
     }
-    
+
+   
     public function getFilamentAvatarUrl(): ?string
     {
         if ($this->hasMedia('profile')) {

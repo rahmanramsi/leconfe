@@ -157,11 +157,6 @@ class Conference extends Model implements HasAvatar, HasMedia, HasName
         return route('livewirePageGroup.conference.pages.home', ['conference' => $this->path]);
     }
 
-    public function getSupportedCurrencies(): array
-    {
-        return $this->getMeta('payment.supported_currencies') ?? ['usd'];
-    }
-
     public function hasThumbnail(): bool
     {
         return $this->getMedia('thumbnail')->isNotEmpty();
@@ -183,7 +178,6 @@ class Conference extends Model implements HasAvatar, HasMedia, HasName
             'settings_default_language' => 'en',
             'settings_languages' => ['en'],
             'page_footer' => view('frontend.examples.footer')->render(),
-            'workflow.payment.supported_currencies' => ['usd'],
             'languages' => ['en'],
         ];
     }

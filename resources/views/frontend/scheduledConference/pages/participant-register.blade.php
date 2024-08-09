@@ -8,67 +8,67 @@
         <div class="mt-6 w-full">
             <div class="flex mb-5 space-x-4">
                 <h1 class="text-xl font-semibold min-w-fit">Participant Registration</h1>
-                <hr class="w-full h-px my-auto bg-gray-200 border-0 dark:bg-gray-700">
+                <hr class="w-full h-px my-auto bg-gray-200 border-0">
             </div>
             @if (!$isSubmit)
                 <form wire:submit='register'>
                     <div class="mt-2 w-full">
-                        <table class="mt-2 table">
-                            <thead class="text-base">
-                                <tr>
-                                    <td>Registration Type</td>
-                                    <td>Quota</td>
-                                    <td>Cost</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($registrationTypeList as $index => $type)
-                                    @if ($type->active)
-                                        <tr @class(['bg-red-100' => $type->isInvalid()])>
-                                            <td>
-                                                <label>
+                        <div class="overflow-x-auto mt-2">
+                            <table class="mt-2 table table-xs sm:table-md">
+                                <thead class="text-base">
+                                    <tr>
+                                        <td>Registration Type</td>
+                                        <td>Quota</td>
+                                        <td>Cost</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($registrationTypeList as $index => $type)
+                                        @if ($type->active)
+                                            <tr>
+                                                <td>
                                                     <strong>{{ $type->type }}</strong>
-                                                    <ul class="text-sm">
-                                                        {{ new Illuminate\Support\HtmlString($type->getMeta('description')) }}
-                                                    </ul>
-                                                </label>
-                                            </td>
-                                            <td>
-                                                <strong>
-                                                    @if ($type->isExpired())
-                                                        Expired!
-                                                    @else
+                                                    <p class="text-xs sm:text-sm">
+                                                        {{ $type->getMeta('description') }}
+                                                    </p>
+                                                </td>
+                                                <td>
+                                                    <strong>
                                                         {{ $type->getPaidParticipantCount() }}/{{ $type->quota }}
-                                                    @endif
-                                                </strong>
-                                            </td>
-                                            <td>
-                                                @php
-                                                    $typeCost = $type->cost;
-                                                    $typeCurrency = Str::upper($type->currency);
-                                                    $typeCostFormatted = money($typeCost, $typeCurrency);
-                                                    $elementID = Str::slug($type->type)
-                                                @endphp
-                                                <input @class(['cursor-pointer' => !$type->isInvalid()]) id="{{ $elementID }}" type="radio" wire:model="type" value="{{ $type->isInvalid() ? $index : $type->id }}" @disabled($type->isInvalid() || !$isLogged)>
-                                                <label @class(['cursor-pointer' => !$type->isInvalid()]) for="{{ $elementID }}">
-                                                    {{ 
-                                                        ($typeCost <= 0 || $typeCurrency === 'FREE') ? 
-                                                        'Free' : "($typeCurrency) $typeCostFormatted"
-                                                    }}
-                                                </label>
+                                                    </strong>
+                                                </td>
+                                                <td>
+                                                    @php
+                                                        $typeCost = $type->cost;
+                                                        $typeCurrency = Str::upper($type->currency);
+                                                        $typeCostFormatted = money($typeCost, $typeCurrency, true);
+                                                        $elementID = Str::slug($type->type)
+                                                    @endphp
+                                                    <div class="flex items-center gap-2">
+                                                        @if($isLogged)
+                                                            <input @class(['radio radio-xs radio-primary']) id="{{ $elementID }}" type="radio" wire:model="type" value="{{ $type->id }}" @disabled(!$type->isOpen())>
+                                                        @endif
+                                                        <label @class(['cursor-pointer' => $type->isOpen()]) for="{{ $elementID }}">
+                                                            {{ 
+                                                                ($typeCost <= 0 || $typeCurrency === 'FREE') ? 
+                                                                'Free' : "$typeCostFormatted"
+                                                            }}
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endif
+                                    @endforeach
+                                    @if ($registrationTypeList->isEmpty())
+                                        <tr>
+                                            <td colspan="3" class="text-center">
+                                                Registration type are empty.
                                             </td>
                                         </tr>
                                     @endif
-                                @endforeach
-                                @if ($registrationTypeList->isEmpty())
-                                    <tr>
-                                        <td colspan="3" class="text-center">
-                                            Registration type are empty.
-                                        </td>
-                                    </tr>
-                                @endif
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                         @error('type')
                             <div class="text-red-600 text-sm">
                                 {{ $message }}
@@ -82,7 +82,7 @@
                         @endempty
                         <hr class="my-8">
                         @if ($isLogged)
-                            <p class="mb-2">This is your detailed account information.</p>
+                            <p class="mb-2 font-medium">This is your detailed account information.</p>
                             <table class="w-full text-md">
                                 <tr>
                                     <td>Name</td>
@@ -97,25 +97,25 @@
                                 <tr>
                                     <td>Affiliation</td>
                                     <td>:</td>
-                                    <td>{{ $userModel->getMeta('affiliation', '-') }}</td>
+                                    <td>{{ $userModel->getMeta('affiliation') ?? '-' }}</td>
                                 </tr>
                                 <tr>
                                     <td>Phone</td>
                                     <td>:</td>
-                                    <td>{{ $userModel->getMeta('phone', '-') }}</td>
+                                    <td>{{ $userModel->getMeta('phone',) ?? '-'  }}</td>
                                 </tr>
                                 @if($userCountry)
                                     <tr>
                                         <td>Country</td>
                                         <td>:</td>
-                                        <td>{{ $userCountry->name }} {{ $userCountry->flag }}</td>
+                                        <td>{{ $userCountry->flag . ' ' . $userCountry->name }}</td>
                                     </tr>
                                 @endif
                             </table>
                             <p class="mt-2">If you feel this is not your account, please log out and use your account.</p>
                         @else
                             <p>
-                                You don't have an account, please <x-website::link class="text-blue-600 hover:underline" :href="url('login')">login</x-website::link> first.
+                                You're currently not logged in, please <a  class="link link-primary" href="{{ app()->getLoginUrl() }}">login</a> first.
                             </p>
                         @endif
                         <hr class="my-8">
@@ -135,29 +135,32 @@
                     <p class="mt-2">
                         These are your registration details, please double check and confirm if they are correct.
                     </p>
-                    <table class="mt-2">
-                        <tr>
-                            <td class="align-text-top">Type</td>
-                            <td class="align-text-top pl-5">:</td>
-                            <td class="pl-2">
-                                <strong>{{ $registrationType->type }}</strong>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-text-top">Description</td>
-                            <td class="align-text-top pl-5">:</td>
-                            <td class="pl-2">
-                                {{ new Illuminate\Support\HtmlString($registrationType->getMeta('description')) }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="align-text-top">Cost</td>
-                            <td class="align-text-top pl-5">:</td>
-                            <td class="pl-2">
-                                {{ ($registrationType->cost === 0 || $registrationType->currency === 'free') ? 'Free' : '('.Str::upper($registrationType->currency).') '.money($registrationType->cost, $registrationType->currency) }}
-                            </td>
-                        </tr>
-                    </table>
+                    <div class="overflow-x-auto mt-2">
+                        <table>
+                            <tr>
+                                <td class="align-text-top">Type</td>
+                                <td class="align-text-top pl-5">:</td>
+                                <td class="pl-2">
+                                    <strong>{{ $registrationType->type }}</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="align-text-top">Description</td>
+                                <td class="align-text-top pl-5">:</td>
+                                <td class="pl-2">
+                                    {{ $registrationType->getMeta('description') ?? '-' }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="align-text-top">Cost</td>
+                                <td class="align-text-top pl-5">:</td>
+                                <td class="pl-2">
+                                    {{ ($registrationType->cost === 0 || $registrationType->currency === 'free') ? 'Free' : money($registrationType->cost, $registrationType->currency, true) }}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
                     <p class="mt-2">
                         Is this a mistake? You can <button type="button" class="text-red-500 hover:underline" wire:click="cancel" x-data x-on:click="window.scrollTo(0, 0)">cancel</button> this.
                     </p>
@@ -177,18 +180,18 @@
                         <tr>
                             <td>Affiliation</td>
                             <td>:</td>
-                            <td>{{ $userModel->getMeta('affiliation', '-') }}</td>
+                            <td>{{ $userModel->getMeta('affiliation') ?? '-' }}</td>
                         </tr>
                         <tr>
                             <td>Phone</td>
                             <td>:</td>
-                            <td>{{ $userModel->getMeta('phone', '-') }}</td>
+                            <td>{{ $userModel->getMeta('phone') ?? '-' }}</td>
                         </tr>
                         @if($userCountry)
                             <tr>
                                 <td>Country</td>
                                 <td>:</td>
-                                <td>{{ $userCountry->name }} {{ $userCountry->flag }}</td>
+                                <td>{{ $userCountry->flag . ' ' . $userCountry->name }}</td>
                             </tr>
                         @endif
                     </table>
@@ -216,7 +219,7 @@
     @else
         <div class="my-6 w-full">
             <p class="text-lg">
-                this conference registration are not open.
+                Registration currently closed.
             </p>
         </div>
     @endif

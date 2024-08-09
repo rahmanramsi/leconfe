@@ -258,6 +258,7 @@ class PanelProvider extends ServiceProvider
             $table
                 ->defaultPaginationPageOption(5)
                 ->paginationPageOptions([5, 10, 25, 50]);
+            Table::$defaultDateDisplayFormat = Setting::get('format_date');
         });
 
         TinyEditor::configureUsing(function (TinyEditor $tinyEditor): void {

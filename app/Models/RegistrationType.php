@@ -16,7 +16,26 @@ class RegistrationType extends Model
 {
     use BelongsToScheduledConference, HasShortflakePrimary, Cachable, Metable, HasFactory;
 
-    protected $guarded = ['id', 'scheduled_conference_id'];
+    public const LEVEL_PARTICIPANT = 1; 
+    public const LEVEL_AUTHOR = 2;
+
+    protected $fillable = [
+        'type',
+        'cost',
+        'quota',
+        'level',
+        'currency',
+        'active',
+        'order_column',
+        'opened_at',
+        'closed_at',
+    ];
+
+    protected $casts = [
+        'active' => 'boolean',
+        'opened_at' => 'date',
+        'closed_at' => 'date',
+    ];
 
     public function getRegisteredUserCount()
     {
@@ -38,22 +57,30 @@ class RegistrationType extends Model
     }
 
     public function isQuotaFull()
-    {
+    {   
         return $this->getQuotaLeft() <= 0;
     }
 
+    public function isOpen()
+    {
+        return (now()->greaterThanOrEqualTo($this->opened_at) && !$this->isExpired()) &&  !$this->isQuotaFull();
+    }
+    
     public function isExpired()
     {
-        return Carbon::parse($this->closed_at)->diffInDays(now(), false) > 0;
-    }
-
-    public function isInvalid()
-    {
-        return $this->isQuotaFull() || $this->isExpired();
+        return now()->greaterThan($this->closed_at);
     }
 
     public function registration(): HasMany
     {
         return $this->hasMany(Registration::class, 'registration_type_id', 'id');
+    }
+
+    public static function getLevelOptions() : array 
+    {
+        return [
+            self::LEVEL_PARTICIPANT => 'Participant',
+            self::LEVEL_AUTHOR => 'Author',
+        ];
     }
 }
