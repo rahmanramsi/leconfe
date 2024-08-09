@@ -16,6 +16,8 @@ class RegistrationPolicy
         if ($user->can('Registration:viewAny')) {
             return true;
         }
+
+        return false;
     }
 
     /**
@@ -26,6 +28,8 @@ class RegistrationPolicy
         if ($user->can('Registration:enroll')) {
             return true;
         }
+
+        return false;
     }
 
     /**
@@ -36,6 +40,8 @@ class RegistrationPolicy
         if ($user->can('Registration:update')) {
             return true;
         }
+
+        return false;
     }
 
     /**
@@ -46,5 +52,7 @@ class RegistrationPolicy
         if ($user->can('Registration:delete')) {
             return true;
         }
+
+        return false;
     }
 }

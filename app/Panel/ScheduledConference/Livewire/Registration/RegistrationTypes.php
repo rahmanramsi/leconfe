@@ -141,7 +141,7 @@ class RegistrationTypes extends Component implements HasTable, HasForms
                         return $data;
                     })
                     ->using(fn (array $data) => RegistrationTypeCreateAction::run($data))
-                    ->authorize('RegistrationSetting:create'),
+                    ->authorize('create', RegistrationType::class),
             ])
             ->columns([
                 TextColumn::make('type')
@@ -164,8 +164,7 @@ class RegistrationTypes extends Component implements HasTable, HasForms
                     ->date(Setting::get('format_date'))
                     ->color(fn (Model $record) => $record->isExpired() ? Color::Red : null),
                 ToggleColumn::make('active')
-                    ->onColor(Color::Green)
-                    ->offColor(Color::Red),
+                    ->disabled(fn (Model $record) => auth()->user()->cannot('update', $record)),
             ])
             ->emptyStateHeading('Type are empty')
             ->emptyStateDescription('Create a Type to get started.')
@@ -180,16 +179,12 @@ class RegistrationTypes extends Component implements HasTable, HasForms
                         }
                         return $data;
                     })
-                    ->authorize('RegistrationSetting:edit'),
+                    ->authorize(fn (Model $record) => auth()->user()->can('update', $record)),
                 ActionGroup::make([
                     DeleteAction::make()
                         ->using(fn (Model $record) => RegistrationTypeDeleteAction::run($record))
-                        ->authorize('RegistrationSetting:delete'),
+                        ->authorize(fn (Model $record) => auth()->user()->can('delete', $record)),
                 ])
-            ])
-            ->bulkActions([
-                DeleteBulkAction::make()
-                    ->authorize('RegistrationSetting:delete'),
             ])
             ->paginated(false);
     }

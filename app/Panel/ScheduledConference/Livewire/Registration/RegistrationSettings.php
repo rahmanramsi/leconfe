@@ -37,12 +37,13 @@ class RegistrationSettings extends Component implements HasForms
                     ->schema([
                         Toggle::make('meta.registration_attend')
                             ->label('Attendance Feature')
-                            ->inline(false),
+                            ->inline(false)
+                            ->disabled(fn () => auth()->user()->cannot('RegistrationSetting:update')),
                         TinyEditor::make('meta.registration_policy')
                             ->label('Registration Policy')
                             ->profile('basic')
                             ->minHeight(300)
-                            ->disabled(fn () =>  auth()->user()->cannot('RegistrationSetting:edit')),
+                            ->disabled(fn () => auth()->user()->cannot('RegistrationSetting:update')),
                     ]),
                 Actions::make([
                     Action::make('Save changes')
@@ -58,7 +59,7 @@ class RegistrationSettings extends Component implements HasForms
                                 throw $th;
                             }
                         })
-                        ->authorize('RegistrationSetting:edit'),
+                        ->authorize('RegistrationSetting:update'),
                 ])->alignRight()
             ])->statePath('formData');
     }

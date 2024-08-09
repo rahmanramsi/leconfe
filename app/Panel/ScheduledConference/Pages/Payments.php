@@ -27,11 +27,7 @@ class Payments extends Page
 
     public static function canAccess(): bool
     {
-        $user = auth()->user();
-        if($user->can('RegistrationSetting:viewAny')) {
-            return true;
-        }
-        return false;
+        return auth()->user()->can('PaymentSetting:viewAny');
     }
 
     public function infolist(Infolist $infolist): Infolist

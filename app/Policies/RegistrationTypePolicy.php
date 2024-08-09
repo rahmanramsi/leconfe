@@ -16,6 +16,8 @@ class RegistrationTypePolicy
         if ($user->can('RegistrationSetting:viewAny')) {
             return true;
         }
+
+        return false;
     }
 
     /**
@@ -26,6 +28,8 @@ class RegistrationTypePolicy
         if ($user->can('RegistrationSetting:create')) {
             return true;
         }
+
+        return false;
     }
 
     /**
@@ -36,6 +40,8 @@ class RegistrationTypePolicy
         if ($user->can('RegistrationSetting:update')) {
             return true;
         }
+
+        return false;
     }
 
     /**
@@ -46,5 +52,7 @@ class RegistrationTypePolicy
         if ($user->can('RegistrationSetting:delete')) {
             return true;
         }
+
+        return false;
     }
 }

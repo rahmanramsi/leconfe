@@ -16,26 +16,32 @@ class RegistrationAttendancePolicy
         if ($user->can('Attendance:viewAny')) {
             return true;
         }
+
+        return false;
     }
 
     /**
-     * Determine whether the user can create models.
+     * Determine whether the user can mark in models.
      */
-    public function create(User $user): bool
+    public function markIn(User $user): bool
     {
-        if ($user->can('Attendance:create')) {
+        if ($user->can('Attendance:markIn')) {
             return true;
         }
+
+        return false;
     }
 
     /**
-     * Determine whether the user can update the model.
+     * Determine whether the user can mark out in model.
      */
-    public function update(User $user, RegistrationAttendance $registrationAttendance): bool
+    public function markOut(User $user): bool
     {
-        if ($user->can('Attendance:update')) {
+        if ($user->can('Attendance:markOut')) {
             return true;
         }
+
+        return false;
     }
 
     /**
@@ -46,5 +52,7 @@ class RegistrationAttendancePolicy
         if ($user->can('Attendance:delete')) {
             return true;
         }
+
+        return false;
     }
 }

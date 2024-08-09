@@ -24,6 +24,7 @@ use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
 use App\Forms\Components\TinyEditor;
+use App\Models\Announcement;
 use App\Panel\ScheduledConference\Livewire\Registration\RegistrationTypePage;
 use Filament\Tables\Actions\ActionGroup;
 use Illuminate\Support\Collection;
@@ -84,7 +85,7 @@ class PaymentManuals extends Component implements HasForms, HasTable
                     ->modalWidth('4xl')
                     ->model(PaymentManual::class)
                     ->form(static::manualPaymentForm())
-                    ->authorize('RegistrationSetting:create')
+                    ->authorize('create', PaymentManual::class)
             ])
             ->columns([
                 TextColumn::make('name')
@@ -112,15 +113,11 @@ class PaymentManuals extends Component implements HasForms, HasTable
             ->actions([
                 EditAction::make()
                     ->form(static::manualPaymentForm())
-                    ->authorize('RegistrationSetting:edit'),
+                    ->authorize(fn (Model $record) => auth()->user()->can('update', $record)),
                 ActionGroup::make([
                     DeleteAction::make()
-                        ->authorize('RegistrationSetting:delete'),
+                        ->authorize(fn (Model $record) => auth()->user()->can('delete', $record)),
                 ])
-            ])
-            ->bulkActions([
-                DeleteBulkAction::make()
-                    ->authorize('RegistrationSetting:delete'),
             ]);
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Panel\ScheduledConference\Resources\TimelineResource\Pages;
 
+use App\Models\Session;
 use App\Models\Timeline;
 use Filament\Actions;
 use Filament\Support\Enums\MaxWidth;
@@ -17,11 +18,13 @@ class ManageTimeline extends ListRecords
         return [
             Actions\Action::make('Sessions')
                 ->color('gray')
-                ->url(fn () => static::$resource::getUrl('all-session')),
+                ->url(fn () => static::$resource::getUrl('all-session'))
+                ->authorize('viewAny', Session::class),
             Actions\CreateAction::make()
                 ->modalHeading('Add Timeline')
                 ->modalWidth(MaxWidth::ExtraLarge)
-                ->model(Timeline::class),
+                ->model(Timeline::class)
+                ->authorize('create', Timeline::class),
         ];
     }
 }

@@ -9,16 +9,6 @@ use Illuminate\Auth\Access\Response;
 class PaymentManualPolicy
 {
     /**
-     * Determine whether the user can view any models.
-     */
-    public function viewAny(User $user): bool
-    {
-        if ($user->can('PaymentManual:viewAny')) {
-            return true;
-        }
-    }
-
-    /**
      * Determine whether the user can create models.
      */
     public function create(User $user): bool
@@ -26,6 +16,8 @@ class PaymentManualPolicy
         if ($user->can('PaymentManual:create')) {
             return true;
         }
+
+        return false;
     }
 
     /**
@@ -36,6 +28,8 @@ class PaymentManualPolicy
         if ($user->can('PaymentManual:update')) {
             return true;
         }
+
+        return false;
     }
 
     /**
@@ -46,5 +40,7 @@ class PaymentManualPolicy
         if ($user->can('PaymentManual:delete')) {
             return true;
         }
+
+        return false;
     }
 }

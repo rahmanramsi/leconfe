@@ -73,7 +73,7 @@ class ListAllSession extends Page implements HasTable, HasForms
                     }
                     return $data;
                 })
-                ->authorize('Timeline:create'),
+                ->authorize('create', Session::class),
         ];
     }
 
@@ -142,10 +142,10 @@ class ListAllSession extends Page implements HasTable, HasForms
                     ->modalHeading('Edit Session')
                     ->model(static::$model)
                     ->form(fn (Form $form) => $this->form($form))
-                    ->authorize('Timeline:edit'),
+                    ->authorize(fn (Model $record) => auth()->user()->can('update', $record)),
                 ActionGroup::make([
                     DeleteAction::make()
-                    ->authorize('Timeline:delete'),
+                        ->authorize(fn (Model $record) => auth()->user()->can('delete', $record)),
                 ])
             ])
             ->bulkActions([

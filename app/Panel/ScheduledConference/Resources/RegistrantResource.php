@@ -33,6 +33,7 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Models\Enums\RegistrationPaymentType;
 use Filament\Tables\Actions\DeleteBulkAction;
 use App\Models\Enums\RegistrationPaymentState;
+use App\Models\RegistrationAttendance;
 use Filament\Tables\Actions\ForceDeleteAction;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Infolists\Components\Grid as InfolistGrid;
@@ -58,11 +59,7 @@ class RegistrantResource extends Resource
 
     public static function canAccess(): bool
     {
-        $user = auth()->user();
-        if ($user->can('Registration:viewAny')) {
-            return true;
-        }
-        return false;
+        return auth()->user()->can('viewAny', Registration::class);
     }
 
     public static function form(Form $form): Form
@@ -146,7 +143,7 @@ class RegistrantResource extends Resource
                 Action::make('enroll_user')
                     ->label('Enroll User')
                     ->url(fn() => RegistrantResource::getUrl('enroll'))
-                    ->authorize('Registration:enroll')
+                    ->authorize('enroll', Registration::class)
             ])
             ->columns([
                 SpatieMediaLibraryImageColumn::make('user.profile')
@@ -212,7 +209,7 @@ class RegistrantResource extends Resource
                     ->label('Decision')
                     ->modalHeading('Paid Status Decision')
                     ->modalWidth('lg')
-                    ->authorize('Registration:edit'),
+                    ->authorize(fn (Model $record) => auth()->user()->can('update', $record)),
                 ActionGroup::make([
                     Action::make('attendance')
                         ->label('Attendance')
@@ -220,16 +217,16 @@ class RegistrantResource extends Resource
                         ->color(Color::Blue)
                         ->url(fn(Model $record) => static::getUrl('attendance', ['record' => $record]))
                         ->visible(fn(Model $record) => ($record->registrationPayment->state === RegistrationPaymentState::Paid->value) && app()->getCurrentScheduledConference()->isAttendanceEnabled())
-                        ->authorize('Registration:edit'),
+                        ->authorize(fn () => auth()->user()->can('viewAny', RegistrationAttendance::class)),
                     DeleteAction::make()
                         ->label('Trash')
-                        ->authorize('Registration:delete'),
+                        ->authorize(fn (Model $record) => auth()->user()->can('delete', $record)),
                     RestoreAction::make()
                         ->color(Color::Green)
-                        ->authorize('Registration:delete'),
+                        ->authorize(fn (Model $record) => auth()->user()->can('delete', $record)),
                     ForceDeleteAction::make()
                         ->label('Delete')
-                        ->authorize('Registration:delete'),
+                        ->authorize(fn (Model $record) => auth()->user()->can('delete', $record)),
                 ]),
             ])
             ->bulkActions([

@@ -13,6 +13,7 @@ use App\Tables\Columns\IndexColumn;
 use Filament\Forms\Components\Grid;
 use Filament\Tables\Actions\Action;
 use App\Forms\Components\TinyEditor;
+use App\Models\Session;
 use Filament\Support\Enums\MaxWidth;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
@@ -140,7 +141,8 @@ class TimelineResource extends Resource
                         ->label('Details')
                         ->icon('heroicon-m-calendar-days')
                         ->color(Color::Blue)
-                        ->url(fn (Model $record) => static::getUrl('session', ['record' => $record])),
+                        ->url(fn (Model $record) => static::getUrl('session', ['record' => $record]))
+                        ->authorize(fn (Model $record) => auth()->user()->can('view', $record) && auth()->user()->can('viewAny', Session::class)),
                     DeleteAction::make(),
                 ]),
             ]);

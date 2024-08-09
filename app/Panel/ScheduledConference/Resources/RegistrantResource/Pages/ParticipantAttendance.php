@@ -140,7 +140,8 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
                     } catch (\Throwable $th) {
                         $action->sendFailureNotification();
                     }
-                }),
+                })
+                ->authorize('markIn', RegistrationAttendance::class),
             Actions\Action::make('mark_out_day')
                 ->label('Mark out (Day)')
                 ->icon('heroicon-m-finger-print')
@@ -173,7 +174,8 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
                     } catch (\Throwable $th) {
                         $action->sendFailureNotification();
                     }
-                }),
+                })
+                ->authorize('markOut', RegistrationAttendance::class),
         ];
     }
 
@@ -345,7 +347,8 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
                             $action->sendFailureNotification();
                         }
                     })
-                    ->visible(fn (Model $record) => !$this->registration->isAttended($record) && $record->isRequiresAttendance()),
+                    ->visible(fn (Model $record) => !$this->registration->isAttended($record) && $record->isRequiresAttendance())
+                    ->authorize('markIn', RegistrationAttendance::class),
                 Action::make('mark_out')
                     ->icon('heroicon-m-finger-print')
                     ->color(Color::Red)
@@ -361,7 +364,8 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
 
                         $action->sendSuccessNotification();
                     })
-                    ->visible(fn (Model $record) => $this->registration->isAttended($record) && $record->isRequiresAttendance()),
+                    ->visible(fn (Model $record) => $this->registration->isAttended($record) && $record->isRequiresAttendance())
+                    ->authorize('markOut', RegistrationAttendance::class),
             ])
             ->bulkActions([
                 DeleteBulkAction::make()

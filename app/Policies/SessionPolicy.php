@@ -16,6 +16,20 @@ class SessionPolicy
         if ($user->can('Session:viewAny')) {
             return true;
         }
+
+        return false;
+    }
+
+    /**
+     * Determine whether the user can create models.
+     */
+    public function create(User $user): bool
+    {
+        if ($user->can('Session:create')) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -26,6 +40,8 @@ class SessionPolicy
         if ($user->can('Session:update')) {
             return true;
         }
+
+        return false;
     }
 
     /**
@@ -36,5 +52,7 @@ class SessionPolicy
         if ($user->can('Session:delete')) {
             return true;
         }
+
+        return false;
     }
 }
