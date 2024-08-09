@@ -33,10 +33,6 @@ class ConferenceAgenda extends Page
 
     public function mount()
     {
-        if(!auth()->check()) {
-            return redirect(app()->getLoginUrl() . '?' . http_build_query(['redirect' => 'agenda']));
-        }
-        
         if(!app()->getCurrentScheduledConference()->isAttendanceEnabled()) {
             return abort(404);
         }
@@ -140,7 +136,7 @@ class ConferenceAgenda extends Page
             ->orderBy('date', 'ASC')
             ->get();
 
-        $userRegistration = Registration::withTrashed()
+        $userRegistration = !$isLogged ? null : Registration::withTrashed()
             ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
             ->where('user_id', auth()->user()->id)
             ->first();
