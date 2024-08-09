@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Agenda;
+use App\Models\Session;
 use App\Models\Registration;
 use App\Models\Timeline;
 use App\Models\ScheduledConference;
@@ -19,7 +19,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(ScheduledConference::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Timeline::class)->nullable()->constrained()->cascadeOnDelete();
-            $table->foreignIdFor(Agenda::class)->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Session::class)->nullable()->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Registration::class)->constrained()->cascadeOnDelete();
             $table->timestamps();
         });

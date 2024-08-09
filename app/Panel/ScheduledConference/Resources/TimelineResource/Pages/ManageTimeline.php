@@ -15,9 +15,9 @@ class ManageTimeline extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\Action::make('Agenda list')
+            Actions\Action::make('Sessions')
                 ->color('gray')
-                ->url(fn () => static::$resource::getUrl('all-agenda')),
+                ->url(fn () => static::$resource::getUrl('all-session')),
             Actions\CreateAction::make()
                 ->modalHeading('Add Timeline')
                 ->modalWidth(MaxWidth::ExtraLarge)

@@ -2,7 +2,7 @@
 
 namespace App\Frontend\ScheduledConference\Pages;
 
-use App\Models\Agenda;
+use App\Models\Session;
 use App\Models\Enums\RegistrationPaymentState;
 use App\Models\Timeline;
 use App\Models\Registration;
@@ -12,9 +12,9 @@ use Illuminate\Support\Arr;
 use Rahmanramsi\LivewirePageGroup\PageGroup;
 use Rahmanramsi\LivewirePageGroup\Pages\Page;
 
-class ConferenceAgenda extends Page
+class Agenda extends Page
 {
-    protected static string $view = 'frontend.scheduledConference.pages.conference-agenda';
+    protected static string $view = 'frontend.scheduledConference.pages.agenda';
 
     protected static ?string $slug = 'agenda';
 
@@ -22,14 +22,14 @@ class ConferenceAgenda extends Page
 
     public ?Timeline $timelineData = null;
 
-    public ?Agenda $agendaData = null;
+    public ?Session $sessionData = null;
 
     public bool $isOpen = false;
 
     public ?string $errorMessage = null;
 
     public const ATTEND_TYPE_TIMELINE = 'timeline';
-    public const ATTEND_TYPE_AGENDA = 'agenda';
+    public const ATTEND_TYPE_SESSION = 'session';
 
     public function mount()
     {
@@ -47,11 +47,11 @@ class ConferenceAgenda extends Page
 
             $this->timelineData = $timeline;
         } else {
-            $agenda = Agenda::where('id', $data_id)->first();
+            $session = Session::where('id', $data_id)->first();
 
-            if(!$agenda) return;
+            if(!$session) return;
 
-            $this->agendaData = $agenda;
+            $this->sessionData = $session;
         }
         $this->typeData = $data_type;
         $this->isOpen = true;
@@ -61,7 +61,7 @@ class ConferenceAgenda extends Page
     {
         $this->typeData = null;
         $this->timelineData = null;
-        $this->agendaData = null;
+        $this->sessionData = null;
         $this->errorMessage = false;
         $this->isOpen = false;
     }
@@ -109,16 +109,16 @@ class ConferenceAgenda extends Page
             ]);
         } else {
             
-            $agenda = $this->agendaData;
+            $session = $this->sessionData;
 
-            // agenda yang dipilih tidak valid
-            if(!$agenda) {
+            // session yang dipilih tidak valid
+            if(!$session) {
                 $this->errorMessage = "Invalid event selection";
                 return;
             }
 
             RegistrationAttendance::create([
-                'agenda_id' => $agenda->id,
+                'session_id' => $session->id,
                 'registration_id' => $registration->id,
             ]);
         }
@@ -133,6 +133,7 @@ class ConferenceAgenda extends Page
         $currentScheduledConference = app()->getCurrentScheduledConference();
 
         $timelines = Timeline::where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
+            ->where('hide', false)
             ->orderBy('date', 'ASC')
             ->get();
 
@@ -145,7 +146,7 @@ class ConferenceAgenda extends Page
 
         $typeData = $this->typeData ?? null;
         $timelineData = $this->timelineData ?? null;
-        $agendaData = $this->agendaData ?? null;
+        $sessionData = $this->sessionData ?? null;
 
         return [
             'isLogged' => $isLogged,
@@ -155,7 +156,7 @@ class ConferenceAgenda extends Page
             'timelines' => $timelines,
             'typeData' => $typeData,
             'timelineData' => $timelineData,
-            'agendaData' => $agendaData,
+            'sessionData' => $sessionData,
             'errorMessage' => $this->errorMessage,
         ];
     }
@@ -164,7 +165,7 @@ class ConferenceAgenda extends Page
     {
         return [
             route(Home::getRouteName()) => 'Home',
-            'Participant Attendance',
+            'Agenda',
         ];
     }
 

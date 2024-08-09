@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
-use App\Models\Agenda;
+use App\Models\Session;
 use App\Facades\Setting;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
@@ -96,30 +96,30 @@ class Timeline extends Model
 
     public function getEarliestTime(): ?Carbon
     {
-        $earliest_agenda = $this->agendas()
+        $earliest_session = $this->sessions()
             ->orderBy('time_start', 'ASC')
             ->limit(1)
             ->first();
 
-        if(!$earliest_agenda) {
+        if(!$earliest_session) {
             return now()->subDays(60);
         }
 
-        return $earliest_agenda->date_start;
+        return $earliest_session->date_start;
     }
 
     public function getLatestTime(): ?Carbon
     {
-        $latest_agenda = $this->agendas()
+        $latest_session = $this->sessions()
             ->orderBy('time_end', 'DESC')
             ->limit(1)
             ->first();
 
-        if(!$latest_agenda) {
+        if(!$latest_session) {
             return now()->subDays(30);
         }
 
-        return $latest_agenda->date_end;
+        return $latest_session->date_end;
     }
 
     public function isOngoing(): bool
@@ -158,8 +158,8 @@ class Timeline extends Model
         return true;
     }
 
-    public function agendas(): HasMany
+    public function sessions(): HasMany
     {
-        return $this->hasMany(Agenda::class);
+        return $this->hasMany(Session::class);
     }
 }

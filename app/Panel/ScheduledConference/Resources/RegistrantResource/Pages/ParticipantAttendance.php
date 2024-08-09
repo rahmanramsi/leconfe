@@ -4,7 +4,7 @@ namespace App\Panel\ScheduledConference\Resources\RegistrantResource\Pages;
 
 use Carbon\Carbon;
 use Filament\Actions;
-use App\Models\Agenda;
+use App\Models\Session;
 use Filament\Forms\Get;
 use App\Facades\Setting;
 use App\Models\Timeline;
@@ -36,7 +36,7 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
 {
     use InteractsWithForms, InteractsWithTable;
 
-    protected static ?string $model = Agenda::class;
+    protected static ?string $model = Session::class;
 
     protected static string $resource = RegistrantResource::class;
 
@@ -221,10 +221,10 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
                             ->orderBy('time_end', $direction);
                     }),
                 TextColumn::make('name')
-                    ->label('Agenda name')
+                    ->label('Session name')
                     ->searchable(query: function (Builder $query, string $search): Builder {
                         return $query
-                            ->where('agendas.name', 'like', "%{$search}%");
+                            ->where('sessions.name', 'like', "%{$search}%");
                     })
                     ->sortable(),
                 IconColumn::make('requires_attendance')
@@ -275,8 +275,8 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
                             return $userTimelineAttendance->created_at;
                         }
 
-                        if ($userAgendaAttendance = $this->registration->getAttendance($record)) {
-                            return $userAgendaAttendance->created_at;
+                        if ($userSessionAttendance = $this->registration->getAttendance($record)) {
+                            return $userSessionAttendance->created_at;
                         }
 
                         return null;
@@ -297,8 +297,8 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
                     })
                     ->orderQueryUsing(function (Builder $query, string $direction) {
                         return $query
-                            ->select(['agendas.*', 'timelines.date'])
-                            ->leftJoin('timelines', 'timelines.id', '=', 'agendas.timeline_id')
+                            ->select(['sessions.*', 'timelines.date'])
+                            ->leftJoin('timelines', 'timelines.id', '=', 'sessions.timeline_id')
                             ->orderBy('timelines.date', $direction);
                     })
             ])
@@ -332,7 +332,7 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
                             $time = (string) Carbon::parse($record->date)->setTimeFromTimeString($data['attendance_time']);
 
                             RegistrationAttendance::create([
-                                'agenda_id' => $record->id,
+                                'session_id' => $record->id,
                                 'registration_id' => $this->registration->id,
                                 'created_at' => $time,
                                 'updated_at' => $time,

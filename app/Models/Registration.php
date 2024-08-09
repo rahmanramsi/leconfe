@@ -25,7 +25,7 @@ class Registration extends Model
         return $this->registrationPayment->state;
     }
 
-    public function getAttendance(null | Timeline | Agenda $data): ?RegistrationAttendance
+    public function getAttendance(null | Timeline | Session $data): ?RegistrationAttendance
     {
         if(!$data) {
             return null;
@@ -37,14 +37,14 @@ class Registration extends Model
             $attendance = $attendance->where('timeline_id', $data->id);
         }
 
-        if($data instanceof Agenda) {
-            $attendance = $attendance->where('agenda_id', $data->id);
+        if($data instanceof Session) {
+            $attendance = $attendance->where('session_id', $data->id);
         }
 
         return $attendance->first();
     }
 
-    public function isAttended(null | Timeline | Agenda $data): bool
+    public function isAttended(null | Timeline | Session $data): bool
     {
         if(!$this->getAttendance($data)) {
             return false;

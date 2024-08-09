@@ -14,7 +14,7 @@ use App\Models\Concerns\BelongsToScheduledConference;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Agenda extends Model
+class Session extends Model
 {
     use BelongsToScheduledConference, HasShortflakePrimary, Cachable, HasFactory;
 

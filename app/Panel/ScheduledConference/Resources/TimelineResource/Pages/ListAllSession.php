@@ -4,7 +4,7 @@ namespace App\Panel\ScheduledConference\Resources\TimelineResource\Pages;
 
 use Carbon\Carbon;
 use Filament\Actions;
-use App\Models\Agenda;
+use App\Models\Session;
 use App\Facades\Setting;
 use App\Models\Timeline;
 use Filament\Forms\Form;
@@ -33,17 +33,17 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
 use App\Panel\ScheduledConference\Resources\TimelineResource;
 
-class ListAllAgenda extends Page implements HasTable, HasForms
+class ListAllSession extends Page implements HasTable, HasForms
 {
     use InteractsWithTable, InteractsWithForms;
 
-    protected static ?string $model = Agenda::class;
+    protected static ?string $model = Session::class;
 
     protected static string $resource = TimelineResource::class;
 
-    protected static string $view = 'panel.scheduledConference.resources.timeline-resource.pages.list-agenda';
+    protected static string $view = 'panel.scheduledConference.resources.timeline-resource.pages.list-session';
 
-    protected static ?string $title = 'Agenda list';
+    protected static ?string $title = 'Session list';
 
     public function getBreadcrumbs(): array
     {
@@ -62,8 +62,8 @@ class ListAllAgenda extends Page implements HasTable, HasForms
     {
         return [
             Actions\CreateAction::make()
-                ->label('Add agenda')
-                ->modalHeading('Add Agenda')
+                ->label('Add session')
+                ->modalHeading('Add Session')
                 ->model(static::$model)
                 ->form(fn (Form $form) => $this->form($form))
                 ->mutateFormDataUsing(function (array $data) {
@@ -81,7 +81,7 @@ class ListAllAgenda extends Page implements HasTable, HasForms
     {
         return $form
             ->schema([
-                ...ListAgenda::getAgendaForm(),
+                ...self::$resource::getSessionForm(),
                 Select::make('timeline_id')
                     ->label('Belong to timeline')
                     ->options(Timeline::get()->pluck('name', 'id')->toArray())
@@ -106,10 +106,10 @@ class ListAllAgenda extends Page implements HasTable, HasForms
                             ->orderBy('time_end', $direction);
                     }),
                 TextColumn::make('name')
-                    ->label('Agenda name')
+                    ->label('Session name')
                     ->searchable(query: function (Builder $query, string $search): Builder {
                         return $query
-                            ->where('agendas.name', 'like', "%{$search}%");
+                            ->where('sessions.name', 'like', "%{$search}%");
                     })
                     ->sortable(),
                 TextColumn::make('public_details')
@@ -139,7 +139,7 @@ class ListAllAgenda extends Page implements HasTable, HasForms
             ->defaultSort('time_span')
             ->actions([
                 EditAction::make()
-                    ->modalHeading('Edit Agenda')
+                    ->modalHeading('Edit Session')
                     ->model(static::$model)
                     ->form(fn (Form $form) => $this->form($form))
                     ->authorize('Timeline:edit'),
@@ -154,17 +154,17 @@ class ListAllAgenda extends Page implements HasTable, HasForms
             ])
             ->groups([
                 Group::make('timeline.name')
-                    ->label('Timeline')
+                    ->label('')
                     ->getDescriptionFromRecordUsing(fn (Model $record): string => Carbon::parse($record->timeline->date)->format(Setting::get('format_date')))
                     ->orderQueryUsing(function (Builder $query, string $direction) {
                         return $query
-                            ->select(['agendas.*', 'timelines.date'])
-                            ->leftJoin('timelines', 'timelines.id', '=', 'agendas.timeline_id')
+                            ->select(['sessions.*', 'timelines.date'])
+                            ->leftJoin('timelines', 'timelines.id', '=', 'sessions.timeline_id')
                             ->orderBy('timelines.date', $direction);
-                    })
-                    ->collapsible(),
+                    }),
             ])
+            ->groupingSettingsHidden()
             ->defaultGroup('timeline.name')
-            ->paginated(true);
+            ->paginated(false);
     }
 }

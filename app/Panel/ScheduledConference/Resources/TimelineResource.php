@@ -8,28 +8,30 @@ use App\Models\Timeline;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Filament\Support\Colors\Color;
 use App\Tables\Columns\IndexColumn;
 use Filament\Forms\Components\Grid;
+use Filament\Tables\Actions\Action;
+use App\Forms\Components\TinyEditor;
 use Filament\Support\Enums\MaxWidth;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Textarea;
 use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\Rules\Unique;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\TimePicker;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Forms\Components\CheckboxList;
 use App\Panel\ScheduledConference\Resources\TimelineResource\Pages;
-use Filament\Forms\Components\Checkbox;
-use Filament\Support\Colors\Color;
-use Filament\Tables\Actions\Action;
-use Filament\Tables\Columns\IconColumn;
 
 class TimelineResource extends Resource
 {
@@ -38,6 +40,33 @@ class TimelineResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-clock';
 
     protected static ?string $navigationGroup = 'Conference';
+
+    public static function getSessionForm(): array
+    {
+        return [
+            TextInput::make('name')
+                ->label('Session name')
+                ->required(),
+            TinyEditor::make('public_details')
+                ->minHeight(200)
+                ->hint('Detail that visible to all user'),
+            TinyEditor::make('details')
+                ->minHeight(200)
+                ->hint('Detail that visible only to participant'),
+            Grid::make(2)
+                ->schema([
+                    TimePicker::make('time_start')
+                        ->required()
+                        ->before('time_end'),
+                    TimePicker::make('time_end')
+                        ->required()
+                        ->after('time_start'),
+                ]),
+            Checkbox::make('requires_attendance')
+                ->disabled(fn (?Model $record) => (boolean) $record ? $record->timeline->isRequiresAttendance() : false)
+                ->helperText(fn (?Model $record) => $record ? ($record->timeline->isRequiresAttendance() ? 'Timeline are requiring attendance, this is disabled.' : null) : null),
+        ];
+    }
 
     public static function form(Form $form): Form
     {
@@ -80,9 +109,9 @@ class TimelineResource extends Resource
                     ->dateTime(Setting::get('format_date'))
                     ->sortable(),
                 TextColumn::make('name'),
-                TextColumn::make('agendas_count')
-                    ->label('Agenda')
-                    ->counts('agendas')
+                TextColumn::make('sessions_count')
+                    ->label('Session')
+                    ->counts('sessions')
                     ->badge()
                     ->color(Color::Blue)
                     ->alignCenter(),
@@ -96,7 +125,7 @@ class TimelineResource extends Resource
                 ToggleColumn::make('hide')
                     ->label('Hidden'),
             ])
-            ->recordUrl(fn (Model $record) => static::getUrl('agenda', ['record' => $record]))
+            ->recordUrl(fn (Model $record) => static::getUrl('session', ['record' => $record]))
             ->filters([
                 // ...
             ])
@@ -105,11 +134,11 @@ class TimelineResource extends Resource
                     ->modalWidth(MaxWidth::ExtraLarge)
                     ->model(Timeline::class),
                 ActionGroup::make([
-                    Action::make('agenda')
-                        ->label('Agenda List')
+                    Action::make('session')
+                        ->label('Details')
                         ->icon('heroicon-m-calendar-days')
                         ->color(Color::Blue)
-                        ->url(fn (Model $record) => static::getUrl('agenda', ['record' => $record])),
+                        ->url(fn (Model $record) => static::getUrl('session', ['record' => $record])),
                     DeleteAction::make(),
                 ]),
             ]);
@@ -126,8 +155,8 @@ class TimelineResource extends Resource
     {
         return [
             'index' => Pages\ManageTimeline::route('/'),
-            'all-agenda' => Pages\ListAllAgenda::route('/agenda'),
-            'agenda' => Pages\ListAgenda::route('/{record}/agenda'),
+            'all-session' => Pages\ListAllSession::route('/session'),
+            'session' => Pages\ListSession::route('/{record}/session'),
         ];
     }
 }

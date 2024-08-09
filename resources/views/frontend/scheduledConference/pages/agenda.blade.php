@@ -9,19 +9,34 @@
 
     <div class="mt-6">
         <div class="flex mb-5 space-x-4">
-            <h1 class="text-xl font-semibold min-w-fit">Participant Attendance</h1>
+            <h1 class="text-xl font-semibold min-w-fit">Agenda</h1>
             <hr class="w-full h-px my-auto bg-gray-200 border-0 dark:bg-gray-700">
         </div>
-        <p class="mt-4 text-sm">
-            Please select the event below to confirm your attendance.
-        </p>
+        @if ($isParticipant)
+            <p class="mt-4 text-sm">
+                Please select the event below to confirm your attendance.
+            </p>
+        @endif
         <div class="mt-4 relative overflow-x-auto">
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 border" lazy>
-                <tbody>
-                    @foreach ($timelines as $timeline)
-                        @if ($timeline->hide)
-                            @continue
+                <thead>
+                    <tr class="bg-gray-100 border-b dark:bg-gray-700">
+                        <td class="px-6 pl-8 py-2 text-left">Time</td>
+                        <td class="px-6 py-2 text-left">Session Name</td>
+                        @if ($isParticipant)
+                            <td class="px-6 py-2 text-left">Attendance Status</td>
                         @endif
+                    </tr>
+                </thead>
+                <tbody>
+                    @if ($timelines->isEmpty())
+                        <tr>
+                            <td class="px-6 py-4 text-center" colspan="3">
+                                Agenda are empty.
+                            </td>
+                        </tr>
+                    @endif
+                    @foreach ($timelines as $timeline)
                         <tr class="bg-gray-50 border-b dark:bg-gray-800">
                             <td class="px-6 py-4" {!! (!$timeline->canShown() || !$isParticipant) ? "colspan='3'" : "colspan='2'" !!}>
                                 <strong class="block font-medium text-gray-900 dark:text-white">
@@ -72,25 +87,25 @@
                             @endif
                         </tr>
                         @php
-                            $agendas = $timeline
-                                ->agendas()
+                            $sessions = $timeline
+                                ->sessions()
                                 ->orderBy('time_start', 'ASC')
                                 ->orderBy('time_end', 'ASC')
                                 ->get();
                         @endphp
-                        @foreach ($agendas as $agenda)
+                        @foreach ($sessions as $session)
                             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                 <td class="px-6 pl-8 py-4 text-left w-fit text-nowrap">
-                                    {{ $agenda->time_span }}
-                                    @if ($agenda->isOngoing())
+                                    {{ $session->time_span }}
+                                    @if ($session->isOngoing())
                                         <span class="badge badge-success  text-white mx-2">
                                             On going
                                         </span>
-                                    @elseif ($agenda->isFuture())
+                                    @elseif ($session->isFuture())
                                         <span class="badge badge-info text-white mx-2">
                                             Not Started
                                         </span>
-                                    @elseif ($agenda->isPast())
+                                    @elseif ($session->isPast())
                                         <span class="badge mx-2">
                                             Over
                                         </span>
@@ -99,14 +114,14 @@
                                 <th scope="row" class="px-6 py-4 whitespace-nowrap text-left text-wrap" 
                                 x-data="{ open: false }">
                                     <strong class="font-medium text-gray-900 dark:text-white">
-                                        {{ $agenda->name }}
+                                        {{ $session->name }}
                                     </strong>
 
                                     <p class="font-normal text-xs text-gray-500">
-                                        {{ new Illuminate\Support\HtmlString($agenda->public_details) }}
+                                        {{ new Illuminate\Support\HtmlString($session->public_details) }}
                                     </p>
 
-                                    @if (!empty($agenda->details) && $isParticipant)
+                                    @if (!empty($session->details) && $isParticipant)
                                         <div class="flex w-full mt-2 px-4 py-2 rounded hover:!bg-yellow-100 cursor-pointer" style="background-color: #fff8e8;" @click="open = !open">
                                             <x-filament::icon
                                                 icon="heroicon-m-lock-open"
@@ -137,25 +152,25 @@
                                             x-show="open" 
                                             @click.away="open = false"
                                         >
-                                            {{ new Illuminate\Support\HtmlString($agenda->details) }}
+                                            {{ new Illuminate\Support\HtmlString($session->details) }}
                                         </div>
                                     @endif
                                 </th>
-                                <td class="px-4 py-4 text-right align-middle">
-                                    @if ($agenda->isRequiresAttendance() && $isParticipant)
-                                        @if ($agenda->canAttend() && $isParticipant)
-                                            @if ($userRegistration->isAttended($agenda))
+                                @if ($session->isRequiresAttendance() && $isParticipant)
+                                    <td class="px-4 py-4 text-right align-middle">
+                                        @if ($session->canAttend() && $isParticipant)
+                                            @if ($userRegistration->isAttended($session))
                                                 <button class="btn btn-xs btn-disabled no-animation !text-white hover:text-white">
                                                     Confirmed
                                                 </button>
                                             @else
                                                 <button class="btn btn-xs btn-info no-animation text-white hover:text-white " 
-                                                wire:click="attend({{ $agenda->id }}, '{{ static::ATTEND_TYPE_AGENDA }}')">
+                                                wire:click="attend({{ $session->id }}, '{{ static::ATTEND_TYPE_SESSION }}')">
                                                     Attend
                                                 </button>
                                             @endif
                                         @else
-                                            @if ($userRegistration->isAttended($agenda))
+                                            @if ($userRegistration->isAttended($session))
                                                 <button class="btn btn-xs btn-disabled no-animation !text-white hover:text-white">
                                                     Confirmed
                                                 </button>
@@ -165,8 +180,8 @@
                                                 </button>
                                             @endif
                                         @endif
-                                    @endif
-                                </td>
+                                    </td>
+                                @endif
                             </tr>
                         @endforeach
                     @endforeach
@@ -176,7 +191,7 @@
     </div>
     
     {{-- modal --}}
-    @if ($timelineData || $agendaData)
+    @if ($timelineData || $sessionData)
         <div x-data="{ open: @entangle('isOpen') }" x-show="open" class="fixed inset-0 flex items-center justify-center z-50">
             <div wire:click="cancel" class="fixed inset-0 bg-gray-800 opacity-75"></div>
 
@@ -192,9 +207,9 @@
                         <p class="text-gray-600">
                             Are you sure you want attend on <strong>{{ $timelineData->name }}</strong> in <strong>{{ $currentScheduledConference->title }}</strong>?
                         </p>
-                    @elseif($typeData === self::ATTEND_TYPE_AGENDA)
+                    @elseif($typeData === self::ATTEND_TYPE_SESSION)
                         <p class="text-gray-600">
-                            Are you sure you want attend on <strong>{{ $agendaData->name }}</strong> from <strong>{{ $agendaData->timeline->name }}</strong> in <strong>{{ $currentScheduledConference->title }}</strong>?
+                            Are you sure you want attend on <strong>{{ $sessionData->name }}</strong> from <strong>{{ $sessionData->timeline->name }}</strong> in <strong>{{ $currentScheduledConference->title }}</strong>?
                         </p>
                     @else
                         INVALID!

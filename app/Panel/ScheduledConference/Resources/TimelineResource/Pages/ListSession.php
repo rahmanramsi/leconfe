@@ -3,7 +3,7 @@
 namespace App\Panel\ScheduledConference\Resources\TimelineResource\Pages;
 
 use Filament\Actions;
-use App\Models\Agenda;
+use App\Models\Session;
 use App\Facades\Setting;
 use App\Models\Timeline;
 use Filament\Forms\Form;
@@ -34,15 +34,15 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
 use App\Panel\ScheduledConference\Resources\TimelineResource;
 
-class ListAgenda extends Page implements HasTable, HasForms
+class ListSession extends Page implements HasTable, HasForms
 {
     use InteractsWithTable, InteractsWithForms;
 
-    protected static ?string $model = Agenda::class;
+    protected static ?string $model = Session::class;
 
     protected static string $resource = TimelineResource::class;
 
-    protected static string $view = 'panel.scheduledConference.resources.timeline-resource.pages.list-agenda';
+    protected static string $view = 'panel.scheduledConference.resources.timeline-resource.pages.list-session';
 
     public ?Timeline $timeline = null;
 
@@ -74,8 +74,8 @@ class ListAgenda extends Page implements HasTable, HasForms
     {
         return [
             Actions\CreateAction::make()
-                ->label('Add agenda')
-                ->modalHeading('Add Agenda')
+                ->label('Add session')
+                ->modalHeading('Add Session')
                 ->model(static::$model)
                 ->form(fn (Form $form) => $this->form($form))
                 ->mutateFormDataUsing(function (?array $data) {
@@ -87,38 +87,11 @@ class ListAgenda extends Page implements HasTable, HasForms
         ];
     }
 
-    public static function getAgendaForm(): array
-    {
-        return [
-            TextInput::make('name')
-                ->label('Agenda name')
-                ->required(),
-            TinyEditor::make('public_details')
-                ->minHeight(200)
-                ->hint('Detail that visible to all user'),
-            TinyEditor::make('details')
-                ->minHeight(200)
-                ->hint('Detail that visible only to participant'),
-            Grid::make(2)
-                ->schema([
-                    TimePicker::make('time_start')
-                        ->required()
-                        ->before('time_end'),
-                    TimePicker::make('time_end')
-                        ->required()
-                        ->after('time_start'),
-                ]),
-            Checkbox::make('requires_attendance')
-                ->disabled(fn (?Model $record) => (boolean) $record ? $record->timeline->isRequiresAttendance() : false)
-                ->helperText(fn (?Model $record) => $record ? ($record->timeline->isRequiresAttendance() ? 'Timeline are requiring attendance, this is disabled.' : null) : null),
-        ];
-    }
-
     public function form(Form $form): Form
     {
         return $form
             ->schema([
-                ...static::getAgendaForm()
+                ...self::$resource::getSessionForm()
             ])
             ->columns(1);
     }
@@ -139,10 +112,10 @@ class ListAgenda extends Page implements HasTable, HasForms
                             ->orderBy('time_end', $direction);
                     }),
                 TextColumn::make('name')
-                    ->label('Agenda name')
+                    ->label('Session name')
                     ->searchable(query: function (Builder $query, string $search): Builder {
                         return $query
-                            ->where('agendas.name', 'like', "%{$search}%");
+                            ->where('sessions.name', 'like', "%{$search}%");
                     })
                     ->sortable(),
                 TextColumn::make('public_details')
@@ -172,7 +145,7 @@ class ListAgenda extends Page implements HasTable, HasForms
             ->defaultSort('time_span')
             ->actions([
                 EditAction::make()
-                    ->modalHeading('Edit Agenda')
+                    ->modalHeading('Edit Session')
                     ->model(static::$model)
                     ->form(fn (Form $form) => $this->form($form))
                     ->authorize('Timeline:edit'),
