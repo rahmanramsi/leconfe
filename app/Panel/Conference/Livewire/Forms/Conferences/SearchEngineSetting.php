@@ -52,7 +52,7 @@ class SearchEngineSetting extends Component implements HasForms
                         ->action(function (Action $action) {
                             $formData = $this->form->getState();
                             try {
-                                ConferenceUpdateAction::run($this->conference, $formData);
+                                ConferenceUpdateAction::run($this->form->getRecord(), $formData);
                                 $action->sendSuccessNotification();
                             } catch (\Throwable $th) {
                                 $action->sendFailureNotification();

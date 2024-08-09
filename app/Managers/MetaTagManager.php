@@ -2,7 +2,6 @@
 
 namespace App\Managers;
 
-use HTML5;
 use Illuminate\Support\Collection;
 use Illuminate\Support\HtmlString;
 
@@ -12,21 +11,13 @@ class MetaTagManager
 
     public function add(string $name, ?string $content): self
     {
-        $this->metas[$name] = $content;
+        $this->metas[] = [
+            'name' => $name,
+            'content' => e($content)
+        ];
+
 
         return $this;
-    }
-
-    public function remove(string $name): self
-    {
-        unset($this->metas[$name]);
-
-        return $this;
-    }
-
-    public function get(string $name): ?string
-    {
-        return $this->metas[$name] ?? null;
     }
 
     public function all(): Collection
@@ -38,9 +29,14 @@ class MetaTagManager
     {
         return new HtmlString(
             $this->all()
-                ->map(fn ($content, $name) => <<<HTML
-                    <meta name="{$name}" content="{$content}">
-                HTML)
+                ->map(function ($meta){
+                    $name = $meta['name'];
+                    $content = $meta['content'];
+                    
+                    return <<<HTML
+                        <meta name="{$name}" content="$content">
+                    HTML;
+                })
                 ->implode("\n")
         );
     }

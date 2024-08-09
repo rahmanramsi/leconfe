@@ -6,8 +6,9 @@
             </div>
         @endif
 
-        <div class="conferences space-y-4" x-data="{ tab: 'current' }" x-cloak>
-            <div class="conference-current space-y-4" x-show="tab === 'current'">
+        <div class="conferences space-y-4">
+            <x-website::heading-title title="Conference List" />
+            <div class="conference-current space-y-4">
                 @if ($conferences->isNotEmpty())
                     <div class="grid xl:grid-cols-2 gap-6">
                         @foreach ($conferences as $conference)
@@ -28,10 +29,11 @@
                                             {!! $conference->getMeta('summary') !!}
                                         </div>
                                     @endif
-
-                                    <div class="flex items-center gap-2">
-                                        <a href="{{ $conference->getHomeUrl() }}" class="link text-sm">View Conference</a>
-                                        <a href="{{ $conference->getHomeUrl() }}" class="link text-sm">Current Event</a>
+                                    <div class="flex items-center gap-2 text-sm">
+                                        <a href="{{ $conference->getHomeUrl() }}" class="link link-primary">View Conference</a>
+                                        @if($conference->currentScheduledConference)
+                                            <a href="{{ $conference->currentScheduledConference->getHomeUrl() }}" class="link link-primary">View Current Event</a>
+                                        @endif
                                     </div>
                                 </div>
                             </div>

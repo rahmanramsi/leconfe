@@ -8,6 +8,8 @@ use App\Facades\SidebarFacade;
 use App\Models\ScheduledConference;
 use Livewire\Livewire;
 use App\Classes\Settings;
+use App\Console\Kernel as ConsoleKernel;
+use App\Http\Kernel as HttpKernel;
 use App\Listeners\SubmissionEventSubscriber;
 use App\Models\Conference;
 use Illuminate\Support\Str;
@@ -23,6 +25,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Event;
 
 class AppServiceProvider extends ServiceProvider
@@ -67,7 +70,6 @@ class AppServiceProvider extends ServiceProvider
                 $app['config']['app.asset_url']
             );
         });
-
     }
 
     /**
@@ -78,18 +80,26 @@ class AppServiceProvider extends ServiceProvider
         $this->setupModel();
         $this->setupStorage();
         $this->extendStr();
+        $this->extendBlade();
         $this->detectConference();
 
         Event::subscribe(SubmissionEventSubscriber::class);
     }
 
-    protected function extendStr()
+    protected function extendBlade(): void
+    {
+        Blade::directive('hook', function (string $name) {
+            return "<?php echo \App\Facades\Hook::call($name) ?>";
+        });
+    }
+
+    protected function extendStr(): void
     {
         /**
          * Add macro to Str class to mask email address.
          */
         Str::macro('maskEmail', function ($email) {
-            if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 return $email;
             }
 
@@ -105,7 +115,7 @@ class AppServiceProvider extends ServiceProvider
         });
     }
 
-    protected function setupModel()
+    protected function setupModel(): void
     {
         // As these are concerned with application correctness,
         // leave them enabled all the time.
@@ -117,14 +127,14 @@ class AppServiceProvider extends ServiceProvider
         Model::preventLazyLoading(!$this->app->isProduction());
     }
 
-    protected function setupMorph()
+    protected function setupMorph(): void
     {
         Relation::enforceMorphMap([
             //
         ]);
     }
 
-    protected function setupLog()
+    protected function setupLog(): void
     {
         if ($this->app->isProduction()) {
             return;
@@ -158,7 +168,7 @@ class AppServiceProvider extends ServiceProvider
         }
     }
 
-    protected function setupStorage()
+    protected function setupStorage(): void
     {
         // Create a temporary URL for a file in the local storage disk.
         Storage::disk('local')->buildTemporaryUrlsUsing(function ($path, $expiration, $options) {
@@ -170,7 +180,7 @@ class AppServiceProvider extends ServiceProvider
         });
     }
 
-    protected function detectConference()
+    protected function detectConference(): void
     {
         if ($this->app->runningInConsole() || !$this->app->isInstalled()) {
             return;
@@ -178,24 +188,27 @@ class AppServiceProvider extends ServiceProvider
         $this->app->scopeCurrentConference();
 
         $pathInfos = explode('/', request()->getPathInfo());
-        // Detect conference from URL path
-        if (isset($pathInfos[1]) && !blank($pathInfos[1])) {
+        $conferencePath = $pathInfos[1] ?? null;
 
-            $conference = Conference::where('path', $pathInfos[1])->first();
+        $isOnScheduledPath = isset($pathInfos[2]) && $pathInfos[2] == 'scheduled' && isset($pathInfos[3]) && !blank($pathInfos[3]);
+        $scheduledConferencePath = $pathInfos[3] ?? null;
+
+        // Detect conference from URL path
+        if ($conferencePath) {
+
+            $conference = Conference::query()
+                ->with(['media', 'meta'])
+                ->where('path', $pathInfos[1])->first();
 
             $conference ? $this->app->setCurrentConferenceId($conference->getKey()) : $this->app->setCurrentConferenceId(Application::CONTEXT_WEBSITE);
 
-            // Detect serie from URL path when conference is set
+            // Detect scheduledConference from URL path when conference is set
             if ($conference) {
 
-                // Eager load conference relations
-                $conference->load(['media', 'meta']);
-
-                if(isset($pathInfos[3]) && !blank($pathInfos[3]) && $scheduledConference = ScheduledConference::where('path', $pathInfos[3])->first()){
+                if ($isOnScheduledPath && $scheduledConference = ScheduledConference::where('path', $scheduledConferencePath)->first()) {
                     $this->app->setCurrentScheduledConferenceId($scheduledConference->getKey());
                     $this->app->scopeCurrentScheduledConference();
                 }
-
             }
         }
 
@@ -203,10 +216,10 @@ class AppServiceProvider extends ServiceProvider
         $currentConference = $this->app->getCurrentConference();
         if ($currentConference) {
             // Scope livewire update path to current serie
-            $currentSerie = $this->app->getCurrentScheduledConference();
-            if (isset($pathInfos[3]) && $currentSerie && $currentSerie->path === $pathInfos[3]) {
+            $currentScheduledConference = $this->app->getCurrentScheduledConference();
+            if ($isOnScheduledPath && $currentScheduledConference && $currentScheduledConference->path === $scheduledConferencePath) {
                 Livewire::setUpdateRoute(
-                    fn ($handle) => Route::post($currentConference->path . '/series/' . $currentSerie->path . '/livewire/update', $handle)->middleware('web')
+                    fn ($handle) => Route::post($currentConference->path . '/scheduled/' . $currentScheduledConference->path . '/livewire/update', $handle)->middleware('web')
                 );
             } else {
                 Livewire::setUpdateRoute(fn ($handle) => Route::post($currentConference->path . '/livewire/update', $handle)->middleware('web'));

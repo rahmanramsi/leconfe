@@ -2,13 +2,8 @@
 
 namespace App\Frontend\Website\Pages;
 
-use App\Facades\Block as BlockFacade;
-use App\Facades\SidebarFacade;
 use App\Models\Conference;
-use App\Models\Enums\ScheduledConferenceState;
-use App\Models\ScheduledConference;
-use App\Models\Sponsor;
-use App\Models\Topic;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Route;
 use Livewire\WithoutUrlPagination;
 use Livewire\WithPagination;
@@ -21,11 +16,14 @@ class Home extends Page
 
     protected static string $view = 'frontend.website.pages.home';
 
-
     protected function getViewData(): array
     {
         $conferences = Conference::query()
-            ->with(['media', 'meta'])
+            ->with([
+                'media',
+                'meta',
+                'currentScheduledConference' => fn (Builder $query) => $query->with('conference')->withoutGlobalScopes(),
+            ])
             ->get();
 
         return [

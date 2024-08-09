@@ -71,11 +71,6 @@ class ScheduledConference extends Model implements HasMedia, HasAvatar, HasName
         return $this->hasMany(Submission::class);
     }
 
-    public function venues(): HasMany
-    {
-        return $this->hasMany(Venue::class);
-    }
-
     public function committees(): HasMany
     {
         return $this->hasMany(Committee::class);
@@ -89,11 +84,6 @@ class ScheduledConference extends Model implements HasMedia, HasAvatar, HasName
     public function speakerRoles(): HasMany
     {
         return $this->hasMany(SpeakerRole::class);
-    }
-
-    public function sponsors(): HasMany
-    {
-        return $this->hasMany(Sponsor::class);
     }
 
     public function announcements(): HasMany

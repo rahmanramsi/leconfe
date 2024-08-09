@@ -52,7 +52,7 @@ class PanelProvider extends ServiceProvider
             )
             ->renderHook(
                 PanelsRenderHook::SIDEBAR_NAV_START,
-                function(){
+                function () {
                     $currentConference = app()->getCurrentConference();
                     $currentScheduledConference = app()->getCurrentScheduledConference();
                     $scheduledConferences = ScheduledConference::query()
@@ -97,10 +97,10 @@ class PanelProvider extends ServiceProvider
             )
             ->renderHook(
                 PanelsRenderHook::SIDEBAR_NAV_START,
-                function(){
+                function () {
                     $currentConference = app()->getCurrentConference();
                     $conferenceQuery = Conference::query()
-                        ->when(!auth()->user()->hasRole(UserRole::Admin), fn($query) => $query->whereHas('conferenceUsers', function ($query) {
+                        ->when(!auth()->user()->hasRole(UserRole::Admin), fn ($query) => $query->whereHas('conferenceUsers', function ($query) {
                             $query->where('model_has_roles.model_id', auth()->id());
                         }))
                         ->where('path', '!=', $currentConference->path)
@@ -133,7 +133,7 @@ class PanelProvider extends ServiceProvider
             ->id(static::PANEL_ADMINISTRATION)
             ->path('administration')
             ->homeUrl(fn () => route('livewirePageGroup.website.pages.home'))
-            ->bootUsing(fn() => static::setupFilamentComponent())
+            ->bootUsing(fn () => static::setupFilamentComponent())
             ->discoverResources(in: app_path('Panel/Administration/Resources'), for: 'App\\Panel\\Administration\\Resources')
             ->discoverPages(in: app_path('Panel/Administration/Pages'), for: 'App\\Panel\\Administration\\Pages')
             ->discoverWidgets(in: app_path('Panel/Administration/Widgets'), for: 'App\\Panel\\Administration\\Widgets')
@@ -162,7 +162,18 @@ class PanelProvider extends ServiceProvider
                         @vite(['resources/panel/js/panel.js'])
                     Blade)
             )
-            ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
+            ->renderHook(
+                PanelsRenderHook::USER_MENU_PROFILE_AFTER,
+                function() {
+                    $languages = Setting::get('languages', ['en']);
+                    if(count($languages) < 2){
+                        return;
+                    }
+
+
+                    return Blade::render('@livewire(App\Livewire\LanguageSwitcher::class)');
+                },
+            )
             ->viteTheme('resources/panel/css/panel.css')
             ->colors([
                 'primary' => Color::hex('#1c3569'),
@@ -198,7 +209,7 @@ class PanelProvider extends ServiceProvider
     {
         Blade::anonymousComponentPath(resource_path('views/panel/conference/components'), 'panel');
         Blade::anonymousComponentPath(resource_path('views/panel/administration/components'), 'administration');
-        Blade::anonymousComponentPath(resource_path('views/panel/series/components'), 'series');
+        Blade::anonymousComponentPath(resource_path('views/panel/scheduledConference/components'), 'scheduledConference');
     }
 
     public static function getMiddleware(): array
@@ -252,7 +263,7 @@ class PanelProvider extends ServiceProvider
         TinyEditor::configureUsing(function (TinyEditor $tinyEditor): void {
             $tinyEditor
                 ->setRelativeUrls(false)
-                ->setRemoveScriptHost(false)
+                ->setRemoveScriptHost(true)
                 ->toolbarSticky(false);
         });
     }

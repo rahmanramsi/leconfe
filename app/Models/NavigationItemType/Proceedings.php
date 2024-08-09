@@ -3,6 +3,7 @@
 namespace App\Models\NavigationItemType;
 
 use App\Models\NavigationMenuItem;
+use App\Models\Proceeding;
 
 class Proceedings extends BaseNavigationItemType
 {
@@ -18,7 +19,7 @@ class Proceedings extends BaseNavigationItemType
 
     public static function getIsDisplayed(NavigationMenuItem $navigationMenuItem): bool
     {
-        return app()->getCurrentConferenceId();
+        return app()->getCurrentConferenceId() && Proceeding::count() > 0;
     }
 
     public static function getUrl(NavigationMenuItem $navigationMenuItem): string

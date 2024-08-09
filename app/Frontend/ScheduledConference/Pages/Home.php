@@ -2,8 +2,8 @@
 
 namespace App\Frontend\ScheduledConference\Pages;
 
-use App\Models\Venue;
-use Illuminate\Support\Str;
+use App\Models\Stakeholder;
+use App\Models\StakeholderLevel;
 use Illuminate\Support\Facades\Route;
 use Rahmanramsi\LivewirePageGroup\PageGroup;
 use Rahmanramsi\LivewirePageGroup\Pages\Page;
@@ -18,32 +18,32 @@ class Home extends Page
 
     protected function getViewData(): array
     {
-        $additionalInformations = collect(app()->getCurrentConference()->getMeta('additional_information') ?? [])
-            ->filter(fn ($tab) => $tab['is_shown'] ?? false)
-            ->map(function ($tab) {
-                $tab['slug'] = Str::slug($tab['title']);
-                return $tab;
-            })
-            ->values();
-
-        $currentProceeding = app()->getCurrentConference()
-            ->proceedings()
-            ->published()
-            ->current()
-            ->first();
-
-        $currentSerie = app()->getCurrentScheduledConference();
-        $currentSerie?->load([
+        $currentScheduledConference = app()->getCurrentScheduledConference();
+        $currentScheduledConference->load([
             'speakerRoles.speakers' => ['meta'],
         ]);
 
+        $sponsorLevels = StakeholderLevel::sponsors()
+            ->with(['stakeholders'])
+            ->whereHas('stakeholders')
+            ->orderBy('order_column', 'asc')
+            ->get();
+
+        $sponsorsWithoutLevel = Stakeholder::sponsors()
+            ->whereNull('level_id')
+            ->orderBy('order_column', 'asc')
+            ->get();
+        
+        $partners = Stakeholder::partners()
+            ->where('is_shown', true)
+            ->orderBy('order_column', 'asc')
+            ->get();
+
         return [
-            'currentProceeding' => $currentProceeding,
-            'currentSerie' => $currentSerie,
-            // 'announcements' => Announcement::query()->get(),
-            'acceptedSubmission' => app()->getCurrentConference()->submission()->published()->get(),
-            'additionalInformations' => $additionalInformations,
-            'venues' => Venue::query()->get(),
+            'partners' => $partners,
+            'sponsorLevels' => $sponsorLevels,
+            'sponsorsWithoutLevel' => $sponsorsWithoutLevel,
+            'currentScheduledConference' => $currentScheduledConference,
         ];
     }
 

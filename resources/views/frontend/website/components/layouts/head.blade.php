@@ -3,10 +3,7 @@
 ])
 
 <head>
-    <title>
-        {{ $title ? strip_tags($title) . ' - ' : null }}
-        {{ $contextName ?? config('app.name') }}
-    </title>
+    <title>{{ $title ? strip_tags($title) . ' - ' : null }}{{ $contextName ?? config('app.name') }}</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="application-name" content="Leconfe" />
@@ -14,8 +11,10 @@
 
     {{ MetaTag::render() }}
 
-    @if (isset($favicon))
+    @if (isset($favicon) && !empty($favicon))
         <link rel="icon" type="image/x-icon" href="{{ $favicon }}" />
+    @else 
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     @endif
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -32,14 +31,15 @@
 
     @livewireStyles
     @vite(['resources/frontend/css/frontend.css', 'resources/frontend/js/frontend.js'])
-
-    @isset($styleSheet)
+    @if(isset($styleSheet) && !empty($styleSheet))
         <link rel="stylesheet" type="text/css" href="{{ $styleSheet }}" />
-    @endisset
+    @endif
 
     @if (isset($appearanceColor))
         <style>
             {!! $appearanceColor !!}
         </style>
     @endif
+
+    @hook('frontend:head')
 </head>

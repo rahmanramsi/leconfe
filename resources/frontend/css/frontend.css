@@ -54,7 +54,8 @@
         prose-p:my-2
         max-w-none
         prose-img:my-0
-        first:*:mt-0 last:*:mb-0
+        first:*:mt-0 last:*:mb-0;
+    --tw-prose-body: unset;
 }
 
 .text-heading {

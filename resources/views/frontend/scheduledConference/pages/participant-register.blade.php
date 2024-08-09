@@ -104,11 +104,13 @@
                                     <td>:</td>
                                     <td>{{ $userModel->getMeta('phone', '-') }}</td>
                                 </tr>
-                                <tr>
-                                    <td>Country</td>
-                                    <td>:</td>
-                                    <td>{{ $userCountry->name }} {{ $userCountry->flag }}</td>
-                                </tr>
+                                @if($userCountry)
+                                    <tr>
+                                        <td>Country</td>
+                                        <td>:</td>
+                                        <td>{{ $userCountry->name }} {{ $userCountry->flag }}</td>
+                                    </tr>
+                                @endif
                             </table>
                             <p class="mt-2">If you feel this is not your account, please log out and use your account.</p>
                         @else
@@ -182,11 +184,13 @@
                             <td>:</td>
                             <td>{{ $userModel->getMeta('phone', '-') }}</td>
                         </tr>
-                        <tr>
-                            <td>Country</td>
-                            <td>:</td>
-                            <td>{{ $userCountry->name }} {{ $userCountry->flag }}</td>
-                        </tr>
+                        @if($userCountry)
+                            <tr>
+                                <td>Country</td>
+                                <td>:</td>
+                                <td>{{ $userCountry->name }} {{ $userCountry->flag }}</td>
+                            </tr>
+                        @endif
                     </table>
                     @empty(!$currentScheduledConference->getMeta('payment_policy'))
                         <hr class="my-8">

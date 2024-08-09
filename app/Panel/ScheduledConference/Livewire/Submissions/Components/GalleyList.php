@@ -38,7 +38,6 @@ class GalleyList extends \Livewire\Component implements HasForms, HasTable
 
     public Submission $submission;
     public bool $viewOnly = false;
-    public const ACCEPTED_FILE_TYPES = ['pdf', 'docx', 'xls', 'png', 'jpg', 'jpeg'];
 
     public function render()
     {
@@ -101,11 +100,6 @@ class GalleyList extends \Livewire\Component implements HasForms, HasTable
                 ->downloadable()
                 ->reorderable()
                 ->disk('private-files')
-                ->acceptedFileTypes(
-                    fn (): array => collect(static::ACCEPTED_FILE_TYPES)
-                        ->map(fn ($ext) => MimeType::fromExtension($ext))
-                        ->toArray()
-                )
                 ->preserveFilenames()
                 ->live()
                 ->collection(SubmissionFileCategory::GALLEY_FILES)
@@ -164,10 +158,10 @@ class GalleyList extends \Livewire\Component implements HasForms, HasTable
                     TextColumn::make('label')
                         ->color('primary')
                         ->url(
-                            fn (SubmissionGalley $galley) => 
-                                !$galley->remote_url ? route('submission-files.view', $galley->file->media->uuid) : $galley->remote_url,
+                            fn (SubmissionGalley $galley) => $galley->getUrl(),
                             true
                         )
+                        ->openUrlInNewTab()
                 ]),
             ])
             ->headerActions([

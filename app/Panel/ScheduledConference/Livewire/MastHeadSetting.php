@@ -21,6 +21,8 @@ use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use App\Forms\Components\TinyEditor;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Textarea;
 use Squire\Models\Country;
 
@@ -62,6 +64,18 @@ class MastHeadSetting extends Component implements HasForms
                                     ->autocomplete()
                                     ->required()
                                     ->placeholder('Enter the title of the scheduled conference'),
+                                Grid::make()
+                                    ->schema([
+                                        DatePicker::make('date_start')
+                                            ->label('Start Date')
+                                            ->placeholder('Enter the start date of the serie')
+                                            ->requiredWith('date_end'),
+                                        DatePicker::make('date_end')
+                                            ->label('End Date')
+                                            ->afterOrEqual('date_start')
+                                            ->requiredWith('date_start')
+                                            ->placeholder('Enter the end date of the serie'),
+                                    ]),
                                 Textarea::make('meta.description')
                                     ->rows(3)
                                     ->autosize()
@@ -113,7 +127,7 @@ class MastHeadSetting extends Component implements HasForms
                             ->description('Include any information about your conference which may be of interest to readers, authors or reviewers.')
                             ->schema([
                                 TinyEditor::make('meta.about')
-                                    ->label('About the Conference')
+                                    ->label('About the Scheduled Conference')
                                     ->profile('basic'),
                             ])
                     ]),

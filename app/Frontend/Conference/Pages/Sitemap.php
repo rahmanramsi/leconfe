@@ -19,11 +19,13 @@ class Sitemap extends Page
 {
     function __invoke()
     {
-        $sitemap = Cache::remember(
-            'sitemap_' . app()->getCurrentConferenceId(),
-            Carbon::now()->addDay(),
-            fn () => $this->generateSitemap(),
-        );
+        // $sitemap = Cache::remember(
+        //     'sitemap_' . app()->getCurrentConferenceId(),
+        //     Carbon::now()->addHour(),
+        //     fn () => $this->generateSitemap(),
+        // );
+
+        $sitemap = $this->generateSitemap();
 
         return response($sitemap->render(), 200, [
             'Content-Type' => 'application/xml'
@@ -40,6 +42,11 @@ class Sitemap extends Page
                     ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
             )
             ->add(
+                Url::create(route(AboutSystem::getRouteName()))
+                    ->setLastModificationDate($currentConference->updated_at)
+                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
+            )
+            ->add(
                 Url::create(route(Login::getRouteName()))
                     ->setChangeFrequency(Url::CHANGE_FREQUENCY_NEVER)
             )
@@ -49,7 +56,7 @@ class Sitemap extends Page
             );
 
         Proceeding::query()
-            ->with(['conference', 'submissions'])
+            ->with(['conference', 'submissions' => ['galleys.file.media']])
             ->published()
             ->lazy()->each(function (Proceeding $proceeding) use ($sitemap) {
                 $sitemap->add(
@@ -59,12 +66,27 @@ class Sitemap extends Page
                         ->setPriority(1)
                 );
 
-                $proceeding->submissions->each(fn (Submission $submission) => $sitemap->add(
-                    Url::create($submission->getUrl())
-                        ->setLastModificationDate($submission->updated_at)
-                        ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
-                        ->setPriority(1)
-                ));
+                $proceeding->submissions->each(function (Submission $submission) use($sitemap) {
+                    $sitemap->add(
+                        Url::create($submission->getUrl())
+                            ->setLastModificationDate($submission->updated_at)
+                            ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
+                            ->setPriority(1)
+                    );
+
+                    foreach ($submission->galleys as $galley) {
+                        if($galley->remote_url) continue;
+
+                        $sitemap->add(
+                            Url::create($galley->getUrl())
+                                ->setLastModificationDate($galley->file->media->updated_at)
+                                ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
+                                ->setPriority(1)
+                        );
+                    }
+
+                    
+                });
             });
 
         StaticPage::query()
@@ -77,7 +99,7 @@ class Sitemap extends Page
 
 
         ScheduledConference::query()
-            ->with(['conference', 'announcements', 'staticPages'])
+            ->with(['conference', 'announcements.scheduledConference', 'staticPages'])
             ->whereIn('state', [ScheduledConferenceState::Current, ScheduledConferenceState::Archived, ScheduledConferenceState::Published])
             ->orderBy('date_start', 'desc')
             ->lazy()
@@ -90,6 +112,18 @@ class Sitemap extends Page
 
                 $sitemap->add(
                     Url::create(route(ScheduledConferencePages\About::getRouteName('scheduledConference'), ['serie' => $scheduledConference]))
+                        ->setLastModificationDate($scheduledConference->updated_at)
+                        ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
+                );
+
+                $sitemap->add(
+                    Url::create(route(ScheduledConferencePages\AboutSystem::getRouteName('scheduledConference'), ['serie' => $scheduledConference]))
+                        ->setLastModificationDate($scheduledConference->updated_at)
+                        ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
+                );
+             
+                $sitemap->add(
+                    Url::create(route(ScheduledConferencePages\EditorialTeam::getRouteName('scheduledConference'), ['serie' => $scheduledConference]))
                         ->setLastModificationDate($scheduledConference->updated_at)
                         ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
                 );

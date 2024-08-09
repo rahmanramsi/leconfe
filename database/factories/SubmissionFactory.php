@@ -2,10 +2,17 @@
 
 namespace Database\Factories;
 
+use App\Actions\SubmissionFiles\UploadSubmissionFileAction;
 use App\Models\Conference;
+use App\Models\Enums\SubmissionStatus;
+use App\Models\Enums\UserRole;
+use App\Models\Role;
 use App\Models\Submission;
+use App\Models\SubmissionFile;
+use App\Models\SubmissionFileType;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Arr;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Submission>
@@ -26,10 +33,7 @@ class SubmissionFactory extends Factory
      */
     public function definition(): array
     {
-        return [
-            'user_id' => User::inRandomOrder()->first()->id,
-            'conference_id' => Conference::inRandomOrder()->first()->id,
-        ];
+        return [];
     }
 
     /**
@@ -40,7 +44,53 @@ class SubmissionFactory extends Factory
         return $this->afterCreating(function (Submission $submission) {
             $submission->setManyMeta([
                 'title' => fake()->sentence(),
+                'keywords' => fake()->words(5),
+                'abstract' => fake()->paragraph(),
             ]);
+            $submission->refresh();
+
+            $states = [
+                null,
+                SubmissionStatus::Incomplete,
+                SubmissionStatus::Queued,
+            ];
+
+            $state = Arr::random($states);
+
+            if($state){
+                $submission->state()->fulfill();
+            }
+
+            if (in_array($state, [SubmissionStatus::Incomplete, SubmissionStatus::Queued])) {
+                $conferenceEditorRole = Role::withoutGlobalScopes()
+                    ->where('scheduled_conference_id', $submission->scheduled_conference_id)
+                    ->where('name', UserRole::ConferenceEditor)->first();
+                $userConferenceEditor = $conferenceEditorRole->users->first();
+
+
+                $submission->participants()->create([
+                    'user_id' => $userConferenceEditor->getKey(),
+                    'role_id' => $conferenceEditorRole->getKey(),
+                ]);
+            }
+
+            if (in_array($state, [SubmissionStatus::Queued])) {
+                $media = $submission->addMedia(resource_path('assets/sample.pdf'))
+                    ->preservingOriginal()
+                    ->toMediaCollection('abstract-files', 'private-files');
+
+                $submissionFileType = SubmissionFileType::withoutGlobalScopes()->where('scheduled_conference_id', $submission->scheduled_conference_id)->first();
+
+                SubmissionFile::create([
+                    'submission_id' => $submission->id,
+                    'submission_file_type_id' => $submissionFileType->id,
+                    'media_id' => $media->id,
+                    'user_id' => $submission->user_id,
+                    'category' => 'abstract-files',
+                ]);
+
+                $submission->state()->acceptAbstract();
+            }
         });
     }
 }

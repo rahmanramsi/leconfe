@@ -38,7 +38,7 @@
         "propaganistas/laravel-disposable-email": "^2.2",
         "propaganistas/laravel-phone": "^5.0",
         "rahmanramsi/laravel-async-queue": "^1.0",
-        "rahmanramsi/livewire-page-group": "*",
+        "rahmanramsi/livewire-page-group": "^0.0.6",
         "rickselby/laravel-gate-cache": "^3.8",
         "simplesoftwareio/simple-qrcode": "~4",
         "spatie/array-to-xml": "^3.3",
@@ -60,7 +60,6 @@
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.8",
-        "deployer/deployer": "^7.3",
         "fakerphp/faker": "^1.9.1",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.18",

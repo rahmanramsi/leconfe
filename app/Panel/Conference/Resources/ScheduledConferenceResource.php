@@ -30,8 +30,6 @@ class ScheduledConferenceResource extends Resource
 {
     protected static ?string $model = ScheduledConference::class;
 
-    protected static ?int $navigationSort = 3;
-
     protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
 
     public static function form(Form $form): Form
@@ -111,7 +109,7 @@ class ScheduledConferenceResource extends Resource
                         ->requiresConfirmation()
                         ->icon('heroicon-o-check-circle')
                         ->color('success')
-                        ->hidden(fn (ScheduledConference $record) => $record->isArchived() || $record->isCurrent() || $record->isDraft() || $record->trashed())
+                        ->hidden(fn (ScheduledConference $record) => $record->isCurrent() || $record->isDraft() || $record->trashed())
                         ->action(fn (ScheduledConference $record, Tables\Actions\Action $action) => $record->update(['state' => ScheduledConferenceState::Current]) && $action->success())
                         ->successNotificationTitle(fn (ScheduledConference $scheduledConference) => $scheduledConference->title . ' is set as current'),    
                     Tables\Actions\Action::make('move_to_archive')
@@ -136,6 +134,10 @@ class ScheduledConferenceResource extends Resource
                         ->modalHeading('Move To Trash')
                         ->hidden(fn (ScheduledConference $record) => $record->isCurrent() || $record->trashed())
                         ->successNotificationTitle('Serie moved to trash'),
+                    Tables\Actions\ForceDeleteAction::make()
+                        ->label('Delete Permanently')
+                        ->hidden(fn (ScheduledConference $record) => ! $record->trashed())
+                        ->successNotificationTitle('Serie deleted permanently'),
                 ]),
             ]);
     }

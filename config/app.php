@@ -89,6 +89,16 @@ return [
 
     'locale' => 'en',
 
+    /**
+     * Application Supported Locales
+     */
+    'locales' => [
+        'en' => 'English',
+        'id' =>  'Indonesia',
+        'sq' => 'Albania',
+        'ar' => 'Arabic',
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Application Fallback Locale
@@ -227,4 +237,6 @@ return [
     ])->toArray(),
 
     'must_verify_email' => env('MUST_VERIFY_EMAIL', false),
+
+    'report_errors' => env('REPORT_ERRORS', false),
 ];

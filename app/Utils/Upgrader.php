@@ -35,36 +35,17 @@ class Upgrader extends Installer
 
             $this->addNewApplicationVersion();
 
-            $this->optimize();
+            $this->configureOptimization();
         } catch (\Throwable $th) {
-            if (! $th instanceof NoUpgradeScript) {
-                activity('leconfe')
-                    ->causedByAnonymous()
-                    ->event('upgrade')
-                    ->withProperties([
-                        'from' => $this->installedVersion,
-                        'to' => $this->codeVersion,
-                        'duration' => round(microtime(true) - $start, 2),
-                        'status' => 'failed',
-                    ])
-                    ->log($th->getMessage());
-            }
-
             throw $th;
 
             return;
         }
 
-        activity('leconfe')
-            ->causedByAnonymous()
-            ->event('upgrade')
-            ->withProperties([
-                'from' => $this->installedVersion,
-                'to' => $this->codeVersion,
-                'duration' => round(microtime(true) - $start, 2),
-                'status' => 'success',
-            ])
-            ->log('Upgrade success');
+        $this->log('Upgrade success', [
+            'duration' => round(microtime(true) - $start, 2),
+            'status' => 'success',
+        ]);
     }
 
     public function log($message, $properties = [])
@@ -91,7 +72,7 @@ class Upgrader extends Installer
     public function startActions()
     {
         if (empty($this->actions)) {
-            throw new NoUpgradeScript($this->installedVersion, $this->codeVersion);
+            return;
         }
 
         // Sort by priority
@@ -100,7 +81,7 @@ class Upgrader extends Installer
         foreach ($this->actions as $actions) {
             foreach ($actions as $key => $action) {
                 $this->command?->info("Running upgrade actions : $key");
-                $action();
+                $action($this->command);
             }
         }
     }

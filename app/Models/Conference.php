@@ -176,13 +176,15 @@ class Conference extends Model implements HasAvatar, HasMedia, HasName
     {
         return [
             'settings_allow_registration' => true,
-            'settings_must_verify_email' => false,
             'settings_select_format_date' => 'j F Y',
             'settings_format_date' => 'j F Y',
             'settings_select_format_time' => 'H:i',
             'settings_format_time' => 'H:i',
+            'settings_default_language' => 'en',
+            'settings_languages' => ['en'],
             'page_footer' => view('frontend.examples.footer')->render(),
             'workflow.payment.supported_currencies' => ['usd'],
+            'languages' => ['en'],
         ];
     }
 }

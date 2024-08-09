@@ -50,7 +50,7 @@ class TrackTable extends Component implements HasForms, HasTable
                     ->label('New Track')
                     ->modalWidth(MaxWidth::ThreeExtraLarge)
                     ->form(fn (Form $form) => $this->form($form))
-                    ->action(fn (array $data) => TrackCreateAction::run($data))
+                    ->using(fn (array $data) => TrackCreateAction::run($data))
             ])
             ->actions([
                 EditAction::make()

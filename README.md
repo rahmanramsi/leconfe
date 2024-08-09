@@ -3,11 +3,15 @@
 Leconfe is an open-source conference management system that allows users to manage conferences, papers, reviews, including publishing the issue. 
 This project is created to make the conference management seamless including the management of the participant, venue, registration, payment, and the crucial aspect of the conference event. 
 
-[Leconfe](https://openjournaltheme.com) is a [Open Journal Theme](https://openjournalteam.com) product.
+[Leconfe](https://leconfe.com) is a [Open Journal Theme](https://openjournalteam.com) product.
 
 ## Features ✨
 
-WIP
+- Manage Multiple Conference Series.
+- Publish Conference Proceedings and Paper.
+- Held scheduled conferences repeatedly easily.
+- Paper Submission Workflow
+- Participant Registration & Attendance
 
 ## Why is this open-source? 🔓
 

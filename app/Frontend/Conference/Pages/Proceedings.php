@@ -2,6 +2,7 @@
 
 namespace App\Frontend\Conference\Pages;
 
+use App\Models\Enums\SubmissionStatus;
 use App\Models\Proceeding;
 use App\Models\Topic;
 use Livewire\Attributes\Title;
@@ -22,6 +23,9 @@ class Proceedings extends Page
     {
         $this->proceedings = Proceeding::query()
             ->published()
+            ->with([
+                'submissions' => fn ($query) => $query->status(SubmissionStatus::Published)
+            ])
             ->orderBy('order_column')
             ->get();
     }

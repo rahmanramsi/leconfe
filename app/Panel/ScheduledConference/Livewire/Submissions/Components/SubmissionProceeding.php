@@ -117,9 +117,9 @@ class SubmissionProceeding extends \Livewire\Component implements HasForms, HasI
                 return ! auth()->user()->can('editing', $this->submission);
             })
             ->schema([
-                SpatieMediaLibraryFileUpload::make('media.article-cover')
+                SpatieMediaLibraryFileUpload::make('media.cover')
                     ->label('Cover Image')
-                    ->collection('article-cover')
+                    ->collection('cover')
                     ->model($this->submission)
                     ->image()
                     ->preserveFilenames(),

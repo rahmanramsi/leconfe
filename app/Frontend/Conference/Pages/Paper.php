@@ -15,10 +15,19 @@ class Paper extends Page
 {
     protected static string $view = 'frontend.conference.pages.paper';
 
-    public Submission $submission;
+    public ?Submission $paper;
 
-    public function mount(Submission $submission)
+    public function mount($submission)
     {
+        $this->paper = Submission::query()
+            ->where('id', $submission)
+            ->with(['track', 'media', 'meta', 'galleys.file.media', 'authors' => fn ($query) => $query->with(['role', 'meta'])])
+            ->first();
+
+        if (!$this->paper) {
+            return abort(404);
+        }
+
         if (!$this->canAccess()) {
             abort(404);
         }
@@ -28,62 +37,96 @@ class Paper extends Page
 
     public function getTitle(): string|Htmlable
     {
-        return $this->submission->getMeta('title');
+        return $this->paper->getMeta('title');
     }
 
-    public function addMetadata() : void
+    public function addMetadata(): void
     {
-        MetaTag::add('citation_conference_title', app()->getCurrentConference()->name);
-        MetaTag::add('citation_title', e($this->submission->getMeta('title')));
+        $conference = $this->paper->conference;
+        $scheduledConference = $this->paper->scheduledConference;
 
-        $this->submission->authors->each(function ($author) {
+        MetaTag::add('gs_meta_revision', '1.1');
+        MetaTag::add('citation_title', e($this->paper->getMeta('title')));
+
+        $this->paper->authors->each(function ($author) {
             MetaTag::add('citation_author', $author->fullName);
-            if($author->getMeta('affiliation')){
-                MetaTag::add('citation_author_affiliation', $author->getMeta('affiliation'));
+            if ($author->getMeta('affiliation')) {
+                MetaTag::add('citation_author_affiliation', e($author->getMeta('affiliation')));
             }
         });
 
-        if($this->submission->isPublished()){
-            MetaTag::add('citation_publication_date', $this->submission->published_at?->format('Y/m/d'));
+        if ($this->paper->isPublished()) {
+            MetaTag::add('citation_publication_date', $this->paper->published_at?->format('Y/m/d'));
+            MetaTag::add('citation_date', $this->paper->published_at?->format('Y/m/d'));
         }
 
-        $proceeding = $this->submission->proceeding;
-        MetaTag::add('citation_volume', $proceeding->volume);
-        MetaTag::add('citation_issue', $proceeding->number);
+        if($this->paper->doi?->doi){
+            MetaTag::add('citation_doi', $this->paper->doi->doi);
+        }
 
-        if($this->submission->getMeta('article_pages')){
-            [$start, $end] = explode('-', $this->submission->getMeta('article_pages'));
+        if($scheduledConference->getMeta('publisher_name')){
+            MetaTag::add('citation_publisher', e($scheduledConference->getMeta('publisher_name')));
+        }
 
-            if($start){
+        $proceeding = $this->paper->proceeding;
+
+        MetaTag::add('citation_conference_title', e($conference->name));
+        if($conference->getMeta('issn')){
+            MetaTag::add('citation_issn', e($conference->getMeta('issn')));
+        }
+        MetaTag::add('citation_volume', e($proceeding->volume));
+        MetaTag::add('citation_issue', e($proceeding->number));
+        if($this->paper){
+            MetaTag::add('citation_section', e($this->paper->track->title));
+        }
+
+        if ($this->paper->getMeta('article_pages')) {
+            [$start, $end] = explode('-', $this->paper->getMeta('article_pages'));
+
+            if ($start) {
                 MetaTag::add('citation_firstpage', $start);
             }
 
-            if($end){
+            if ($end) {
                 MetaTag::add('citation_lastpage', $end);
             }
         }
 
-        MetaTag::add('citation_abstract_html_url', route(static::getRouteName(), ['submission' => $this->submission->getKey()]));
-        
-        $this->submission->galleys->each(function ($galley) {
-            if($galley->isPdf()){
+        MetaTag::add('citation_abstract_html_url', route(static::getRouteName(), ['submission' => $this->paper->getKey()]));
+
+        $this->paper->galleys->each(function ($galley) {
+            if ($galley->isPdf()) {
                 MetaTag::add('citation_pdf_url', $galley->getUrl());
             }
         });
 
+        collect($this->paper->getMeta('keywords'))
+            ->each(fn($keyword) => MetaTag::add('citation_keywords', $keyword));
+
+        collect(explode(PHP_EOL, $this->paper->getMeta('references')))
+            ->filter()
+            ->values()
+            ->each(fn ($reference) => MetaTag::add('citation_reference', $reference));
+
+        MetaTag::add('og:title', e($this->paper->getMeta('title')));
+        MetaTag::add('og:type', 'paper');
+        MetaTag::add('og:url', route(static::getRouteName(), ['submission' => $this->paper->getKey()]));
+        if ($this->paper->getFirstMedia('cover')) {
+            MetaTag::add('og:image', $this->paper->getFirstMedia('cover')->getAvailableUrl(['thumb']));
+        }
     }
 
     public function canAccess(): bool
     {
-        if (!$this->submission->proceeding) {
+        if (!$this->paper->proceeding) {
             return false;
         }
 
-        if (auth()->user()?->can('editing', $this->submission)) {
+        if (auth()->user()?->can('editing', $this->paper)) {
             return true;
         }
 
-        if ($this->submission->isPublished() && $this->submission->proceeding->isPublished()) {
+        if ($this->paper->isPublished() && $this->paper->proceeding->isPublished()) {
             return true;
         }
 
@@ -92,13 +135,13 @@ class Paper extends Page
 
     public function canPreview(): bool
     {
-        if (!$this->submission->proceeding?->isPublished()) {
+        if (!$this->paper->proceeding?->isPublished()) {
             return true;
         }
 
-        $isSubmissionNotPublished = !$this->submission->isPublished();
+        $isSubmissionNotPublished = !$this->paper->isPublished();
 
-        $canUserEdit = auth()->user()?->can('editing', $this->submission);
+        $canUserEdit = auth()->user()?->can('editing', $this->paper);
 
         if ($isSubmissionNotPublished && $canUserEdit) {
             return true;
@@ -112,10 +155,11 @@ class Paper extends Page
         return [
             route(Home::getRouteName()) => 'Home',
             route(Proceedings::getRouteName()) => 'Proceedings',
-            route(ProceedingDetail::getRouteName(), [$this->submission->proceeding->id]) => Str::limit(
-                $this->submission->proceeding->seriesTitle(), 70
+            route(ProceedingDetail::getRouteName(), [$this->paper->proceeding->id]) => Str::limit(
+                $this->paper->proceeding->seriesTitle(),
+                70
             ),
-            'Article'
+            'Paper'
         ];
     }
 
