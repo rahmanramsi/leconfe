@@ -20,7 +20,7 @@ class Agenda extends BaseNavigationItemType
 
     public static function getIsDisplayed(NavigationMenuItem $navigationMenuItem): bool
     {
-        return app()->getCurrentScheduledConferenceId() && app()->getCurrentScheduledConference()->isAttendanceEnabled();
+        return app()->getCurrentScheduledConferenceId();
     }
 
     public static function getUrl(NavigationMenuItem $navigationMenuItem): string

@@ -33,9 +33,6 @@ class Agenda extends Page
 
     public function mount()
     {
-        if(!app()->getCurrentScheduledConference()->isAttendanceEnabled()) {
-            return abort(404);
-        }
     }
 
     public function attend($data_id, $data_type): void
