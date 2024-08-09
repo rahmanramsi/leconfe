@@ -12,16 +12,6 @@
             <h1 class="text-xl font-semibold min-w-fit">Participant Attendance</h1>
             <hr class="w-full h-px my-auto bg-gray-200 border-0 dark:bg-gray-700">
         </div>
-        <div class="mt-5 px-6 py-4 margin-2 border text-center">
-            <h1 class="text-base text-gray-800 font-semibold">
-                {{ $currentScheduledConference->title }}
-            </h1>
-            @if (!empty($currentScheduledConference->getMeta('description')))
-                <p class="mt-2 text-sm">
-                    {{ $currentScheduledConference->getMeta('description') }}
-                </p>
-            @endif
-        </div>
         <p class="mt-4 text-sm">
             Please select the event below to confirm your attendance.
         </p>
@@ -37,15 +27,15 @@
                                 <strong class="block font-medium text-gray-900 dark:text-white">
                                     {{ $timeline->name }}
                                     @if ($timeline->isOngoing())
-                                        <span class="bg-green-100 text-green-800 text-xs font-semibold mx-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
-                                            Ongoing
+                                        <span class="badge badge-success text-white mx-2">
+                                            On going
                                         </span>
                                     @elseif ($timeline->getEarliestTime()->isFuture())
-                                        <span class="bg-blue-100 text-blue-800 text-xs font-semibold mx-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
+                                        <span class="badge badge-info text-white mx-2">
                                             Not started
                                         </span>
                                     @elseif ($timeline->getLatestTime()->isPast())
-                                        <span class="bg-gray-200 text-gray-800 text-xs font-semibold mx-2 px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">
+                                        <span class="badge mx-2">
                                             Over
                                         </span>
                                     @endif
@@ -55,26 +45,26 @@
                                 </p>
                             </td>
                             @if ($timeline->canShown() && $isParticipant)
-                                <td class="px-6 py-4 text-right">
+                                <td class="px-6 py-4 text-right text-xs font-normal">
                                     @if ($timeline->canAttend())
                                         @if ($userRegistration->isAttended($timeline))
-                                            <button class="py-1 px-4 text-xs font-medium text-green-700 focus:outline-none bg-white rounded-full border border-gray-200 focus:z-10 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 cursor-default">
-                                                Attendance Confirmed
+                                            <button class="btn btn-sm btn-disabled no-animation !text-white hover:text-white">
+                                                Confirmed
                                             </button>
                                         @else
-                                            <button class="py-1 px-4 text-xs font-medium text-blue-700 focus:outline-none bg-white rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-600 focus:z-10 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" 
+                                            <button class="btn btn-sm btn-info no-animation text-white rounded" 
                                             wire:click="attend({{ $timeline->id }}, '{{ static::ATTEND_TYPE_TIMELINE }}')">
-                                                Confirm Attendance
+                                                Attend
                                             </button>
                                         @endif
                                     @else
                                         @if ($userRegistration->isAttended($timeline))
-                                            <button class="py-1 px-4 text-xs font-medium text-green-700 focus:outline-none bg-white rounded-full border border-gray-200 focus:z-10 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 cursor-default">
-                                                Attendance Confirmed
+                                            <button class="btn btn-sm btn-disabled no-animation !text-white hover:text-white">
+                                                Confirmed
                                             </button>
                                         @else
-                                            <button class="py-1 px-4 text-xs font-medium text-red-700 focus:outline-none bg-white rounded-full border border-gray-200 focus:z-10 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 cursor-default">
-                                                Attendance Expired
+                                            <button class="btn btn-sm btn-disabled no-animation !text-white hover:text-white">
+                                                Expired
                                             </button>
                                         @endif
                                     @endif
@@ -93,15 +83,15 @@
                                 <td class="px-6 pl-8 py-4 text-left w-fit text-nowrap">
                                     {{ $agenda->time_span }}
                                     @if ($agenda->isOngoing())
-                                        <span class="bg-green-100 text-green-800 text-xs font-medium mx-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">
-                                            Ongoing
+                                        <span class="badge badge-success  text-white mx-2">
+                                            On going
                                         </span>
                                     @elseif ($agenda->isFuture())
-                                        <span class="bg-blue-100 text-blue-800 text-xs font-medium mx-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
-                                            Not started
+                                        <span class="badge badge-info text-white mx-2">
+                                            Not Started
                                         </span>
                                     @elseif ($agenda->isPast())
-                                        <span class="bg-gray-100 text-gray-800 text-xs font-medium mx-2 px-2.5 py-0.5 rounded-full dark:bg-gray-700 dark:text-gray-300">
+                                        <span class="badge mx-2">
                                             Over
                                         </span>
                                     @endif
@@ -155,23 +145,23 @@
                                     @if ($agenda->isRequiresAttendance() && $isParticipant)
                                         @if ($agenda->canAttend() && $isParticipant)
                                             @if ($userRegistration->isAttended($agenda))
-                                                <button class="py-1 px-3 text-xs font-medium text-green-700 focus:outline-none bg-white rounded-full border border-gray-200 focus:z-10 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 cursor-default">
-                                                    Attendance Confirmed
+                                                <button class="btn btn-xs btn-disabled no-animation !text-white hover:text-white">
+                                                    Confirmed
                                                 </button>
                                             @else
-                                                <button class="py-1 px-3 text-xs font-medium text-blue-700 focus:outline-none bg-white rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-600 focus:z-10 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700" 
+                                                <button class="btn btn-xs btn-info no-animation text-white hover:text-white " 
                                                 wire:click="attend({{ $agenda->id }}, '{{ static::ATTEND_TYPE_AGENDA }}')">
-                                                    Confirm Attendance
+                                                    Attend
                                                 </button>
                                             @endif
                                         @else
                                             @if ($userRegistration->isAttended($agenda))
-                                                <button class="py-1 px-3 text-xs font-medium text-green-700 focus:outline-none bg-white rounded-full border border-gray-200 focus:z-10 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 cursor-default">
-                                                    Attendance Confirmed
+                                                <button class="btn btn-xs btn-disabled no-animation !text-white hover:text-white">
+                                                    Confirmed
                                                 </button>
                                             @else
-                                                <button class="py-1 px-3 text-xs font-medium text-red-700 focus:outline-none bg-white rounded-full border border-gray-200 focus:z-10 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 cursor-default">
-                                                    Attendance Expired
+                                                <button class="btn btn-xs btn-disabled no-animation !text-white hover:text-white">
+                                                    Expired
                                                 </button>
                                             @endif
                                         @endif
@@ -189,12 +179,14 @@
     @if ($timelineData || $agendaData)
         <div x-data="{ open: @entangle('isOpen') }" x-show="open" class="fixed inset-0 flex items-center justify-center z-50">
             <div wire:click="cancel" class="fixed inset-0 bg-gray-800 opacity-75"></div>
-            <div x-show="open" class="bg-white rounded shadow-lg p-6 w-1/3 mx-auto z-50 transform transition-all duration-300 ease-in-out">
+
+            <div x-show="open" x-transition class="bg-white rounded shadow-lg p-6 w-1/3 mx-auto z-50 transform transition-all duration-300 ease-in-out">
                 <div class="flex justify-between items-center border-b pb-3">
                     <h2 class="text-lg font-semibold">
                         Attendance Confirmation
                     </h2>
                 </div>
+
                 <div class="mt-4">
                     @if ($typeData === self::ATTEND_TYPE_TIMELINE)
                         <p class="text-gray-600">
@@ -214,10 +206,12 @@
                         </small>
                     @endif
                 </div>
+
                 <div class="mt-6 flex justify-end space-x-2 text-sm">
                     <button wire:click="cancel" class="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300" wire:loading.attr="disabled">
                         Cancel
                     </button>
+
                     <button wire:click="confirm" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" wire:loading.attr="disabled">
                         Confirm
                     </button>

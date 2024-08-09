@@ -189,7 +189,7 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
                 continue;
             }
 
-            if ($type === self::DAY_ATTENDANCE_MARK_TYPE_IN && !$timeline->canAttend()) {
+            if ($type === self::DAY_ATTENDANCE_MARK_TYPE_IN && !$timeline->canShown()) {
                 continue;
             }
 

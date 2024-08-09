@@ -12,11 +12,11 @@ use Illuminate\Support\Arr;
 use Rahmanramsi\LivewirePageGroup\PageGroup;
 use Rahmanramsi\LivewirePageGroup\Pages\Page;
 
-class ParticipantAttendance extends Page
+class ConferenceAgenda extends Page
 {
-    protected static string $view = 'frontend.scheduledConference.pages.participant-attendance';
+    protected static string $view = 'frontend.scheduledConference.pages.conference-agenda';
 
-    protected static ?string $slug = 'attendance';
+    protected static ?string $slug = 'agenda';
 
     public ?string $typeData = null;
 
@@ -34,7 +34,7 @@ class ParticipantAttendance extends Page
     public function mount()
     {
         if(!auth()->check()) {
-            return redirect(app()->getLoginUrl() . '?' . http_build_query(['redirect' => 'attendance']));
+            return redirect(app()->getLoginUrl() . '?' . http_build_query(['redirect' => 'agenda']));
         }
         
         if(!app()->getCurrentScheduledConference()->isAttendanceEnabled()) {

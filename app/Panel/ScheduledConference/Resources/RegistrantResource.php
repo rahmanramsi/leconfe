@@ -118,7 +118,7 @@ class RegistrantResource extends Resource
                                     View::make('blade')
                                         ->view('panel.scheduledConference.resources.registrant-resource.pages.attendance-qr-code', [
                                             'currentScheduledConference' => app()->getCurrentScheduledConference(),
-                                            'attendanceRedirectUrl' => route('livewirePageGroup.scheduledConference.pages.attendance'),
+                                            'attendanceRedirectUrl' => route('livewirePageGroup.scheduledConference.pages.agenda'),
                                             'QrCodeImageSize' => 400,
                                             'QrCodeFooterText' => 'Please scan this QR Code to confirm your attendance.',
                                         ]),

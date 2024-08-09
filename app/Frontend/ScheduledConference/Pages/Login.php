@@ -24,8 +24,8 @@ class Login extends WebsiteLogin
 
     public function getRedirectUrl(): string
     {
-        if($this->redirect === 'attendance') {
-            return route('livewirePageGroup.scheduledConference.pages.attendance');
+        if($this->redirect === 'agenda') {
+            return route('livewirePageGroup.scheduledConference.pages.agenda');
         }
 
         return route('filament.scheduledConference.pages.dashboard');
