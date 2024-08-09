@@ -24,7 +24,7 @@
                         <td class="px-6 pl-8 py-2 text-left">Time</td>
                         <td class="px-6 py-2 text-left">Session Name</td>
                         @if ($isParticipant)
-                            <td class="px-6 py-2 text-left">Attendance Status</td>
+                            <td class="px-6 py-2 text-center">Status</td>
                         @endif
                     </tr>
                 </thead>
@@ -60,7 +60,7 @@
                                 </p>
                             </td>
                             @if ($timeline->canShown() && $isParticipant)
-                                <td class="px-6 py-4 text-right text-xs font-normal">
+                                <td class="px-6 py-4 text-right text-xs font-normal w-fit">
                                     @if ($timeline->canAttend())
                                         @if ($userRegistration->isAttended($timeline))
                                             <button class="btn btn-sm btn-disabled no-animation !text-white hover:text-white">
@@ -111,7 +111,7 @@
                                         </span>
                                     @endif
                                 </td>
-                                <th scope="row" class="px-6 py-4 whitespace-nowrap text-left text-wrap" 
+                                <td scope="row" class="px-6 py-4 whitespace-nowrap text-left text-wrap w-full"
                                 x-data="{ open: false }">
                                     <strong class="font-medium text-gray-900 dark:text-white">
                                         {{ $session->name }}
@@ -155,9 +155,9 @@
                                             {{ new Illuminate\Support\HtmlString($session->details) }}
                                         </div>
                                     @endif
-                                </th>
+                                </td>
                                 @if ($session->isRequiresAttendance() && $isParticipant)
-                                    <td class="px-4 py-4 text-right align-middle">
+                                    <td class="px-4 py-4 text-right align-middle w-fit">
                                         @if ($session->canAttend() && $isParticipant)
                                             @if ($userRegistration->isAttended($session))
                                                 <button class="btn btn-xs btn-disabled no-animation !text-white hover:text-white">
