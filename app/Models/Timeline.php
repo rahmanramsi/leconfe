@@ -94,7 +94,7 @@ class Timeline extends Model
         );
     }
 
-    public function getEarliestTime(): ?Carbon
+    public function getEarliestTime(): Carbon
     {
         $earliest_session = $this->sessions()
             ->orderBy('time_start', 'ASC')
@@ -102,13 +102,13 @@ class Timeline extends Model
             ->first();
 
         if(!$earliest_session) {
-            return now()->subDays(60);
+            return Carbon::minValue();
         }
 
         return $earliest_session->date_start;
     }
 
-    public function getLatestTime(): ?Carbon
+    public function getLatestTime(): Carbon
     {
         $latest_session = $this->sessions()
             ->orderBy('time_end', 'DESC')
@@ -116,7 +116,7 @@ class Timeline extends Model
             ->first();
 
         if(!$latest_session) {
-            return now()->subDays(30);
+            return Carbon::minValue();
         }
 
         return $latest_session->date_end;

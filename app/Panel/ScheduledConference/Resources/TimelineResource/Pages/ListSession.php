@@ -51,10 +51,18 @@ class ListSession extends Page implements HasTable, HasForms
         $this->timeline = $record;
     }
 
-    public function getTitle(): string | Htmlable
+    public function getHeading(): string | Htmlable
     {
-        $timeline = $this->timeline->name;
-        return "Timeline: $timeline";
+        return $this->timeline->name;
+    }
+
+    public function getSubheading(): string | Htmlable | null
+    {
+        $timeline = $this->timeline;
+        $date = $timeline->date->format(Setting::get('format_date'));
+        $timeSpan = $timeline->time_span;
+
+        return "$date ($timeSpan)";
     }
 
     public function getBreadcrumbs(): array
