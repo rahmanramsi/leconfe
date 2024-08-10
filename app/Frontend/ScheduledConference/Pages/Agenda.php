@@ -2,6 +2,7 @@
 
 namespace App\Frontend\ScheduledConference\Pages;
 
+use App\Models\User;
 use App\Models\Session;
 use App\Models\Timeline;
 use Illuminate\Support\Arr;

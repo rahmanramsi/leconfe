@@ -1,0 +1,69 @@
+<?php
+
+namespace App\Notifications;
+
+use App\Models\Registration;
+use App\Panel\ScheduledConference\Resources\RegistrantResource;
+use App\Providers\PanelProvider;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
+use Filament\Notifications\Actions\Action;
+use Filament\Notifications\Notification as FilamentNotification;
+
+class NewRegistration extends Notification
+{
+    use Queueable;
+
+    /**
+     * Create a new notification instance.
+     */
+    public function __construct(public Registration $registration)
+    {
+        //
+    }
+
+    /**
+     * Get the notification's delivery channels.
+     *
+     * @return array<int, string>
+     */
+    public function via($notifiable): array
+    {
+        return ['database'];
+    }
+
+    public function toDatabase(object $notifiable)
+    {
+        $registrationCost = money($this->registration->registrationPayment->cost, $this->registration->registrationPayment->currency, true);
+        
+        return FilamentNotification::make()
+            ->icon('heroicon-m-user-plus')
+            ->iconColor('primary')
+            ->title('New Registrant')
+            ->body("
+                Name: {$this->registration->user->full_name}<br>
+                Type: {$this->registration->registrationPayment->name}<br>
+                Cost: {$registrationCost}
+            ")
+            ->actions([
+                Action::make('new-registrant')
+                    ->label('Go to registrant list')
+                    ->url(fn () => RegistrantResource::getUrl('index', panel: PanelProvider::PANEL_SCHEDULED_CONFERENCE)),
+            ])
+            ->getDatabaseMessage();
+    }
+
+    /**
+     * Get the array representation of the notification.
+     *
+     * @return array<string, mixed>
+     */
+    public function toArray(object $notifiable): array
+    {
+        return [
+            //
+        ];
+    }
+}

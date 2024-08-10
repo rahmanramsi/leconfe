@@ -9,6 +9,8 @@ use App\Models\Enums\UserRole;
 use Livewire\Attributes\Title;
 use App\Models\RegistrationType;
 use App\Models\Timeline;
+use App\Models\User;
+use App\Notifications\NewRegistration;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -92,6 +94,18 @@ class ParticipantRegister extends Page
             'state' => $isFree ? RegistrationPaymentState::Paid : RegistrationPaymentState::Unpaid,
             'paid_at' => $isFree ? now() : null,
         ]);
+
+        User::whereHas('roles', function ($query) {
+            $query->whereHas('permissions', function ($query) {
+                $query->where('name', 'Registration:notified');
+            });
+        })->get()->each(function ($user) use($registration) {
+            $user->notify(
+                new NewRegistration(
+                    registration: $registration,
+                )
+            );
+        });
 
         return redirect(request()->header('Referer'));
     }
