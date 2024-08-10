@@ -3,14 +3,15 @@
 namespace App\Frontend\ScheduledConference\Pages;
 
 use App\Models\Session;
-use App\Models\Enums\RegistrationPaymentState;
 use App\Models\Timeline;
+use Illuminate\Support\Arr;
 use App\Models\Registration;
 use Illuminate\Support\Facades\Route;
 use App\Models\RegistrationAttendance;
-use Illuminate\Support\Arr;
 use Rahmanramsi\LivewirePageGroup\PageGroup;
 use Rahmanramsi\LivewirePageGroup\Pages\Page;
+use App\Models\Enums\RegistrationPaymentState;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 
 class Agenda extends Page
 {
@@ -124,6 +125,11 @@ class Agenda extends Page
         $currentScheduledConference = app()->getCurrentScheduledConference();
 
         $timelines = Timeline::where('hide', false)
+            ->with(['sessions' => function (Builder $query) {
+                $query
+                    ->orderBy('time_start', 'ASC')
+                    ->orderBy('time_end', 'ASC');
+            }])
             ->orderBy('date', 'ASC')
             ->get();
 

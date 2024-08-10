@@ -32,6 +32,7 @@ use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
 use App\Panel\ScheduledConference\Resources\TimelineResource;
+use Illuminate\Contracts\Database\Eloquent\Builder as EloquentBuilder;
 
 class ListAllSession extends Page implements HasTable, HasForms
 {
@@ -96,6 +97,9 @@ class ListAllSession extends Page implements HasTable, HasForms
         return $table
             ->query(
                 static::$model::query()
+                    ->with(['timeline' => function (EloquentBuilder $query) {
+                        $query->orderBy('date', 'ASC');
+                    }])
             )
             ->columns([
                 TextColumn::make('time_span')

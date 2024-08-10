@@ -66,8 +66,8 @@ class TimelineResource extends Resource
                         ->after('time_start'),
                 ]),
             Checkbox::make('require_attendance')
-                ->disabled(fn(?Model $record) => (bool) $record ? $record->timeline->isRequiresAttendance() : false)
-                ->helperText(fn(?Model $record) => $record ? ($record->timeline->isRequiresAttendance() ? 'Timeline are requiring attendance, this is disabled.' : null) : null),
+                ->disabled(fn(?Model $record) => (bool) $record ? $record->timeline->isRequireAttendance() : false)
+                ->helperText(fn(?Model $record) => $record ? ($record->timeline->isRequireAttendance() ? 'Timeline are requiring attendance, this is disabled.' : null) : null),
         ];
     }
 
@@ -135,7 +135,15 @@ class TimelineResource extends Resource
             ->actions([
                 EditAction::make()
                     ->modalWidth(MaxWidth::ExtraLarge)
-                    ->model(Timeline::class),
+                    ->model(Timeline::class)
+                    ->after(function (Model $record, array $data) {
+                        $date = $data['date'];
+                        foreach($record->sessions as $session) {
+                            $session->date = $date;
+                            $session->save();
+                        }
+                        return $data;
+                    }),
                 ActionGroup::make([
                     Action::make('session')
                         ->label('Details')

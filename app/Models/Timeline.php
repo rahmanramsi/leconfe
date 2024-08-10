@@ -88,8 +88,8 @@ class Timeline extends Model
         return Attribute::make(
             get: fn() => Str::squish(
                 $this->getEarliestTime()->format(Setting::get('format_time')) .
-                    ' - ' .
-                    $this->getLatestTime()->format(Setting::get('format_time'))
+                ' - ' .
+                $this->getLatestTime()->format(Setting::get('format_time'))
             ),
         );
     }
@@ -127,14 +127,14 @@ class Timeline extends Model
         return !$this->getEarliestTime()->isFuture() && !$this->getLatestTime()->isPast();
     }
 
-    public function isRequiresAttendance(): bool
+    public function isRequireAttendance(): bool
     {
         return $this->require_attendance;
     }
 
     public function canShown(): bool
     {
-        if (!$this->isRequiresAttendance()) {
+        if (!$this->isRequireAttendance()) {
             return false;
         }
 

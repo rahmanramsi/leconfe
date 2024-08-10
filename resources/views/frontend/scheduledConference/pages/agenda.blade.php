@@ -77,20 +77,22 @@
                                                 Confirmed
                                             </button>
                                         @else
-                                            <button class="btn btn-sm btn-disabled no-animation !text-white hover:text-white">
-                                                Expired
-                                            </button>
+                                            @if ($timeline->getEarliestTime()->isFuture())
+                                                <button class="btn btn-sm btn-disabled no-animation !text-white hover:text-white">
+                                                    Incoming
+                                                </button>
+                                            @elseif ($timeline->getEarliestTime()->isPast())
+                                                <button class="btn btn-sm btn-disabled no-animation !text-white hover:text-white">
+                                                    Expired
+                                                </button>
+                                            @endif
                                         @endif
                                     @endif
                                 </td>
                             @endif
                         </tr>
                         @php
-                            $sessions = $timeline
-                                ->sessions()
-                                ->orderBy('time_start', 'ASC')
-                                ->orderBy('time_end', 'ASC')
-                                ->get();
+                            $sessions = $timeline->sessions;
                         @endphp
                         @foreach ($sessions as $session)
                             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -155,9 +157,9 @@
                                         </div>
                                     @endif
                                 </td>
-                                @if ($session->isRequiresAttendance() && $isParticipant)
+                                @if ($session->require_attendance && !$timeline->isRequireAttendance() && $isParticipant)
                                     <td class="px-4 py-4 text-right align-middle w-fit">
-                                        @if ($session->canAttend() && $isParticipant)
+                                        @if ($session->isOngoing())
                                             @if ($userRegistration->isAttended($session))
                                                 <button class="btn btn-xs btn-disabled no-animation !text-white hover:text-white">
                                                     Confirmed
@@ -174,9 +176,15 @@
                                                     Confirmed
                                                 </button>
                                             @else
-                                                <button class="btn btn-xs btn-disabled no-animation !text-white hover:text-white">
-                                                    Expired
-                                                </button>
+                                                @if ($session->isFuture())
+                                                    <button class="btn btn-xs btn-disabled no-animation !text-white hover:text-white">
+                                                        Incoming
+                                                    </button>
+                                                @elseif ($session->isPast())
+                                                    <button class="btn btn-xs btn-disabled no-animation !text-white hover:text-white">
+                                                        Expired
+                                                    </button>
+                                                @endif
                                             @endif
                                         @endif
                                     </td>

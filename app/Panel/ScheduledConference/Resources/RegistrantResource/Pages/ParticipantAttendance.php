@@ -263,7 +263,7 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
                     ->falseIcon('heroicon-o-x-mark')
                     ->falseColor(Color::Red)
                     ->tooltip(function (Model $record) {
-                        if ($record->timeline->isRequiresAttendance()) {
+                        if ($record->timeline->isRequireAttendance()) {
                             return 'Per day attendance are required, mark in and out on top of the page.';
                         }
                     })
@@ -291,7 +291,7 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
                     ->label('')
                     ->getDescriptionFromRecordUsing(function (Model $record): string {
                         $date = $record->timeline->date->format(Setting::get('format_date'));
-                        $attendanceRequire = $record->timeline->isRequiresAttendance() ? "(Per day attendance are required)" : null;
+                        $attendanceRequire = $record->timeline->isRequireAttendance() ? "(Per day attendance are required)" : null;
 
                         return "$date $attendanceRequire";
                     })
@@ -345,7 +345,7 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
                             $action->sendFailureNotification();
                         }
                     })
-                    ->visible(fn(Model $record) => !$this->registration->isAttended($record) && $record->isRequiresAttendance())
+                    ->visible(fn(Model $record) => !$this->registration->isAttended($record) && $record->isRequireAttendance())
                     ->authorize('markIn', RegistrationAttendance::class),
                 Action::make('mark_out')
                     ->icon('heroicon-m-finger-print')
@@ -362,7 +362,7 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
 
                         $action->sendSuccessNotification();
                     })
-                    ->visible(fn(Model $record) => $this->registration->isAttended($record) && $record->isRequiresAttendance())
+                    ->visible(fn(Model $record) => $this->registration->isAttended($record) && $record->isRequireAttendance())
                     ->authorize('markOut', RegistrationAttendance::class),
             ])
             ->bulkActions([

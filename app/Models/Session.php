@@ -53,14 +53,14 @@ class Session extends Model
     protected function dateStart(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->date->setTimeFromTimeString($this->time_start),
+            get: fn() => $this->date->setTimeFromTimeString($this->time_start->format('H:i:s')),
         );
     }
 
     protected function dateEnd(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->date->setTimeFromTimeString($this->time_end),
+            get: fn() => $this->date->setTimeFromTimeString($this->time_end->format('H:i:s')),
         );
     }
 
@@ -79,9 +79,9 @@ class Session extends Model
         return !$this->isFuture() && !$this->isPast();
     }
 
-    public function isRequiresAttendance(): bool
+    public function isRequireAttendance(): bool
     {
-        if ($this->timeline()->first()->isRequiresAttendance()) {
+        if ($this->timeline->isRequireAttendance()) {
             return false;
         }
 
@@ -90,7 +90,7 @@ class Session extends Model
 
     public function canAttend(): bool
     {
-        if (!$this->isRequiresAttendance()) {
+        if (!$this->isRequireAttendance()) {
             return false;
         }
 
@@ -103,7 +103,7 @@ class Session extends Model
 
     public function getRequiresAttendanceStatus(): string
     {
-        if ($this->timeline()->first()->isRequiresAttendance()) {
+        if ($this->timeline->isRequireAttendance()) {
             return self::ATTENDANCE_STATUS_TIMELINE;
         }
 

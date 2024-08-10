@@ -33,6 +33,7 @@ use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
 use App\Panel\ScheduledConference\Resources\TimelineResource;
+use Illuminate\Contracts\Database\Eloquent\Builder as EloquentBuilder;
 
 class ListSession extends Page implements HasTable, HasForms
 {
@@ -110,6 +111,7 @@ class ListSession extends Page implements HasTable, HasForms
             ->query(
                 static::$model::query()
                     ->where('timeline_id', $this->timeline->id)
+                    ->with('timeline')
             )
             ->columns([
                 TextColumn::make('time_span')
