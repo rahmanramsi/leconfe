@@ -2,10 +2,17 @@
 
 namespace App\Notifications;
 
+use App\Models\User;
+use App\Models\Registration;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
+use App\Providers\PanelProvider;
+use Filament\Notifications\Actions\Action;
 use Illuminate\Notifications\Notification;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Models\Enums\RegistrationPaymentState;
+use Illuminate\Notifications\Messages\MailMessage;
+use App\Panel\ScheduledConference\Resources\RegistrantResource;
+use Filament\Notifications\Notification as FilamentNotification;
 
 class RegistrationPaymentDecision extends Notification
 {
@@ -14,7 +21,7 @@ class RegistrationPaymentDecision extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+    public function __construct(public User $user, public string $state = RegistrationPaymentState::Unpaid->value)
     {
         //
     }
@@ -26,18 +33,17 @@ class RegistrationPaymentDecision extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['database'];
     }
 
-    /**
-     * Get the mail representation of the notification.
-     */
-    public function toMail(object $notifiable): MailMessage
+    public function toDatabase(object $notifiable)
     {
-        return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+        $state = $this->state === RegistrationPaymentState::Paid->value ? 'accepted' : 'declined';
+
+        return FilamentNotification::make()
+            ->title('Participant Registration')
+            ->body("Dear {$this->user->full_name}, your payment has been {$state}, please finish your registration payment.")
+            ->getDatabaseMessage();
     }
 
     /**

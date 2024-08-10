@@ -13,37 +13,38 @@ use Filament\Tables\Table;
 use Illuminate\Support\Str;
 use App\Models\Registration;
 use Filament\Facades\Filament;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Support\Colors\Color;
 use Filament\Forms\Components\Grid;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Grouping\Group;
 use Filament\Forms\Components\Select;
+use App\Models\RegistrationAttendance;
 use Filament\Infolists\Components\View;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Model;
+use Filament\Infolists\Components\Split;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Infolists\Components\Section;
 use Filament\Tables\Actions\RestoreAction;
+use Filament\Infolists\Components\Fieldset;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Filament\Infolists\Components\TextEntry;
 use App\Models\Enums\RegistrationPaymentType;
 use Filament\Tables\Actions\DeleteBulkAction;
 use App\Models\Enums\RegistrationPaymentState;
-use App\Models\RegistrationAttendance;
 use Filament\Tables\Actions\ForceDeleteAction;
+use App\Notifications\RegistrationPaymentDecision;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Infolists\Components\Grid as InfolistGrid;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use App\Panel\ScheduledConference\Resources\RegistrantResource\Pages;
-use Filament\Infolists\Components\Fieldset;
-use Filament\Infolists\Components\Section;
-use Filament\Infolists\Components\Split;
-use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Infolist;
 
 class RegistrantResource extends Resource
 {
@@ -201,6 +202,14 @@ class RegistrantResource extends Resource
                     ->label('Decision')
                     ->modalHeading('Paid Status Decision')
                     ->modalWidth('lg')
+                    ->after(function (Model $record) {
+                        $record->user->notify(
+                            new RegistrationPaymentDecision(
+                                user: $record->user,
+                                state: $record->registrationPayment->state
+                        )
+                        );
+                    })
                     ->hidden(fn(Model $record) => $record->trashed())
                     ->authorize(fn (Model $record) => auth()->user()->can('update', $record)),
                 ActionGroup::make([
