@@ -1,5 +1,4 @@
 @use('App\Models\Enums\RegistrationPaymentState')
-@use('Carbon\Carbon')
 @use('App\Facades\Setting')
 
 <x-website::layouts.main>
@@ -56,7 +55,7 @@
                                     @endif
                                 </strong>
                                 <p class="text-gray-500">
-                                    {{ Carbon::parse($timeline->date)->format(Setting::get('format_date')) }}
+                                    {{ $timeline->date->format(Setting::get('format_date')) }}
                                 </p>
                             </td>
                             @if ($timeline->canShown() && $isParticipant)

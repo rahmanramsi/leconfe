@@ -156,7 +156,7 @@ class ListAllSession extends Page implements HasTable, HasForms
             ->groups([
                 Group::make('timeline.name')
                     ->label('')
-                    ->getDescriptionFromRecordUsing(fn(Model $record): string => Carbon::parse($record->timeline->date)->format(Setting::get('format_date')))
+                    ->getDescriptionFromRecordUsing(fn(Model $record): string => $record->timeline->date->format(Setting::get('format_date')))
                     ->orderQueryUsing(function (Builder $query, string $direction) {
                         return $query
                             ->select(['sessions.*', 'timelines.date'])

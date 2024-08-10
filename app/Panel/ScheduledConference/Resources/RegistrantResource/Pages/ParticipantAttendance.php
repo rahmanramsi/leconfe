@@ -103,7 +103,7 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
                                                 return 'Select valid timeline.';
                                             }
 
-                                            return Carbon::parse($timeline->date)->format(Setting::get('format_date'));
+                                            return $timeline->date->format(Setting::get('format_date'));
                                         }),
                                 ]),
                             TimePicker::make('attendance_time')
@@ -127,7 +127,7 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
                 ->action(function (array $data, Actions\Action $action) {
                     try {
                         $timeline = Timeline::where('id', $data['timeline_id'])->first();
-                        $time = (string) Carbon::parse($timeline->date)->setTimeFromTimeString($data['attendance_time']);
+                        $time = (string) $timeline->date->setTimeFromTimeString($data['attendance_time']);
 
                         RegistrationAttendance::create([
                             'timeline_id' => $timeline->id,
@@ -198,7 +198,7 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
             }
 
             $timelineName = $timeline->name;
-            $timelineDate = Carbon::parse($timeline->date)->format(Setting::get('format_date'));
+            $timelineDate = $timeline->date->format(Setting::get('format_date'));
             $timelineTimeSpan = $timeline->time_span;
 
             $timelinesOption[$timeline->id] = "($timelineDate, $timelineTimeSpan) $timelineName ";
@@ -290,10 +290,10 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
                 Group::make('timeline.name')
                     ->label('')
                     ->getDescriptionFromRecordUsing(function (Model $record): string {
-                        $date = Carbon::parse($record->timeline->date)->format(Setting::get('format_date'));
-                        $isRequiresAttendance = $record->timeline->isRequiresAttendance() ? "(Per day attendance are required)" : null;
+                        $date = $record->timeline->date->format(Setting::get('format_date'));
+                        $attendanceRequire = $record->timeline->isRequiresAttendance() ? "(Per day attendance are required)" : null;
 
-                        return "$date $isRequiresAttendance";
+                        return "$date $attendanceRequire";
                     })
                     ->orderQueryUsing(function (Builder $query, string $direction) {
                         return $query
@@ -318,7 +318,7 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
                                     ->schema([
                                         Placeholder::make('attendance_date')
                                             ->label('')
-                                            ->content(fn() => Carbon::parse($record->date)->format(Setting::get('format_date'))),
+                                            ->content(fn() => $record->date->format(Setting::get('format_date'))),
                                     ]),
                                 TimePicker::make('attendance_time')
                                     ->helperText('Input participant attendance time.')
@@ -329,7 +329,7 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
                     })
                     ->action(function (Model $record, array $data, Action $action) {
                         try {
-                            $time = (string) Carbon::parse($record->date)->setTimeFromTimeString($data['attendance_time']);
+                            $time = (string) $record->date->setTimeFromTimeString($data['attendance_time']);
 
                             RegistrationAttendance::create([
                                 'session_id' => $record->id,

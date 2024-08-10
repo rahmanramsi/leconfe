@@ -29,6 +29,12 @@ class Session extends Model
         'time_end',
     ];
 
+    protected $casts = [
+        'date' => 'datetime',
+        'time_start' => 'datetime',
+        'time_end' => 'datetime',
+    ];
+
     public const ATTENDANCE_STATUS_TIMELINE = 'timeline';
     public const ATTENDANCE_STATUS_REQUIRED = 'required';
     public const ATTENDANCE_STATUS_NOT_REQUIRED = 'not-required';
@@ -37,9 +43,9 @@ class Session extends Model
     {
         return Attribute::make(
             get: fn() => Str::squish(
-                Carbon::parse($this->time_start)->format(Setting::get('format_time')) .
-                    ' - ' .
-                    Carbon::parse($this->time_end)->format(Setting::get('format_time'))
+                $this->time_start->format(Setting::get('format_time')) .
+                ' - ' .
+                $this->time_end->format(Setting::get('format_time'))
             ),
         );
     }
@@ -47,14 +53,14 @@ class Session extends Model
     protected function dateStart(): Attribute
     {
         return Attribute::make(
-            get: fn() => Carbon::parse($this->date)->setTimeFromTimeString($this->time_start),
+            get: fn() => $this->date->setTimeFromTimeString($this->time_start),
         );
     }
 
     protected function dateEnd(): Attribute
     {
         return Attribute::make(
-            get: fn() => Carbon::parse($this->date)->setTimeFromTimeString($this->time_end),
+            get: fn() => $this->date->setTimeFromTimeString($this->time_end),
         );
     }
 
