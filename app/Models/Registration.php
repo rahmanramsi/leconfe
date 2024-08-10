@@ -27,12 +27,8 @@ class Registration extends Model
         return $this->registrationPayment->state;
     }
 
-    public function getAttendance(null | Timeline | Session $data): ?RegistrationAttendance
+    public function getAttendance(Timeline | Session $data): ?RegistrationAttendance
     {
-        if(!$data) {
-            return null;
-        }
-        
         $attendance = RegistrationAttendance::where('registration_id', $this->id);
 
         if($data instanceof Timeline) {
