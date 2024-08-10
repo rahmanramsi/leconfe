@@ -65,9 +65,9 @@ class TimelineResource extends Resource
                         ->required()
                         ->after('time_start'),
                 ]),
-            Checkbox::make('requires_attendance')
-                ->disabled(fn (?Model $record) => (boolean) $record ? $record->timeline->isRequiresAttendance() : false)
-                ->helperText(fn (?Model $record) => $record ? ($record->timeline->isRequiresAttendance() ? 'Timeline are requiring attendance, this is disabled.' : null) : null),
+            Checkbox::make('require_attendance')
+                ->disabled(fn(?Model $record) => (bool) $record ? $record->timeline->isRequiresAttendance() : false)
+                ->helperText(fn(?Model $record) => $record ? ($record->timeline->isRequiresAttendance() ? 'Timeline are requiring attendance, this is disabled.' : null) : null),
         ];
     }
 
@@ -81,14 +81,14 @@ class TimelineResource extends Resource
                     ->maxLength(255),
                 DatePicker::make('date')
                     ->required(),
-                Checkbox::make('requires_attendance')
+                Checkbox::make('require_attendance')
                     ->helperText('By turning this on, participants only need to attend here.'),
                 Select::make('type')
                     ->options(Timeline::getTypes())
                     ->helperText('Type that integrates with the workflow process.')
                     ->unique(
-                        ignorable: fn () => $form->getRecord(),
-                        modifyRuleUsing: fn (Unique $rule) => $rule->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId()),
+                        ignorable: fn() => $form->getRecord(),
+                        modifyRuleUsing: fn(Unique $rule) => $rule->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId()),
                     )
                     ->native(false),
             ])
@@ -118,7 +118,7 @@ class TimelineResource extends Resource
                     ->badge()
                     ->color(Color::Blue)
                     ->alignCenter(),
-                IconColumn::make('requires_attendance')
+                IconColumn::make('require_attendance')
                     ->boolean()
                     ->trueIcon('heroicon-o-check-circle')
                     ->trueColor(Color::Green)
@@ -128,7 +128,7 @@ class TimelineResource extends Resource
                 ToggleColumn::make('hide')
                     ->label('Hidden'),
             ])
-            ->recordUrl(fn (Model $record) => static::getUrl('session', ['record' => $record]))
+            ->recordUrl(fn(Model $record) => static::getUrl('session', ['record' => $record]))
             ->filters([
                 // ...
             ])
@@ -141,8 +141,8 @@ class TimelineResource extends Resource
                         ->label('Details')
                         ->icon('heroicon-m-calendar-days')
                         ->color(Color::Blue)
-                        ->url(fn (Model $record) => static::getUrl('session', ['record' => $record]))
-                        ->authorize(fn (Model $record) => auth()->user()->can('view', $record) && auth()->user()->can('viewAny', Session::class)),
+                        ->url(fn(Model $record) => static::getUrl('session', ['record' => $record]))
+                        ->authorize(fn(Model $record) => auth()->user()->can('view', $record) && auth()->user()->can('viewAny', Session::class)),
                     DeleteAction::make(),
                 ]),
             ]);

@@ -32,7 +32,7 @@ class Timeline extends Model
         'date',
         'type',
         'hide',
-        'requires_attendance',
+        'require_attendance',
     ];
 
     protected $casts = [
@@ -86,10 +86,10 @@ class Timeline extends Model
     protected function timeSpan(): Attribute
     {
         return Attribute::make(
-            get: fn () => Str::squish(
-                $this->getEarliestTime()->format(Setting::get('format_time')) . 
-                ' - ' . 
-                $this->getLatestTime()->format(Setting::get('format_time'))
+            get: fn() => Str::squish(
+                $this->getEarliestTime()->format(Setting::get('format_time')) .
+                    ' - ' .
+                    $this->getLatestTime()->format(Setting::get('format_time'))
             ),
         );
     }
@@ -101,7 +101,7 @@ class Timeline extends Model
             ->limit(1)
             ->first();
 
-        if(!$earliest_session) {
+        if (!$earliest_session) {
             return Carbon::minValue();
         }
 
@@ -115,7 +115,7 @@ class Timeline extends Model
             ->limit(1)
             ->first();
 
-        if(!$latest_session) {
+        if (!$latest_session) {
             return Carbon::minValue();
         }
 
@@ -129,16 +129,16 @@ class Timeline extends Model
 
     public function isRequiresAttendance(): bool
     {
-        return $this->requires_attendance;
+        return $this->require_attendance;
     }
 
     public function canShown(): bool
     {
-        if(!$this->isRequiresAttendance()) {
+        if (!$this->isRequiresAttendance()) {
             return false;
         }
 
-        if($this->hide) {
+        if ($this->hide) {
             return false;
         }
 
@@ -147,11 +147,11 @@ class Timeline extends Model
 
     public function canAttend(): bool
     {
-        if(!$this->canShown()) {
+        if (!$this->canShown()) {
             return false;
         }
 
-        if(!$this->isOngoing()) {
+        if (!$this->isOngoing()) {
             return false;
         }
 

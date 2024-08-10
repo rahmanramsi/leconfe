@@ -65,10 +65,10 @@ class ListAllSession extends Page implements HasTable, HasForms
                 ->label('Add session')
                 ->modalHeading('Add Session')
                 ->model(static::$model)
-                ->form(fn (Form $form) => $this->form($form))
+                ->form(fn(Form $form) => $this->form($form))
                 ->mutateFormDataUsing(function (array $data) {
                     $timeline = Timeline::where('id', $data['timeline_id'])->first();
-                    if($timeline) {
+                    if ($timeline) {
                         $data['date'] = $timeline->date;
                     }
                     return $data;
@@ -115,24 +115,25 @@ class ListAllSession extends Page implements HasTable, HasForms
                 TextColumn::make('public_details')
                     ->label('Public Details')
                     ->placeholder('Empty')
-                    ->formatStateUsing(fn () => 'Not Empty'),
+                    ->formatStateUsing(fn() => 'Not Empty'),
                 TextColumn::make('details')
                     ->label('Participant Details')
                     ->placeholder('Empty')
-                    ->formatStateUsing(fn () => 'Not Empty'),
-                IconColumn::make('requires_attendance')
-                    ->icon(fn (Model $record) => match($record->getRequiresAttendanceStatus()) {
+                    ->formatStateUsing(fn() => 'Not Empty'),
+                IconColumn::make('require_attendance')
+                    ->icon(fn(Model $record) => match ($record->getRequiresAttendanceStatus()) {
                         'timeline' => 'heroicon-o-stop-circle',
                         'not-required' => 'heroicon-o-x-circle',
                         'required' => 'heroicon-o-check-circle',
                     })
-                    ->color(fn (Model $record) => match($record->getRequiresAttendanceStatus()) {
+                    ->color(fn(Model $record) => match ($record->getRequiresAttendanceStatus()) {
                         'timeline' => Color::Blue,
                         'not-required' => Color::Red,
                         'required' => Color::Green,
                     })
-                    ->tooltip(fn (Model $record) => $record->getRequiresAttendanceStatus() === 'timeline' ?
-                        "Attendance are'nt required because the timeline had it active." : null
+                    ->tooltip(
+                        fn(Model $record) => $record->getRequiresAttendanceStatus() === 'timeline' ?
+                            "Attendance are'nt required because the timeline had it active." : null
                     )
                     ->alignCenter(),
             ])
@@ -141,11 +142,11 @@ class ListAllSession extends Page implements HasTable, HasForms
                 EditAction::make()
                     ->modalHeading('Edit Session')
                     ->model(static::$model)
-                    ->form(fn (Form $form) => $this->form($form))
-                    ->authorize(fn (Model $record) => auth()->user()->can('update', $record)),
+                    ->form(fn(Form $form) => $this->form($form))
+                    ->authorize(fn(Model $record) => auth()->user()->can('update', $record)),
                 ActionGroup::make([
                     DeleteAction::make()
-                        ->authorize(fn (Model $record) => auth()->user()->can('delete', $record)),
+                        ->authorize(fn(Model $record) => auth()->user()->can('delete', $record)),
                 ])
             ])
             ->bulkActions([
@@ -155,7 +156,7 @@ class ListAllSession extends Page implements HasTable, HasForms
             ->groups([
                 Group::make('timeline.name')
                     ->label('')
-                    ->getDescriptionFromRecordUsing(fn (Model $record): string => Carbon::parse($record->timeline->date)->format(Setting::get('format_date')))
+                    ->getDescriptionFromRecordUsing(fn(Model $record): string => Carbon::parse($record->timeline->date)->format(Setting::get('format_date')))
                     ->orderQueryUsing(function (Builder $query, string $direction) {
                         return $query
                             ->select(['sessions.*', 'timelines.date'])

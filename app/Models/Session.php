@@ -23,7 +23,7 @@ class Session extends Model
         'name',
         'public_details',
         'details',
-        'requires_attendance',
+        'require_attendance',
         'date',
         'time_start',
         'time_end',
@@ -36,10 +36,10 @@ class Session extends Model
     protected function timeSpan(): Attribute
     {
         return Attribute::make(
-            get: fn () => Str::squish(
-                Carbon::parse($this->time_start)->format(Setting::get('format_time')) . 
-                ' - ' . 
-                Carbon::parse($this->time_end)->format(Setting::get('format_time'))
+            get: fn() => Str::squish(
+                Carbon::parse($this->time_start)->format(Setting::get('format_time')) .
+                    ' - ' .
+                    Carbon::parse($this->time_end)->format(Setting::get('format_time'))
             ),
         );
     }
@@ -47,14 +47,14 @@ class Session extends Model
     protected function dateStart(): Attribute
     {
         return Attribute::make(
-            get: fn () => Carbon::parse($this->date)->setTimeFromTimeString($this->time_start),
+            get: fn() => Carbon::parse($this->date)->setTimeFromTimeString($this->time_start),
         );
     }
 
     protected function dateEnd(): Attribute
     {
         return Attribute::make(
-            get: fn () => Carbon::parse($this->date)->setTimeFromTimeString($this->time_end),
+            get: fn() => Carbon::parse($this->date)->setTimeFromTimeString($this->time_end),
         );
     }
 
@@ -75,20 +75,20 @@ class Session extends Model
 
     public function isRequiresAttendance(): bool
     {
-        if($this->timeline()->first()->isRequiresAttendance()) {
+        if ($this->timeline()->first()->isRequiresAttendance()) {
             return false;
         }
 
-        return $this->requires_attendance;
+        return $this->require_attendance;
     }
 
     public function canAttend(): bool
     {
-        if(!$this->isRequiresAttendance()) {
+        if (!$this->isRequiresAttendance()) {
             return false;
         }
 
-        if(!$this->isOngoing()) {
+        if (!$this->isOngoing()) {
             return false;
         }
 
@@ -97,11 +97,11 @@ class Session extends Model
 
     public function getRequiresAttendanceStatus(): string
     {
-        if($this->timeline()->first()->isRequiresAttendance()) {
+        if ($this->timeline()->first()->isRequiresAttendance()) {
             return self::ATTENDANCE_STATUS_TIMELINE;
         }
 
-        if(!$this->requires_attendance) {
+        if (!$this->require_attendance) {
             return self::ATTENDANCE_STATUS_NOT_REQUIRED;
         }
 

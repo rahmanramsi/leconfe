@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('public_details')->nullable();
             $table->text('details')->nullable();
-            $table->boolean('requires_attendance')->default(false);
+            $table->boolean('require_attendance')->default(false);
             $table->date('date');
             $table->time('time_start');
             $table->time('time_end');

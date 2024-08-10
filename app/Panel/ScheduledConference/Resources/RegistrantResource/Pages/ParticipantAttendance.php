@@ -227,18 +227,18 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
                             ->where('sessions.name', 'like', "%{$search}%");
                     })
                     ->sortable(),
-                IconColumn::make('requires_attendance')
-                    ->icon(fn (Model $record) => match ($record->getRequiresAttendanceStatus()) {
+                IconColumn::make('require_attendance')
+                    ->icon(fn(Model $record) => match ($record->getRequiresAttendanceStatus()) {
                         'required' => 'heroicon-o-check',
                         default => 'heroicon-o-x-mark',
                     })
-                    ->color(fn (Model $record) => match ($record->getRequiresAttendanceStatus()) {
+                    ->color(fn(Model $record) => match ($record->getRequiresAttendanceStatus()) {
                         'required' => Color::Green,
                         'not-required' => Color::Gray,
                         'timeline' => Color::Blue,
                     })
                     ->tooltip(
-                        fn (Model $record) => match($record->getRequiresAttendanceStatus()) {
+                        fn(Model $record) => match ($record->getRequiresAttendanceStatus()) {
                             'not-required' => "Attendance are'nt required.",
                             'timeline' => "Attendance are'nt required because per day attendance are required.",
                             default => null,
@@ -318,11 +318,11 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
                                     ->schema([
                                         Placeholder::make('attendance_date')
                                             ->label('')
-                                            ->content(fn () => Carbon::parse($record->date)->format(Setting::get('format_date'))),
+                                            ->content(fn() => Carbon::parse($record->date)->format(Setting::get('format_date'))),
                                     ]),
                                 TimePicker::make('attendance_time')
                                     ->helperText('Input participant attendance time.')
-                                    ->hint(fn () => $record->time_span)
+                                    ->hint(fn() => $record->time_span)
                                     ->required(),
                             ])
                             ->columns(1);
@@ -345,7 +345,7 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
                             $action->sendFailureNotification();
                         }
                     })
-                    ->visible(fn (Model $record) => !$this->registration->isAttended($record) && $record->isRequiresAttendance())
+                    ->visible(fn(Model $record) => !$this->registration->isAttended($record) && $record->isRequiresAttendance())
                     ->authorize('markIn', RegistrationAttendance::class),
                 Action::make('mark_out')
                     ->icon('heroicon-m-finger-print')
@@ -362,7 +362,7 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
 
                         $action->sendSuccessNotification();
                     })
-                    ->visible(fn (Model $record) => $this->registration->isAttended($record) && $record->isRequiresAttendance())
+                    ->visible(fn(Model $record) => $this->registration->isAttended($record) && $record->isRequiresAttendance())
                     ->authorize('markOut', RegistrationAttendance::class),
             ])
             ->bulkActions([
