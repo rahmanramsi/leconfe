@@ -35,22 +35,22 @@ class Agenda extends Page
     {
     }
 
-    public function attend($data_id, $data_type): void
+    public function attend($id, $type): void
     {
-        if($data_type === self::ATTEND_TYPE_TIMELINE) {
-            $timeline = Timeline::where('id', $data_id)->first();
+        if($type === self::ATTEND_TYPE_TIMELINE) {
+            $timeline = Timeline::where('id', $id)->first();
 
             if(!$timeline) return;
 
             $this->timelineData = $timeline;
         } else {
-            $session = Session::where('id', $data_id)->first();
+            $session = Session::where('id', $id)->first();
 
             if(!$session) return;
 
             $this->sessionData = $session;
         }
-        $this->typeData = $data_type;
+        $this->typeData = $type;
         $this->isOpen = true;
     }
 
@@ -65,7 +65,6 @@ class Agenda extends Page
 
     public function confirm(): void
     {
-        // belum login
         if(!auth()->check()) {
             $this->errorMessage = "You're not logged in";
             return;
@@ -77,13 +76,11 @@ class Agenda extends Page
             ->where('user_id', auth()->user()->id)
             ->first();
 
-        // tidak melakukan registrasi
         if(!$registration) {
             $this->errorMessage = "You're not registrant of " . app()->getCurrentScheduledConference()->title;
             return;
         }
 
-        // belum melakukan pembayaran
         if($registration->registrationPayment->state !== RegistrationPaymentState::Paid->value) { 
             $this->errorMessage = "You're not participant of " . app()->getCurrentScheduledConference()->title;
             return;
@@ -93,7 +90,6 @@ class Agenda extends Page
 
             $timeline = $this->timelineData;
 
-            // timeline yang dipilih tidak valid
             if(!$timeline) {
                 $this->errorMessage = "Invalid event selection";
                 return;
@@ -107,7 +103,6 @@ class Agenda extends Page
             
             $session = $this->sessionData;
 
-            // session yang dipilih tidak valid
             if(!$session) {
                 $this->errorMessage = "Invalid event selection";
                 return;
