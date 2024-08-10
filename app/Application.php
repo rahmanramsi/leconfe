@@ -2,34 +2,38 @@
 
 namespace App;
 
-use App\Actions\Site\SiteCreateAction;
-use App\Models\Announcement;
-use App\Models\AuthorRole;
-use App\Models\Block;
-use App\Models\Committee;
-use App\Models\CommitteeRole;
-use App\Models\Conference;
-use App\Models\MailTemplate;
-use App\Models\NavigationMenu;
-use App\Models\Proceeding;
-use App\Models\Registration;
-use App\Models\RegistrationType;
-use App\Models\Scopes\ConferenceScope;
-use App\Models\Scopes\ScheduledConferenceScope;
-use App\Models\ScheduledConference;
 use App\Models\Site;
-use App\Models\SpeakerRole;
-use App\Models\Stakeholder;
-use App\Models\StakeholderLevel;
-use App\Models\StaticPage;
-use App\Models\Submission;
-use App\Models\SubmissionFileType;
-use App\Models\Timeline;
+use App\Models\Block;
 use App\Models\Topic;
 use App\Models\Track;
+use App\Models\Session;
 use App\Models\Version;
-use Illuminate\Foundation\Application as LaravelApplication;
+use App\Models\Timeline;
+use App\Models\Committee;
+use App\Models\AuthorRole;
+use App\Models\Conference;
+use App\Models\Proceeding;
+use App\Models\StaticPage;
+use App\Models\Submission;
+use App\Models\SpeakerRole;
+use App\Models\Stakeholder;
+use App\Models\Announcement;
+use App\Models\MailTemplate;
+use App\Models\Registration;
+use App\Models\CommitteeRole;
+use App\Models\NavigationMenu;
+use App\Models\RegistrationType;
+use App\Models\StakeholderLevel;
+use App\Models\SubmissionFileType;
 use Illuminate\Support\Collection;
+use App\Models\RegistrationPayment;
+use App\Models\ScheduledConference;
+use App\Actions\Site\SiteCreateAction;
+use App\Models\PaymentManual;
+use App\Models\RegistrationAttendance;
+use App\Models\Scopes\ConferenceScope;
+use App\Models\Scopes\ScheduledConferenceScope;
+use Illuminate\Foundation\Application as LaravelApplication;
 
 class Application extends LaravelApplication
 {
@@ -161,6 +165,10 @@ class Application extends LaravelApplication
             StakeholderLevel::class,
             RegistrationType::class,
             Registration::class,
+            RegistrationAttendance::class,
+            RegistrationPayment::class,
+            PaymentManual::class,
+            Session::class,
         ];
 
         foreach ($models as $model) {

@@ -72,7 +72,6 @@ class PaymentManuals extends Component implements HasForms, HasTable
         return $table
             ->query(
                 PaymentManual::query()
-                    ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
                     ->orderBy('order_column')
             )
             ->heading('Manual Payment List')

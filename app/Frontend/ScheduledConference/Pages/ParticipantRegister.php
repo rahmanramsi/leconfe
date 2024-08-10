@@ -32,7 +32,6 @@ class ParticipantRegister extends Page
     {
         $isLogged = auth()->check();
         $userRegistration = !$isLogged ? null : Registration::withTrashed()
-            ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
             ->where('user_id', auth()->user()->id)
             ->first();
         if ($userRegistration)
@@ -112,7 +111,6 @@ class ParticipantRegister extends Page
         $isLogged = auth()->check();
 
         $userRegistration = !$isLogged ? null : Registration::withTrashed()
-            ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
             ->where('user_id', auth()->user()->id)
             ->first();
 
@@ -120,9 +118,7 @@ class ParticipantRegister extends Page
 
         $userCountry = !$isLogged ? null : Country::find(auth()->user()->getMeta('country', null));
 
-        $registrationTypeList = RegistrationType::select('*')
-            ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
-            ->get();
+        $registrationTypeList = RegistrationType::select('*')->get();
 
         $registrationType = null;
         if (isset($this->formData['type'])) {

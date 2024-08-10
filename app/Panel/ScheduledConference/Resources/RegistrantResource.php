@@ -97,7 +97,6 @@ class RegistrantResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn(Builder $query) => $query->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId()))
             ->heading('Registrant List')
             ->headerActions([
                 Action::make('attendance_qr_code')

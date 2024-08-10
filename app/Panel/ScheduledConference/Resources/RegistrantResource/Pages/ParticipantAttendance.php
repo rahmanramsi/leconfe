@@ -182,9 +182,7 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
     public static function getTimelineListOption(int $type, Registration $registration): array
     {
         $timelinesOption = [];
-        $timelines = Timeline::where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
-            ->orderBy('date', 'ASC')
-            ->get();
+        $timelines = Timeline::orderBy('date', 'ASC')->get();
 
         foreach ($timelines as $timeline) {
             if ($type === self::DAY_ATTENDANCE_MARK_TYPE_IN && $registration->isAttended($timeline)) {

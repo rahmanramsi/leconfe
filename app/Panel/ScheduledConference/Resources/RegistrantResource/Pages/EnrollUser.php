@@ -63,7 +63,7 @@ class EnrollUser extends ListRecords
     public static function getRegistrationTypeOptions(): array
     {
         $registrationTypeOptions = [];
-        $registrationTypes = RegistrationType::where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())->get();
+        $registrationTypes = RegistrationType::get();
         foreach ($registrationTypes as $registrationType) {
             if (!$registrationType->active) continue;
 

@@ -74,7 +74,6 @@ class Agenda extends Page
         $typeData = $this->typeData;
 
         $registration = Registration::withTrashed()
-            ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
             ->where('user_id', auth()->user()->id)
             ->first();
 
@@ -129,13 +128,11 @@ class Agenda extends Page
 
         $currentScheduledConference = app()->getCurrentScheduledConference();
 
-        $timelines = Timeline::where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
-            ->where('hide', false)
+        $timelines = Timeline::where('hide', false)
             ->orderBy('date', 'ASC')
             ->get();
 
         $userRegistration = !$isLogged ? null : Registration::withTrashed()
-            ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
             ->where('user_id', auth()->user()->id)
             ->first();
 
