@@ -2,13 +2,12 @@
 
 namespace App\Panel\ScheduledConference\Pages;
 
-use Filament\Forms\Form;
 use Filament\Pages\Page;
 use Filament\Infolists\Infolist;
 use App\Infolists\Components\LivewireEntry;
 use App\Infolists\Components\VerticalTabs as InfolistsVerticalTabs;
-use App\Panel\ScheduledConference\Livewire\Registration\RegistrationSettings;
-use App\Panel\ScheduledConference\Livewire\Registration\RegistrationTypes;
+use App\Panel\ScheduledConference\Livewire\Registration\RegistrationSetting;
+use App\Panel\ScheduledConference\Livewire\Registration\RegistrationTypeTable;
 
 class Registrations extends Page
 {
@@ -39,13 +38,13 @@ class Registrations extends Page
                             ->icon('heroicon-o-list-bullet')
                             ->schema([
                                 LivewireEntry::make('registrationType')
-                                    ->livewire(RegistrationTypes::class)
+                                    ->livewire(RegistrationTypeTable::class)
                             ]),
                         InfolistsVerticalTabs\Tab::make('Settings')
                             ->icon('heroicon-o-cog-6-tooth')
                             ->schema([
                                 LivewireEntry::make('registrationSettings')
-                                    ->livewire(RegistrationSettings::class)
+                                    ->livewire(RegistrationSetting::class)
                             ]),
                     ]),
             ]);

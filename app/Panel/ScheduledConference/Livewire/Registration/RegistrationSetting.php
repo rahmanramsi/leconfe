@@ -16,7 +16,7 @@ use App\Forms\Components\TinyEditor;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Toggle;
 
-class RegistrationSettings extends Component implements HasForms
+class RegistrationSetting extends Component implements HasForms
 {
     use InteractsWithForms;
 

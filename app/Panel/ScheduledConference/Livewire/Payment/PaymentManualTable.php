@@ -29,7 +29,7 @@ use App\Panel\ScheduledConference\Livewire\Registration\RegistrationTypePage;
 use Filament\Tables\Actions\ActionGroup;
 use Illuminate\Support\Collection;
 
-class PaymentManuals extends Component implements HasForms, HasTable
+class PaymentManualTable extends Component implements HasForms, HasTable
 {
     use InteractsWithForms, InteractsWithTable;
 

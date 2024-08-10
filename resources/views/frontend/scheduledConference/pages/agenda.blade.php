@@ -1,7 +1,7 @@
 @use('App\Models\Enums\RegistrationPaymentState')
-@use('Illuminate\Support\Str')
 @use('Carbon\Carbon')
 @use('App\Facades\Setting')
+
 <x-website::layouts.main>
     <div class="space-y-6">
         <x-website::breadcrumbs :breadcrumbs="$this->getBreadcrumbs()" />

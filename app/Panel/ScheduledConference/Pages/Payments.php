@@ -2,14 +2,13 @@
 
 namespace App\Panel\ScheduledConference\Pages;  
 
-use Filament\Forms\Form;
 use Filament\Pages\Page;
 use Filament\Infolists\Infolist;
 use Filament\Infolists\Components\Tabs;
 use App\Infolists\Components\LivewireEntry;
 use App\Infolists\Components\VerticalTabs as InfolistsVerticalTabs;
-use App\Panel\ScheduledConference\Livewire\Payment\PaymentManuals;
-use App\Panel\ScheduledConference\Livewire\Payment\PaymentSettings;
+use App\Panel\ScheduledConference\Livewire\Payment\PaymentManualTable;
+use App\Panel\ScheduledConference\Livewire\Payment\PaymentSetting;
 
 class Payments extends Page
 {
@@ -45,14 +44,14 @@ class Payments extends Page
                                             ->icon('heroicon-o-credit-card')
                                             ->schema([
                                                 LivewireEntry::make('manual')
-                                                    ->livewire(PaymentManuals::class)
+                                                    ->livewire(PaymentManualTable::class)
                                             ]),
                                     ]),
                             ]),
                         Tabs\Tab::make('Settings')
                             ->schema([
                                 LivewireEntry::make('settings')
-                                    ->livewire(PaymentSettings::class)
+                                    ->livewire(PaymentSetting::class)
                             ])
                     ])
             ]);
