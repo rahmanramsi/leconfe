@@ -99,6 +99,7 @@
 - 'Registration:enroll'
 - 'Registration:update'
 - 'Registration:delete'
+- 'Registration:notified'
 - 'RegistrationSetting:viewAny'
 - 'RegistrationSetting:update'
 - 'RegistrationSetting:create'
