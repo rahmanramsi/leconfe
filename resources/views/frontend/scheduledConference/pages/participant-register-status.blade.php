@@ -87,27 +87,24 @@
             @if ($userRegistration->getState() === RegistrationPaymentState::Unpaid->value && !$userRegistration->trashed())
                 <hr class="my-8">
                 <div class="w-full">
-                    @foreach ($paymentList as $currency)
+                    @foreach ($paymentList as $currency => $payments)
                         <div class="my-6">
                             <div class="flex space-x-4">
                                 <h1 class="text-lg font-semibold min-w-fit">
-                                    {{ currency($currency->currency)->getName() }} ({{ Str::upper($currency->currency) }})
+                                    {{ currency($currency)->getName() }} ({{ Str::upper($currency) }})
                                 </h1>
                                 <hr class="w-full h-px my-auto bg-gray-200 border-0 dark:bg-gray-700">
                             </div>
                             <div class="grid md:grid-cols-6 gap-4 mt-1">
-                                @php
-                                    $payments = json_decode($currency->payments, true);
-                                @endphp
                                 @foreach ($payments as $payment)
                                     <div @class([
                                         'px-5 py-3 border border-gray-300 rounded',
                                         'md:col-span-6' => count($payments) === 1,
                                         'md:col-span-3' => count($payments) !== 1,
                                     ])>
-                                        <h1 class="font-bold text-left">{{ $payment['name'] }}</h1>
+                                        <h1 class="font-bold text-left">{{ $payment->name }}</h1>
                                         <div class="user-content">
-                                            {{ new Illuminate\Support\HtmlString($payment['detail']) }}
+                                            {{ new Illuminate\Support\HtmlString($payment->detail) }}
                                         </div>
                                     </div>
                                 @endforeach
@@ -115,7 +112,7 @@
                             </div>
                         </div>
                     @endforeach
-                    @if ($paymentList->isEmpty())
+                    @if (!count($paymentList))
                         <p>
                             Payment method are empty.
                         </p>

@@ -41,17 +41,16 @@ class ParticipantRegisterStatus extends Page
             ->where('user_id', auth()->user()->id)
             ->first();
 
-        $paymentList = PaymentManual::select('*')
-            ->select(
-                'currency',
-                DB::raw('JSON_ARRAYAGG(JSON_OBJECT(
-                    "name", name,
-                    "currency", currency,
-                    "detail", detail
-                )) AS payments')
-            )
-            ->groupBy('currency')
-            ->get();
+        $paymentList = [];
+        $payments = PaymentManual::select('*')->get();
+        
+        foreach ($payments as $payment) {
+            $paymentCurrencyCode = $payment->currency;
+            if(!isset($paymentList[$paymentCurrencyCode])) {
+                $paymentList[$paymentCurrencyCode] = [];
+            }
+            $paymentList[$paymentCurrencyCode][] = $payment;
+        }
 
         return [
             'currentScheduledConference' => $currentScheduledConference,
