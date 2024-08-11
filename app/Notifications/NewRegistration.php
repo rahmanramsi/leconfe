@@ -2,12 +2,12 @@
 
 namespace App\Notifications;
 
+use App\Mail\Templates\NewRegistrationMail;
 use App\Models\Registration;
 use App\Panel\ScheduledConference\Resources\RegistrantResource;
 use App\Providers\PanelProvider;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Filament\Notifications\Actions\Action;
 use Filament\Notifications\Notification as FilamentNotification;
@@ -31,7 +31,16 @@ class NewRegistration extends Notification
      */
     public function via($notifiable): array
     {
-        return ['database'];
+        return ['database', 'mail'];
+    }
+
+    /**
+     * Get the mail representation of the notification.
+     */
+    public function toMail(object $notifiable)
+    {
+        return (new NewRegistrationMail($this->registration))
+            ->to($notifiable);
     }
 
     public function toDatabase(object $notifiable)

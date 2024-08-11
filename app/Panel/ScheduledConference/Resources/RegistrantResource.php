@@ -205,8 +205,7 @@ class RegistrantResource extends Resource
                     ->after(function (Model $record) {
                         $record->user->notify(
                             new RegistrationPaymentDecision(
-                                user: $record->user,
-                                state: $record->registrationPayment->state
+                                registration: $record
                         )
                         );
                     })

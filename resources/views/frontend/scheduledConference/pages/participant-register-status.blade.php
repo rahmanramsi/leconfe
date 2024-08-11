@@ -23,7 +23,7 @@
                             'badge-error' => $userRegistration->trashed(),
                         ])>
                             {{ 
-                                $userRegistration->trashed() ?  'Failed' : $userRegistration->getState();
+                                $userRegistration->trashed() ?  'Failed' : $userRegistration->getState()
                             }}
                         </span>
                     </td>

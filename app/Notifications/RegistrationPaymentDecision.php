@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use App\Models\User;
+use Illuminate\Support\Str;
 use App\Models\Registration;
 use Illuminate\Bus\Queueable;
 use App\Providers\PanelProvider;
@@ -11,6 +12,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Models\Enums\RegistrationPaymentState;
 use Illuminate\Notifications\Messages\MailMessage;
+use App\Mail\Templates\RegistrationPaymentDecisionMail;
 use App\Panel\ScheduledConference\Resources\RegistrantResource;
 use Filament\Notifications\Notification as FilamentNotification;
 
@@ -21,7 +23,7 @@ class RegistrationPaymentDecision extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct(public User $user, public string $state = RegistrationPaymentState::Unpaid->value)
+    public function __construct(public Registration $registration)
     {
         //
     }
@@ -33,16 +35,28 @@ class RegistrationPaymentDecision extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['database'];
+        return ['database', 'mail'];
+    }
+    
+    /**
+     * Get the mail representation of the notification.
+     */
+    public function toMail(object $notifiable)
+    {
+        return (new RegistrationPaymentDecisionMail($this->registration))
+            ->to($notifiable);
     }
 
     public function toDatabase(object $notifiable)
     {
-        $state = $this->state === RegistrationPaymentState::Paid->value ? 'accepted' : 'declined';
-
+        $paymentStatus = Str::lower($this->registration->registrationPayment->state);
+        
         return FilamentNotification::make()
             ->title('Participant Registration')
-            ->body("Dear {$this->user->full_name}, your payment has been {$state}, please finish your registration payment.")
+            ->body("
+                Dear {$this->registration->user->full_name}, <br>
+                your payment status are {$paymentStatus}, please finish your registration process.
+            ")
             ->getDatabaseMessage();
     }
 
