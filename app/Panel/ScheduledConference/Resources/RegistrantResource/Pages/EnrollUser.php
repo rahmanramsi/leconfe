@@ -3,28 +3,19 @@
 namespace App\Panel\ScheduledConference\Resources\RegistrantResource\Pages;
 
 use Closure;
-use Carbon\Carbon;
 use App\Models\User;
-use Filament\Actions;
 use Filament\Forms\Get;
-use App\Facades\Setting;
 use Filament\Tables\Table;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use App\Models\Registration;
 use Filament\Facades\Filament;
 use App\Models\RegistrationType;
 use Illuminate\Support\HtmlString;
-use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Support\Enums\FontWeight;
-use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Fieldset;
-use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Enums\RegistrationPaymentState;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Tables\Actions\CreateAction;
@@ -32,6 +23,7 @@ use Filament\Tables\Columns\Layout\Split;
 use Filament\Tables\Columns\Layout\Stack;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\Placeholder;
+use App\Models\Enums\RegistrationPaymentState;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use App\Panel\ScheduledConference\Resources\RegistrantResource;
 
@@ -238,6 +230,12 @@ class EnrollUser extends ListRecords
                             'state' => $data['registrationPayment']['state'],
                             'paid_at' => $data['registrationPayment']['state'] === RegistrationPaymentState::Paid->value ? $data['registrationPayment']['paid_at'] : null,
                         ]);
+
+                        $record->user->notify(
+                            new \App\Notifications\RegistrationEnroll(
+                                registration: $record,
+                            )
+                        );
                     })
             ])
             ->extremePaginationLinks();

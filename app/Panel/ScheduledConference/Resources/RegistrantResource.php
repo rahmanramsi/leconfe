@@ -206,7 +206,7 @@ class RegistrantResource extends Resource
                         $record->user->notify(
                             new RegistrationPaymentDecision(
                                 registration: $record
-                        )
+                            )
                         );
                     })
                     ->hidden(fn(Model $record) => $record->trashed())
