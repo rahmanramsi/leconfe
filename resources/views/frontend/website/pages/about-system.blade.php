@@ -8,7 +8,7 @@
             <hr class="w-full h-px my-auto bg-gray-200 border-0 dark:bg-gray-700">
         </div>
         <div class="user-content">
-            This conference utilizes the <a href="https://leconfe.com">Leconfe</a> platform, an open-source conference management software. Developed, maintained, and freely distributed by Open Synergic under the GNU General Public License, Leconfe offers a robust solution for organizing and managing conferences. For more information about the platform, please visit the <a href="https://leconfe.com">Leconfe</a> website.
+            This {{ $name }} utilizes the <a href="https://leconfe.com">Leconfe</a> platform, an open-source conference management software. Developed, maintained, and freely distributed by Open Synergic under the GNU General Public License, Leconfe offers a robust solution for organizing and managing conferences. For more information about the platform, please visit the <a href="https://leconfe.com">Leconfe</a> website.
         </div>
     </div>
 </x-website::layouts.main>
