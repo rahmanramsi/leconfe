@@ -27,9 +27,8 @@ class HookManager
     {
         $hooks = $this->getHooks();
         if (!isset($hooks[$name])) {
-            return $params;
+            return false;
         }
-
 
         ksort($hooks[$name], SORT_NUMERIC);
 		
