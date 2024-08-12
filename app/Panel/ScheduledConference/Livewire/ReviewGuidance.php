@@ -52,19 +52,19 @@ class ReviewGuidance extends Component implements HasForms
                 Section::make()
                     ->schema([
                         TinyEditor::make('meta.review_guidelines')
-                            ->label('Review Guidelines')
+                            ->label(__('general.review_guidelines'))
                             ->plugins('autoresize link wordcount image code lists')
                             ->toolbar('bold italic superscript subscript | link | blockquote bullist numlist'),
                         TinyEditor::make('meta.competing_interests')
-                            ->label('Competing Interests')
+                            ->label(__('general.competing_interests'))
                             ->plugins('autoresize link wordcount image code lists')
                             ->toolbar('bold italic superscript subscript | link | blockquote bullist numlist'),
                     ]),
                 Actions::make([
                     Action::make('save')
-                        ->label('Save')
-                        ->successNotificationTitle('Saved!')
-                        ->failureNotificationTitle('Data could not be saved.')
+                        ->label(__('general.save'))
+                        ->successNotificationTitle(__('general.saved'))
+                        ->failureNotificationTitle(__('general.data_could_not_saved'))
                         ->action(function (Action $action) {
                             $formData = $this->form->getState();
                             try {

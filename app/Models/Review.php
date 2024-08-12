@@ -92,9 +92,9 @@ class Review extends Model implements HasMedia
     public static function getModeOptions() : array
     {
         return [
-            self::MODE_DOUBLE_ANONYMOUS => 'Anonymous Reviewer/Anonymous Author',
-            self::MODE_ANONYMOUS => 'Anonymous Reviewer/Disclosed Author',
-            self::MODE_OPEN => 'Open',
+            self::MODE_DOUBLE_ANONYMOUS => __('general.anonymous_author'),
+            self::MODE_ANONYMOUS => __('general.anonymous_disclosed_author'),
+            self::MODE_OPEN => __('general.open'),
         ];
     }
 }

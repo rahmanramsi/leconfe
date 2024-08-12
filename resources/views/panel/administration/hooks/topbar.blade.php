@@ -1,11 +1,11 @@
 @use('\App\Models\Conference')
-<x-filament::dropdown 
-    placement="bottom-start" 
+<x-filament::dropdown
+    placement="bottom-start"
     teleport
     id="switch-conference"
     >
     <x-slot name="trigger">
-        <button  
+        <button
             @if (filament()->isSidebarCollapsibleOnDesktop())
                 x-data="{ tooltip: false }"
                 x-effect="
@@ -23,7 +23,7 @@
             class="fi-tenant-menu-trigger group flex w-full items-center justify-center gap-x-3 rounded-lg p-2 text-sm font-medium outline-none transition duration-75 hover:bg-gray-100 focus:bg-gray-100 dark:hover:bg-white/5 dark:focus:bg-white/5">
             <x-filament::icon icon="heroicon-m-cog-8-tooth" class="h-5 w-5" />
             <span class="hidden md:grid justify-items-start text-start text-gray-950 dark:text-white text-lg">
-                Administration
+                Administrations
             </span>
             <x-filament::icon icon="heroicon-m-chevron-down" icon-alias="panels::tenant-menu.toggle-button"
                 :x-show="filament()->isSidebarCollapsibleOnDesktop() ? '$store.sidebar.isOpen' : null"

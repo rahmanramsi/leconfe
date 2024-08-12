@@ -49,56 +49,56 @@ class DOISetup extends Component implements HasForms
                         Fieldset::make('DOIs')
                             ->schema([
                                 Checkbox::make('meta.doi_enabled')
-                                    ->label('Allow Digital Object Identifiers (DOIs) to be assigned to work published in this conference')
+                                    ->label(__('general.allow_digital_object_dois'))
                             ])
                             ->columns(1),
-                        Fieldset::make('Items with DOIs')
+                        Fieldset::make(__('general.items_with_DOIs'))
                             ->schema([
                                 Placeholder::make('items.description')
                                     ->hiddenLabel()
-                                    ->content(new HtmlString('Select which items will be assigned a DOI.')),
+                                    ->content(new HtmlString(__('general.select_which_items_assigned_DOI'))),
                                 CheckboxList::make('meta.doi_items')
                                     ->hiddenLabel()
                                     ->options([
-                                        'articles' => 'Articles',
+                                        'articles' => __('general.articles'),
                                     ])
                             ])
                             ->columns(1),
                         TextInput::make('meta.doi_prefix')
-                            ->label('DOI Prefix')
+                            ->label(__('general.doi_prefix'))
                             // ->maxWidth(MaxWidth::Small)
-                            ->helperText(new HtmlString('The DOI Prefix is assigned by a registration agency, such as Crossref or DataCite. Example: 10.xxxx'))
+                            ->helperText(new HtmlString(__('general.doi_prefix_assigned_registration')))
                             ->placeholder('10.xxxxx')
                             ->regex('/^10\.\d+$/')
                             ->requiredUnless('meta.doi_enabled', true)
                             ->validationMessages([
-                                'regex' => 'The DOI Prefix must be in the format 10.xxxx.',
-                                'required_unless' => 'The DOI Prefix is required if DOIs are enabled.'
+                                'regex' => __('general.the_doi_format_validation'),
+                                'required_unless' =>  __('general.the_doi_required_enabled')
                             ]),
                         Select::make('meta.doi_automatic_assignment')
-                            ->label('Automatic DOI Assignment')
-                            ->helperText(new HtmlString('When should a submission be assigned a DOI?'))
+                            ->label(__('general.automatic_doi_assignment'))
+                            ->helperText(new HtmlString(__('general.submission_assigned_doi')))
                             ->placeholder('Never')
                             ->options([
-                                'edit_stage' => 'Upon reaching editing stage',
-                                'published' => 'Upon Publication',
+                                'edit_stage' => __('general.option_reaching_editing_stage'),
+                                'published' => __('general.option_upon_publication'),
                             ]),
-                        Fieldset::make('DOI Format')
+                        Fieldset::make(__('general.doi_format'))
                             ->schema([
                                 Radio::make('meta.doi_format')
                                     ->hiddenLabel()
                                     ->options([
-                                        'default' => 'Default - Automatically generates a unique eight-character suffix',
-                                        'none' => 'None - Suffixes must be entered manually on the DOI management page and will not be generated automatically'
+                                        'default' => __('general.automatically_generate_unique_suffix'),
+                                        'none' =>  __('general.not_be_automatically_generate_unique_suffix')
                                     ])
                             ])
                             ->columns(1)
                     ]),
                 Actions::make([
                     Action::make('save')
-                        ->label('Save')
-                        ->successNotificationTitle('Saved!')
-                        ->failureNotificationTitle('Data could not be saved.')
+                        ->label(__('general.save'))
+                        ->successNotificationTitle(__('general.saved'))
+                        ->failureNotificationTitle(__('general.data_could_not_saved'))
                         ->action(function (Action $action) {
                             $formData = $this->form->getState();
                             try {

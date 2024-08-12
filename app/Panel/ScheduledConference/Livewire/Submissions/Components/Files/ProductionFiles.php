@@ -10,7 +10,13 @@ class ProductionFiles extends SubmissionFilesTable
 
     protected ?string $category = SubmissionFileCategory::EDITED_FILES;
 
-    protected string $tableHeading = 'Production Files';
+    protected string $tableHeading;
+
+    public function __construct()
+    {
+        $this->tableHeading = __('general.production_files');
+    }
+
 
     public function isViewOnly(): bool
     {

@@ -1,39 +1,39 @@
-<div class="sidebar-settings space-y-4">
+<div class="space-y-4 sidebar-settings">
     <x-filament::section>
         <x-slot name="heading">
-            Sidebars Manager
+            {{ __('general.sidebars_manager') }}
         </x-slot>
         @if ($sidebars->isEmpty())
             <div>
                 <p class="text-sm text-gray-500">
-                    No sidebars found.
+                    {{ __('general.no_sidebars_found') }}
                 </p>
             </div>
         @else
             <div class="space-y-4" x-data="sidebarsManager({{ Js::from($sidebars) }})" wire:ignore>
-                <div class="sidebar-items text-sm flex flex-col gap-2" x-ref="sortable">
+                <div class="flex flex-col gap-2 text-sm sidebar-items" x-ref="sortable">
                     <template x-for="sidebar in items" :key="sidebar.id">
                         <div class="sidebar-item" data-sortable-item :data-id="sidebar.id">
                             <div class="relative group">
-                                <div class="flex items-center gap-2 rounded-xl border bg-white">
+                                <div class="flex items-center gap-2 bg-white border rounded-xl">
                                     <button type="button"
-                                        class="text-sm p-3 bg-gray-50 rounded-l-xl text-gray-500 hover:text-gray-900 border-r"
+                                        class="p-3 text-sm text-gray-500 border-r bg-gray-50 rounded-l-xl hover:text-gray-900"
                                         data-sortable-handle>
-                                        <x-heroicon-s-arrows-up-down class="h-4 w-4" />
+                                        <x-heroicon-s-arrows-up-down class="w-4 h-4" />
                                     </button>
-                                    <div class="sidebar-item-name flex items-center gap-2">
+                                    <div class="flex items-center gap-2 sidebar-item-name">
                                         <div x-html="sidebar.prefixName"></div>
                                         <div x-text="sidebar.name"></div>
                                         <div x-html="sidebar.suffixName"></div>
                                     </div>
-                                    <x-filament::input.checkbox class="ml-auto mx-4" x-model="sidebar.isActive" />
+                                    <x-filament::input.checkbox class="mx-4 ml-auto" x-model="sidebar.isActive" />
                                 </div>
                             </div>
                         </div>
                     </template>
                 </div>
                 <x-filament::button x-on:click="save" wire:target="save">
-                    Save
+                    {{ __('general.save') }}
                 </x-filament::button>
             </div>
         @endif

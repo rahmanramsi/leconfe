@@ -17,16 +17,16 @@
         <div class="sticky z-30 flex flex-col self-start col-span-4 gap-3 top-24" x-data="{ decision:@js($submissionDecision) }">
             @if($submission->getEditors()->isEmpty() && ! $user->hasRole(\App\Models\Enums\UserRole::ConferenceEditor->value))
                 <div class="px-4 py-3.5 text-base text-white rounded-lg border-2 border-primary-700 bg-primary-500">
-                    {{ $user->can('assignParticipant', $submission) ? 'Assign an editor to enable the editorial decisions for this stage.' : 'No editor assigned to this submission.' }}
+                    {{ $user->can('assignParticipant', $submission) ? __('general.assign_an_editor_to_enable_the_editorial') : __('general.no_editor_assigned_submission') }}
                 </div>
             @else
 
                 @if($submissionDecision)
-                    <div class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:ring-white/10 space-y-3 py-5 px-6">
+                    <div class="px-6 py-5 space-y-3 overflow-hidden bg-white shadow-sm rounded-xl ring-1 ring-gray-950/5 dark:ring-white/10">
                         <div class="text-base">
-                            {{ $submission->status == SubmissionStatus::Declined ? 'Submission Declined' : 'Submission accepted for review.' }}
+                            {{ $submission->status == SubmissionStatus::Declined ? __('general.submission_declined') : __('general.submission_accepted_for_review') }}
                         </div>
-                        <button class="text-sm text-primary-500 underline"
+                        <button class="text-sm underline text-primary-500"
                             @@click="decision = !decision" x-text="decision ? 'Change Decision' : 'Cancel'"
                         ></button>
                     </div>

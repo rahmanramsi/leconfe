@@ -33,7 +33,7 @@ class ActivityLogList extends \Livewire\Component implements HasForms, HasTable
             ->defaultPaginationPageOption(20)
             ->columns([
                 TextColumn::make('created_at')
-                    ->label('Date')
+                    ->label(__('general.date'))
                     ->formatStateUsing(function ($state) {
                         return $state->format(Setting::get('format_date')) . ' ' . $state->format(Setting::get('format_time'));
                     })
@@ -48,8 +48,9 @@ class ActivityLogList extends \Livewire\Component implements HasForms, HasTable
 
                         return $record->causer->fullName;
                     })
-                    ->label('Causer Name'),
-                TextColumn::make('description'),
+                    ->label(__('general.causer_name')),
+                TextColumn::make('description')
+                    ->label(__('general.description')),
             ]);
     }
 

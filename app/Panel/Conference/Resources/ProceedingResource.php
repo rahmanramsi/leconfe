@@ -26,6 +26,16 @@ class ProceedingResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-book-open';
 
+    public static function getNavigationLabel(): string
+    {
+        return __('general.proceeding');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('general.proceeding');
+    }
+
     public static function getEloquentQuery(): Builder
     {
         return static::getModel()::query()
@@ -39,25 +49,31 @@ class ProceedingResource extends Resource
             ->columns(1)
             ->schema([
                 Fieldset::make('Identification')
+                    ->label(__('general.identification'))
                     ->columns(3)
                     ->schema([
                         TextInput::make('volume')
+                            ->label(__('general.volume'))
                             ->numeric()
                             ->minValue(0),
                         TextInput::make('number')
+                            ->label(__('general.number'))
                             ->numeric()
                             ->minValue(0),
                         TextInput::make('year')
+                            ->label(__('general.year'))
                             ->numeric()
                             ->minValue(0),
                     ]),
                 TextInput::make('title')
-                    ->label('Title')
+                    ->label(__('general.title'))
                     ->required(),
                 Textarea::make('description')
+                    ->label(__('general.description'))
                     ->nullable()
                     ->autosize(),
                 SpatieMediaLibraryFileUpload::make('cover')
+                    ->label(__('general.cover'))
                     ->collection('cover')
                     ->imageResizeUpscale(false)
                     ->image()
@@ -72,16 +88,19 @@ class ProceedingResource extends Resource
             ->columns([
                 IndexColumn::make('no'),
                 TextColumn::make('title')
+                    ->label(__('general.title'))
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('submissions_count')
-                    ->label('Submissions')
+                    ->label(__('general.submissions'))
                     ->counts('submissions'),
                 TextColumn::make('current')
+                    ->label(__('general.current'))
                     ->hidden(fn(Component $livewire) => $livewire->activeTab === 'future')
-                    ->state(fn(Proceeding $record) => $record->published && $record->current ? 'Current' : '')
+                    ->state(fn(Proceeding $record) => $record->published && $record->current ? __('general.current') : '')
                     ->badge(),
                 TextColumn::make('published_at')
+                    ->label(__('general.published_at'))
                     ->sortable()
                     ->hidden(fn(Component $livewire) => $livewire->activeTab === 'future')
                     ->date(Setting::get('format_date'))
@@ -94,22 +113,26 @@ class ProceedingResource extends Resource
                     Tables\Actions\EditAction::make()
                         ->modalWidth('xl'),
                     Tables\Actions\Action::make('preview')
+                        ->label(__('general.preview'))
                         ->icon('heroicon-o-eye')
                         ->hidden(fn (Proceeding $record) => !$record->published)
                         ->url(fn (Proceeding $record) => route('livewirePageGroup.conference.pages.proceeding-detail', [$record->id]), true),
                     Tables\Actions\Action::make('publish')
+                        ->label(__('general.publish'))
                         ->requiresConfirmation()
                         ->color('success')
                         ->icon('heroicon-o-arrow-up-tray')
                         ->hidden(fn (Proceeding $record) => $record->published)
                         ->action(fn (Proceeding $record) => $record->publish()),
                     Tables\Actions\Action::make('unpublish')
+                        ->label(__('general.unpublish'))
                         ->requiresConfirmation()
                         ->color('danger')
                         ->icon('heroicon-o-arrow-down-tray')
                         ->hidden(fn (Proceeding $record) => !$record->published)
                         ->action(fn (Proceeding $record) => $record->unpublish()),
                     Tables\Actions\Action::make('set_as_current')
+                        ->label(__('general.set_as_current'))
                         ->requiresConfirmation()
                         ->icon('heroicon-s-arrow-up-circle')
                         ->visible(fn (Proceeding $record) => $record->published && !$record->current)

@@ -47,9 +47,9 @@ class ThemeSetting extends Component implements HasForms
                     ->schema([
                         ColorPicker::make('meta.appearance_color')
                             ->regex('/^#?(([a-f0-9]{3}){1,2})$/i')
-                            ->label('Appearance Color'),
+                            ->label(__('general.appearance_color')),
                         CssFileUpload::make('styleSheet')
-                            ->label('Custom Stylesheet')
+                            ->label(__('general.custom_stylesheet'))
                             ->collection('styleSheet')
                             ->getUploadedFileNameForStorageUsing(static function (BaseFileUpload $component, TemporaryUploadedFile $file) {
                                 return Str::random().'.css';
@@ -62,9 +62,9 @@ class ThemeSetting extends Component implements HasForms
                     ]),
                 Actions::make([
                     Action::make('save')
-                        ->label('Save')
-                        ->successNotificationTitle('Saved!')
-                        ->failureNotificationTitle('Data could not be saved.')
+                        ->label(__('general.save'))
+                        ->successNotificationTitle(__('general.saved'))
+                        ->failureNotificationTitle(__('general.data_could_not_saved.'))
                         ->action(function (Action $action) {
                             try {
                                 ConferenceUpdateAction::run($this->form->getRecord(),  $this->form->getState());

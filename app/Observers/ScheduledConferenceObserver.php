@@ -134,26 +134,14 @@ class ScheduledConferenceObserver
         TrackPopulateAction::run($scheduledConference);
         RolePopulateScheduledConferenceAction::run($scheduledConference);
         FilesTypePopulateAction::run($scheduledConference);
-        
+
         $scheduledConference->setManyMeta([
-            'before_you_begin' =>  <<<HTML
-            <p>Thank you for submitting to the $scheduledConference->title. You will be asked to upload files, identify co-authors, and provide information such as the title and abstract.</p>
-            <p>Please read our Submission Guidelines if you have not done so already. When filling out the forms, provide as many details as possible in order to help our editors evaluate your work.</p>
-            <p>Once you begin, you can save your submission and come back to it later. You will be able to review and correct any information before you submit.</p>
-        HTML,
-            'submission_checklist' => <<<HTML
-            <p>All submissions must meet the following requirements.</p>
-            <ul>
-                <li>The submission has not been previously published, nor is it before another journal for consideration (or an explanation has been provided in Comments to the Editor).</li>
-                <li>The submission file is in OpenOffice, Microsoft Word, or RTF document file format.</li>
-                <li>Where available, URLs for the references have been provided.</li>
-                <li>The text is single-spaced; uses a 12-point font; employs italics, rather than underlining (except with URL addresses); and all illustrations, figures, and tables are placed within the text at the appropriate points, rather than at the end.</li>
-                <li>The text adheres to the stylistic and bibliographic requirements outlined in the Author Guidelines.</li>
-            </ul>
-        HTML,
+            'before_you_begin' => __('general.before_you_begin_current_scheduled', ['variable' => $scheduledConference->title]),
+            'submission_checklist' => __('general.submission_checklist_following_requirements'),
             'review_mode' => Review::MODE_DOUBLE_ANONYMOUS,
             'review_invitation_response_deadline' => 30,
             'review_completion_deadline' => 30,
         ]);
+
     }
 }

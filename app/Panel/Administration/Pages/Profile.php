@@ -76,25 +76,30 @@ class Profile extends Page implements HasForms
                 Section::make()
                     ->schema([
                         SpatieMediaLibraryFileUpload::make('profile')
-                            ->label('Profile Photo')
+                            ->label(__('general.profile_photo'))
                             ->collection('profile')
                             ->avatar()
                             ->columnSpan(['lg' => 2]),
                         TextInput::make('given_name')
+                            ->label(__('general.given_name'))
                             ->required(),
-                        TextInput::make('family_name'),
+                        TextInput::make('family_name')
+                            ->label(__('general.family_name')),
                         TextInput::make('email')
+                            ->label(__('general.email'))
                             ->columnSpan(['lg' => 2])
                             ->disabled(fn (?User $record) => $record)
                             ->dehydrated(fn (?User $record) => !$record)
                             ->unique(ignoreRecord: true),
                         TextInput::make('password')
+                            ->label(__('general.password'))
                             ->required(fn (?User $record) => !$record)
                             ->password()
                             ->dehydrateStateUsing(fn ($state) => Hash::make($state))
                             ->dehydrated(fn ($state) => filled($state))
                             ->confirmed(),
                         TextInput::make('password_confirmation')
+                            ->label(__('general.password_confirmation'))
                             ->requiredWith('password')
                             ->password()
                             ->dehydrated(false),
@@ -112,12 +117,12 @@ class Profile extends Page implements HasForms
             $user = UserUpdateAction::run(auth()->user(), $this->informationForm->getState());
             Notification::make()
                 ->success()
-                ->title('Saved!')
+                ->title(__('general.saved'))
                 ->send();
         } catch (\Throwable $th) {
             Notification::make()
                 ->danger()
-                ->title('Failed to save.')
+                ->title(__('general.failed_to_save'))
                 ->send();
         }
     }
@@ -130,9 +135,10 @@ class Profile extends Page implements HasForms
                 Forms\Components\Section::make()
                     ->schema([
                         CheckboxList::make('roles')
-                            ->label('Roles')
+                            ->label(__('general.roles'))
                             ->options(UserRole::selfAssignedRoleValues()),
                         TagsInput::make('meta.reviewing_interests')
+                            ->label(__('general.reviewing_interests'))
                             ->placeholder('')
                             ->columnSpan([
                                 'lg' => 2,
@@ -164,12 +170,12 @@ class Profile extends Page implements HasForms
 
             Notification::make()
                 ->success()
-                ->title('Saved!')
+                ->title(__('general.saved'))
                 ->send();
         } catch (\Throwable $th) {
             Notification::make()
                 ->danger()
-                ->title('Failed to save.')
+                ->title(__('general.failed_to_save'))
                 ->send();
             throw $th;
         }
@@ -180,11 +186,11 @@ class Profile extends Page implements HasForms
         return $form
             ->statePath('notificationFormData')
             ->schema([
-                Section::make('New Announcement')
-                    ->description("These are notifications when there's a new announcement send.")
+                Section::make(__('general.new_announcement'))
+                    ->description(__('general.notifications_announcement_send'))
                     ->schema([
                         Checkbox::make('meta.notification.enable_new_announcement_email')
-                            ->label('Enable Email Notification'),
+                            ->label(__('general.enable_email_notification')),
                     ])
                     ->aside(),
             ]);
@@ -202,12 +208,12 @@ class Profile extends Page implements HasForms
 
             Notification::make()
                 ->success()
-                ->title('Saved!')
+                ->title(__('general.saved'))
                 ->send();
         } catch (\Throwable $th) {
             Notification::make()
                 ->danger()
-                ->title('Failed to save.')
+                ->title(__('general.failed_to_save'))
                 ->send();
             throw $th;
         }
@@ -220,20 +226,22 @@ class Profile extends Page implements HasForms
                 Tabs::make()
                     ->schema([
                         Tab::make('Information')
+                            ->label(__('general.information'))
                             ->icon('heroicon-o-information-circle')
                             ->schema([
                                 BladeEntry::make('information-form')
-                                    ->blade('
-                                        <form wire:submit="submitInformationForm" class="space-y-4">
-                                            {{ $this->informationForm }}
-                            
-                                            <x-filament::button type="submit">
-                                                Save
-                                            </x-filament::button>
-                                        </form>
-                                    '),
+                                ->blade('
+                                    <form wire:submit="submitInformationForm" class="space-y-4">
+                                        {{ $this->informationForm }}
+
+                                        <x-filament::button type="submit">
+                                            {{ __("general.save")}}
+                                        </x-filament::button>
+                                    </form>
+                                '),
                             ]),
                         Tab::make('Roles')
+                            ->label(__('general.roles'))
                             ->icon('heroicon-o-shield-check')
                             ->hidden(!app()->getCurrentConference())
                             ->schema([
@@ -246,21 +254,22 @@ class Profile extends Page implements HasForms
                                                     <div class="flex items-center">
                                                         <x-heroicon-o-globe-alt class="w-8 h-8 text-primary-800" />
                                                         <div class="flex flex-col ml-3">
-                                                            <div class="font-medium text-sm leading-none">Register for the conference and select your preferred role to participate.</div>
+                                                            <div class="text-sm font-medium leading-none">{{ __("general.register_for_conference")}}</div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </x-filament::section>
                                             @endif
                                             {{ $this->rolesForm }}
-                            
+
                                             <x-filament::button type="submit">
-                                                Save
-                                            </x-filament::button>                
+                                                {{ __("general.save")}}
+                                            </x-filament::button>
                                         </form>
                                     '),
                             ]),
                         Tab::make('Notifications')
+                            ->label(__('general.notification'))
                             ->icon('heroicon-o-bell')
                             ->schema([
                                 BladeEntry::make('notification-form')
@@ -271,8 +280,8 @@ class Profile extends Page implements HasForms
                                             </x-filament::section>
 
                                             <x-filament::button type="submit">
-                                                Save
-                                            </x-filament::button>                
+                                                {{ __("general.save")}}
+                                            </x-filament::button>
                                         </form>
                                     '),
                             ]),

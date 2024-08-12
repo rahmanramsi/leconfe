@@ -32,33 +32,44 @@ class ScheduledConferenceResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
 
+    public static function getNavigationLabel(): string
+    {
+        return __('general.scheduled_conference');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('general.scheduled_conference');
+    }
+
+
     public static function form(Form $form): Form
     {
         return $form
             ->columns(1)
             ->schema([
                 TextInput::make('title')
-                    ->label('Title')
+                    ->label(__('general.title'))
                     ->autofocus()
                     ->autocomplete()
                     ->required()
-                    ->placeholder('Enter the title of the serie'),
+                    ->placeholder(__('general.enter_the_title_of_the_serie')),
                 TextInput::make('path')
                     ->prefix(fn () => route('livewirePageGroup.conference.pages.home', ['conference' => app()->getCurrentConference()->path]) . '/scheduled/')
-                    ->label('Path')
+                    ->label(__('general.path'))
                     ->rule('alpha_dash')
                     ->required(),
                 Grid::make()
                     ->schema([
                         DatePicker::make('date_start')
-                            ->label('Start Date')
-                            ->placeholder('Enter the start date of the serie')
+                            ->label(__('general.start_date'))
+                            ->placeholder(__('general.enter_the_start_date_of_the_serie'))
                             ->requiredWith('date_end'),
                         DatePicker::make('date_end')
-                            ->label('End Date')
+                            ->label(__('general.end_date'))
                             ->afterOrEqual('date_start')
                             ->requiredWith('date_start')
-                            ->placeholder('Enter the end date of the serie'),
+                            ->placeholder(__('general.enter_the_end_date_of_the_serie')),
                     ]),
             ]);
     }
@@ -71,14 +82,17 @@ class ScheduledConferenceResource extends Resource
             ->columns([
                 IndexColumn::make('no'),
                 TextColumn::make('title')
+                    ->label(__('general.title'))
                     ->searchable()
                     ->description(fn (ScheduledConference $record) => $record->current ? 'Current' : null)
                     ->sortable()
                     ->wrap()
                     ->wrapHeader(),
                 TextColumn::make('date_start')
+                    ->label(__('general.start_date'))
                     ->date(Setting::get('format_date')),
                 TextColumn::make('date_end')
+                    ->label(__('general.end_date'))
                     ->date(Setting::get('format_date')),
 
             ])
@@ -88,13 +102,13 @@ class ScheduledConferenceResource extends Resource
             ->actions([
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\Action::make('publish')
-                        ->label('Publish')
+                        ->label(__('general.publish'))
                         ->requiresConfirmation()
                         ->icon('heroicon-o-arrow-up-on-square')
                         ->color('primary')
                         ->form([
                             Checkbox::make('set_as_current')
-                                ->label('Set as current serie'),
+                                ->label(__('general.set_as_current_serie')),
                         ])
                         ->hidden(fn (ScheduledConference $record) => $record->isArchived() || $record->isCurrent() || $record->isPublished() || $record->trashed())
                         ->action(function (ScheduledConference $record, array $data, Tables\Actions\Action $action) {
@@ -105,15 +119,15 @@ class ScheduledConferenceResource extends Resource
                             return $action->success();
                         }),
                     Tables\Actions\Action::make('set_as_current')
-                        ->label('Set As Current')
+                        ->label(__('general.set_as_current'))
                         ->requiresConfirmation()
                         ->icon('heroicon-o-check-circle')
                         ->color('success')
                         ->hidden(fn (ScheduledConference $record) => $record->isCurrent() || $record->isDraft() || $record->trashed())
                         ->action(fn (ScheduledConference $record, Tables\Actions\Action $action) => $record->update(['state' => ScheduledConferenceState::Current]) && $action->success())
-                        ->successNotificationTitle(fn (ScheduledConference $scheduledConference) => $scheduledConference->title . ' is set as current'),    
+                        ->successNotificationTitle(fn (ScheduledConference $scheduledConference) => $scheduledConference->title . ' is set as current'),
                     Tables\Actions\Action::make('move_to_archive')
-                        ->label('Move To Archive')
+                        ->label(__('general.move_to_archive'))
                         ->requiresConfirmation()
                         ->icon('heroicon-o-archive-box-arrow-down')
                         ->color('warning')
@@ -130,14 +144,14 @@ class ScheduledConferenceResource extends Resource
                         })
                         ->using(fn (ScheduledConference $record, array $data) => ScheduledConferenceUpdateAction::run($record, $data)),
                     Tables\Actions\DeleteAction::make()
-                        ->label('Move To Trash')
-                        ->modalHeading('Move To Trash')
+                        ->label(__('general.move_to_trash'))
+                        ->modalHeading(__('general.move_to_trash'))
                         ->hidden(fn (ScheduledConference $record) => $record->isCurrent() || $record->trashed())
-                        ->successNotificationTitle('Serie moved to trash'),
+                        ->successNotificationTitle(__('general.serie_moved_to_trash')),
                     Tables\Actions\ForceDeleteAction::make()
-                        ->label('Delete Permanently')
+                        ->label(__('general.delete_permanently'))
                         ->hidden(fn (ScheduledConference $record) => ! $record->trashed())
-                        ->successNotificationTitle('Serie deleted permanently'),
+                        ->successNotificationTitle(__('general.serie_deleted_permanently')),
                 ]),
             ]);
     }

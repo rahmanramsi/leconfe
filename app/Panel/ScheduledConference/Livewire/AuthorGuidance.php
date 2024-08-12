@@ -52,26 +52,26 @@ class AuthorGuidance extends Component implements HasForms
                     ->columns(1)
                     ->schema([
                         TinyEditor::make('meta.author_guidelines')
-                            ->label('Author Guidelines')
-                            ->helperText('Provide guidance on anything authors might need to know, such as bibliographic and formatting standards, alongside examples of common citation formats to be used. You may also wish to provide details about the preferred format and subject matter of submissions.')
+                            ->label(__('general.author_guidelines'))
+                            ->helperText(__('general.guidance_authors_might_need_to_know'))
                             ->toolbar('bold italic superscript subscript | link | blockquote bullist numlist')
                             ->plugins('autoresize link wordcount lists'),
                         TinyEditor::make('meta.before_you_begin')
-                            ->label('Before You Begin')
-                            ->helperText('Provide a brief explanation of the submission process so that the author knows what to expect.')
+                            ->label(__('general.before_you_begin'))
+                            ->helperText(__('general.brief_explanation'))
                             ->toolbar('bold italic superscript subscript | link | blockquote bullist numlist')
                             ->plugins('autoresize link wordcount lists'),
                         TinyEditor::make('meta.submission_checklist')
-                            ->label('Submission Checklist')
-                            ->helperText('Provide a brief explanation of the submission process so that the author knows what to expect.')
+                            ->label(__('general.submission_checklist'))
+                            ->helperText(__('general.brief_explanation'))
                             ->toolbar('bold italic superscript subscript | link | blockquote bullist numlist')
                             ->plugins('autoresize link wordcount lists'),
                     ]),
                 Actions::make([
                     Action::make('save')
-                        ->label('Save')
-                        ->successNotificationTitle('Saved!')
-                        ->failureNotificationTitle('Data could not be saved.')
+                        ->label(__('general.save'))
+                        ->successNotificationTitle(__('general.saved'))
+                        ->failureNotificationTitle(__('general.data_could_not_saved'))
                         ->action(function (Action $action) {
                             $formData = $this->form->getState();
                             try {

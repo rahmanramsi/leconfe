@@ -34,12 +34,18 @@ use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\Placeholder;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use App\Panel\ScheduledConference\Resources\RegistrantResource;
+use Illuminate\Contracts\Support\Htmlable;
 
 class EnrollUser extends ListRecords
 {
     protected static string $resource = RegistrantResource::class;
 
-    protected static ?string $title = 'Enroll User';
+    protected static ?string $title = 'Enroll Users';
+
+    public function getTitle() : string|Htmlable
+    {
+        return __('general.enroll_users');
+    }
 
     public static function canAccess(array $parameters = []): bool
     {
@@ -83,38 +89,38 @@ class EnrollUser extends ListRecords
         $email = $record->email;
         $affiliation = $record->getMeta('affiliation');
         return [
-            Fieldset::make('User details')
+            Fieldset::make(__('general.user_details'))
                 ->schema([
                     Placeholder::make('user')
                         ->label('')
-                        ->content(new HtmlString(<<<HTML
-                            <table class='w-full'>
+                        ->content(new HtmlString(
+                            "<table class='w-full'>
                                 <tr>
                                     <td>
-                                        <strong>Name</strong>
+                                        <strong>" . __('general.name') . "</strong>
                                     </td>
                                     <td class='pl-5'>:</td>
                                     <td>{$fullName}</td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <strong>Email</strong>
+                                        <strong>" . __('general.email') . "</strong>
                                     </td>
                                     <td class='pl-5'>:</td>
                                     <td>{$email}</td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <strong>Affiliation</strong>
+                                        <strong>" . __('general.affiliation') . "</strong>
                                     </td>
                                     <td class='pl-5'>:</td>
                                     <td>{$affiliation}</td>
                                 </tr>
-                            </table>
-                        HTML))
+                            </table>"
+                        ))
                 ]),
             Select::make('registration_type_id')
-                ->label('Type')
+                ->label(__('general.type'))
                 ->options(static::getRegistrationTypeOptions())
                 ->searchable()
                 ->required()
@@ -129,9 +135,10 @@ class EnrollUser extends ListRecords
                         }
                     },
                 ]),
-            Fieldset::make('Payment')
+            Fieldset::make(__('general.payment'))
                 ->schema([
                     Select::make('registrationPayment.state')
+                        ->label(__('general.state'))
                         ->options(
                             RegistrationPaymentState::array()
                         )
@@ -140,8 +147,8 @@ class EnrollUser extends ListRecords
                         ->required()
                         ->live(),
                     DatePicker::make('registrationPayment.paid_at')
-                        ->label('Paid Date')
-                        ->placeholder('Select registration paid date..')
+                        ->label(__('general.paid_Date'))
+                        ->placeholder(__('general.select_registration_paid_date'))
                         ->prefixIcon('heroicon-m-calendar')
                         ->formatStateUsing(fn () => now())
                         ->visible(fn (Get $get) => $get('registrationPayment.state') === RegistrationPaymentState::Paid->value)
@@ -212,15 +219,15 @@ class EnrollUser extends ListRecords
             ])
             ->actions([
                 CreateAction::make('enroll')
-                    ->label('Enroll')
-                    ->modelLabel('Enroll User')
+                    ->label(__('general.enroll'))
+                    ->modelLabel(__('general.enroll_user'))
                     ->icon('heroicon-m-circle-stack')
                     ->color('gray')
                     ->button()
                     ->model(Registration::class)
                     ->form(fn (?Model $record) => static::enrollForm($record))
                     ->createAnother(false)
-                    ->modalSubmitActionLabel('Enroll')
+                    ->modalSubmitActionLabel(__('general.enroll'))
                     ->mutateFormDataUsing(function (Model $record, $data) { // record are user model
                         $registrationType = RegistrationType::where('id', $data['registration_type_id'])->first();
                         if ($registrationType) {

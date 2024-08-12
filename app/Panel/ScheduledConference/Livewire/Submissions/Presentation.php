@@ -38,13 +38,13 @@ class Presentation extends Component implements HasActions, HasForms
     public function sendToEditingAction()
     {
         return Action::make('sendToEditing')
-            ->label('Send to Editing')
-            ->modalHeading('Send to Editing')
-            ->modalSubmitActionLabel('Send to Editing')
+            ->label(__('general.send_to_editing'))
+            ->modalHeading(__('general.send_to_editing'))
+            ->modalSubmitActionLabel(__('general.send_to_editing'))
             ->authorize('acceptAbstract', $this->submission)
             ->modalWidth('2xl')
             ->record($this->submission)
-            ->successNotificationTitle('Accepted')
+            ->successNotificationTitle(__('general.accepted'))
             ->extraAttributes(['class' => 'w-full'])
             ->requiresConfirmation()
             ->icon('lineawesome-check-circle-solid')
@@ -52,7 +52,7 @@ class Presentation extends Component implements HasActions, HasForms
                 function (Action $action, array $data) {
                     try {
                         $this->submission->state()->sendToEditing();
-                       
+
                         $action->successRedirectUrl(
                             SubmissionResource::getUrl('view', [
                                 'record' => $this->submission->getKey(),
@@ -62,7 +62,7 @@ class Presentation extends Component implements HasActions, HasForms
                         $action->success();
                     } catch (\Throwable $th) {
                         Log::error($th->getMessage());
-                        $action->failureNotificationTitle('Failed to send to editing');
+                        $action->failureNotificationTitle(__('general.failed_to_send_to_editing'));
                         $action->failure();
                     }
                 }

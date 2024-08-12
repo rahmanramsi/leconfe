@@ -21,7 +21,7 @@ class UploadFilesStep extends Component implements HasActions, HasForms, HasWiza
 
     public static function getWizardLabel(): string
     {
-        return 'Upload Abstract';
+        return __('general.upload_abstract');
     }
 
     public function render()
@@ -32,9 +32,9 @@ class UploadFilesStep extends Component implements HasActions, HasForms, HasWiza
     public function nextStep()
     {
         return PageAction::make('nextStep')
-            ->label('Next')
-            ->failureNotificationTitle('No files were added to the submission')
-            ->successNotificationTitle('Saved')
+            ->label(__('general.next'))
+            ->failureNotificationTitle(__('general.no_files_added_to_submission'))
+            ->successNotificationTitle(__('general.saved'))
             ->action(function (PageAction $action) {
                 if (! $this->record->submissionFiles()->exists()) {
                     return $action->failure();

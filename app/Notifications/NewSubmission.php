@@ -52,7 +52,7 @@ class NewSubmission extends Notification implements ShouldQueue
             ->actions([
                 Action::make('new-submission')
                     ->url(SubmissionResource::getUrl('view', ['record' => $this->submission, 'tenant' => $this->submission->conference]))
-                    ->label('View')
+                    ->label(__('general.view'))
                     ->markAsRead(),
             ])
             ->getDatabaseMessage();

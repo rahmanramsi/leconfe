@@ -9,7 +9,7 @@
 
 <div class="space-y-6">
     <div class="grid grid-cols-12 gap-4">
-        <div class="space-y-4 col-span-8">
+        <div class="col-span-8 space-y-4">
             {{-- Papers --}}
             @livewire(Components\Files\PaperFiles::class, ['submission' => $submission])
 
@@ -22,13 +22,13 @@
             {{-- Discussions --}}
             @livewire(Components\Discussions\DiscussionTopic::class, ['submission' => $submission, 'stage' => SubmissionStage::PeerReview, 'lazy' => true])
         </div>
-        
-        <div class="self-start sticky z-30 top-24 flex flex-col gap-4 col-span-4" x-data="{ decision: @js($submissionDecision) }">
-            @if($submission->stage != SubmissionStage::CallforAbstract)    
+
+        <div class="sticky z-30 flex flex-col self-start col-span-4 gap-4 top-24" x-data="{ decision: @js($submissionDecision) }">
+            @if($submission->stage != SubmissionStage::CallforAbstract)
                 @if ($submission->revision_required)
                     <div class="flex items-center p-4 text-sm border rounded-lg border-warning-400 bg-warning-200 text-warning-600" x-show="!decision" role="alert">
                         <span class="text-base text-center">
-                            Revisions have been requested.
+                            {{ __('general.revisions_have_been_requested') }}
                         </span>
                     </div>
                 @endif
@@ -38,19 +38,19 @@
                         {{ $user->can('assignParticipant', $submission) ? 'Assign an editor to enable the editorial decisions for this stage.' : 'No editor assigned to this submission.' }}
                     </div>
                 @else
-                    
+
                     @if($submissionDecision)
-                        <div class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:ring-white/10 space-y-3 py-5 px-6">
+                        <div class="px-6 py-5 space-y-3 overflow-hidden bg-white shadow-sm rounded-xl ring-1 ring-gray-950/5 dark:ring-white/10">
                             <div class="text-base">
                                 @if ($submission->status == SubmissionStatus::Declined)
-                                    Submission Declined
+                                    {{ __('general.submission_declined') }}
                                 @elseif ($submission->skipped_review)
-                                    Submission skipped
+                                    {{ __('general.review_skipped') }}
                                 @else
-                                    Submission accepted
+                                    {{ __('general.submission_accepted') }}
                                 @endif
                             </div>
-                            <button class="text-sm text-primary-500 underline" 
+                            <button class="text-sm underline text-primary-500"
                                 @@click="decision = !decision" x-text="decision ? 'Change Decision' : 'Cancel'"
                             ></button>
                         </div>
@@ -75,7 +75,6 @@
                     </div>
                 @endif
             @endif
-            
             @livewire(Components\ParticipantList::class, ['submission' => $submission, 'lazy' => true])
         </div>
 

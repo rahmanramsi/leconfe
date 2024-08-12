@@ -29,7 +29,18 @@ class AnnouncementResource extends Resource
 
     protected static ?string $modelLabel = 'Announcement';
 
-    protected static ?string $navigationGroup = 'Conference';
+
+    public static function getNavigationGroup(): string
+    {
+        return __('general.conference');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('general.announcement');
+    }
+
+
 
     protected static ?string $navigationIcon = 'heroicon-o-speaker-wave';
 
@@ -43,17 +54,20 @@ class AnnouncementResource extends Resource
         return $form
             ->schema([
                 TextInput::make('title')
+                    ->label(__('general.title'))
                     ->required(),
                 Textarea::make('meta.summary')
+                    ->label(__('general.summary'))
                     ->autosize(),
                 TinyEditor::make('meta.content')
-                    ->label('Announcement')
+                    ->label(__('general.announcement'))
                     ->profile('basic')
-                    ->helperText('The complete announcement content.'),
+                    ->helperText(__('general.complete_announcement_content')),
                 DatePicker::make('expires_at')
+                    ->label(__('general.expires_at'))
                     ->minDate(today()->addDay()),
                 Checkbox::make('send_email')
-                    ->label('Send email about this to subscribed users')
+                    ->label(__('general.send_email_to_subscribed_users'))
                     ->hidden(fn (?Announcement $record) => $record),
             ])
             ->columns(1);
@@ -66,9 +80,11 @@ class AnnouncementResource extends Resource
             ->columns([
                 IndexColumn::make('no'),
                 TextColumn::make('title')
+                    ->label(__('general.title'))
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('expires_at')
+                    ->label(__('general.expires_at'))
                     ->sortable()
                     ->date(Setting::get('format_date')),
             ])
@@ -77,6 +93,7 @@ class AnnouncementResource extends Resource
             ])
             ->actions([
                 Action::make('view')
+                    ->label(__('general.view'))
                     ->icon('heroicon-o-eye')
                     ->url(fn ($record) =>  route('livewirePageGroup.scheduledConference.pages.announcement-page', [
                         'announcement' => $record->id,

@@ -47,12 +47,12 @@ class AbstractAccepted extends Notification implements ShouldQueue
         return FilamentNotification::make('abstract-accepted')
             ->icon('lineawesome-check-circle')
             ->iconColor('success')
-            ->title('Abstract Accepted')
+            ->title(__('general.abstract_accepted'))
             ->body("Title: {$this->submission->getMeta('title')}")
             ->actions([
                 Action::make('view-abstract')
                     ->url(SubmissionResource::getUrl('view', ['record' => $this->submission, 'tenant' => $this->submission->conference]))
-                    ->label('View')
+                    ->label(__('general.view'))
                     ->markAsRead(),
             ])
             ->toDatabase();

@@ -8,5 +8,11 @@ class ReviewerFiles extends SubmissionFilesTable
 {
     protected ?string $category = SubmissionFileCategory::REVIEWER_FILES;
 
-    protected string $tableHeading = 'Reviewer Files';
+    protected string $tableHeading;
+
+    public function __construct()
+    {
+        $this->tableHeading = __('general.reviewer_files');
+    }
+
 }

@@ -22,8 +22,8 @@ class ManagePermissions extends ManageRecords
             Actions\ActionGroup::make([
                 Actions\Action::make('persist')
                     ->requiresConfirmation()
-                    ->modalDescription('This will persist all permissions to storage.')
-                    ->label('Persist Permissions')
+                    ->modalDescription(__('general.persist_all_permissions_to_storage'))
+                    ->label(__('general.persist_permissions'))
                     ->action(function () {
                         PermissionPersistAction::run();
                     }),

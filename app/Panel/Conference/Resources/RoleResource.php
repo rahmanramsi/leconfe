@@ -31,7 +31,15 @@ class RoleResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-shield-check';
 
-    protected static ?string $navigationGroup = 'Settings';
+    public static function getNavigationLabel(): string
+    {
+        return __('general.role');
+    }
+
+    public static function getNavigationGroup(): string
+    {
+        return __('general.settings');
+    }
 
     protected static ?int $navigationSort = 6;
 
@@ -56,10 +64,11 @@ class RoleResource extends Resource
             ->schema([
                 Section::make()
                     ->schema([
-                        TextInput::make('name'),
+                        TextInput::make('name')
+                            ->label(__('general.name')),
                         Select::make('copy_permissions_from')
                             ->dehydrated(false)
-                            ->label('Copy permissions from')
+                            ->label(__('general.copy_permissions_from'))
                             ->hidden(fn (string $operation) => $operation === 'view')
                             ->options(fn () => static::getEloquentQuery()->where('name', '!=', UserRole::Admin)->pluck('name', 'id')->toArray())
                             ->live()
@@ -85,7 +94,7 @@ class RoleResource extends Resource
                     ->columns([
                         'sm' => 2,
                     ]),
-                Section::make('Advanced Permissions')
+                Section::make(__('general.advanced_permissions'))
                     ->schema(static::getPermissionEntitySchema())
                     ->collapsible(false)
                     ->columns([
@@ -101,6 +110,7 @@ class RoleResource extends Resource
             ->columns([
                 IndexColumn::make('no'),
                 TextColumn::make('name')
+                    ->label(__('general.name'))
                     ->searchable(),
             ])
             ->filters([
@@ -113,10 +123,10 @@ class RoleResource extends Resource
                 Tables\Actions\Action::make('persistRolePermissions')
                     ->requiresConfirmation()
                     ->icon('heroicon-o-shield-check')
-                    ->label('Persist Permissions')
+                    ->label(__('general.persist_permissions'))
                     ->hidden(fn (Role $record) => !in_array($record->name, UserRole::values()) || app()->isProduction())
                     ->action(fn (Role $record) => RolePersistAssignedPermissions::run($record))
-                    ->successNotificationTitle('Permissions persisted successfully.')
+                    ->successNotificationTitle(__('general.permissions_persisted_successfully'))
             ])
             ->bulkActions([
                 // Tables\Actions\BulkActionGroup::make([

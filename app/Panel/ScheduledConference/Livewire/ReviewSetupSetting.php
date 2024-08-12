@@ -51,25 +51,26 @@ class ReviewSetupSetting extends Component implements HasForms
                 Section::make()
                     ->schema([
                         Radio::make('meta.review_mode')
+                            ->label(__('general.review_mode'))
                             ->options(Review::getModeOptions()),
                         TextInput::make('meta.review_invitation_response_deadline')
-                            ->label('Default Response Deadline')
-                            ->helperText('Deadline for reviewers to respond to invitations')
+                            ->label(__('general.default_response_deadline'))
+                            ->helperText(__('general.deadline_reviewers_invitations'))
                             ->numeric()
                             ->minValue(1)
-                            ->suffix('Days'),
+                            ->suffix(__('general.days')),
                         TextInput::make('meta.review_completion_deadline')
-                            ->label('Default Completion Deadline')
-                            ->helperText('Deadline for completing reviews')
+                            ->label(__('general.default_completion_deadline'))
+                            ->helperText(__('general.default_completing_deadline'))
                             ->numeric()
                             ->minValue(1)
-                            ->suffix('Days'),
+                            ->suffix(__('general.days')),
                     ]),
                 Actions::make([
                     Action::make('save')
-                        ->label('Save')
-                        ->successNotificationTitle('Saved!')
-                        ->failureNotificationTitle('Data could not be saved.')
+                        ->label(__('general.save'))
+                        ->successNotificationTitle(__('general.saved'))
+                        ->failureNotificationTitle(__('general.data_could_not_saved'))
                         ->action(function (Action $action) {
                             $formData = $this->form->getState();
                             try {

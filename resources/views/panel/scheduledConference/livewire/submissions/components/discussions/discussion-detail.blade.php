@@ -1,12 +1,12 @@
 <div>
     <x-filament::fieldset class="mb-8">
     <x-slot name="label">
-        {{ __("Participants") }}
+        {{ __("general.participants") }}
     </x-slot>
 
     <div class="grid grid-cols-3 gap-4">
         @foreach($topic->participants()->with(['user', 'topic'])->get() as $participant)
-        <div class="col-span-1 flex items-center space-x-2">
+        <div class="flex items-center col-span-1 space-x-2">
             <x-filament::avatar
                 src="{{ $participant->user->getFilamentAvatarUrl() }}"
                 alt="Profile Picture"
@@ -20,7 +20,7 @@
         </div>
         @endforeach
     </div>
-    
+
     {{-- Form fields --}}
 </x-filament::fieldset>
     {{ $this->table }}

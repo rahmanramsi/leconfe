@@ -22,7 +22,7 @@ class QueuedSubmissionState extends BaseSubmissionState
         Log::make(
             name: 'submission',
             subject: $this->submission,
-            description: __('log.submission.abstract_accepted'),
+            description: __('general.log.submission.abstract_accepted'),
             event : 'submission-abstract-accepted',
         )
             ->by(auth()->user())
@@ -38,7 +38,7 @@ class QueuedSubmissionState extends BaseSubmissionState
         Log::make(
             name: 'submission',
             subject: $this->submission,
-            description: __('log.submission.declined'),
+            description: __('general.log.submission.declined'),
             event: 'submission-declined',
         )
             ->by(auth()->user())

@@ -24,7 +24,15 @@ class TimelineResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-clock';
 
-    protected static ?string $navigationGroup = 'Conference';
+    public static function getNavigationGroup(): string
+    {
+        return __('general.conference');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('general.timeline');
+    }
 
     public static function form(Form $form): Form
     {
@@ -37,14 +45,18 @@ class TimelineResource extends Resource
             Grid::make(1)
                 ->schema([
                     TextInput::make('title')
+                        ->label(__('general.title'))
                         ->required(),
-                    TextInput::make('subtitle'),
+                    TextInput::make('subtitle')
+                        ->label(__('general.subtitle')),
                     DatePicker::make('date')
+                        ->label(__('general.date'))
                         ->rule('date')
                         ->required(),
                     Grid::make(2)
                         ->schema([
                             CheckboxList::make('roles')
+                                ->label(__('general.roles'))
                                 ->options(Role::all()->pluck('name', 'name'))
                                 ->columns(2),
                         ]),
@@ -58,11 +70,14 @@ class TimelineResource extends Resource
         return $table
             ->query(Timeline::query())
             ->columns([
-                TextColumn::make('title'),
+                TextColumn::make('title')
+                    ->label(__('general.title')),
                 TextColumn::make('date')
+                    ->label(__('general.date'))
                     ->dateTime(Setting::get('format_date'))
                     ->sortable(),
                 TextColumn::make('roles')
+                    ->label(__('general.roles'))
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'Author' => 'warning',

@@ -51,16 +51,18 @@ class PaymentManuals extends Component implements HasForms, HasTable
     {
         return [
             TextInput::make('name')
-                ->placeholder('Input a name for the payment method..')
+                ->label(__('general.name'))
+                ->placeholder(__('general.input_name_payment_method'))
                 ->required(),
             Select::make('currency')
+                ->label(__('general.currency'))
                 ->options(static::getCurrencyOptions())
-                ->placeholder('Select payment currency..')
+                ->placeholder(__('general.select_payment_currency'))
                 ->searchable()
                 ->required(),
             TinyEditor::make('detail')
-                ->placeholder('Input payment details..')
-                ->hint('*Add instruction here.')
+                ->placeholder(__('general.input_payment_details'))
+                ->hint(__('general.add_instruction_here'))
                 ->profile('basic')
                 ->required(),
         ];
@@ -73,12 +75,12 @@ class PaymentManuals extends Component implements HasForms, HasTable
                 PaymentManual::query()
                     ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
             )
-            ->heading('Manual Payment List')
+            ->heading(__('general.manual_payment_list'))
             ->reorderable('order_column')
             ->headerActions([
                 CreateAction::make()
-                    ->label("Add Manual Payment")
-                    ->modalHeading('Create new manual payment')
+                    ->label(__('general.add_manual_payment'))
+                    ->modalHeading(__('general.create_new_manual_payment'))
                     ->modalWidth('4xl')
                     ->model(PaymentManual::class)
                     ->form(static::manualPaymentForm())
@@ -86,9 +88,11 @@ class PaymentManuals extends Component implements HasForms, HasTable
             ])
             ->columns([
                 TextColumn::make('name')
+                    ->label(__('general.name'))
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('currency')
+                    ->label(__('general.currency'))
                     ->formatStateUsing(fn ($state) => currency($state))
                     ->badge()
                     ->searchable()
@@ -97,10 +101,10 @@ class PaymentManuals extends Component implements HasForms, HasTable
             ->groups([
                 Group::make('currency')
                     ->getTitleFromRecordUsing(fn (Model $record): string => Str::upper($record->currency))
-                    ->label('Currency')
+                    ->label(__('general.currency'))
                     ->collapsible()
             ])
-            ->emptyStateHeading('Manual payment are empty')
+            ->emptyStateHeading(__('general.manual_payment_are_empty'))
             ->actions([
                 EditAction::make()
                     ->form(static::manualPaymentForm())

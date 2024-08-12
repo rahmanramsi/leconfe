@@ -40,15 +40,16 @@ class SearchEngineSetting extends Component implements HasForms
                 Section::make()
                     ->schema([
                         KeyValue::make('meta.meta_tags')
-                            ->keyLabel('Name')
-                            ->valueLabel('Content')
-                            ->helperText('Add meta tags, to the head of every page on your conference. Before adding any tags, consult with a technical advisor to ensure that they are compatible with your website and will not cause any problems.'),
+                            ->label(__('general.meta_tags'))
+                            ->keyLabel(__('general.name'))
+                            ->valueLabel(__('general.content'))
+                            ->helperText(__('general.add_meta_tags_conference')),
                     ]),
                 Actions::make([
                     Action::make('save')
-                        ->label('Save')
-                        ->successNotificationTitle('Saved!')
-                        ->failureNotificationTitle('Data could not be saved.')
+                        ->label(__('general.save'))
+                        ->successNotificationTitle(__('general.saved'))
+                        ->failureNotificationTitle(__('general.data_could_not_saved'))
                         ->action(function (Action $action) {
                             $formData = $this->form->getState();
                             try {

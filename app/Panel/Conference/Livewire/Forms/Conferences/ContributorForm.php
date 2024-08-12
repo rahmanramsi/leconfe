@@ -23,7 +23,7 @@ class ContributorForm extends Component
     {
         return [
             Forms\Components\SpatieMediaLibraryFileUpload::make('profile')
-                ->label('Profile Picture')
+                ->label(__('general.profile_picture'))
                 ->image()
                 ->key('profile')
                 ->collection('profile')
@@ -33,9 +33,12 @@ class ContributorForm extends Component
                     'lg' => 2,
                 ]),
             Forms\Components\TextInput::make('given_name')
+                ->label(__('general.given_name'))
                 ->required(),
-            Forms\Components\TextInput::make('family_name'),
+            Forms\Components\TextInput::make('family_name')
+                ->label(__('general.family_name')),
             Forms\Components\TextInput::make('email')
+                ->label(__('general.email'))
                 ->required()
                 ->unique(
                     ignoreRecord: true,
@@ -56,40 +59,44 @@ class ContributorForm extends Component
     {
         return [
             Forms\Components\TagsInput::make('meta.expertise')
+                ->label(__('general.expertise'))
                 ->placeholder('')
                 ->columnSpan([
                     'lg' => 2,
                 ]),
             Forms\Components\TextInput::make('meta.affiliation')
+                ->label(__('general.affiliation'))
                 ->prefixIcon('heroicon-s-building-library')
                 ->placeholder('University of Jakarta')
                 ->columnSpan([
                     'lg' => 2,
                 ]),
             Forms\Components\Select::make('meta.country')
-                ->placeholder('Select a country')
+                ->label(__('general.country'))
+                ->placeholder(__('general.select_a_country'))
                 ->searchable()
                 ->options(fn () => Country::all()->mapWithKeys(fn ($country) => [$country->id => $country->flag.' '.$country->name]))
                 ->optionsLimit(250),
             Forms\Components\TextInput::make('meta.phone')
+                ->label(__('general.phone'))
                 ->prefixIcon('heroicon-s-phone')
                 ->type('tel')
                 ->rule('phone:INTERNATIONAL')
-                ->helperText('International format, e.g. +6281234567890'),
-            Forms\Components\Fieldset::make('Scholar Profile')
+                ->helperText(__('general.phone_format_international')),
+            Forms\Components\Fieldset::make(__('general.scholar_profile'))
                 ->schema([
                     Forms\Components\Grid::make(2)
                         ->schema([
                             Forms\Components\TextInput::make('meta.orcid_id')
                                 ->prefixIcon('academicon-orcid')
                                 ->placeholder('0000-0000-0000-0000')
-                                ->label('ORCID iD'),
+                                ->label(__('general.orcid_id')),
                             Forms\Components\TextInput::make('meta.google_scholar_id')
                                 ->prefixIcon('academicon-google-scholar')
                                 ->placeholder('abcdefgh1234')
-                                ->label('Google Scholar'),
+                                ->label(__('general.google_scholar')),
                             Forms\Components\TextInput::make('meta.scopus_id')
-                                ->label('Scopus ID')
+                                ->label(__('general.scopus_id'))
                                 ->placeholder('7005557890')
                                 ->prefixIcon('academicon-scopus-square'),
                         ]),
@@ -103,6 +110,7 @@ class ContributorForm extends Component
             IndexColumn::make('no')
                 ->toggleable(),
             SpatieMediaLibraryImageColumn::make('profile')
+                ->label(__('general.profile'))
                 ->collection('profile')
                 ->conversion('avatar')
                 ->width(50)
@@ -114,9 +122,11 @@ class ContributorForm extends Component
                 ->defaultImageUrl(fn (Model $record): string => $record->getFilamentAvatarUrl())
                 ->toggleable(),
             TextColumn::make('email')
+                ->label(__('general.email'))
                 ->searchable()
                 ->toggleable(isToggledHiddenByDefault: true),
             TextColumn::make('full_name')
+                ->label(__('general.full_name'))
                 ->searchable(
                     query: fn ($query, $search) => $query
                         ->where('given_name', 'LIKE', "%{$search}%")
@@ -124,6 +134,7 @@ class ContributorForm extends Component
                 )
                 ->toggleable(),
             TextColumn::make('role.name')
+                ->label(__('general.role'))
                 ->badge()
                 ->limitList(3)
                 ->listWithLineBreaks(),

@@ -20,8 +20,8 @@ class ManagePlugins extends ManageRecords
     public function getTabs(): array
     {
         return [
-            'all' => Tab::make(),
-            'disabled' => Tab::make()
+            'all' => Tab::make(__('general.all')),
+            'disabled' => Tab::make(__('general.disabled'))
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('enabled', false)),
         ];
     }
@@ -30,11 +30,12 @@ class ManagePlugins extends ManageRecords
     {
         return [
             Actions\Action::make('upload-plugin')
-                ->label('Upload Plugin')
-                ->modalHeading('Upload Plugin')
+                ->label(__('general.upload_plugin'))
+                ->modalHeading(__('general.upload_plugin'))
                 ->visible(fn () => auth()->user()->can('install', PluginModel::class))
                 ->form([
                     FileUpload::make('file')
+                        ->label(__('general.file'))
                         ->disk('plugins-tmp')
                         ->acceptedFileTypes(['application/zip'])
                         ->required(),
@@ -46,7 +47,7 @@ class ManagePlugins extends ManageRecords
                     } catch (\Throwable $th) {
                         Notification::make('install-failed')
                             ->danger()
-                            ->title('Failed to install plugin')
+                            ->title(__('general.failed_to_install_plugin'))
                             ->send();
                         Log::error($th);
 
@@ -56,12 +57,12 @@ class ManagePlugins extends ManageRecords
                     }
 
                     Notification::make('install-success')
-                        ->title('Install success')
+                        ->title(__('general.install_success'))
                         ->success()
-                        ->body('Plugin installed successfully')
+                        ->body(__('general.plugin_installed_successfully'))
                         ->send();
                 })
-                ->modalSubmitActionLabel('Submit'),
+                ->modalSubmitActionLabel(__('general.submit')),
         ];
     }
 }

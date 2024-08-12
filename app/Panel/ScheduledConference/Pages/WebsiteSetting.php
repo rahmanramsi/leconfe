@@ -18,16 +18,32 @@ use App\Panel\ScheduledConference\Livewire\PrivacySetting;
 use App\Panel\ScheduledConference\Livewire\SetupSetting;
 use App\Panel\ScheduledConference\Livewire\SponsorSetting;
 use App\Panel\ScheduledConference\Livewire\ThemeSetting;
+use Illuminate\Contracts\Support\Htmlable;
 
 class WebsiteSetting extends Page
 {
 	protected static string $view = 'panel.scheduledConference.pages.website-setting';
 
-	protected static ?string $navigationGroup = 'Settings';
+    public static function getNavigationGroup(): string
+    {
+        return __('general.settings');
+    }
+
+    public function getHeading(): string|Htmlable
+    {
+        return __('general.website_setting');
+    }
+
 
 	protected static ?string $navigationIcon = 'heroicon-o-globe-alt';
 
-	protected static ?string $navigationLabel = 'Website';
+
+    public static function getNavigationLabel(): string
+    {
+        return __('general.website');
+    }
+
+
 
 	public function mount(): void
 	{
@@ -47,43 +63,51 @@ class WebsiteSetting extends Page
 					->contained(false)
 					->tabs([
 						Tabs\Tab::make('Appearance')
+                            ->label(__('general.appearance'))
 							->schema([
 								VerticalTabs\Tabs::make()
 									->schema([
 										VerticalTabs\Tab::make('Theme')
+                                            ->label(__('general.theme'))
 											->icon('heroicon-o-adjustments-horizontal')
 											->schema([
 												LivewireEntry::make('setup-setting')
 													->livewire(ThemeSetting::class),
 											]),
 										VerticalTabs\Tab::make('Setup')
+                                            ->label(__('general.setup'))
 											->icon('heroicon-o-cog')
 											->schema([
 												LivewireEntry::make('setup-setting')
 													->livewire(SetupSetting::class),
 											]),
 										VerticalTabs\Tab::make('Sidebar')
+                                            ->label(__('general.sidebar'))
 											->icon('heroicon-o-view-columns')
 											->schema([
 												LivewireEntry::make('sidebar-setting')
 													->livewire(SidebarSetting::class),
 											]),
 										VerticalTabs\Tab::make('Supports')
+                                            ->label(__('general.supports'))
 											->icon('heroicon-o-currency-dollar')
 											->schema([
 												Tabs::make('sponsors')
 													->tabs([
 														Tabs\Tab::make('Sponsorship Levels')
+                                                            ->label(__('general.sponsorship_levels'))
 															->schema([
 																LivewireEntry::make('sponsorship-level-table')
 																	->livewire(SponsorLevelTable::class),
 															]),
 														Tabs\Tab::make('Sponsors')
+                                                            ->label(__('general.sponsors'))
 															->schema([
 																LivewireEntry::make('sponsor-table')
 																	->livewire(SponsorTable::class),
 															]),
 														Tabs\Tab::make('Partners')
+                                                            ->label(__('general.partners'))
 															->schema([
 																LivewireEntry::make('partner-table')
 																	->livewire(PartnerTable::class),
@@ -93,16 +117,19 @@ class WebsiteSetting extends Page
 									]),
 							]),
 						Tabs\Tab::make('Setup')
+                            ->label(__('general.setup'))
 							->schema([
 								VerticalTabs\Tabs::make()
 									->schema([
 										VerticalTabs\Tab::make('Navigation Menu')
+                                            ->label(__('general.navigation_menu'))
 											->icon('heroicon-o-list-bullet')
 											->schema([
 												LivewireEntry::make('navigation-menu-setting')
 													->livewire(NavigationMenuSetting::class),
 											]),
 										VerticalTabs\Tab::make('Privacy Statement')
+                                            ->label(__('general.privacy_statement'))
 											->icon('heroicon-o-shield-check')
 											->schema([
 												LivewireEntry::make('navigation-menu-setting')

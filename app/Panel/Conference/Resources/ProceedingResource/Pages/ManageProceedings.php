@@ -26,12 +26,12 @@ class ManageProceedings extends ManageRecords
     {
         return [
             'future' => Tab::make()
-                ->label('Future Proceedings')
+                ->label(__('general.future_proceedings'))
                 ->modifyQueryUsing(fn (Builder $query) => $query->published(false))
                 ->badge(fn () => Proceeding::published(false)->count())
                 ->badgeColor(fn () => Proceeding::published(false)->count() ? 'primary' : 'gray'),
             'back' => Tab::make()
-                ->label('Back Proceedings')
+                ->label(__('general.back_proceedings'))
                 ->modifyQueryUsing(fn (Builder $query) => $query->published())
                 ->badge(fn () => Proceeding::published()->count())
                 ->badgeColor(fn () => Proceeding::published()->count() ? 'primary' : 'gray'),

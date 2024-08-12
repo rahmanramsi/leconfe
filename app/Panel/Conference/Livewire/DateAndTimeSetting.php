@@ -40,15 +40,11 @@ class DateAndTimeSetting extends Component implements HasForms
         return $form
             ->statePath('formData')
             ->schema([
-                Section::make('Date and Time Formats')
-                    ->description(new HtmlString(<<<'HTML'
-                                        Please select the desired format for dates and times. You may also enter a custom format using
-                                    special <a href="https://www.php.net/manual/en/function.strftime.php#refsect1-function.strftime-parameters" target="_blank"
-                                        class="filament-link inline-flex items-center justify-center gap-0.5 font-medium outline-none hover:underline focus:underline text-sm text-primary-600 hover:text-primary-500 filament-tables-link-action">format characters</a>.
-                                    HTML))
+                Section::make(__('general.date_and_time_formats'))
+                    ->description(new HtmlString(__('general.format_character_dates_and_times')))
                     ->schema([
                         Radio::make('select_format_date')
-                            ->label('Date')
+                            ->label(__('general.date'))
                             ->options(
                                 fn () => collect([
                                     'F j, Y',
@@ -57,16 +53,16 @@ class DateAndTimeSetting extends Component implements HasForms
                                     'Y F j',
                                 ])
                                     ->mapWithKeys(fn ($format) => [$format => $now->format($format)])
-                                    ->put('custom', 'Custom')
+                                    ->put('custom', __('general.custom'))
                             ),
                         TextInput::make('format_date')
                             ->hiddenLabel()
-                            ->placeholder('Enter a custom date format')
+                            ->placeholder(__('general.enter_custom_date_format'))
                             ->required(fn (Get $get) => $get('select_format_date') === 'custom')
                             ->dehydrated()
                             ->dehydrateStateUsing(fn (Get $get, ?string $state) => $get('select_format_date') === 'custom' ? $state : $get('select_format_date')),
                         Radio::make('select_format_time')
-                            ->label('Time')
+                            ->label(__('general.time'))
                             ->options(
                                 fn () => collect([
                                     'h:i A',
@@ -74,18 +70,19 @@ class DateAndTimeSetting extends Component implements HasForms
                                     'H:i',
                                 ])
                                     ->mapWithKeys(fn ($format) => [$format => $now->format($format)])
-                                    ->put('custom', 'Custom')
+                                    ->put('custom', __('general.custom'))
                             ),
                         TextInput::make('format_time')
                             ->hiddenLabel()
-                            ->placeholder('Enter a custom time format')
+                            ->placeholder(__('general.enter_custom_time_format'))
                             ->required(fn (Get $get) => $get('select_format_time') === 'custom')
                             ->dehydrated()
                             ->dehydrateStateUsing(fn (Get $get, ?string $state) => $get('select_format_time') === 'custom' ? $state : $get('select_format_time')),
                     ]),
                 Actions::make([
                     Action::make('save')
-                        ->successNotificationTitle('Saved!')
+                        ->label(__('general.save'))
+                        ->successNotificationTitle(__('general.saved'))
                         ->action(function (Action $action) {
                             $formData = $this->form->getState();
                             try {

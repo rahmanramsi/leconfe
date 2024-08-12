@@ -45,7 +45,7 @@ class PeerReview extends Component implements HasActions, HasForms
         return Action::make('declineSubmissionAction')
             ->icon('lineawesome-times-solid')
             ->authorize('declinePaper', $this->submission)
-            ->label('Decline Submission')
+            ->label(__('general.decline_submission'))
             ->color('danger')
             ->outlined()
             ->mountUsing(function (Form $form) {
@@ -61,16 +61,19 @@ class PeerReview extends Component implements HasActions, HasForms
                     ->columns(1)
                     ->schema([
                         TextInput::make('email')
+                            ->label(__('general.email'))
                             ->readOnly()
                             ->dehydrated(),
                         TextInput::make('subject')
+                            ->label(__('general.subject'))
                             ->required(),
                         TinyEditor::make('message')
+                            ->label(__('general.message'))
                             ->minHeight(300)
                             ->profile('email')
                             ->columnSpanFull(),
                         Checkbox::make('do-not-notify-author')
-                            ->label("Don't Send Notification to Author")
+                            ->label(__('general.dont_send_notification_to_author'))
                             ->columnSpanFull(),
                     ]),
             ])
@@ -86,7 +89,7 @@ class PeerReview extends Component implements HasActions, HasForms
                                     ->contentUsing($data['message'])
                             );
                     } catch (\Exception $e) {
-                        $action->failureNotificationTitle('The email notification was not delivered.');
+                        $action->failureNotificationTitle(__('general.email_notification_was_not_delivered'));
                         $action->failure();
                     }
                 }
@@ -107,8 +110,8 @@ class PeerReview extends Component implements HasActions, HasForms
             ->authorize('acceptPaper', $this->submission)
             ->icon('lineawesome-check-circle-solid')
             ->color('primary')
-            ->label('Accept Submission')
-            ->modalSubmitActionLabel('Accept')
+            ->label(__('general.accept_submission'))
+            ->modalSubmitActionLabel(__('general.accept'))
             ->mountUsing(function (Form $form) {
                 $mailTemplate = MailTemplate::where('mailable', AcceptPaperMail::class)->first();
                 $form->fill([
@@ -122,16 +125,19 @@ class PeerReview extends Component implements HasActions, HasForms
                     ->columns(1)
                     ->schema([
                         TextInput::make('email')
+                            ->label(__('general.email'))
                             ->readOnly()
                             ->dehydrated(),
                         TextInput::make('subject')
+                            ->label(__('general.subject'))
                             ->required(),
                         TinyEditor::make('message')
+                            ->label(__('general.message'))
                             ->minHeight(300)
                             ->profile('email')
                             ->columnSpanFull(),
                         Checkbox::make('do-not-notify-author')
-                            ->label("Don't Send Notification to Author")
+                            ->label(__('general.dont_send_notification_to_author'))
                             ->columnSpanFull(),
                     ]),
             ])
@@ -147,7 +153,7 @@ class PeerReview extends Component implements HasActions, HasForms
                                     ->contentUsing($data['message'])
                             );
                     } catch (\Exception $e) {
-                        $action->failureNotificationTitle('The email notification was not delivered.');
+                        $action->failureNotificationTitle(__('general.email_notification_was_not_delivered'));
                         $action->failure();
                     }
                 }
@@ -170,7 +176,7 @@ class PeerReview extends Component implements HasActions, HasForms
             ->icon('lineawesome-list-alt-solid')
             ->outlined()
             ->color(Color::Orange)
-            ->label('Request Revision')
+            ->label(__('general.request_revision'))
             ->mountUsing(function (Form $form): void {
                 $mailTemplate = MailTemplate::where('mailable', RevisionRequestMail::class)->first();
                 $form->fill([
@@ -181,19 +187,23 @@ class PeerReview extends Component implements HasActions, HasForms
             })
             ->form([
                 Fieldset::make('Notification')
+                    ->label(__('general.notification'))
                     ->columns(1)
                     ->schema([
                         TextInput::make('email')
+                            ->label(__('general.email'))
                             ->readOnly()
                             ->dehydrated(),
                         TextInput::make('subject')
+                            ->label(__('general.subject'))
                             ->required(),
                         TinyEditor::make('message')
+                            ->label(__('general.message'))
                             ->minHeight(300)
                             ->profile('email')
                             ->columnSpanFull(),
                         Checkbox::make('do-not-notify-author')
-                            ->label("Don't Send Notification to Author")
+                            ->label(__('general.dont_send_notification_to_author'))
                             ->columnSpanFull(),
                     ]),
             ])
@@ -214,7 +224,7 @@ class PeerReview extends Component implements HasActions, HasForms
                                     ->contentUsing($data['message'])
                             );
                     } catch (\Exception $e) {
-                        $action->failureNotificationTitle('The email notification was not delivered.');
+                        $action->failureNotificationTitle(__('general.email_notification_was_not_delivered'));
                         $action->failure();
                     }
                 }
@@ -232,11 +242,11 @@ class PeerReview extends Component implements HasActions, HasForms
     public function skipReviewAction()
     {
         return Action::make('skipReviewAction')
-            ->label('Skip Review')
+            ->label(__('general.skip_review'))
             ->icon('lineawesome-check-circle-solid')
             ->color('gray')
             ->outlined()
-            ->successNotificationTitle('Review Skipped')
+            ->successNotificationTitle(__('general.review_skipped'))
             ->action(function (Action $action) {
                 $this->submission->state()->skipReview();
 

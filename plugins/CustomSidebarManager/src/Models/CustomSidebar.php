@@ -12,8 +12,6 @@ class CustomSidebar extends Model
 
     public $incrementing = false;
 
-    // protected $primaryKey = 'name';
-
     protected $keyType = 'string';
 
     protected $schema = [

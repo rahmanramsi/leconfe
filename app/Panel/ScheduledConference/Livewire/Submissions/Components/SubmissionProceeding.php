@@ -55,24 +55,25 @@ class SubmissionProceeding extends \Livewire\Component implements HasForms, HasI
             ->record($this->submission)
             ->schema([
                 TextEntry::make('id')
-                    ->label('Proceeding')
+                    ->label(__('general.proceeding'))
                     ->html()
                     ->getStateUsing(function (Submission $record) {
                         if ($record->proceeding){
                             $proceedingTitle = $record->proceeding->title;
                             $proceedingRoute = route('filament.conference.resources.proceedings.view', ['record' => $record->proceeding]);
 
-                            return <<<HTML
-                                <a class="text-primary-700 hover:text-primary-800" href="$proceedingRoute">$proceedingTitle</a>
-                            HTML;
+                            return __(
+                                'general.proceeding_route_title',
+                                ['route' => $proceedingRoute, 'variable' => $proceedingTitle]
+                            );
                         }
 
-                        return 'This submission has not yet been scheduled for publication in the proceedings.';
+                        return __('general.submission_not_yet_publication');
                     })
                     ->suffixActions([
                         Action::make('assign_proceeding')
                             ->button()
-                            ->label(fn(Submission $record) => $record->proceeding ? 'Change Proceeding' : 'Assign to Proceeding')
+                            ->label(fn(Submission $record) => $record->proceeding ? __('general.change_proceeding') :  __('general.assign_to_proceeding'))
                             ->visible(fn (Submission $record) => auth()->user()->can('editing', $record))
                             ->modalWidth(MaxWidth::ExtraLarge)
                             ->form(fn (Submission $record) => static::getFormAssignProceeding($record))
@@ -85,18 +86,18 @@ class SubmissionProceeding extends \Livewire\Component implements HasForms, HasI
     {
         return [
             Select::make('proceeding_id')
-                ->label('Proceeding')
-                ->placeholder('None')
+                ->label(__('general.proceeding'))
+                ->placeholder(__('general.none'))
                 ->formatStateUsing(fn () => $submission->proceeding_id ?? null)
                 // ->native(false)
                 // ->searchable()
                 ->options(
                     fn () => [
-                        'Future Proceeding' => Proceeding::query()
+                        __('general.future_proceedings') => Proceeding::query()
                             ->where('published', false)
                             ->pluck('title', 'id')
                             ->toArray(),
-                        'Back Proceeding' => Proceeding::query()
+                        __('general.back_proceedings') => Proceeding::query()
                             ->where('published', true)
                             ->pluck('title', 'id')
                             ->toArray(),
@@ -118,15 +119,15 @@ class SubmissionProceeding extends \Livewire\Component implements HasForms, HasI
             })
             ->schema([
                 SpatieMediaLibraryFileUpload::make('media.cover')
-                    ->label('Cover Image')
+                    ->label(__('general.cover_image'))
                     ->collection('cover')
                     ->model($this->submission)
                     ->image()
                     ->preserveFilenames(),
                 TextInput::make('meta.article_pages')
-                    ->label('Pages')
+                    ->label(__('general.pages'))
                     ->maxWidth('xs')
-                    ->placeholder('e.g. 1-10'),
+                    ->placeholder(__('general.eg_1_10')),
             ]);
     }
 
@@ -139,16 +140,16 @@ class SubmissionProceeding extends \Livewire\Component implements HasForms, HasI
             );
 
             $this->form->model($submission)->saveRelationships();
-            
+
             Notification::make('success')
                 ->success()
-                ->title('Saved!')
+                ->title(__('general.saved'))
                 ->send();
         } catch (\Throwable $th) {
             Notification::make('error')
                 ->danger()
-                ->title('Error!')
-                ->body('There was an error pleas contact the administrator.')
+                ->title(__('general.error'))
+                ->body(__('general.there_was_error_please_contact_administrator'))
                 ->send();
 
             Log::error($th);
