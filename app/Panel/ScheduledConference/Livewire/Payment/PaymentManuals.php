@@ -101,7 +101,7 @@ class PaymentManuals extends Component implements HasForms, HasTable
             ->groups([
                 Group::make('currency')
                     ->getTitleFromRecordUsing(fn (Model $record): string => Str::upper($record->currency))
-                    ->label('Currency')
+                    ->label(__('general.currency'))
                     ->collapsible()
             ])
             ->emptyStateHeading(__('general.manual_payment_are_empty'))

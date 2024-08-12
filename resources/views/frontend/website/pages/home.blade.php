@@ -32,7 +32,7 @@
                                     <div class="flex items-center gap-2 text-sm">
                                         <a href="{{ $conference->getHomeUrl() }}" class="link link-primary">{{ __('general.view_conference') }}</a>
                                         @if($conference->currentScheduledConference)
-                                            <a href="{{ $conference->currentScheduledConference->getHomeUrl() }}" class="link link-primary">View Current Event</a>
+                                            <a href="{{ $conference->currentScheduledConference->getHomeUrl() }}" class="link link-primary">{{ __('general.view_current_event') }}</a>
                                         @endif
                                     </div>
                                 </div>
@@ -41,7 +41,7 @@
                     </div>
                 @else
                     <div class="my-12 text-center">
-                        <p class="text-lg font-bold">There are no conferences taking place at this time</p>
+                        <p class="text-lg font-bold">{{ __('general.there_are_no_conferences_taking_place_at_this_time') }}</p>
                     </div>
                 @endif
             </div>

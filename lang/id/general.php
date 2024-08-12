@@ -726,7 +726,8 @@ return [
     'causer_name' => 'Nama Penyebab',
     'switch_scheduled_conference' => 'Ganti Konferensi yang Dijadwalkan',
     'back_to_conference' => 'Kembali ke Konferensi',
-
+    'view_current_event' => 'Lihat Acara Saat Ini',
+    'there_are_no_conferences_taking_place_at_this_time' => 'Saat ini tidak ada konferensi yang berlangsung',
 
 
 

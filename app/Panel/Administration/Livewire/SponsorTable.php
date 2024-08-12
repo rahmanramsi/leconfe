@@ -50,7 +50,7 @@ class SponsorTable extends Component implements HasForms, HasTable
                 SpatieMediaLibraryImageColumn::make('logo')
                     ->label(__('general.logo'))
                     ->collection('logo')
-                    ->conversion('thumb'),
+                    ->conversion('thumb')
                     ->collection('logo'),
                 TextColumn::make('name')
                     ->label(__('general.name'))

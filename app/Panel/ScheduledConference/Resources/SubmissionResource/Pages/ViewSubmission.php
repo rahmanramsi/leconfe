@@ -94,19 +94,19 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                 ->url(route('livewirePageGroup.conference.pages.paper', ['submission' => $this->record->id]), true)
                 ->label(function () {
                     if ($this->record->isPublished()) {
-                        return 'View';
+                        return __('general.view');
                     }
 
                     if (auth()->user()->can('editing', $this->record)) {
-                        return 'Preview';
+                        return __('general.preview');
                     }
                 })
                 ->visible(
                     fn(): bool => ($this->record->isPublished() || auth()->user()->can('editing', $this->record)) && $this->record->proceeding
                 ),
             Action::make('assign_proceeding')
-                ->label('Publish Now')
-                ->modalHeading('Assign Proceeding for publication')
+                ->label(__('general.publication'))
+                ->modalHeading(__('general.assign_proceeding_for_publication'))
                 ->visible(fn() => !$this->record->proceeding && $this->record->stage == SubmissionStage::Editing)
                 ->modalWidth(MaxWidth::ExtraLarge)
                 ->form(SubmissionProceeding::getFormAssignProceeding($this->record))
@@ -123,7 +123,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                     fn(): bool => $this->record->proceeding ? true : false
                 )
                 ->authorize('publish', $this->record)
-                ->successNotificationTitle('Submission published successfully')
+                ->successNotificationTitle(__('general.assign_proceeding_for_publication'))
                 ->mountUsing(function (Form $form) {
                     $mailTemplate = MailTemplate::where('mailable', PublishSubmissionMail::class)->first();
                     $form->fill([
@@ -134,18 +134,22 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                 })
                 ->form([
                     Fieldset::make('Notification')
+                        ->label(__('general.notification'))
                         ->columns(1)
                         ->schema([
                             TextInput::make('email')
+                                ->label(__('general.email'))
                                 ->disabled()
                                 ->dehydrated(),
                             TextInput::make('subject')
+                                ->label(__('general.subject'))
                                 ->required(),
                             TinyEditor::make('message')
+                                ->label(__('general.message'))
                                 ->profile('email')
                                 ->minHeight(300),
                             Checkbox::make('do-not-notify-author')
-                                ->label("Don't Send Notification to Author"),
+                                ->label(__('general.dont_send_notification_to_author')),
                         ]),
                 ])
                 ->action(function (Action $action, array $data) {
@@ -160,7 +164,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                                         ->contentUsing($data['message'])
                                 );
                         } catch (\Exception $e) {
-                            $action->failureNotificationTitle('Failed to send notification to author');
+                            $action->failureNotificationTitle(__('general.failed_send_notification_to_author'));
                             $action->failure();
                         }
                     }
