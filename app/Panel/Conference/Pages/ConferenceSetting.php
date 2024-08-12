@@ -20,15 +20,10 @@ class ConferenceSetting extends Page implements HasForms, HasInfolists
 
     protected static ?int $navigationSort = -1;
 
-    // protected static ?string $navigationGroup = 'Settings';
-
     protected static ?string $navigationIcon = 'heroicon-s-window';
 
     protected static string $view = 'panel.conference.pages.conference';
 
-    // protected ?string $heading = 'Conference Settings';
-
-    // protected static ?string $navigationLabel = 'Conference';
 
     public static function getNavigationLabel(): string
     {

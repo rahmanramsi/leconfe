@@ -22,7 +22,6 @@ class CommitteeResource extends Resource
 {
     protected static ?string $model = Committee::class;
 
-    // protected static ?string $navigationGroup = 'Conference';
 
     public static function getNavigationGroup(): string
     {

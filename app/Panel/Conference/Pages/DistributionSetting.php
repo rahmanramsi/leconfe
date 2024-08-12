@@ -24,15 +24,10 @@ class DistributionSetting extends Page implements HasForms, HasInfolists
 
     protected static ?int $navigationSort = 3;
 
-    // protected static ?string $navigationGroup = 'Settings';
-
     protected static ?string $navigationIcon = 'heroicon-o-window';
 
     protected static string $view = 'panel.conference.pages.distribution';
 
-    // protected ?string $heading = 'Distribution Settings';
-
-    // protected static ?string $navigationLabel = 'Distribution';
 
     public static function getNavigationLabel(): string
     {

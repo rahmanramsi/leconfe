@@ -24,9 +24,6 @@ class TimelineResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-clock';
 
-    // protected static ?string $navigationGroup = 'Conference';
-
-
     public static function getNavigationGroup(): string
     {
         return __('general.conference');

@@ -24,7 +24,6 @@ class StaticPageResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-credit-card';
 
-    // protected static ?string $navigationGroup = 'Settings';
 
     public static function getNavigationLabel(): string
     {

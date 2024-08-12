@@ -25,7 +25,6 @@ class WebsiteSetting extends Page implements HasInfolists
 
     protected static string $view = 'panel.administration.pages.site-settings';
 
-    // protected static ?string $navigationGroup = 'Settings';
 
     public static function getNavigationLabel(): string
     {

@@ -21,11 +21,7 @@ class ScheduledConferenceSetting extends Page
 {
     protected static string $view = 'panel.scheduledConference.pages.scheduled-conference-setting';
 
-    // protected static ?string $navigationGroup = 'Settings';
-
     protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
-
-    // protected static ?string $navigationLabel = 'Scheduled Conference';
 
 
     public static function getNavigationLabel(): string

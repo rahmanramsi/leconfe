@@ -54,7 +54,7 @@ class SetupSetting extends Component implements HasForms
                             ->label(__('general.description'))
                             ->rows(3)
                             ->autosize()
-                            ->hint(__('general.recomended_length_50_160'))
+                            ->hint(__('general.recommended_description_length'))
                             ->helperText(__('general.short_description_of_the_website')),
                         TinyEditor::make('meta.about')
                             ->label(__('general.about_site'))

@@ -15,17 +15,12 @@ class RegistrationSettings extends Page
 {
     protected static string $view = 'panel.scheduledConference.pages.registration-setting';
 
-    // protected static ?string $navigationGroup = 'Settings';
     public static function getNavigationGroup(): string
     {
         return __('general.settings');
     }
 
     protected static ?string $navigationIcon = 'heroicon-o-arrow-right-end-on-rectangle';
-
-    // protected static ?string $navigationLabel = 'Registrations';
-
-    // protected static ?string $title = 'Registration Settings';
 
     public static function getNavigationLabel(): string
     {

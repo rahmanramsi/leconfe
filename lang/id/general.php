@@ -88,7 +88,7 @@ return [
     'website_name' => 'Nama Website',
     'logo' => 'Logo',
     'description' => 'Deskripsi',
-    'recomended_length_50_160' => 'Panjang yang disarankan: 50-160 karakter',
+    'recommended_description_length' => 'Panjang yang disarankan: 50-160 karakter',
     'short_description_of_the_website' => 'Deskripsi singkat tentang website. Ini akan digunakan untuk membantu mesin pencari memahami website.',
     'about_site' => 'Tentang Situs',
     'page_footer' => 'Footer Halaman',

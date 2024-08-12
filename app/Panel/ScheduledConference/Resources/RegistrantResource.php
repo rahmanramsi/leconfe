@@ -40,11 +40,7 @@ class RegistrantResource extends Resource
 {
     protected static ?string $model = Registration::class;
 
-    // protected static ?string $modelLabel = 'Registration';
-
     protected static ?string $navigationIcon = 'heroicon-o-user-plus';
-
-    // protected static ?string $navigationGroup = 'Conference';
 
 
     public static function getNavigationLabel(): string
@@ -56,8 +52,6 @@ class RegistrantResource extends Resource
     {
         return __('general.conference');
     }
-
-    // protected static ?string $navigationLabel = 'Registrants';
 
     public static function canAccess(): bool
     {

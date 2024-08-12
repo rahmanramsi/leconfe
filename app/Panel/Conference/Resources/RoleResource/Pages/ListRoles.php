@@ -11,7 +11,6 @@ class ListRoles extends ListRecords
 {
     protected static string $resource = RoleResource::class;
 
-    // protected static ?string $title = 'Role Management';
 
     public function getHeading(): string|Htmlable
     {

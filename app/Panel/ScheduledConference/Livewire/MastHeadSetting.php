@@ -81,7 +81,7 @@ class MastHeadSetting extends Component implements HasForms
                                     ->rows(3)
                                     ->autosize()
                                     ->columnSpanFull()
-                                    ->hint(__('general.recomended_length_50_160'))
+                                    ->hint(__('general.recommended_description_length'))
                                     ->helperText(__('general.short_description_of_the_website')),
                                 TextInput::make('meta.acronym')
                                     ->label(__('general.acronym'))

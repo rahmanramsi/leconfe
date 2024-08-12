@@ -23,8 +23,6 @@ class WebsiteSetting extends Page
 {
 	protected static string $view = 'panel.conference.pages.website-setting';
 
-	// protected static ?string $navigationGroup = 'Settings';
-
     public static function getNavigationGroup(): string
     {
         return __('general.settings');
@@ -32,7 +30,6 @@ class WebsiteSetting extends Page
 
 	protected static ?string $navigationIcon = 'heroicon-o-globe-alt';
 
-	// protected static ?string $navigationLabel = 'Website';
 
     public static function getNavigationLabel(): string
     {

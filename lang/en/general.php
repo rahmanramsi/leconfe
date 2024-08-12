@@ -88,7 +88,7 @@ return [
     'website_name' => 'Website Name',
     'logo' => 'Logo',
     'description' => 'Description',
-    'recomended_length_50_160' => 'Recommended length: 50-160 characters',
+    'recommended_description_length' => 'Recommended length: 50-160 characters',
     'short_description_of_the_website' => 'A short description of the website. This will used to help search engines understand the website.',
     'about_site' => 'About Site',
     'page_footer' => 'Page footer',

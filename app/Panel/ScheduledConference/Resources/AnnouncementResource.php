@@ -29,7 +29,6 @@ class AnnouncementResource extends Resource
 
     protected static ?string $modelLabel = 'Announcement';
 
-    // protected static ?string $navigationGroup = 'Conference';
 
     public static function getNavigationGroup(): string
     {

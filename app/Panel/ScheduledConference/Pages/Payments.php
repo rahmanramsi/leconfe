@@ -16,7 +16,6 @@ class Payments extends Page
 {
     protected static string $view = 'panel.scheduledConference.pages.payment';
 
-    // protected static ?string $navigationGroup = 'Settings';
 
     public static function getNavigationGroup(): string
     {
@@ -35,11 +34,8 @@ class Payments extends Page
 
     protected static ?string $navigationIcon = 'heroicon-o-banknotes';
 
-    // protected static ?string $navigationLabel = 'Payments';
-
     protected static ?int $navigationSort = 3;
 
-    // protected static ?string $title = 'Payment Methods';
 
     public static function canAccess(): bool
     {

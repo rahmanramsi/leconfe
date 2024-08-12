@@ -24,7 +24,6 @@ class WorkflowSetting extends Page
 {
     protected static string $view = 'panel.scheduledConference.pages.workflow-setting';
 
-    // protected static ?string $navigationGroup = 'Settings';
 
     public static function getNavigationGroup(): string
     {
@@ -43,7 +42,7 @@ class WorkflowSetting extends Page
 
     protected static ?string $navigationIcon = 'heroicon-o-window';
 
-    // protected static ?string $navigationLabel = 'Workflow';
+
 
     public function mount(): void
     {

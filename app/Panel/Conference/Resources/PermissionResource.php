@@ -21,8 +21,6 @@ class PermissionResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-lock-closed';
 
-    // protected static ?string $navigationGroup = 'Settings';
-
     public static function getNavigationLabel(): string
     {
         return __('general.permission');
