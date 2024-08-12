@@ -38,21 +38,23 @@ class TimelineTable extends Component implements HasForms, HasTable
     {
         return $table
             ->query(Timeline::query())
-            ->heading('Timeline')
+            ->heading(__('general.timeline'))
             ->defaultSort('date')
             ->columns([
                 IndexColumn::make('no')
                     ->label('No.'),
-                TextColumn::make('name'),
+                TextColumn::make('name')
+                    ->label(__('general.name')),
                 TextColumn::make('date')
+                    ->label(__('general.date'))
                     ->dateTime(Setting::get('format_date'))
                     ->sortable(),
                 ToggleColumn::make('hide')
-                    ->label('Hidden'),
+                    ->label(__('general.hidden')),
             ])
             ->headerActions([
                 CreateAction::make()
-                    ->label('Add new Timeline')
+                    ->label(__('general.add_new_timeline'))
                     ->modalWidth(MaxWidth::ExtraLarge)
                     ->form(fn (Form $form) => $this->form($form)),
             ])
@@ -72,14 +74,18 @@ class TimelineTable extends Component implements HasForms, HasTable
         return $form
             ->schema([
                 TextInput::make('name')
+                    ->label(__('general.name'))
                     ->required(),
                 Textarea::make('description')
+                    ->label(__('general.description'))
                     ->maxLength(255),
                 DatePicker::make('date')
+                    ->label(__('general.date'))
                     ->required(),
                 Select::make('type')
+                    ->label(__('general.type'))
                     ->options(Timeline::getTypes())
-                    ->helperText('Type that integrates with the workflow process.')
+                    ->helperText(__('general.type_integrates_with_workflow_process'))
                     ->unique(
                         ignorable: fn () => $form->getRecord(),
                         modifyRuleUsing: fn (Unique $rule) => $rule->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId()),

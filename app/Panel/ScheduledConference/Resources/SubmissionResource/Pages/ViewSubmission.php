@@ -107,14 +107,14 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                 ->model(Payment::class)
                 ->icon('heroicon-o-currency-dollar')
                 ->color('primary')
-                ->modalHeading('Submission Payment')
+                ->modalHeading(__('general.submission_payment'))
                 ->when(
                     fn (Action $action) => !FacadesPayment::driver($action->getRecord()?->payment_method),
                     fn (Action $action) => $action
                         ->modalContent(function ($action) {
                             $paymentMethod = $action->getRecord()?->payment_method ?? FacadesPayment::getDefaultDriver();
 
-                            return new HtmlString("<p>There's a problem with configured payment method. Please contact administrator. <br>Payment method : " . $paymentMethod . ' </p>');
+                            return new HtmlString(__('general.problem_with_configured_payment_method', ['variable' =>   $paymentMethod]));
                         })
                         ->modalWidth('xl')
                         ->modalSubmitAction(false),
@@ -139,7 +139,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
 
                             $items = Arr::join($payment->getMeta('items'), ', ');
 
-                            Log::make($this->record, 'submission', "Payment for {$items} has been made.")
+                            Log::make($this->record, 'submission', __('general.payment_has_been_made', ['variable' => $items]))
                                 ->by(auth()->user())
                                 ->save();
 
@@ -156,10 +156,10 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                                     ->lazy()
                                     ->each(fn ($user) => $user->notify(new NewPayment($this->record)));
                             } catch (\Exception $e) {
-                                $action->failureNotificationTitle('Failed to send notification');
+                                $action->failureNotificationTitle(__('general.failed_send_notification'));
                                 $action->failure();
                             }
-                            $action->successNotificationTitle('Payment Success');
+                            $action->successNotificationTitle(__('general.payment_success'));
                             $action->success();
                         })->mountUsing(function (Form $form, ?Payment $record) {
 
@@ -174,7 +174,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
 
                             return [
                                 Select::make('currency_id')
-                                    ->label('Currency')
+                                    ->label(__('general.currency'))
                                     ->options(
                                         Currency::query()
                                             ->whereIn('id', App::getCurrentConference()->getSupportedCurrencies())
@@ -217,7 +217,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                                     new PaymentStatusUpdated($record)
                                 );
                             } catch (\Exception $e) {
-                                $action->failureNotificationTitle('Failed to send notification');
+                                $action->failureNotificationTitle(__('general.failed_send_notification'));
                                 $action->failure();
                             }
                             $action->success();
@@ -242,7 +242,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                                     Grid::make()
                                         ->schema([
                                             Select::make('currency_id')
-                                                ->label('Currency')
+                                                ->label(__('general.currency'))
                                                 ->options(Currency::pluck('name', 'id')),
                                             TextInput::make('amount')
                                                 ->prefix(fn (Get $get) => $get('currency_id') ? Currency::find($get('currency_id'))->symbol_native : null)
@@ -282,8 +282,8 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                     fn (): bool => ($this->record->isPublished() || auth()->user()->can('editing', $this->record)) && $this->record->proceeding
                 ),
             Action::make('assign_proceeding')
-                ->label('Publish Now')
-                ->modalHeading('Assign Proceeding for publication')
+                ->label(__('general.publish_now'))
+                ->modalHeading(__('general.assign_proceeding_for_publication'))
                 ->visible(fn () => !$this->record->proceeding && $this->record->stage == SubmissionStage::Editing)
                 ->modalWidth(MaxWidth::ExtraLarge)
                 ->form(SubmissionProceeding::getFormAssignProceeding($this->record))
@@ -295,7 +295,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                 }),
             Action::make('publish')
                 ->color('primary')
-                ->label('Publish Now')
+                ->label(__('general.publish_now'))
                 ->visible(
                     fn (): bool => $this->record->proceeding ? true : false
                 )
@@ -303,16 +303,16 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                 ->when(
                     fn () => $this->record->hasPaymentProcess() && !$this->record->payment?->isCompleted(),
                     fn (Action $action): Action => $action
-                        ->modalContent(new HtmlString(<<<'HTML'
-                            <p>Submission fee has not been paid, please notify the author.</p>
-                        HTML))
+                        ->modalContent(new HtmlString("
+                            <p>" . __('general.submission_fee_has_not_been_paid') . "</p>
+                        "))
                         ->modalWidth('xl')
                         ->modalSubmitAction(false)
                 )
                 ->when(
                     fn () => !$this->record->hasPaymentProcess() || $this->record->payment?->isCompleted(),
                     fn (Action $action): Action => $action
-                        ->successNotificationTitle('Submission published successfully')
+                        ->successNotificationTitle(__('general.submission_published_successfully'))
                         ->mountUsing(function (Form $form) {
                             $mailTemplate = MailTemplate::where('mailable', PublishSubmissionMail::class)->first();
                             $form->fill([
@@ -323,18 +323,22 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                         })
                         ->form([
                             Fieldset::make('Notification')
+                                ->label(__('general.notification'))
                                 ->columns(1)
                                 ->schema([
                                     TextInput::make('email')
+                                        ->label(__('general.email'))
                                         ->disabled()
                                         ->dehydrated(),
                                     TextInput::make('subject')
+                                        ->label(__('general.subject'))
                                         ->required(),
                                     TinyEditor::make('message')
+                                        ->label(__('general.message'))
                                         ->profile('email')
                                         ->minHeight(300),
                                     Checkbox::make('do-not-notify-author')
-                                        ->label("Don't Send Notification to Author"),
+                                        ->label(__('general.dont_send_notification_to_author')),
                                 ]),
                         ])
                         ->action(function (Action $action, array $data) {
@@ -349,7 +353,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                                                 ->contentUsing($data['message'])
                                         );
                                 } catch (\Exception $e) {
-                                    $action->failureNotificationTitle('Failed to send notification to author');
+                                    $action->failureNotificationTitle(__('general.failed_send_notification_to_author'));
                                     $action->failure();
                                 }
                             }
@@ -362,11 +366,12 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                         })
                 ),
             Action::make('unpublish')
+                ->label(__('general.unpublish'))
                 ->icon('lineawesome-calendar-times-solid')
                 ->color('danger')
                 ->authorize('unpublish', $this->record)
                 ->requiresConfirmation()
-                ->successNotificationTitle('Submission unpublished')
+                ->successNotificationTitle(__('general.submission_unpublished'))
                 ->action(function (Action $action) {
                     $this->record->state()->unpublish();
 
@@ -382,16 +387,16 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                 ->outlined()
                 ->color('danger')
                 ->authorize('requestWithdraw', $this->record)
-                ->label('Request for Withdrawal')
+                ->label(__('general.request_for_withdrawal'))
                 ->icon('lineawesome-times-circle-solid')
                 ->form([
                     Textarea::make('reason')
                         ->required()
-                        ->placeholder('Reason for withdrawal')
-                        ->label('Reason'),
+                        ->placeholder(__('general.reason_for_withdrawal'))
+                        ->label(__('general.reason')),
                 ])
                 ->requiresConfirmation()
-                ->successNotificationTitle('Withdraw Requested, Please wait for editor to approve')
+                ->successNotificationTitle(__('general.withdraw_requested_please_wait_for_editor_approve'))
                 ->action(function (Action $action, array $data) {
                     RequestWithdrawalAction::run(
                         $this->record,
@@ -416,7 +421,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                                 $editor->notify(new SubmissionWithdrawRequested($this->record));
                             });
                     } catch (\Exception $e) {
-                        $action->failureNotificationTitle('Failed to send notification');
+                        $action->failureNotificationTitle(__('general.failed_send_notification'));
                         $action->failure();
                     }
 
@@ -451,17 +456,17 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                 ->form([
                     Textarea::make('reason')
                         ->readonly()
-                        ->placeholder('Reason for withdrawal')
-                        ->label('Reason'),
+                        ->placeholder(__('general.reason_for_disabling_user'))
+                        ->label(__('general.reason')),
                 ])
                 ->requiresConfirmation()
                 ->modalHeading(function () {
-                    return $this->record->user->fullName . ' has requested to withdraw this submission.';
+                    return $this->record->user->fullName . __('general.requested_withdraw_this_submission');
                 })
-                ->modalDescription("You can either reject the request or accept it, remember it can't be undone.")
-                ->modalCancelActionLabel('Ignore')
-                ->modalSubmitActionLabel('Withdraw')
-                ->successNotificationTitle('Withdrawn')
+                ->modalDescription(__('general.either_reject_request_or_accept'))
+                ->modalCancelActionLabel(__('general.ignore'))
+                ->modalSubmitActionLabel(__('general.withdrawn'))
+                ->successNotificationTitle(__('general.withdrawn'))
                 ->extraModalFooterActions([
                     Action::make('reject')
                         ->color('warning')
@@ -473,7 +478,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                                     'record' => $this->record,
                                 ]),
                             );
-                            $action->successNotificationTitle('Withdrawal request rejected');
+                            $action->successNotificationTitle(__('general.withdrawal_request_rejected'));
                             $action->success();
                         }),
                 ])
@@ -484,7 +489,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                             new SubmissionWithdrawn($this->record)
                         );
                     } catch (\Exception $e) {
-                        $action->failureNotificationTitle('Failed to send notification');
+                        $action->failureNotificationTitle(__('general.failed_send_notification'));
                         $action->failure();
                     }
                     $action->successRedirectUrl(
@@ -496,16 +501,17 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                 })
                 ->modalWidth('2xl'),
             Action::make('activity-log')
+                ->label(__('general.activity_log'))
                 ->hidden(
                     fn (): bool => $this->record->stage == SubmissionStage::Wizard
                 )
                 ->outlined()
                 ->icon('lineawesome-history-solid')
-                ->modalHeading('Activity Log')
-                ->modalDescription('This is the activity log of this submission, it contains all the changes that has been made to this submission.')
+                ->modalHeading(__('general.activity_log'))
+                ->modalDescription(__('general.activity_log_submissions'))
                 ->modalWidth('5xl')
                 ->modalSubmitAction(false)
-                ->modalCancelActionLabel('Close')
+                ->modalCancelActionLabel(__('general.close'))
                 ->infolist(function () {
                     return [
                         LivewireEntry::make('activites-table')
@@ -523,23 +529,23 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
         $badgeHtml = '<div class="flex items-center gap-x-2">';
 
         $badgeHtml .= match ($this->record->status) {
-            SubmissionStatus::Incomplete => '<x-filament::badge color="gray" class="w-fit">' . SubmissionStatus::Incomplete->value . '</x-filament::badge>',
-            SubmissionStatus::Queued => '<x-filament::badge color="primary" class="w-fit">' . SubmissionStatus::Queued->value . '</x-filament::badge>',
-            SubmissionStatus::OnReview => '<x-filament::badge color="warning" class="w-fit">' . SubmissionStatus::OnReview->value . '</x-filament::badge>',
-            SubmissionStatus::Published => '<x-filament::badge color="success" class="w-fit">' . SubmissionStatus::Published->value . '</x-filament::badge>',
-            SubmissionStatus::Editing => '<x-filament::badge color="info" class="w-fit">' . SubmissionStatus::Editing->value . '</x-filament::badge>',
-            SubmissionStatus::Declined => '<x-filament::badge color="danger" class="w-fit">' . SubmissionStatus::Declined->value . '</x-filament::badge>',
-            SubmissionStatus::Withdrawn => '<x-filament::badge color="danger" class="w-fit">' . SubmissionStatus::Withdrawn->value . '</x-filament::badge>',
+            SubmissionStatus::Incomplete => '<x-filament::badge color="gray" class="w-fit">' . __("general.incomplete") . '</x-filament::badge>',
+            SubmissionStatus::Queued => '<x-filament::badge color="primary" class="w-fit">' . __("general.queued") . '</x-filament::badge>',
+            SubmissionStatus::OnReview => '<x-filament::badge color="warning" class="w-fit">' . __("general.on_review") . '</x-filament::badge>',
+            SubmissionStatus::Published => '<x-filament::badge color="success" class="w-fit">' . __("general.published") . '</x-filament::badge>',
+            SubmissionStatus::Editing => '<x-filament::badge color="info" class="w-fit">' . __("general.editing") . '</x-filament::badge>',
+            SubmissionStatus::Declined => '<x-filament::badge color="danger" class="w-fit">' . __("general.declined") . '</x-filament::badge>',
+            SubmissionStatus::Withdrawn => '<x-filament::badge color="danger" class="w-fit">' . __("general.withdrawn") . '</x-filament::badge>',
             default => null,
         };
 
         if ($this->record->hasPaymentProcess()) {
             $badgeHtml .= match ($this->record->payment?->state) {
-                PaymentState::Unpaid => '<x-filament::badge color="danger" class="w-fit">Unpaid</x-filament::badge>',
-                PaymentState::Processing => '<x-filament::badge color="primary" class="w-fit">Payment Processing</x-filament::badge>',
-                PaymentState::Paid => '<x-filament::badge color="success" class="w-fit">Paid</x-filament::badge>',
-                PaymentState::Waived => '<x-filament::badge color="success" class="w-fit">Payment Waived</x-filament::badge>',
-                default => '<x-filament::badge color="danger" class="w-fit">Unpaid</x-filament::badge>',
+                PaymentState::Unpaid => '<x-filament::badge color="danger" class="w-fit">' . __("general.unpaid") . '</x-filament::badge>',
+                PaymentState::Processing =>  '<x-filament::badge color="primary" class="w-fit">' . __("general.payment_processing") . '</x-filament::badge>',
+                PaymentState::Paid =>  '<x-filament::badge color="success" class="w-fit">' . __("general.paid") . '</x-filament::badge>',
+                PaymentState::Waived =>  '<x-filament::badge color="success" class="w-fit">' . __("general.payment_waived") . '</x-filament::badge>',
+                default => '<x-filament::badge color="danger" class="w-fit">' . __("general.unpaid") . '</x-filament::badge>',
             };
         }
 
@@ -564,6 +570,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                     ->contained(false)
                     ->tabs([
                         HorizontalTab::make('Workflow')
+                            ->label(__('general.workflow'))
                             ->schema([
                                 Tabs::make()
                                     ->activeTab(function () {
@@ -578,6 +585,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                                     ->sticky()
                                     ->tabs([
                                         Tab::make('Call for Abstract')
+                                            ->label(__('general.call_for_abstract'))
                                             ->icon('heroicon-o-information-circle')
                                             ->schema([
                                                 LivewireEntry::make('call-for-abstract')
@@ -586,6 +594,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                                                     ]),
                                             ]),
                                         Tab::make('Peer Review')
+                                            ->label(__('general.peer_review'))
                                             ->icon('iconpark-checklist-o')
                                             ->schema([
                                                 LivewireEntry::make('peer-review')
@@ -594,6 +603,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                                                     ]),
                                             ]),
                                         Tab::make('Presentation')
+                                            ->label(__('general.presentation'))
                                             ->icon('heroicon-o-presentation-chart-bar')
                                             ->schema([
                                                 LivewireEntry::make('presentation')
@@ -602,6 +612,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                                                     ]),
                                             ]),
                                         Tab::make('Editing')
+                                            ->label(__('general.editing'))
                                             ->icon('heroicon-o-pencil')
                                             ->schema([
                                                 LivewireEntry::make('editing')
@@ -613,6 +624,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                                     ->maxWidth('full'),
                             ]),
                         HorizontalTab::make('Publication')
+                            ->label(__('general.publication'))
                             ->extraAttributes([
                                 'x-on:open-publication-tab.window' => new HtmlString('tab = \'-publication-tab\''),
                             ])
@@ -623,12 +635,13 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                                     ->visible(
                                         fn (): bool => $this->record->isPublished()
                                     )
-                                    ->content("You can't edit this submission because it is already published."),
+                                    ->content(__('general.cant_edit_submission_because_already_published')),
                                 Tabs::make()
                                     ->verticalSpace('space-y-2')
                                     // ->persistTabInQueryString('ptab') // ptab shorten of publication-tab
                                     ->tabs([
                                         Tab::make('Detail')
+                                            ->label(__('general.details'))
                                             ->icon('heroicon-o-information-circle')
                                             ->schema([
                                                 LivewireEntry::make('detail-form')
@@ -637,6 +650,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                                                     ]),
                                             ]),
                                         Tab::make('Contributors')
+                                            ->label(__('general.contributors'))
                                             ->icon('heroicon-o-user-group')
                                             ->schema([
                                                 LivewireEntry::make('contributors')
@@ -646,6 +660,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                                                     ]),
                                             ]),
                                         Tab::make('Galleys')
+                                            ->label(__('general.galleys'))
                                             ->icon('heroicon-o-document-text')
                                             ->schema([
                                                 LivewireEntry::make('galleys')
@@ -655,6 +670,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                                                     ]),
                                             ]),
                                         Tab::make('Proceeding')
+                                            ->label(__('general.proceeding'))
                                             ->icon('heroicon-o-book-open')
                                             ->schema([
                                                 LivewireEntry::make('proceeding')
@@ -663,6 +679,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                                                     ]),
                                             ]),
                                         Tab::make('References')
+                                            ->label(__('general.references'))
                                             ->icon('iconpark-list')
                                             ->schema([
                                                 LivewireEntry::make('references')
@@ -678,6 +695,6 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
 
     public function getTitle(): string
     {
-        return $this->record->stage == SubmissionStage::Wizard ? 'Submission Wizard' : 'Submission';
+        return $this->record->stage == SubmissionStage::Wizard ? __('general.submission_wizard') : __('general.submission');
     }
 }

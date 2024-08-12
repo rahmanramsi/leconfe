@@ -34,14 +34,15 @@ class RegistrationPolicies extends Component implements HasForms
                 Section::make(null)
                     ->schema([
                         TinyEditor::make('meta.registration_policy')
-                            ->label('Registration Policy')
+                            ->label(__('general.registration_policy'))
                             ->minHeight(300)
                             ->disabled(fn () =>  auth()->user()->cannot('RegistrationSetting:edit')),
                     ]),
                 Actions::make([
                     Action::make('Save changes')
-                        ->successNotificationTitle('Saved!')
-                        ->failureNotificationTitle('Data could not be saved.')
+                        ->label(__('general.save_changes'))
+                        ->successNotificationTitle(__('general.saved'))
+                        ->failureNotificationTitle(__('general.data_could_not_saved'))
                         ->action(function (Action $action) {
                             $formData = $this->form->getState();
                             try {

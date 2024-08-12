@@ -10,6 +10,7 @@ use Filament\Infolists\Concerns\InteractsWithInfolists;
 use Filament\Infolists\Contracts\HasInfolists;
 use Filament\Infolists\Infolist;
 use Filament\Pages\Page;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,15 +20,31 @@ class ConferenceSetting extends Page implements HasForms, HasInfolists
 
     protected static ?int $navigationSort = -1;
 
-    protected static ?string $navigationGroup = 'Settings';
+    // protected static ?string $navigationGroup = 'Settings';
 
     protected static ?string $navigationIcon = 'heroicon-s-window';
 
     protected static string $view = 'panel.conference.pages.conference';
 
-    protected ?string $heading = 'Conference Settings';
+    // protected ?string $heading = 'Conference Settings';
 
-    protected static ?string $navigationLabel = 'Conference';
+    // protected static ?string $navigationLabel = 'Conference';
+
+    public static function getNavigationLabel(): string
+    {
+        return __('general.conference');
+    }
+
+    public function getHeading(): string|Htmlable
+    {
+        return __('general.conference_settings');
+    }
+
+    public static function getNavigationGroup(): string
+    {
+        return __('general.settings');
+    }
+
 
     public function mount(): void
     {

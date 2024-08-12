@@ -40,16 +40,19 @@ class SubmissionPaymentItemTable extends \Livewire\Component implements HasForms
         $formField = [
             Hidden::make('type'),
             TextInput::make('name')
+                ->label(__('general.name'))
                 ->required(),
             Textarea::make('description')
+                ->label(__('general.description'))
                 ->autosize(),
             Repeater::make('fees')
+                ->label(__('general.fees'))
                 ->required()
                 ->schema([
                     Grid::make()
                         ->schema([
                             Select::make('currency_id')
-                                ->label('Currency')
+                                ->label(__('general.currency'))
                                 ->searchable()
                                 ->required()
                                 ->disabled()
@@ -58,6 +61,7 @@ class SubmissionPaymentItemTable extends \Livewire\Component implements HasForms
                                 ->optionsLimit(250)
                                 ->distinct(),
                             TextInput::make('fee')
+                                ->label(__('general.fee'))
                                 ->required()
                                 ->minValue(1)
                                 ->prefix(fn (Get $get) => $get('currency_id') ? Currency::find($get('currency_id'))->symbol_native : null)
@@ -67,7 +71,7 @@ class SubmissionPaymentItemTable extends \Livewire\Component implements HasForms
                 ->deletable(false)
                 ->reorderable(false)
                 ->addable(false)
-                ->addActionLabel('Add Fee'),
+                ->addActionLabel(__('general.add_fee')),
         ];
 
         return $table
@@ -81,14 +85,16 @@ class SubmissionPaymentItemTable extends \Livewire\Component implements HasForms
             ->columns([
                 IndexColumn::make('no'),
                 TextColumn::make('name')
+                    ->label(__('general.name'))
                     ->searchable(),
                 TextColumn::make('description')
+                    ->label(__('general.description'))
                     ->searchable()
                     ->wrap(),
             ])
             ->headerActions([
                 CreateAction::make()
-                    ->label('New Payment Item')
+                    ->label(__('general.new_payment_item'))
                     ->mountUsing(function (Form $form) {
                         $fees = collect(App::getCurrentScheduledConference()->getMeta('payment.supported_currencies'))
                             ->map(fn ($currency) => [

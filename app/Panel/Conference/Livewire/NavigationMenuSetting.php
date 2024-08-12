@@ -41,7 +41,7 @@ class NavigationMenuSetting extends Component implements HasActions, HasForms
             'navigationMenus' => NavigationMenu::query()
                 ->when(!app()->getCurrentScheduledConferenceId(), function ($query) {
                     $query->where('scheduled_conference_id', 0);
-                })           
+                })
                 ->with([
                     'items' => function ($query) {
                         $query
@@ -61,7 +61,7 @@ class NavigationMenuSetting extends Component implements HasActions, HasForms
     {
         return [
             Action::make('create-navigation-menu')
-                ->label('Add Navigation Menu')
+                ->label(__('general.add_navigation_menu'))
                 ->modalWidth('xl')
                 ->form($this->getNavigationMenuForm())
                 ->action(function ($data) {
@@ -73,7 +73,7 @@ class NavigationMenuSetting extends Component implements HasActions, HasForms
     public function editNavigationMenuAction(): Action
     {
         return Action::make('editNavigationMenuAction')
-            ->label('Edit')
+            ->label(__('general.edit'))
             ->modalWidth('xl')
             ->icon('heroicon-s-pencil')
             ->size('xs')
@@ -93,7 +93,7 @@ class NavigationMenuSetting extends Component implements HasActions, HasForms
     public function deleteNavigationMenuAction(): Action
     {
         return Action::make('deleteNavigationMenuAction')
-            ->label('Delete')
+            ->label(__('general.delete'))
             ->icon('heroicon-s-trash')
             ->color('danger')
             ->size('xs')
@@ -109,8 +109,8 @@ class NavigationMenuSetting extends Component implements HasActions, HasForms
     public function addNavigationMenuItemAction(): Action
     {
         return Action::make('addNavigationMenuItemAction')
-            ->label('Add Item')
-            ->modalHeading('Add Navigation Menu Item')
+            ->label(__('general.add_item'))
+            ->modalHeading(__('general.add_navigation_menu_item'))
             ->icon('heroicon-s-plus')
             ->size('xs')
             ->color('gray')
@@ -126,8 +126,8 @@ class NavigationMenuSetting extends Component implements HasActions, HasForms
     public function addNavigationMenuItemChildAction(): Action
     {
         return Action::make('addNavigationMenuItemChildAction')
-            ->label('Add Item')
-            ->modalHeading('Add Navigation Menu Item Child')
+            ->label(__('general.add_item'))
+            ->modalHeading(__('general.add_navigation_menu_item_child'))
             ->icon('heroicon-s-plus')
             ->size('xs')
             ->color('gray')
@@ -147,8 +147,8 @@ class NavigationMenuSetting extends Component implements HasActions, HasForms
     public function editNavigationMenuItemAction(): Action
     {
         return Action::make('editNavigationMenuItemAction')
-            ->label('Edit Item')
-            ->modalHeading('Edit Navigation Menu Item')
+            ->label(__('general.edit_item'))
+            ->modalHeading(__('general.edit_navigation_menu_item'))
             ->extraAttributes([
                 'class' => 'hidden',
             ])
@@ -171,7 +171,7 @@ class NavigationMenuSetting extends Component implements HasActions, HasForms
     public function deleteNavigationItemMenuAction(): Action
     {
         return Action::make('deleteNavigationItemMenuAction')
-            ->label('Delete')
+            ->label(__('general.delete'))
             ->icon('heroicon-s-trash')
             ->color('danger')
             ->size('xs')
@@ -191,7 +191,7 @@ class NavigationMenuSetting extends Component implements HasActions, HasForms
 
             return [
                 TextInput::make('name')
-                    ->label('Name')
+                    ->label(__('general.name'))
                     ->required()
                     ->reactive()
                     ->debounce()
@@ -221,8 +221,10 @@ class NavigationMenuSetting extends Component implements HasActions, HasForms
         return function (array $arguments) {
             return [
                 TextInput::make('label')
+                    ->label(__('general.label'))
                     ->required(),
                 Select::make('type')
+                    ->label(__('general.type'))
                     ->options(NavigationMenuItem::getTypeOptions())
                     ->required()
                     ->reactive(),

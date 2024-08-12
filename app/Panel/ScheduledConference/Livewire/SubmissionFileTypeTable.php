@@ -35,16 +35,17 @@ class SubmissionFileTypeTable extends Component implements HasForms, HasTable
         return $table
             ->query(SubmissionFileType::query())
             ->defaultPaginationPageOption(10)
-            ->heading('Paper Components')
+            ->heading(__('general.paper_components'))
             ->reorderable('order_column')
             ->defaultSort('order_column')
             ->columns([
                 TextColumn::make('name')
+                    ->label(__('general.name'))
                     ->searchable(),
             ])
             ->headerActions([
                 CreateAction::make()
-                    ->label('Add a Component')
+                    ->label(__('general.add_a_component'))
                     ->modalWidth(MaxWidth::ExtraLarge)
                     ->form(fn (Form $form) => $this->form($form)),
             ])
@@ -64,6 +65,7 @@ class SubmissionFileTypeTable extends Component implements HasForms, HasTable
         return $form
             ->schema([
                 TextInput::make('name')
+                    ->label(__('general.name'))
                     ->required(),
             ]);
     }

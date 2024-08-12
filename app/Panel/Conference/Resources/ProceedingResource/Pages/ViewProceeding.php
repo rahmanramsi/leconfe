@@ -46,6 +46,7 @@ class ViewProceeding extends Page implements HasForms, HasTable
     {
         return [
             Actions\Action::make('preview')
+                ->label(__('general.preview'))
                 ->icon('heroicon-o-eye')
                 ->hidden(fn (Proceeding $record) => !$record->published)
                 ->url(fn (Proceeding $record) => route('livewirePageGroup.conference.pages.proceeding-detail', [$record->id]), true),
@@ -107,6 +108,7 @@ class ViewProceeding extends Page implements HasForms, HasTable
                 IndexColumn::make('no')
                     ->label('No.'),
                 TextColumn::make('title')
+                    ->label(__('general.title'))
                     ->getStateUsing(fn (Submission $record) => $record->getMeta('title'))
                     ->url(fn (Submission $record) => route('filament.scheduledConference.resources.submissions.view', ['record' => $record->id, 'serie' => $record->scheduledConference]))
                     ->searchable()
@@ -117,6 +119,7 @@ class ViewProceeding extends Page implements HasForms, HasTable
             ])
             ->actions([
                 Action::make('remove')
+                    ->label(__('general.remove'))
                     ->requiresConfirmation()
                     ->color('danger')
                     ->action(fn (Submission $record) => $record->unassignProceeding())

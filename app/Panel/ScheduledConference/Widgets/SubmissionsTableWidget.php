@@ -22,7 +22,7 @@ class SubmissionsTableWidget extends BaseWidget
         $submissionQuery = ManageSubmissions::generateQueryByCurrentUser('My Queue');
 
         return SubmissionResource::table($table)
-            ->heading('My Submissions')
+            ->heading(__('general.my_submissions'))
             ->query($submissionQuery);
     }
 }

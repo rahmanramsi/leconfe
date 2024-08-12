@@ -4,7 +4,7 @@
         @if($topic->open)
             <div class="flex justify-end">
                 <x-filament::button type="submit" outlined="true" form="form">
-                    {{ __('Add Message') }}
+                    {{ __('general.add_message') }}
                 </x-filament::button>
             </div>
         @endif

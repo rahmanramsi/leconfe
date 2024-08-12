@@ -41,34 +41,36 @@ class SponsorTable extends Component implements HasForms, HasTable
     {
         return $table
             ->query(Stakeholder::sponsors())
-            ->heading('Sponsors')
+            ->heading(__('general.sponsors'))
             ->reorderable('order_column')
             ->defaultSort('order_column', 'asc')
             ->defaultGroup('level.name')
             ->columns([
                 IndexColumn::make('no.'),
                 SpatieMediaLibraryImageColumn::make('logo')
+                    ->label(__('general.logo'))
                     ->collection('logo')
                     ->conversion('thumb'),
                 TextColumn::make('name')
+                    ->label(__('general.name'))
                     ->description(fn(Stakeholder $record) => $record->description)
                     ->searchable(),
                 TextColumn::make('level.name')
-                    ->label('Level')
+                    ->label(__('general.level'))
                     ->badge()
                     ->searchable(),
                 ToggleColumn::make('is_shown')
-                    ->label('Shown'),
+                    ->label(__('general.shown')),
             ])
-            ->emptyStateHeading('No Sponsors')
-            ->emptyStateDescription('Add a sponsor to get started.')
+            ->emptyStateHeading(__('general.no_sponsors'))
+            ->emptyStateDescription(__('general.add_sponsor_to_get_started'))
             ->headerActions([
                 CreateAction::make()
-                    ->label('Add Sponsor')
-                    ->modalHeading('Create Sponsor')
+                    ->label(__('general.add_sponsor'))
+                    ->modalHeading(__('general.create_sponsor'))
                     ->mutateFormDataUsing(function (array $data): array {
                         $data['type'] = Stakeholder::TYPE_SPONSOR;
-                 
+
                         return $data;
                     })
                     ->modalWidth(MaxWidth::ExtraLarge)
@@ -83,7 +85,7 @@ class SponsorTable extends Component implements HasForms, HasTable
                     ->modalWidth(MaxWidth::ExtraLarge)
                     ->mutateFormDataUsing(function (array $data): array {
                         $data['type'] = Stakeholder::TYPE_SPONSOR;
-                 
+
                         return $data;
                     })
                     ->form(fn (Form $form) => $this->form($form))
@@ -100,7 +102,7 @@ class SponsorTable extends Component implements HasForms, HasTable
         return $form
             ->schema([
                 SpatieMediaLibraryFileUpload::make('logo')
-                    ->label('Logo')
+                    ->label(__('general.logo'))
                     ->image()
                     ->key('logo')
                     ->collection('logo')
@@ -108,8 +110,10 @@ class SponsorTable extends Component implements HasForms, HasTable
                     ->alignCenter()
                     ->imageResizeUpscale(false),
                 TextInput::make('name')
+                    ->label(__('general.name'))
                     ->required(),
                 Select::make('level_id')
+                    ->label(__('general.level'))
                     ->relationship('level', 'name', fn($query) => $query->sponsors()->orderBy('order_column', 'asc')),
             ]);
     }

@@ -14,6 +14,7 @@ use Filament\Infolists\Concerns\InteractsWithInfolists;
 use Filament\Infolists\Contracts\HasInfolists;
 use Filament\Infolists\Infolist;
 use Filament\Pages\Page;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Auth;
 
 class WebsiteSetting extends Page implements HasInfolists
@@ -24,7 +25,24 @@ class WebsiteSetting extends Page implements HasInfolists
 
     protected static string $view = 'panel.administration.pages.site-settings';
 
-    protected static ?string $navigationGroup = 'Settings';
+    // protected static ?string $navigationGroup = 'Settings';
+
+    public static function getNavigationLabel(): string
+    {
+        return __('general.website_setting');
+    }
+
+    public function getHeading(): string|Htmlable
+    {
+        return __('general.website_setting');
+    }
+
+
+    public static function getNavigationGroup(): string
+    {
+        return __('general.settings');
+    }
+
 
     public function mount()
     {
@@ -42,10 +60,12 @@ class WebsiteSetting extends Page implements HasInfolists
                 Tabs::make('site_settings')
                     ->tabs([
                         Tabs\Tab::make('Appearance')
+                            ->label(__('general.appearance'))
                             ->schema([
                                 VerticalTabs\Tabs::make()
                                     ->tabs([
                                         VerticalTabs\Tab::make('Theme')
+                                            ->label(__('general.appearance'))
                                             ->icon('heroicon-o-adjustments-horizontal')
                                             ->schema([
                                                 LivewireEntry::make('setup-setting')
@@ -53,12 +73,14 @@ class WebsiteSetting extends Page implements HasInfolists
                                                     ->lazy(),
                                             ]),
                                         VerticalTabs\Tab::make('Setup')
+                                            ->label(__('general.setup'))
                                             ->icon('heroicon-o-cog')
                                             ->schema([
                                                 LivewireEntry::make('setup-setting')
                                                     ->livewire(SetupSetting::class),
                                             ]),
                                         VerticalTabs\Tab::make('Sidebar')
+                                            ->label(__('general.sidebar'))
                                             ->icon('heroicon-o-view-columns')
                                             ->schema([
                                                 LivewireEntry::make('sidebar_setting')
@@ -68,10 +90,12 @@ class WebsiteSetting extends Page implements HasInfolists
                                     ]),
                             ]),
                         Tabs\Tab::make('Setup')
+                            ->label(__('general.setup'))
                             ->schema([
                                 VerticalTabs\Tabs::make()
                                     ->tabs([
                                         VerticalTabs\Tab::make('Navigation Menu')
+                                            ->label(__('general.navigation_menu'))
                                             ->icon('heroicon-o-list-bullet')
                                             ->schema([
                                                 LivewireEntry::make('navigation-menu-setting')
@@ -79,6 +103,7 @@ class WebsiteSetting extends Page implements HasInfolists
                                                     ->lazy(),
                                             ]),
                                         VerticalTabs\Tab::make('Languages')
+                                            ->label(__('general.languages'))
 											->icon('heroicon-o-language')
 											->schema([
 												LivewireEntry::make('language-setting')

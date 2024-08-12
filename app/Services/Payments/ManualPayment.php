@@ -28,7 +28,7 @@ class ManualPayment extends BasePayment
     {
         return [
             TinyEditor::make('instructions')
-                ->label('Payment Instruction')
+                ->label(__('general.payment_instruction'))
                 ->disabled(),
             SpatieMediaLibraryFileUpload::make('payment_proof')
                 ->collection('payment_proof')
@@ -51,7 +51,7 @@ class ManualPayment extends BasePayment
     {
         return [
             TinyEditor::make('manual.instructions')
-                ->label('Payment Instruction')
+                ->label(__('general.payment_instruction'))
                 ->required(),
         ];
     }

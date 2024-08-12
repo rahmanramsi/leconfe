@@ -11,6 +11,7 @@ use Filament\Infolists\Contracts\HasInfolists;
 use Filament\Infolists\Infolist;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -21,9 +22,17 @@ class Dashboard extends Page implements HasInfolists
 
     protected static ?string $navigationIcon = 'heroicon-m-home';
 
-    protected static ?string $title = 'Administration';
+    public static function getNavigationLabel(): string
+    {
+        // This returns the label for the dashboard navigation.
+        return __('general.dashboard');
+    }
 
-    protected static ?string $navigationLabel = 'Dashboard';
+    public function getHeading(): string|Htmlable
+    {
+        // This returns the heading for the dashboard.
+        return __('general.administration');
+    }
 
     protected static string $view = 'panel.administration.pages.dashboard';
 
@@ -39,7 +48,7 @@ class Dashboard extends Page implements HasInfolists
                 Section::make('')
                     ->schema([
                         Actions::make([
-                            Action::make('Expire User Session')
+                            Action::make(__('general.expire_user_session'))
                                 ->icon('heroicon-m-user')
                                 ->color('primary')
                                 ->requiresConfirmation()
@@ -47,15 +56,14 @@ class Dashboard extends Page implements HasInfolists
                                 ->successNotification(
                                     Notification::make()
                                         ->success()
-                                        ->title('Session cleared')
-                                        ->body('User session cleared succesfully'),
+                                        ->title(__('general.session_cleared'))
+                                        ->body(__('general.notification_successfully_cleared')),
                                 )
                                 ->extraAttributes(['class' => 'w-48'])
                                 ->action(fn (Action $action) => $this->expireUserSession($action)),
-
                         ]),
                         Actions::make([
-                            Action::make('Clear Data Caches')
+                            Action::make(__('general.clear_data_caches'))
                                 ->icon('heroicon-m-circle-stack')
                                 ->color('primary')
                                 ->requiresConfirmation()
@@ -63,8 +71,8 @@ class Dashboard extends Page implements HasInfolists
                                 ->successNotification(
                                     Notification::make()
                                         ->success()
-                                        ->title('Clear succesfully')
-                                        ->body('Data caches cleared succesfully'),
+                                        ->title(__('general.successfully_cleared'))
+                                        ->body(__('general.data_caches_cleared_successfully')),
                                 )
                                 ->extraAttributes(['class' => 'w-48'])
                                 ->action(function (Action $action) {
@@ -73,7 +81,7 @@ class Dashboard extends Page implements HasInfolists
                                 }),
                         ]),
                         Actions::make([
-                            Action::make('Clear View Caches')
+                            Action::make(__('general.clear_view_caches'))
                                 ->icon('heroicon-m-trash')
                                 ->color('primary')
                                 ->requiresConfirmation()
@@ -81,8 +89,8 @@ class Dashboard extends Page implements HasInfolists
                                 ->successNotification(
                                     Notification::make()
                                         ->success()
-                                        ->title('Clear succesfully')
-                                        ->body('View caches cleared succesfully'),
+                                        ->title(__('general.successfully_cleared'))
+                                        ->body(__('general.view_caches_cleared_successfully')),
                                 )
                                 ->extraAttributes(['class' => 'w-48'])
                                 ->action(function (Action $action) {

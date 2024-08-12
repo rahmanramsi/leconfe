@@ -33,9 +33,10 @@ class TopicTable extends Component implements HasForms, HasTable
     {
         return $table
             ->query(Topic::query())
-            ->heading('Topics')
+            ->heading(__('general.topic'))
             ->columns([
                 TextColumn::make('name')
+                    ->label(__('general.name'))
                     ->searchable(),
             ])
             ->headerActions([
@@ -64,6 +65,7 @@ class TopicTable extends Component implements HasForms, HasTable
         return $form
             ->schema([
                 TextInput::make('name')
+                    ->label(__('general.name'))
                     ->required(),
             ]);
     }

@@ -29,13 +29,14 @@ class PaymentSettings extends Component implements HasForms
                 Section::make()
                     ->schema([
                         TinyEditor::make('meta.payment_policy')
+                            ->label(__('general.payment_policy'))
                             ->minHeight(450)
                             ->disabled(fn () =>  auth()->user()->cannot('RegistrationSetting:edit')),
                         Actions::make([
                             Action::make('save')
-                                ->label('Save')
-                                ->successNotificationTitle('Saved!')
-                                ->failureNotificationTitle('Data could not be saved.')
+                                ->label(__('general.save'))
+                                ->successNotificationTitle(__('general.saved'))
+                                ->failureNotificationTitle(__('general.data_could_not_saved'))
                                 ->action(function (Action $action) {
                                     $formData = $this->form->getState();
                                     try {

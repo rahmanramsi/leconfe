@@ -1,5 +1,5 @@
 <div class="p-6 border-t">
-    <ul class="-mx-2 grid gap-y-7">
+    <ul class="grid -mx-2 gap-y-7">
         <x-filament-panels::sidebar.item
             :url="route('filament.administration.pages.dashboard')"
         >

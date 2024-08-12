@@ -47,7 +47,24 @@ class UserResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-user-circle';
 
-    protected static ?string $navigationGroup = 'Settings';
+    // protected static ?string $navigationGroup = 'Settings';
+
+    public static function getNavigationLabel(): string
+    {
+        return __('general.user');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('general.user');
+    }
+
+
+    public static function getNavigationGroup(): string
+    {
+        return __('general.settings');
+    }
+
 
     protected static ?int $navigationSort = 5;
 
@@ -74,26 +91,31 @@ class UserResource extends Resource
                         Forms\Components\Section::make()
                             ->schema([
                                 Forms\Components\SpatieMediaLibraryFileUpload::make('profile')
-                                    ->label('Profile Photo')
+                                    ->label(__('general.profile_photo'))
                                     ->collection('profile')
                                     ->alignCenter()
                                     ->avatar()
                                     ->columnSpan(['lg' => 2]),
                                 Forms\Components\TextInput::make('given_name')
+                                    ->label(__('general.given_name'))
                                     ->required(),
-                                Forms\Components\TextInput::make('family_name'),
+                                Forms\Components\TextInput::make('family_name')
+                                    ->label(__('general.family_name')),
                                 Forms\Components\TextInput::make('email')
+                                    ->label(__('general.email'))
                                     ->columnSpan(['lg' => 2])
                                     ->disabled(fn (?User $record) => $record)
                                     ->dehydrated(fn (?User $record) => !$record)
                                     ->unique(ignoreRecord: true),
                                 Forms\Components\TextInput::make('password')
+                                    ->label(__('general.password'))
                                     ->required(fn (?User $record) => !$record)
                                     ->password()
                                     ->dehydrateStateUsing(fn ($state) => Hash::make($state))
                                     ->dehydrated(fn ($state) => filled($state))
                                     ->confirmed(),
                                 Forms\Components\TextInput::make('password_confirmation')
+                                    ->label(__('general.password_confirmation'))
                                     ->requiredWith('password')
                                     ->password()
                                     ->dehydrated(false),
@@ -111,7 +133,7 @@ class UserResource extends Resource
                             ->schema([
                                 Forms\Components\Placeholder::make('disabled_at')
                                     ->visible(fn (?User $record) => $record?->isBanned())
-                                    ->label('Disabled at')
+                                    ->label(__('general.disabled_at'))
                                     ->content(function (?User $record): ?string {
                                         $ban = $record?->bans->first();
 
@@ -119,7 +141,7 @@ class UserResource extends Resource
                                     }),
                                 Forms\Components\Placeholder::make('disabled_until')
                                     ->visible(fn (?User $record) => $record?->isBanned())
-                                    ->label('Disabled until')
+                                    ->label(__('general.disabled_until'))
                                     ->content(function (?User $record): ?string {
                                         $ban = $record?->bans->first();
 
@@ -127,7 +149,7 @@ class UserResource extends Resource
                                     }),
 
                             ]),
-                        Forms\Components\Section::make('User Roles')
+                        Forms\Components\Section::make(__('general.user_roles'))
                             ->schema([
                                 Forms\Components\CheckboxList::make('roles')
                                     ->hiddenLabel()
@@ -213,7 +235,7 @@ class UserResource extends Resource
 
                                 $bannedUntil = $ban->expired_at;
 
-                                return 'Disabled' . ($bannedUntil ? " until {$bannedUntil->format(Setting::get('format_date'))}" : '');
+                                return __('general.disabled') . ($bannedUntil ? __('general.until') . $bannedUntil->format(Setting::get('format_date')) : '');
                             })
                             ->color('danger')
                             ->badge(),
@@ -226,12 +248,13 @@ class UserResource extends Resource
             ])
             ->filters([
                 SelectFilter::make('roles')
+                    ->label(__('general.roles'))
                     ->relationship('roles', 'name', modifyQueryUsing: fn ($query) => $query->where('name', '!=', UserRole::Admin))
                     ->multiple()
                     ->preload(),
                 Filter::make('hide_user_with_no_roles')
                     ->default()
-                    ->label('Hide users with no roles in this scheduled conference.')
+                    ->label(__('general.hide_users_with_no_roles'))
                     ->query(fn(array $data, Builder $query) => $query->whereHas('roles', fn ($query) => $query->where('name', '!=', UserRole::Admin)))
             ])
             ->deferFilters()
@@ -247,13 +270,13 @@ class UserResource extends Resource
                     Impersonate::make()
                         ->grouped()
                         ->hidden(fn ($record) => !auth()->user()->can('loginAs', $record))
-                        ->label(fn (User $record) => "Login as {$record->given_name}")
+                        ->label(fn (User $record) => __('general.login_as') . $record->given_name)
                         ->icon('heroicon-m-key')
                         ->color('primary')
                         ->redirectTo(fn () => app()->getCurrentScheduledConference()?->getPanelUrl() ?? app()->getCurrentConference()?->getPanelUrl()),
                     Action::make('enable')
                         ->visible(fn (User $record) => auth()->user()->can('enable', $record))
-                        ->label('Enable User')
+                        ->label(__('general.enable_user'))
                         ->icon('heroicon-o-check-circle')
                         ->color('success')
                         ->requiresConfirmation()
@@ -262,42 +285,42 @@ class UserResource extends Resource
                         }),
                     Action::make('disable')
                         ->visible(fn (User $record) => auth()->user()->can('disable', $record))
-                        ->label(fn (User $record) => 'Disable')
+                        ->label(fn (User $record) => __('general.disable'))
                         ->icon('heroicon-o-x-circle')
                         ->color('danger')
                         ->modalWidth('xl')
                         ->modalHeading(fn (User $record) => "Disable User : {$record->full_name}")
                         ->form([
                             Textarea::make('comment')
-                                ->label('Reason for Disabling User'),
+                                ->label(__('general.reason_for_disabling_user')),
                             DatePicker::make('expired_at')
-                                ->label('Until')
+                                ->label(__('general.until'))
                                 ->minDate(now()->addDay())
-                                ->hint('To disable permanently, leave field empty'),
+                                ->hint(__('general.to_disable_permanently_leave_field_empty')),
                         ])
                         ->action(function (array $data, User $record) {
                             $record->ban($data);
                         }),
                     Action::make('email')
                         ->visible(fn (User $record) => auth()->user()->can('sendEmail', $record))
-                        ->label(fn (User $record) => 'Send Email')
+                        ->label(fn (User $record) => __('general.send_email'))
                         ->icon('heroicon-o-envelope')
                         ->modalWidth('3xl')
                         ->fillForm(fn ($record) => ['to' => $record->email])
-                        ->modalHeading(fn (User $record) => "Send Email to {$record->full_name}")
+                        ->modalHeading(fn (User $record) => __('general.send_email_to') . $record->full_name)
                         ->form([
                             Grid::make()
                                 ->schema([
                                     TextInput::make('subject')
-                                        ->label('Subject')
+                                        ->label(__('general.subject'))
                                         ->required(),
                                     TextInput::make('to')
-                                        ->label('To')
+                                        ->label(__('general.to'))
                                         ->disabled()
                                         ->required(),
                                 ]),
                             TinyEditor::make('message')
-                                ->label('Message')
+                                ->label(__('general.message'))
                                 ->minHeight(500)
                                 ->required(),
                         ])

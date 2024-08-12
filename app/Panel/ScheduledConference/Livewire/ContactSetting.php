@@ -49,47 +49,47 @@ class ContactSetting extends Component implements HasForms
             ->schema([
                 Section::make()
                     ->schema([
-                        Section::make('Principal Contact')
+                        Section::make(__('general.principal_contact'))
                             ->aside()
-                            ->description('Enter contact details, typically for a principal editorship, managing editorship, or administrative staff position, which can be displayed on your publicly accessible website.')
+                            ->description(__('general.principal_contact_description'))
                             ->schema([
                                 TextInput::make('meta.principal_contact_name')
-                                    ->label('Name')
+                                    ->label(__('general.name'))
                                     ->required()
                                     ->autofocus(),
                                 TextInput::make('meta.principal_contact_email')
-                                    ->label('Email')
+                                    ->label(__('general.email'))
                                     ->required()
                                     ->type('email'),
                                 TextInput::make('meta.principal_contact_phone')
-                                    ->label('Phone')
+                                    ->label(__('general.phone'))
                                     ->type('tel'),
                                 TextInput::make('meta.principal_contact_affiliation')
-                                    ->label('Affiliation'),
+                                    ->label(__('general.affiliation')),
                             ]),
 
-                        Section::make('Technical Support Contact')
+                        Section::make(__('general.technical_support_contact'))
                             ->aside()
-                            ->description('A contact person who can assist editors, authors and reviewers with any problems they have submitting, editing, reviewing or publishing material.')
+                            ->description(__('general.a_contact_person_who_can_assist_editors'))
                             ->schema([
                                 TextInput::make('meta.support_contact_name')
-                                    ->label('Name')
+                                    ->label(__('general.name'))
                                     ->required()
                                     ->autofocus(),
                                 TextInput::make('meta.support_contact_email')
-                                    ->label('Email')
+                                    ->label(__('general.email'))
                                     ->required()
                                     ->type('email'),
                                 TextInput::make('meta.support_contact_phone')
-                                    ->label('Phone')
+                                    ->label(__('general.phone'))
                                     ->type('tel'),
                             ]),
                     ]),
                 Actions::make([
                     Action::make('save')
-                        ->label('Save')
-                        ->successNotificationTitle('Saved!')
-                        ->failureNotificationTitle('Data could not be saved.')
+                        ->label(__('general.save'))
+                        ->successNotificationTitle(__('general.saved'))
+                        ->failureNotificationTitle(__('general.data_could_not_saved'))
                         ->action(function (Action $action) {
                             $formData = $this->form->getState();
                             try {

@@ -24,7 +24,24 @@ class StaticPageResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-credit-card';
 
-    protected static ?string $navigationGroup = 'Settings';
+    // protected static ?string $navigationGroup = 'Settings';
+
+    public static function getNavigationLabel(): string
+    {
+        return __('general.static_page');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('general.static_page');
+    }
+
+
+    public static function getNavigationGroup(): string
+    {
+        return __('general.settings');
+    }
+
 
     public static function getEloquentQuery(): Builder
     {
@@ -43,8 +60,10 @@ class StaticPageResource extends Resource
         return $form
             ->schema([
                 TextInput::make('title')
+                    ->label(__('general.title'))
                     ->required(),
                 TextInput::make('slug')
+                    ->label(__('general.slug'))
                     ->alphaDash()
                     ->unique(ignoreRecord: true, modifyRuleUsing: function (Unique $rule) {
                         return $rule
@@ -52,12 +71,12 @@ class StaticPageResource extends Resource
                             ->where('scheduled_conference_id', app()->getCurrentScheduledConference()?->getKey() ?? 0);
                     }),
                 TinyEditor::make('meta.content')
-                    ->label('Content')
+                    ->label(__('general.content'))
                     ->minHeight(400)
                     ->columnSpanFull()
                     ->plugins('advlist autoresize codesample directionality emoticons fullscreen hr image imagetools link lists media table toc wordcount code')
                     ->toolbar('undo redo removeformat | formatselect fontsizeselect | bold italic | rtl ltr | alignjustify alignright aligncenter alignleft | numlist bullist | forecolor backcolor | blockquote table hr | image link code')
-                    ->helperText('The complete page content.'),
+                    ->helperText(__('general.the_complete_page_content')),
             ]);
     }
 
@@ -68,13 +87,16 @@ class StaticPageResource extends Resource
                 IndexColumn::make('no')
                     ->label('No.'),
                 TextColumn::make('title')
+                    ->label(__('general.title'))
                     ->searchable(),
                 TextColumn::make('slug')
+                    ->label(__('general.slug'))
                     ->searchable()
                     ->color('primary'),
             ])
             ->actions([
                 Action::make('preview')
+                    ->label(__('general.preview'))
                     ->icon('heroicon-o-eye')
                     ->url(fn($record) => $record->getUrl())
                     ->openUrlInNewTab(),

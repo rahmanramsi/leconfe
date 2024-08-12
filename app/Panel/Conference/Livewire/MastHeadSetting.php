@@ -14,6 +14,7 @@ use Filament\Forms\Form;
 use Livewire\Component;
 use App\Forms\Components\TinyEditor;
 use Filament\Forms\Components\Textarea;
+use PhpParser\Node\Stmt\Label;
 use Squire\Models\Country;
 
 class MastHeadSetting extends Component implements HasForms
@@ -44,47 +45,48 @@ class MastHeadSetting extends Component implements HasForms
             ->schema([
                 Section::make()
                     ->schema([
-                        Section::make('Conference Identity')
-                            ->description('Information about the scheduled conference')
+                        Section::make(__('general.conference_identity'))
+                            ->description(__('general.information_about_scheduled_conference'))
                             ->aside()
                             ->schema([
                                 TextInput::make('name')
-                                    ->label('Name')
+                                    ->label(__('general.name'))
                                     ->autofocus()
                                     ->autocomplete()
                                     ->required(),
                                 TextInput::make('meta.issn')
-                                    ->label('ISSN')
-                                    ->helperText('The ISSN of the conference'),
+                                    ->label(__('general.ISSN'))
+                                    ->helperText(__('general.the_issn_of_the_conference')),
                                 Textarea::make('meta.description')
+                                    ->label(__('general.description'))
                                     ->rows(3)
                                     ->autosize()
                                     ->columnSpanFull()
-                                    ->hint('Recommended length: 50-160 characters')
-                                    ->helperText('A short description of the website. This will used to help search engines understand the website.'),
+                                    ->hint(__('general.recomended_length_50_160'))
+                                    ->helperText(__('general.short_description_of_the_website')),
                             ]),
-                        Section::make('Key Information')
-                            ->description('Provide a short description of your conference and identify editors, managing directors and other members of your editorial team.')
+                        Section::make(__('general.key_information'))
+                            ->description(__('general.provide_short_description_your_conference'))
                             ->aside()
                             ->schema([
                                 TinyEditor::make('meta.summary')
-                                    ->label('Conference Summary'),
+                                    ->label(__('general.conference_summary')),
 
                             ]),
-                        Section::make('Description')
+                        Section::make(__('general.description'))
                             ->aside()
-                            ->description('Include any information about your conference which may be of interest to readers, authors or reviewers.')
+                            ->description(__('general.include_about_your_conference'))
                             ->schema([
                                 TinyEditor::make('meta.about')
-                                    ->label('About the Conference')
+                                    ->label(__('general.about_the_conference'))
                                     ->profile('basic'),
                             ])
                     ]),
                 Actions::make([
                     Action::make('save')
-                        ->label('Save')
-                        ->successNotificationTitle('Saved!')
-                        ->failureNotificationTitle('Data could not be saved.')
+                        ->label(__('general.save'))
+                        ->successNotificationTitle(__('general.saved'))
+                        ->failureNotificationTitle(__('general.data_could_not_saved'))
                         ->action(function (Action $action) {
                             try {
                                 ConferenceUpdateAction::run($this->form->getRecord(), $this->form->getState());

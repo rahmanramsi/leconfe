@@ -46,8 +46,8 @@ class RegistrationTypes extends Component implements HasTable, HasForms
                 Grid::make(4)
                 ->schema([
                     TextInput::make('type')
-                        ->label('Name')
-                        ->placeholder('Input type name..')
+                        ->label(__('general.name'))
+                        ->placeholder(__('general.input_type_name'))
                         ->required()
                         ->columnSpan(3)
                         ->unique(
@@ -55,25 +55,25 @@ class RegistrationTypes extends Component implements HasTable, HasForms
                             modifyRuleUsing: fn (Unique $rule) => $rule->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId()),
                         ),
                     TextInput::make('quota')
-                        ->label('Participant Quota')
-                        ->placeholder('Input quota..')
+                        ->label(__('general.participant_quota'))
+                        ->placeholder(__('general.input_quota'))
                         ->numeric()
                         ->minValue(1)
                         ->required(),
                 ]),
             TinyEditor::make('meta.description')
-                ->label('Description')
-                ->placeholder('Input description..')
+                ->label(__('general.description'))
+                ->placeholder(__('general.input_description'))
                 ->formatStateUsing(fn (string $operation, $record) => $operation === 'edit' ? $record->getMeta('description') : null)
                 ->minHeight(100),
             Checkbox::make('free')
-                ->label('Set as free')
+                ->label(__('general.set_as_free'))
                 ->formatStateUsing(fn ($record) => isset($record->cost) ? $record->cost == 0 : false)
                 ->live(),
-            Fieldset::make('Registration Cost')
+            Fieldset::make(__('general.registration_cost'))
                 ->schema([
                     Select::make('currency')
-                        ->label('Currency')
+                        ->label(__('general.currency'))
                         ->formatStateUsing(fn ($state) => ($state !== null) ? ($state !== 'free' ? $state : null) : null)
                         ->options(PaymentManuals::getCurrencyOptions())
                         ->searchable()
@@ -82,14 +82,14 @@ class RegistrationTypes extends Component implements HasTable, HasForms
                     Grid::make(4)
                         ->schema([
                             TextInput::make('cost')
-                                ->label('Price')
-                                ->placeholder('Enter registration cost..')
+                                ->label(__('general.price'))
+                                ->placeholder(__('general.enter_registration_cost'))
                                 ->numeric()
                                 ->required()
                                 ->live()
                                 ->columnSpan(3)
                                 ->rules(['gte:1']),
-                            Placeholder::make('Price Preview')
+                            Placeholder::make(__('general.price_preview'))
                                 ->content(fn (Get $get) => ($get('currency') !== null && $get('currency') !== 'free' && !empty($get('cost'))) ? money($get('cost'), $get('currency')) : 'N/A')
                         ])
                 ])
@@ -98,14 +98,14 @@ class RegistrationTypes extends Component implements HasTable, HasForms
             Grid::make(2)
                 ->schema([
                     DatePicker::make('opened_at')
-                        ->label('Opened Date')
-                        ->placeholder('Select type opened date..')
+                        ->label(__('general.opened_date'))
+                        ->placeholder(__('general.select_type_opened_date'))
                         ->prefixIcon('heroicon-m-calendar-days')
                         ->required()
                         ->before('closed_at'),
                     DatePicker::make('closed_at')
-                        ->label('Closed Date')
-                        ->placeholder('Select type closed date..')
+                        ->label(__('general.closed_date'))
+                        ->placeholder(__('general.select_type_closed_date'))
                         ->prefixIcon('heroicon-m-calendar-days')
                         ->required()
                         ->after('opened_at'),
@@ -121,12 +121,12 @@ class RegistrationTypes extends Component implements HasTable, HasForms
                     ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
                     ->with('meta')
             )
-            ->heading('Type')
+            ->heading(__('general.type'))
             ->reorderable('order_column')
             ->headerActions([
                 CreateAction::make()
-                    ->label("Add Type")
-                    ->modalHeading('Create Type')
+                    ->label(__('general.add_type'))
+                    ->modalHeading(__('general.create_type'))
                     ->modalWidth('4xl')
                     ->model(RegistrationType::class)
                     ->form(fn (Form $form) => $this->form($form))
@@ -142,30 +142,34 @@ class RegistrationTypes extends Component implements HasTable, HasForms
             ])
             ->columns([
                 TextColumn::make('type')
-                    ->label('Name'),
+                    ->label(__('general.name')),
                 TextColumn::make('quota')
-                    ->label('Quota')
+                    ->label(__('general.quota'))
                     ->formatStateUsing(fn (Model $record) => $record->getPaidParticipantCount() . '/' . $record->quota)
                     ->badge()
                     ->color(Color::Blue),
                 TextColumn::make('cost')
+                    ->label(__('general.cost'))
                     ->formatStateUsing(fn (Model $record) => ($record->cost === 0) ? 'Free' : money($record->cost, $record->currency)),
                 TextColumn::make('currency')
-                    ->label('Currency')
+                    ->label(__('general.currency'))
                     ->formatStateUsing(fn (Model $record) => ($record->currency === 'free') ? 'None' : '(' . currency($record->currency)->getCurrency() . ') ' . currency($record->currency)->getName())
                     ->wrap(),
                 TextColumn::make('opened_at')
+                    ->label(__('general.opened_at'))
                     ->date('Y-M-d')
                     ->color(fn (Model $record) => $record->isExpired() ? Color::Red : null),
                 TextColumn::make('closed_at')
+                    ->label(__('general.closed_at'))
                     ->date('Y-M-d')
                     ->color(fn (Model $record) => $record->isExpired() ? Color::Red : null),
                 ToggleColumn::make('active')
+                    ->label(__('general.active'))
                     ->onColor(Color::Green)
                     ->offColor(Color::Red),
             ])
-            ->emptyStateHeading('Type are empty')
-            ->emptyStateDescription('Create a Type to get started.')
+            ->emptyStateHeading(__('general.type_are_empty'))
+            ->emptyStateDescription(__('general.create_a_type_to_get_started'))
             ->actions([
                 EditAction::make()
                     ->form(fn (Form $form) => $this->form($form))

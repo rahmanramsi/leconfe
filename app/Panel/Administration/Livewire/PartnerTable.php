@@ -41,29 +41,31 @@ class PartnerTable extends Component implements HasForms, HasTable
     {
         return $table
             ->query(Stakeholder::partners())
-            ->heading('Partners')
+            ->heading(__('general.partners'))
             ->reorderable('order_column')
             ->defaultSort('order_column', 'asc')
             ->columns([
                 IndexColumn::make('no.'),
                 SpatieMediaLibraryImageColumn::make('logo')
+                    ->label(__('general.logo'))
                     ->collection('logo')
                     ->conversion('thumb'),
                 TextColumn::make('name')
+                    ->label(__('general.name'))
                     ->description(fn(Stakeholder $record) => $record->description)
                     ->searchable(),
                 ToggleColumn::make('is_shown')
-                    ->label('Shown'),
+                    ->label(__('general.shown')),
             ])
-            ->emptyStateHeading('No Partners')
-            ->emptyStateDescription('Add a partner to get started.')
+            ->emptyStateHeading(__('general.no_partners'))
+            ->emptyStateDescription(__('general.add_partner_to_get_started'))
             ->headerActions([
                 CreateAction::make()
-                    ->label('Add Partner')
-                    ->modalHeading('Create Partner')
+                    ->label(__('general.add_partner'))
+                    ->modalHeading(__('general.create_partner'))
                     ->mutateFormDataUsing(function (array $data): array {
                         $data['type'] = Stakeholder::TYPE_PARTNER;
-                 
+
                         return $data;
                     })
                     ->modalWidth(MaxWidth::ExtraLarge)
@@ -90,7 +92,7 @@ class PartnerTable extends Component implements HasForms, HasTable
         return $form
             ->schema([
                 SpatieMediaLibraryFileUpload::make('logo')
-                    ->label('Logo')
+                    ->label(__('general.logo'))
                     ->image()
                     ->key('logo')
                     ->collection('logo')
@@ -98,6 +100,7 @@ class PartnerTable extends Component implements HasForms, HasTable
                     ->alignCenter()
                     ->imageResizeUpscale(false),
                 TextInput::make('name')
+                    ->label(__('general.name'))
                     ->required(),
             ]);
     }

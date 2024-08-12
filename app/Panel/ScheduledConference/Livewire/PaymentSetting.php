@@ -42,10 +42,10 @@ class PaymentSetting extends Component implements HasActions, HasForms
     public function submitAction()
     {
         return Action::make('submitAction')
-            ->label('Save')
+            ->label(__('general.save'))
             ->icon('lineawesome-save-solid')
-            ->failureNotificationTitle('Save Failed')
-            ->successNotificationTitle('Saved')
+            ->failureNotificationTitle(__('general.save_failed'))
+            ->successNotificationTitle(__('general.saved'))
             ->action(function (Action $action) {
                 $this->form->validate();
 
@@ -76,16 +76,18 @@ class PaymentSetting extends Component implements HasActions, HasForms
             ->statePath('data')
             ->schema([
                 Toggle::make('payment.enabled')
+                    ->label(__('general.enabled'))
                     ->reactive(),
                 Grid::make(1)
                     ->hidden(fn (Get $get) => ! $get('payment.enabled'))
                     ->schema([
                         Select::make('payment.method')
-                            ->label('Payment Method')
+                            ->label(__('general.payment_methods'))
                             ->required()
                             ->options(Payment::getAllDriverNames())
                             ->reactive(),
                         Select::make('payment.supported_currencies')
+                            ->label(__('general.supported_currencies'))
                             ->searchable()
                             ->required()
                             ->multiple()

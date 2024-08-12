@@ -65,14 +65,17 @@ class EmailSetting extends Component implements HasForms, HasInfolists, HasTable
                 Split::make([
                     Stack::make([
                         TextColumn::make('subject')
+                            ->label(__('general.subject'))
                             ->searchable()
                             ->weight(FontWeight::Medium)
                             ->sortable(),
                         TextColumn::make('description')
+                            ->label(__('general.description'))
                             ->size(TextColumnSize::Small)
                             ->searchable()
                             ->color('gray'),
                         TextColumn::make('key')
+                            ->label(__('general.key'))
                             ->getStateUsing(fn (MailTemplate $record) => Str::afterLast($record->mailable, '\\'))
                             ->badge()
                             ->color('primary'),
@@ -88,10 +91,11 @@ class EmailSetting extends Component implements HasForms, HasInfolists, HasTable
                         ->color('primary')
                         ->form([
                             TextInput::make('subject')
+                                ->label(__('general.subject'))
                                 ->required()
                                 ->rules('required'),
                             TinyEditor::make('html_template')
-                                ->label('Body')
+                                ->label(__('general.body'))
                                 ->minHeight(500)
                                 ->required()
                                 ->profile('email')
@@ -99,11 +103,11 @@ class EmailSetting extends Component implements HasForms, HasInfolists, HasTable
                         ]),
                     TableAction::make('restoreDefault')
                         ->color('gray')
-                        ->successNotificationTitle('Email template restored to default data.')
+                        ->successNotificationTitle(__('general.email_template_restored_to_default_data'))
                         ->icon('heroicon-o-arrow-path')
-                        ->label('Restore Default')
+                        ->label(__('general.restore_default'))
                         ->requiresConfirmation()
-                        ->failureNotificationTitle('Are you sure you want to restore default data?')
+                        ->failureNotificationTitle(__('general.are_sure_want_restore_default_data'))
                         ->action(function (MailTemplate $record, TableAction $action) {
 
                             try {
@@ -126,13 +130,13 @@ class EmailSetting extends Component implements HasForms, HasInfolists, HasTable
             ->schema([
                 VerticalTabs\Tabs::make()
                     ->schema([
-                        VerticalTabs\Tab::make('Email Templates')
+                        VerticalTabs\Tab::make(__('general.email_templates'))
                             ->icon('heroicon-o-envelope')
                             ->schema([
                                 BladeEntry::make('mail-templates')
                                     ->blade('{{ $this->table }}'),
                             ]),
-                        VerticalTabs\Tab::make('Layout Templates')
+                        VerticalTabs\Tab::make(__('general.layout_templates'))
                             ->icon('heroicon-o-bars-3-bottom-left')
                             ->schema([
                                 BladeEntry::make('layout-templates')
@@ -154,20 +158,20 @@ class EmailSetting extends Component implements HasForms, HasInfolists, HasTable
     {
         return $form
             ->schema([
-                Section::make('Layout Template')
+                Section::make(__('general.layout_templates'))
                     ->schema([
                         TinyEditor::make('mail_header')
-                            ->label('Header')
+                            ->label(__('general.header'))
                             ->profile('email'),
                         TinyEditor::make('mail_footer')
-                            ->label('Footer')
+                            ->label(__('general.footer'))
                             ->profile('email'),
                     ]),
                 Actions::make([
                     Action::make('saveLayoutForm')
-                        ->label('Save')
-                        ->successNotificationTitle('Saved!')
-                        ->failureNotificationTitle('Data could not be saved.')
+                        ->label(__('general.save'))
+                        ->successNotificationTitle(__('general.saved'))
+                        ->failureNotificationTitle(__('general.data_could_not_saved'))
                         ->action(function (Action $action) {
                             $formData = $this->layoutTemplateForm->getState();
 
@@ -179,9 +183,9 @@ class EmailSetting extends Component implements HasForms, HasInfolists, HasTable
                             }
                         }),
                     Action::make('testEmail')
-                        ->label('Test Email')
+                        ->label(__('general.test_email'))
                         ->color('gray')
-                        ->successNotificationTitle('Success sent test mail to your email.')
+                        ->successNotificationTitle(__('general.success_sent_test_mail_to_your_email'))
                         ->action(function (Action $action) {
                             try {
                                 Mail::to(auth()->user()->email)->send(new TestMail);
@@ -189,7 +193,7 @@ class EmailSetting extends Component implements HasForms, HasInfolists, HasTable
                             } catch (\Throwable $th) {
                                 Notification::make()
                                     ->danger()
-                                    ->title('Failed to send test mail to your email.')
+                                    ->title(__('general.failed_sent_test_mail_to_your_email'))
                                     ->body($th->getMessage())
                                     ->send();
                             }

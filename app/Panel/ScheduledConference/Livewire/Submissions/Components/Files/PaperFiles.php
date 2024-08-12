@@ -9,7 +9,13 @@ class PaperFiles extends SubmissionFilesTable
 {
     protected ?string $category = SubmissionFileCategory::PAPER_FILES;
 
-    protected string $tableHeading = 'Papers';
+    protected string $tableHeading;
+
+    public function __construct()
+    {
+        $this->tableHeading = __('general.papers');
+    }
+
 
     public function isViewOnly(): bool
     {
@@ -20,7 +26,7 @@ class PaperFiles extends SubmissionFilesTable
     {
         return [
             Shout::make('information')
-                ->content('After uploading your paper, system will send notification to the editor.'),
+                ->content(__('general.after_uploading_your_paper_system_will_send_notification')),
             ...parent::uploadFormSchema(),
         ];
     }

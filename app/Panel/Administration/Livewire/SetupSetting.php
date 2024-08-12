@@ -41,25 +41,28 @@ class SetupSetting extends Component implements HasForms
                 Section::make()
                     ->schema([
                         TextInput::make('meta.name')
-                            ->label('Website Name')
+                            ->label(__('general.website_name'))
                             ->required(),
                         SpatieMediaLibraryFileUpload::make('logo')
                             ->collection('logo')
+                            ->label(__('general.logo'))
                             ->model(app()->getSite())
                             ->image()
                             ->imageResizeUpscale(false)
                             ->conversion('thumb'),
                         Textarea::make('meta.description')
+                            ->label(__('general.description'))
                             ->rows(3)
                             ->autosize()
-                            ->hint('Recommended length: 50-160 characters')
-                            ->helperText('A short description of the website. This will used to help search engines understand the website.'),
+                            ->hint(__('general.recomended_length_50_160'))
+                            ->helperText(__('general.short_description_of_the_website')),
                         TinyEditor::make('meta.about')
-                            ->label('About Site')
+                            ->label(__('general.about_site'))
                             ->profile('advanced')
                             ->minHeight(300)
                             ->dehydrateStateUsing(fn (?string $state) => Purify::clean($state)),
                         TinyEditor::make('meta.page_footer')
+                            ->label(__('general.page_footer'))
                             ->toolbar('bold italic superscript subscript | link | blockquote bullist numlist | image | code')
                             ->plugins('paste link lists image code')
                             ->minHeight(300)
@@ -68,8 +71,9 @@ class SetupSetting extends Component implements HasForms
                     ->columns(1),
                 Actions::make([
                     Action::make('save')
-                        ->successNotificationTitle('Saved!')
-                        ->failureNotificationTitle('Failed!')
+                        ->label(__('general.save'))
+                        ->successNotificationTitle(__('general.saved'))
+                        ->failureNotificationTitle(__('general.failed'))
                         ->action(function (Action $action) {
                             $data = $this->form->getState();
                             try {

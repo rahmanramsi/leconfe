@@ -25,11 +25,16 @@ class SpeakerResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
-    protected static ?string $navigationGroup = 'Conference';
+    // protected static ?string $navigationGroup = 'Conference';
+
+    public static function getNavigationGroup(): string
+    {
+        return __('general.conference');
+    }
 
     public static function getNavigationLabel(): string
     {
-        return 'Speakers';
+        return __('general.speakers');
     }
 
     public static function getEloquentQuery(): Builder
@@ -46,14 +51,14 @@ class SpeakerResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return 'Speaker';
+        return __('general.speaker');
     }
 
     public static function selectSpeakerField($form): Select
     {
         return Select::make('speaker_id')
-            ->label('Select Existing Speaker')
-            ->placeholder('Select Speaker')
+            ->label(__('general.select_existing_speaker'))
+            ->placeholder(__('general.select_speaker'))
             ->preload()
             ->native(false)
             ->searchable()
@@ -83,7 +88,7 @@ class SpeakerResource extends Resource
                 $speaker = Speaker::with(['meta', 'role' => fn ($query) => $query->withoutGlobalScopes()])->findOrFail($state);
                 $role = SpeakerRoleResource::getEloquentQuery()->whereName($speaker?->role?->name)->first();
 
-                $formData = [ 
+                $formData = [
                     'speaker_id' => $state,
                     'given_name' => $speaker->given_name,
                     'family_name' => $speaker->family_name,
@@ -103,7 +108,7 @@ class SpeakerResource extends Resource
                 static::selectSpeakerField($form),
                 ...ContributorForm::generalFormField(app()->getCurrentScheduledConference()),
                 Forms\Components\Select::make('speaker_role_id')
-                    ->label('Role')
+                    ->label(__('general.role'))
                     ->required()
                     ->searchable()
                     ->relationship(
@@ -113,12 +118,13 @@ class SpeakerResource extends Resource
                     ->preload()
                     ->createOptionForm([
                         TextInput::make('name')
+                            ->label(__('general.name'))
                             ->required(),
                     ])
                     ->createOptionAction(
                         fn (FormAction $action) => $action->color('primary')
                             ->modalWidth('xl')
-                            ->modalHeading('Create Speaker Position')
+                            ->modalHeading(__('general.create_speaker_position'))
                             ->mutateFormDataUsing(function (array $data): array {
                                 return $data;
                             })
@@ -137,7 +143,7 @@ class SpeakerResource extends Resource
     {
         return $table
             ->reorderable('order_column')
-            ->heading('Speakers Table')
+            ->heading(__('general.speakers_table'))
             ->headerActions([
                 CreateAction::make()
                     ->icon('heroicon-o-user-plus')

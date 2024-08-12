@@ -10,7 +10,12 @@ class DraftFiles extends SubmissionFilesTable
 
     protected ?string $category = SubmissionFileCategory::EDITING_DRAFT_FILES;
 
-    protected string $tableHeading = 'Draft Files';
+    protected string $tableHeading;
+
+    public function __construct()
+    {
+        $this->tableHeading = __('general.draft_files');
+    }
 
     public function isViewOnly(): bool
     {

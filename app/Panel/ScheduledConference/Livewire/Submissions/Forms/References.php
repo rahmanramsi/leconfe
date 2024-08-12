@@ -43,7 +43,7 @@ class References extends \Livewire\Component implements HasForms
             ->save();
 
         Notification::make()
-            ->body('Saved successfully')
+            ->body(__('general.saved_successfuly'))
             ->success()
             ->send();
     }
@@ -53,7 +53,7 @@ class References extends \Livewire\Component implements HasForms
         return $form
             ->schema([
                 Textarea::make('meta.references')
-                    ->label('References')
+                    ->label(__('general.references'))
                     ->hiddenLabel()
                     ->autosize(),
             ]);

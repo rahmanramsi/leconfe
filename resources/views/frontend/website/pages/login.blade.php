@@ -8,24 +8,24 @@
             <hr class="w-full h-px my-auto bg-gray-200 border-0 dark:bg-gray-700">
         </div>
         <form wire:submit='login' class="space-y-4">
-            <div class="form-control sm:col-span-6 gap-2">
+            <div class="gap-2 form-control sm:col-span-6">
                 <label class="label-text">
-                    Email <span class="text-red-500">*</span>
+                    {{ __('general.email') }} <span class="text-red-500">*</span>
                 </label>
                 <input type="email" name="email" class="input input-sm" wire:model="email" />
                 @error('email')
-                    <div class="text-red-600 text-sm">
+                    <div class="text-sm text-red-600">
                         {{ $message }}
                     </div>
                 @enderror
             </div>
-            <div class="form-control sm:col-span-3 gap-2">
+            <div class="gap-2 form-control sm:col-span-3">
                 <label class="label-text">
-                    Password <span class="text-red-500">*</span>
+                    {{ __('general.password') }} <span class="text-red-500">*</span>
                 </label>
                 <input type="password" name="password" class="input input-sm" wire:model="password" required />
                 @error('password')
-                    <div class="text-red-600 text-sm">
+                    <div class="text-sm text-red-600">
                         {{ $message }}
                     </div>
                 @enderror

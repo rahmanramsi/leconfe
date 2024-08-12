@@ -57,14 +57,14 @@ class CreateSubmission extends Page implements HasForms
         return $form
             ->schema([
                 Placeholder::make('before_you_begin')
-                    ->label('Before you begin')
+                    ->label(__('general.before_you_begin'))
                     ->extraAttributes(['class' => 'prose prose-sm max-w-none'])
                     ->visible(fn () => app()->getCurrentScheduledConference()->getMeta('before_you_begin') !== null)
                     ->content(fn () => new HtmlString(app()->getCurrentScheduledConference()->getMeta('before_you_begin'))),
                 TextInput::make('meta.title')
                     ->required(),
                 Radio::make('track_id')
-                    ->label('Track')
+                    ->label(__('general.track'))
                     ->required()
                     ->visible(fn() => Track::count() > 1)
                     ->options(fn() => Track::active()->get()->pluck('title', 'id'))
@@ -85,7 +85,7 @@ class CreateSubmission extends Page implements HasForms
                         return Track::find($get('track_id'))->title;
                     })
                     ->content(fn(Get $get) => $get('track_id') ? new HtmlString(Track::find($get('track_id'))->getMeta('policy')) : ''),
-                Fieldset::make('Submission Checklist')
+                Fieldset::make(__('general.submission_checklist'))
                     ->columns(1)
                     ->schema([
                         Placeholder::make('submission_checklist')
@@ -95,14 +95,14 @@ class CreateSubmission extends Page implements HasForms
                             ->content(fn () => new HtmlString(app()->getCurrentScheduledConference()->getMeta('submission_checklist'))),
                         Checkbox::make('submissionRequirements')
                             ->required()
-                            ->label('Yes, my submission meets all of these requirements.')
+                            ->label(__('general.submission_meets_all_of_requirements'))
                     ]),
-                Section::make('Privacy Consent')
+                Section::make(__('general.privacy_consent'))
                     ->schema([
                         Checkbox::make('privacy_consent')
                             ->inline()
                             ->required()
-                            ->label('Yes, I agree to have my data collected and stored according to the privacy statement.'),
+                            ->label(__('general.agree_to_my_collected_stored_to_privacy_statement')),
                     ]),
             ])
             ->model(Submission::class)

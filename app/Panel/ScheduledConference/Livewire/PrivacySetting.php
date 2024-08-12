@@ -49,17 +49,17 @@ class PrivacySetting extends Component implements HasForms
                 Section::make()
                     ->schema([
                         TinyEditor::make('meta.privacy_statement')
-                            ->label('Privacy Statement')
-                            ->helperText('This statement will appear during user registration, author submission, and on the publicly available Privacy page. In some jurisdictions, you are legally required to disclose how you handle user data in this privacy policy.'),
+                            ->label(__('general.privacy_statement'))
+                            ->helperText(__('general.statement_user_registration')),
                     ])
                     ->extraAttributes([
                         'class' => '!p-0',
                     ]),
                 Actions::make([
                     Action::make('save')
-                        ->label('Save')
-                        ->successNotificationTitle('Saved!')
-                        ->failureNotificationTitle('Data could not be saved.')
+                        ->label(__('general.save'))
+                        ->successNotificationTitle(__('general.saved'))
+                        ->failureNotificationTitle(__('general.data_could_not_saved'))
                         ->action(function (Action $action) {
                             $formData = $this->form->getState();
                             try {

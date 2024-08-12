@@ -21,7 +21,24 @@ class PermissionResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-lock-closed';
 
-    protected static ?string $navigationGroup = 'Settings';
+    // protected static ?string $navigationGroup = 'Settings';
+
+    public static function getNavigationLabel(): string
+    {
+        return __('general.permission');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('general.permission');
+    }
+
+
+    public static function getNavigationGroup(): string
+    {
+        return __('general.settings');
+    }
+
 
     protected static ?int $navigationSort = 7;
 
@@ -43,14 +60,17 @@ class PermissionResource extends Resource
         return $form
             ->schema([
                 TextInput::make('context')
+                    ->label(__('general.context'))
                     ->dehydrateStateUsing(fn (string $state): string => Str::studly($state))
                     ->alpha()
-                    ->helperText('Context must be StudlyCase'),
+                    ->helperText(__('general.context_must_be_studlycase')),
                 TextInput::make('action')
+                    ->label(__('general.action'))
                     ->alpha()
-                    ->helperText('Action must be camelCase')
+                    ->helperText(__('general.action_must_be_camelCase'))
                     ->dehydrateStateUsing(fn (string $state): string => Str::camel($state)),
                 CheckboxList::make('roles')
+                    ->label(__('general.roles'))
                     ->relationship('roles', 'name')
                     ->columns(2),
             ]);
@@ -62,15 +82,18 @@ class PermissionResource extends Resource
             // ->deferLoading()
             ->columns([
                 TextColumn::make('name')
+                    ->label(__('general.name'))
                     ->sortable()
                     ->badge()
                     ->searchable(),
                 TextColumn::make('context')
+                    ->label(__('general.context'))
                     ->formatStateUsing(fn (string $state): string => Str::headline($state)),
                 TextColumn::make('action')
+                    ->label(__('general.action'))
                     ->formatStateUsing(fn (string $state): string => Str::headline($state)),
                 TextColumn::make('roles_count')
-                    ->label('Assigned Roles')
+                    ->label(__('general.assigned_roles'))
                     ->counts('roles')
                     ->badge()
                     ->color(fn (int $state) => $state > 0 ? 'primary' : 'gray'),
@@ -79,7 +102,7 @@ class PermissionResource extends Resource
                 Tables\Actions\EditAction::make()
                     ->mutateRecordDataUsing(function (Permission $record, array $data) {
                         $data['context'] = $record->context;
-                        $data['action'] = $record->action;  
+                        $data['action'] = $record->action;
 
                         return $data;
                     }),

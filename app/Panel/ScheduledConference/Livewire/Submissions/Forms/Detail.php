@@ -40,18 +40,22 @@ class Detail extends \Livewire\Component implements HasForms
             })
             ->model($this->submission)
             ->schema([
-                TextInput::make('meta.title'),
-                TextInput::make('meta.subtitle'),
+                TextInput::make('meta.title')
+                    ->label(__('general.title')),
+                TextInput::make('meta.subtitle')
+                    ->label(__('general.subtitle')),
                 Select::make('topics')
                     ->preload()
                     ->multiple()
                     ->relationship('topics', 'name')
-                    ->label('Topic')
+                    ->label(__('general.topic'))
                     ->searchable(),
                 TagsInput::make('meta.keywords')
+                    ->label(__('general.keywords'))
                     ->splitKeys([','])
                     ->placeholder(''),
                 TinyEditor::make('meta.abstract')
+                    ->label(__('general.abstract'))
                     ->required()
                     ->minHeight(300),
             ]);
@@ -74,7 +78,7 @@ class Detail extends \Livewire\Component implements HasForms
             ->save();
 
         Notification::make()
-            ->body('Saved successfully')
+            ->body(__('general.saved_successfuly'))
             ->success()
             ->send();
     }

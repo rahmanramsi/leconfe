@@ -20,16 +20,32 @@ use App\Panel\ScheduledConference\Livewire\SubmissionPaymentItemTable;
 use App\Panel\ScheduledConference\Livewire\TimelineTable;
 use App\Panel\ScheduledConference\Livewire\TopicTable;
 use App\Panel\ScheduledConference\Livewire\TrackTable;
+use Illuminate\Contracts\Support\Htmlable;
 
 class WorkflowSetting extends Page
 {
     protected static string $view = 'panel.scheduledConference.pages.workflow-setting';
 
-    protected static ?string $navigationGroup = 'Settings';
+    // protected static ?string $navigationGroup = 'Settings';
+
+    public static function getNavigationGroup(): string
+    {
+        return __('general.settings');
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('general.workflow');
+    }
+
+    public function getHeading(): string|Htmlable
+    {
+        return __('general.workflow_settings');
+    }
 
     protected static ?string $navigationIcon = 'heroicon-o-window';
 
-    protected static ?string $navigationLabel = 'Workflow';
+    // protected static ?string $navigationLabel = 'Workflow';
 
     public function mount(): void
     {
@@ -49,30 +65,36 @@ class WorkflowSetting extends Page
                     ->contained(false)
                     ->tabs([
                         Tabs\Tab::make('Submission')
+                            ->label(__('general.submissions'))
                             ->schema([
                                 InfolistsVerticalTabs\Tabs::make()
                                     ->schema([
                                         InfolistsVerticalTabs\Tab::make('Components')
+                                            ->label(__('general.components'))
                                             ->schema([
                                                 LivewireEntry::make('submission-file-type-table')
                                                     ->livewire(SubmissionFileTypeTable::class),
                                             ]),
                                         InfolistsVerticalTabs\Tab::make('Author Guidance')
+                                            ->label(__('general.author_guidance'))
                                             ->schema([
                                                 LivewireEntry::make('author-guidance')
                                                     ->livewire(AuthorGuidance::class),
                                             ]),
                                         InfolistsVerticalTabs\Tab::make('Author Roles')
+                                            ->label(__('general.author_roles'))
                                             ->schema([
                                                 LivewireEntry::make('author-roles')
                                                     ->livewire(AuthorRoleTable::class),
                                             ]),
                                         InfolistsVerticalTabs\Tab::make('Tracks')
+                                            ->label(__('general.track'))
                                             ->schema([
                                                 LivewireEntry::make('tracks')
                                                     ->livewire(TrackTable::class),
                                             ]),
                                         InfolistsVerticalTabs\Tab::make('Topics')
+                                            ->label(__('general.topic'))
                                             ->schema([
                                                 LivewireEntry::make('topics')
                                                     ->livewire(TopicTable::class),
@@ -80,15 +102,18 @@ class WorkflowSetting extends Page
                                     ]),
                             ]),
                         Tabs\Tab::make('Review')
+                            ->label(__('general.review'))
                             ->schema([
                                 InfolistsVerticalTabs\Tabs::make()
                                     ->schema([
                                         InfolistsVerticalTabs\Tab::make('Setup')
+                                            ->label(__('general.setup'))
                                             ->schema([
                                                 LivewireEntry::make('review-setup')
                                                     ->livewire(ReviewSetupSetting::class),
                                             ]),
                                         InfolistsVerticalTabs\Tab::make('Reviewer Guidance')
+                                            ->label(__('general.reviewer_guidance'))
                                             ->schema([
                                                 LivewireEntry::make('review-guidance')
                                                     ->livewire(ReviewGuidance::class),
@@ -96,25 +121,30 @@ class WorkflowSetting extends Page
                                     ]),
                             ]),
                         Tabs\Tab::make('Timeline')
+                            ->label(__('general.timeline'))
                             ->schema([
                                 LivewireEntry::make('timeline-table')
                                     ->livewire(TimelineTable::class),
                             ]),
                         Tabs\Tab::make('Emails')
+                            ->label(__('general.email'))
                             ->schema([
                                 LivewireEntry::make('email-setting')
                                     ->livewire(EmailSetting::class),
                             ]),
                         Tabs\Tab::make('Payments')
+                            ->label(__('general.payments'))
                             ->schema([
                                 InfolistsVerticalTabs\Tabs::make()
                                 ->schema([
                                     InfolistsVerticalTabs\Tab::make('Setup')
+                                        ->label(__('general.setup'))
                                         ->schema([
                                             LivewireEntry::make('payments')
                                                 ->livewire(PaymentSetting::class),
                                         ]),
                                     InfolistsVerticalTabs\Tab::make('Submission Payment Items')
+                                        ->label(__('general.submission_payment_items'))
                                         ->schema([
                                             LivewireEntry::make('payment-items')
                                                 ->livewire(SubmissionPaymentItemTable::class),

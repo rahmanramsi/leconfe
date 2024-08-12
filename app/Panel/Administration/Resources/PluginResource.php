@@ -20,7 +20,24 @@ class PluginResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-square-3-stack-3d';
 
-    protected static ?string $navigationGroup = 'Settings';
+    // protected static ?string $navigationGroup = 'Settings';
+
+    public static function getNavigationLabel(): string
+    {
+        return __('general.plugin');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('general.plugin');
+    }
+
+
+    public static function getNavigationGroup(): string
+    {
+        return __('general.settings');
+    }
+
 
     public static function getEloquentQuery(): Builder
     {
@@ -33,6 +50,7 @@ class PluginResource extends Resource
             ->columns([
                 IndexColumn::make('no'),
                 TextColumn::make('name')
+                    ->label(__('general.name'))
                     ->wrap()
                     ->sortable()
                     ->searchable()
@@ -40,9 +58,10 @@ class PluginResource extends Resource
                     ->weight(fn (Plugin $record) => FacadesPlugin::getSetting($record->id, 'enabled') ? FontWeight::SemiBold : FontWeight::Light)
                     ->url(fn (Plugin $record) => FacadesPlugin::getSetting($record->id, 'enabled') ? FacadesPlugin::getPlugin($record->id)?->getPluginPage() : null)
                     ->color(fn (Plugin $record) => (FacadesPlugin::getSetting($record->id, 'enabled') && FacadesPlugin::getPlugin($record->id)?->getPluginPage()) ? 'primary' : null),
-                TextColumn::make('author'),
+                TextColumn::make('author')
+                    ->label(__('general.author')),
                 ToggleColumn::make('enabled')
-                    ->label('Enabled')
+                    ->label(__('general.enabled'))
                     ->getStateUsing(fn (Plugin $record) => FacadesPlugin::getSetting($record->id, 'enabled'))
                     ->updateStateUsing(function (Plugin $record, $state) {
                         FacadesPlugin::enable($record->id, $state);

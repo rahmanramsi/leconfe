@@ -8,7 +8,12 @@ class PresentationFiles extends SubmissionFilesTable
 {
     protected ?string $category = SubmissionFileCategory::PRESENTATION_FILES;
 
-    protected string $tableHeading = 'Presentation Files';
+    protected string $tableHeading;
+
+    public function __construct()
+    {
+        $this->tableHeading = __('general.presentation_files');
+    }
 
     protected $listeners = [
         'refreshPresentationFiles' => '$refresh',

@@ -5,11 +5,11 @@
     <div class="flex flex-col gap-y-6" x-data="{ activeTab: 'speaker-table' }">
         <x-filament::tabs>
             <x-filament::tabs.item alpine-active="activeTab === 'speaker-table'" x-on:click="activeTab = 'speaker-table'">
-                Speakers
+                {{ __('general.speaker') }}
             </x-filament::tabs.item>
             <x-filament::tabs.item alpine-active="activeTab === 'speaker-role'"
                 x-on:click="activeTab = 'speaker-role'">
-                Speaker Roles
+                {{ __('general.speaker_roles') }}
             </x-filament::tabs.item>
 
         </x-filament::tabs>

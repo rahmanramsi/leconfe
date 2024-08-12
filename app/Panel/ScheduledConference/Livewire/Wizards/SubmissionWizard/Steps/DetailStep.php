@@ -42,7 +42,7 @@ class DetailStep extends Component implements HasActions, HasForms, HasWizardSte
 
     public static function getWizardLabel(): string
     {
-        return 'Details';
+        return __('general.details');
     }
 
     protected function getFormModel()
@@ -59,23 +59,26 @@ class DetailStep extends Component implements HasActions, HasForms, HasWizardSte
     {
         return [
             Section::make([
-                Section::make('Submission Details')
-                    ->description('Please provide the following details to help us manage your submission in our system.')
+                Section::make(__('general.submission_details'))
+                    ->description(__('general.provide_details_to_help_us'))
                     ->aside()
                     ->schema([
                         Hidden::make('nextStep'),
                         Select::make('topic')
                             ->preload()
                             ->multiple()
-                            ->label('Topic')
+                            ->label(__('general.topic'))
                             ->searchable()
                             ->relationship('topics', 'name'),
                         TextInput::make('meta.title')
+                            ->label(__('general.title'))
                             ->required(),
                         TagsInput::make('meta.keywords')
+                            ->label(__('general.keywords'))
                             ->splitKeys([','])
                             ->placeholder(''),
                         TinyEditor::make('meta.abstract')
+                            ->label(__('general.abstract'))
                             ->minHeight(300)
                             ->required(),
                     ]),
@@ -86,8 +89,8 @@ class DetailStep extends Component implements HasActions, HasForms, HasWizardSte
     public function nextStep()
     {
         return Action::make('nextStep')
-            ->label('Next')
-            ->successNotificationTitle('Saved')
+            ->label(__('general.next'))
+            ->successNotificationTitle(__('general.saved'))
             ->action(function (Action $action) {
                 $this->record = SubmissionUpdateAction::run($this->form->getState(), $this->record);
                 $this->dispatch('next-wizard-step');

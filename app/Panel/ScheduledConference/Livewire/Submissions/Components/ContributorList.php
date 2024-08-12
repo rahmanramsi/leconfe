@@ -47,8 +47,8 @@ class ContributorList extends \Livewire\Component implements HasForms, HasTable
     public function selectAuthorField(): Select
     {
         return Select::make('author_id')
-            ->label('Select Existing Author')
-            ->placeholder('Select Author')
+            ->label(__('general.select_existing_author'))
+            ->placeholder(__('general.select_author'))
             ->preload()
             ->native(false)
             ->searchable()
@@ -86,7 +86,7 @@ class ContributorList extends \Livewire\Component implements HasForms, HasTable
                 $author = Author::with(['meta', 'role' => fn ($query) => $query->withoutGlobalScopes()])->findOrFail($state);
                 $role = AuthorRoleResource::getEloquentQuery()->whereName($author?->role?->name)->first();
 
-                $formData = [ 
+                $formData = [
                     'author_id' => $state,
                     'given_name' => $author->given_name,
                     'family_name' => $author->family_name,
@@ -115,7 +115,7 @@ class ContributorList extends \Livewire\Component implements HasForms, HasTable
                         ->createOptionAction(
                             fn (FormAction $action) => $action->color('primary')
                                 ->modalWidth('xl')
-                                ->modalHeading('Create Author Role')
+                                ->modalHeading(__('general.create_author_role'))
                         )
                         ->preload()
                         ->required()
@@ -135,7 +135,7 @@ class ContributorList extends \Livewire\Component implements HasForms, HasTable
             ->reorderable(
                 fn () => $this->viewOnly ? false : 'order_column'
             )
-            ->heading('Contributors')
+            ->heading(__('general.contributors'))
             ->query(
                 fn (): Builder => $this->getQuery()
             )
@@ -162,18 +162,18 @@ class ContributorList extends \Livewire\Component implements HasForms, HasTable
             ])
             ->headerActions([
                 CreateAction::make()
-                    ->label('New Contributor')
+                    ->label(__('general.new_contributor'))
                     ->modalWidth('2xl')
                     ->icon('heroicon-o-user-plus')
-                    ->modalHeading('Add Contributor')
-                    ->successNotificationTitle('Contributor added')
+                    ->modalHeading(__('general.add_contributor'))
+                    ->successNotificationTitle(__('general.contributor_added'))
                     ->form($this->getContributorFormSchema())
                     ->using(function (array $data) {
                         $author = Author::whereSubmissionId($this->submission->getKey())->email($data['email'])->first();
                         if (! $author) {
                             $author = AuthorCreateAction::run($this->submission, $data);
                         }
-                        
+
                         return $author;
                     })
                     ->hidden($this->viewOnly),

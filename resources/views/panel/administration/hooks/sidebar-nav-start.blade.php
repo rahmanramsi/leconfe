@@ -22,7 +22,7 @@
                 x-tooltip.html="tooltip"
             @endif
             type="button"
-            class="fi-tenant-menu-trigger group flex w-full items-center justify-center gap-x-3 rounded-lg p-2 text-sm font-medium outline-none transition duration-75 hover:bg-gray-100 focus:bg-gray-100 dark:hover:bg-white/5 dark:focus:bg-white/5"
+            class="flex items-center justify-center w-full p-2 text-sm font-medium transition duration-75 rounded-lg outline-none fi-tenant-menu-trigger group gap-x-3 hover:bg-gray-100 focus:bg-gray-100 dark:hover:bg-white/5 dark:focus:bg-white/5"
         >
             <span
                 @if (filament()->isSidebarCollapsibleOnDesktop())
@@ -31,23 +31,23 @@
                 class="grid justify-items-start text-start me-auto"
             >
                 <span class="text-gray-950 dark:text-white">
-                   Administration
+                   {{ __('general.administration') }}
                 </span>
             </span>
 
              <x-filament::icon
                 icon="heroicon-m-chevron-down"
                 icon-alias="panels::tenant-menu.toggle-button"
-                class="hidden md:block h-5 w-5 shrink-0 text-gray-400 transition duration-75 group-hover:text-gray-500 group-focus:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-400 dark:group-focus:text-gray-400"
+                class="hidden w-5 h-5 text-gray-400 transition duration-75 md:block shrink-0 group-hover:text-gray-500 group-focus:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-400 dark:group-focus:text-gray-400"
             />
         </button>
     </x-slot>
 
     <x-filament::dropdown.list>
-        <div class="flex w-full items-center gap-2 whitespace-nowrap p-2 text-sm transition-colors duration-75 outline-none font-medium border-b">
-            Switch Conference
+        <div class="flex items-center w-full gap-2 p-2 text-sm font-medium transition-colors duration-75 border-b outline-none whitespace-nowrap">
+            {{ __('general.switch_conference') }}
         </div>
-        <div class="max-h-64 overflow-y-scroll">
+        <div class="overflow-y-scroll max-h-64">
         @foreach (App\Models\Conference::with(['media'])->latest()->get() as $conference)
             <x-filament::dropdown.list.item
                 :href="$conference->getPanelUrl()"

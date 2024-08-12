@@ -19,10 +19,10 @@ class Overview extends BaseWidget
     protected function getStats(): array
     {
         return [
-            Stat::make('Submitted Papers', Submission::count())
+            Stat::make(__('general.submitted_papers'), Submission::count())
                 ->icon('heroicon-o-document-text')
-                ->description('Total number of papers submitted'),
-            Stat::make('Accepted Papers', Submission::query()
+                ->description(__('general.total_number_of_papers_submitted')),
+            Stat::make(__('general.accepted_papers'), Submission::query()
                 ->whereIn('status', [
                     SubmissionStatus::OnReview,
                     SubmissionStatus::OnPresentation,
@@ -31,13 +31,13 @@ class Overview extends BaseWidget
                 ])
                 ->where('published_at', '>=', now()->subMonth())
                 ->count())
-                ->description('Accepted paper in the last 30 days'),
-            Stat::make('New Authors', User::query()
+                ->description(__('general.accepted_paper_in_the_last_30_days')),
+            Stat::make(__('general.new_authors'), User::query()
                 ->where('created_at', '>=', now()->subMonth())
                 ->whereHas('roles', fn($query) => $query->where('name', UserRole::Author->value))
                 ->count())
                 ->icon('heroicon-o-user-group')
-                ->description('New authors in the last 30 days'),
+                ->description(__('general.new_authors_in_the_last_30_days')),
         ];
     }
 }

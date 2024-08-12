@@ -12,7 +12,7 @@ class ContributorsStep extends Component implements HasWizardStep
 
     public static function getWizardLabel(): string
     {
-        return 'Contributors';
+        return __('general.contributors');
     }
 
     public function render()
@@ -23,7 +23,7 @@ class ContributorsStep extends Component implements HasWizardStep
     public function nextStep()
     {
         if (! $this->record->participants()->exists()) {
-            $this->addError('errors', 'You must add at least one author');
+            $this->addError('errors', __('general.must_add_one_author'));
 
             return;
         }

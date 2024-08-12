@@ -40,13 +40,24 @@ class RegistrantResource extends Resource
 {
     protected static ?string $model = Registration::class;
 
-    protected static ?string $modelLabel = 'Registration';
+    // protected static ?string $modelLabel = 'Registration';
 
     protected static ?string $navigationIcon = 'heroicon-o-user-plus';
 
-    protected static ?string $navigationGroup = 'Conference';
+    // protected static ?string $navigationGroup = 'Conference';
 
-    protected static ?string $navigationLabel = 'Registrants';
+
+    public static function getNavigationLabel(): string
+    {
+        return __('general.registration');
+    }
+
+    public static function getNavigationGroup(): string
+    {
+        return __('general.conference');
+    }
+
+    // protected static ?string $navigationLabel = 'Registrants';
 
     public static function canAccess(): bool
     {
@@ -65,12 +76,13 @@ class RegistrantResource extends Resource
                     ->relationship('registrationPayment')
                     ->schema([
                         Select::make('state')
+                            ->label(__('general.state'))
                             ->options(RegistrationPaymentState::array())
                             ->native(false)
                             ->required()
                             ->live(),
                         DatePicker::make('paid_at')
-                            ->label('Paid Date')
+                            ->label(__('general.paid_date'))
                             ->placeholder('Select registration paid date..')
                             ->prefixIcon('heroicon-m-calendar')
                             ->formatStateUsing(fn () => now())
@@ -94,15 +106,15 @@ class RegistrantResource extends Resource
         return $table
             ->modifyQueryUsing(fn (Builder $query) => $query->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId()))
             ->reorderable('order_column')
-            ->heading('Registrant List')
+            ->heading(__('general.registrant_list'))
             ->headerActions([
-                Action::make('Enroll User')
+                Action::make(__('general.enroll_user'))
                     ->url(fn () => RegistrantResource::getUrl('enroll'))
                     ->authorize('Registrant:enroll')
             ])
             ->columns([
                 SpatieMediaLibraryImageColumn::make('user.profile')
-                    ->label('Profile')
+                    ->label(__('general.profile'))
                     ->grow(false)
                     ->collection('profile')
                     ->conversion('avatar')
@@ -122,11 +134,11 @@ class RegistrantResource extends Resource
                     ])
                     ->circular(),
                 TextColumn::make('user.full_name')
-                    ->label('User')
+                    ->label(__('general.user'))
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('registrationPayment.name')
-                    ->label('Type')
+                    ->label(__('general.type'))
                     ->description(function (Model $record) {
                         if ($record->registrationPayment->currency === 'free') {
                             return 'Free';
@@ -138,39 +150,39 @@ class RegistrantResource extends Resource
                         return "($code) $cost";
                     }),
                 TextColumn::make('registrationPayment.state')
-                    ->label('State')
+                    ->label(__('general.state'))
                     ->badge()
                     ->color(fn (Model $record) => RegistrationPaymentState::from($record->getState())->getColor()),
                 TextColumn::make('deleted_at')
-                    ->label('Status')
-                    ->placeholder('Valid')
+                    ->label(__('general.status'))
+                    ->placeholder(__('general.valid'))
                     ->formatStateUsing(fn () => "Trashed")
                     ->badge()
                     ->color(Color::Red),
                 TextColumn::make('created_at')
-                    ->label('Registration Date')
+                    ->label(__('general.registration_date'))
                     ->date('Y-M-d')
                     ->sortable(),
             ])
-            ->emptyStateHeading('No Registrant')
+            ->emptyStateHeading(__('general.no_registrant'))
             ->filters([
                 //
             ])
             ->actions([
                 EditAction::make()
-                    ->label('Decision')
-                    ->modalHeading('Paid Status Decision')
+                    ->label(__('general.decision'))
+                    ->modalHeading(__('general.paid_status_decision'))
                     ->modalWidth('lg')
                     ->authorize('Registrant:edit'),
                 ActionGroup::make([
                     DeleteAction::make()
-                        ->label('Trash')
+                        ->label(__('general.trash'))
                         ->authorize('Registrant:delete'),
                     RestoreAction::make()
                         ->color(Color::Green)
                         ->authorize('Registrant:delete'),
                     ForceDeleteAction::make()
-                        ->label('Delete')
+                        ->label(__('general.delete'))
                         ->authorize('Registrant:delete'),
                 ]),
             ])
@@ -180,7 +192,7 @@ class RegistrantResource extends Resource
             ])
             ->groups([
                 Group::make('registrationPayment.name')
-                    ->label('Type')
+                    ->label(__('general.type'))
                     ->collapsible(),
             ])
             ->defaultGroup('registrationPayment.name');
