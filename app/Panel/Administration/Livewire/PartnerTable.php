@@ -47,6 +47,7 @@ class PartnerTable extends Component implements HasForms, HasTable
             ->columns([
                 IndexColumn::make('no.'),
                 SpatieMediaLibraryImageColumn::make('logo')
+                    ->collection('logo'),
                     ->label(__('general.logo'))
                     ->collection('logo')
                     ->conversion('thumb'),
@@ -96,7 +97,6 @@ class PartnerTable extends Component implements HasForms, HasTable
                     ->image()
                     ->key('logo')
                     ->collection('logo')
-                    ->conversion('thumb')
                     ->alignCenter()
                     ->imageResizeUpscale(false),
                 TextInput::make('name')

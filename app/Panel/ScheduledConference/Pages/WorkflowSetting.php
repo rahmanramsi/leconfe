@@ -12,11 +12,9 @@ use App\Panel\ScheduledConference\Livewire\AuthorGuidance;
 use App\Infolists\Components\VerticalTabs as InfolistsVerticalTabs;
 use App\Panel\Conference\Livewire\EmailSetting;
 use App\Panel\ScheduledConference\Livewire\AuthorRoleTable;
-use App\Panel\ScheduledConference\Livewire\PaymentSetting;
 use App\Panel\ScheduledConference\Livewire\ReviewGuidance;
 use App\Panel\ScheduledConference\Livewire\ReviewSetupSetting;
 use App\Panel\ScheduledConference\Livewire\SubmissionFileTypeTable;
-use App\Panel\ScheduledConference\Livewire\SubmissionPaymentItemTable;
 use App\Panel\ScheduledConference\Livewire\TimelineTable;
 use App\Panel\ScheduledConference\Livewire\TopicTable;
 use App\Panel\ScheduledConference\Livewire\TrackTable;
@@ -132,26 +130,6 @@ class WorkflowSetting extends Page
                                 LivewireEntry::make('email-setting')
                                     ->livewire(EmailSetting::class),
                             ]),
-                        Tabs\Tab::make('Payments')
-                            ->label(__('general.payments'))
-                            ->schema([
-                                InfolistsVerticalTabs\Tabs::make()
-                                ->schema([
-                                    InfolistsVerticalTabs\Tab::make('Setup')
-                                        ->label(__('general.setup'))
-                                        ->schema([
-                                            LivewireEntry::make('payments')
-                                                ->livewire(PaymentSetting::class),
-                                        ]),
-                                    InfolistsVerticalTabs\Tab::make('Submission Payment Items')
-                                        ->label(__('general.submission_payment_items'))
-                                        ->schema([
-                                            LivewireEntry::make('payment-items')
-                                                ->livewire(SubmissionPaymentItemTable::class),
-                                        ]),
-                                ]),
-                            ]),
-
                     ]),
             ]);
     }

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(ScheduledConference::class)->constrained()->cascadeOnDelete();
             $table->string('type');
+            $table->unsignedInteger('level')->default(1);
             $table->integer('cost');
             $table->integer('quota');
             $table->string('currency');
@@ -47,7 +48,7 @@ return new class extends Migration
             $table->foreignIdFor(Registration::class)->constrained()->cascadeOnDelete();
             $table->string('type')->nullable();
             $table->string('name');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->integer('cost');
             $table->string('currency');
             $table->string('state')->default(RegistrationPaymentState::Unpaid->value);

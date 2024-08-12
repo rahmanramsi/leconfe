@@ -42,6 +42,8 @@
                                 {!! $nextScheduledConference->getMeta('summary') !!}
                             </div>
                         @endif
+
+                        <a href="{{ $nextScheduledConference->getHomeUrl() }}" class="link link-primary text-sm">View Current Event</a>
                     </div>
                 </div>
             </div>
@@ -70,6 +72,7 @@
                                         {!! $scheduledConference->getMeta('summary') !!}
                                     </div>
                                 @endif
+                                <a href="{{ $scheduledConference->getHomeUrl() }}" class="link link-primary text-sm">View Current Event</a>
                             </div>
                         </div>
                     @endforeach

@@ -7,7 +7,6 @@
     - 'DiscussionTopic:create'
     - 'DiscussionTopic:delete'
     - 'DiscussionTopic:update'
-    - 'Payment:update'
     - 'Permission:assign'
     - 'Plugin:create'
     - 'Plugin:delete'

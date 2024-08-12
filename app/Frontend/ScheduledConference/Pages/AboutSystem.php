@@ -6,4 +6,11 @@ use App\Frontend\Website\Pages\AboutSystem as Page;
 
 class AboutSystem extends Page
 {
+	public function getViewData(): array
+    {
+        return [
+            'name' => app()->getCurrentScheduledConference()->title,
+            'version' => app()->getInstalledVersion(),
+        ];
+    }
 }

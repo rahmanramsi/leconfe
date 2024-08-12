@@ -59,15 +59,4 @@ class Stakeholder extends Model implements HasMedia, Sortable
     {
         return $query->where('is_shown', $show);
     }
-
-    public function registerMediaConversions(?Media $media = null): void
-    {
-        $this->addMediaConversion('thumb')
-            ->keepOriginalImageFormat()
-            ->width(400);
-
-        $this->addMediaConversion('thumb-xl')
-            ->keepOriginalImageFormat()
-            ->width(800);
-    }
 }

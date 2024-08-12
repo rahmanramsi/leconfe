@@ -51,6 +51,7 @@ class SponsorTable extends Component implements HasForms, HasTable
                     ->label(__('general.logo'))
                     ->collection('logo')
                     ->conversion('thumb'),
+                    ->collection('logo'),
                 TextColumn::make('name')
                     ->label(__('general.name'))
                     ->description(fn(Stakeholder $record) => $record->description)
@@ -106,7 +107,6 @@ class SponsorTable extends Component implements HasForms, HasTable
                     ->image()
                     ->key('logo')
                     ->collection('logo')
-                    ->conversion('thumb')
                     ->alignCenter()
                     ->imageResizeUpscale(false),
                 TextInput::make('name')

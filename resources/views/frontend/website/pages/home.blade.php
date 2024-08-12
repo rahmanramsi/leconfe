@@ -6,21 +6,22 @@
             </div>
         @endif
 
-        <div class="conferences space-y-4" x-data="{ tab: 'current' }" x-cloak>
-            <div class="conference-current space-y-4" x-show="tab === 'current'">
+        <div class="space-y-4 conferences">
+            <x-website::heading-title title="Conference List" />
+            <div class="space-y-4 conference-current">
                 @if ($conferences->isNotEmpty())
-                    <div class="grid xl:grid-cols-2 gap-6">
+                    <div class="grid gap-6 xl:grid-cols-2">
                         @foreach ($conferences as $conference)
-                            <div class="conference sm:flex gap-4">
+                            <div class="gap-4 conference sm:flex">
                                 @if ($conference->hasThumbnail())
                                     <div class="cover max-w-40">
                                         <img src="{{ $conference->getThumbnailUrl() }}" alt="{{ $conference->name }}">
                                     </div>
                                 @endif
-                                <div class="information flex-1 space-y-2">
+                                <div class="flex-1 space-y-2 information">
                                     <h2 class="">
                                         <a href="{{ $conference->getHomeUrl() }}"
-                                            class="conference-name link link-primary link-hover font-bold">{{ $conference->name }}</a>
+                                            class="font-bold conference-name link link-primary link-hover">{{ $conference->name }}</a>
                                     </h2>
 
                                     @if ($conference->getMeta('summary'))
@@ -31,7 +32,7 @@
                                     <div class="flex items-center gap-2 text-sm">
                                         <a href="{{ $conference->getHomeUrl() }}" class="link link-primary">{{ __('general.view_conference') }}</a>
                                         @if($conference->currentScheduledConference)
-                                            <a href="{{ $conference->currentScheduledConference->getHomeUrl() }}" class="link link-primary">{{ __('general.current_event') }}</a>
+                                            <a href="{{ $conference->currentScheduledConference->getHomeUrl() }}" class="link link-primary">View Current Event</a>
                                         @endif
                                     </div>
                                 </div>
@@ -39,7 +40,7 @@
                         @endforeach
                     </div>
                 @else
-                    <div class="text-center my-12">
+                    <div class="my-12 text-center">
                         <p class="text-lg font-bold">There are no conferences taking place at this time</p>
                     </div>
                 @endif

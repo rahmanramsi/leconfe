@@ -16,7 +16,6 @@
 - 'DiscussionTopic:create'
 - 'DiscussionTopic:delete'
 - 'DiscussionTopic:update'
-- 'Payment:update'
 - 'Permission:assign'
 - 'Permission:create'
 - 'Permission:delete'

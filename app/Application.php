@@ -11,8 +11,9 @@ use App\Models\CommitteeRole;
 use App\Models\Conference;
 use App\Models\MailTemplate;
 use App\Models\NavigationMenu;
-use App\Models\PaymentItem;
 use App\Models\Proceeding;
+use App\Models\Registration;
+use App\Models\RegistrationType;
 use App\Models\Scopes\ConferenceScope;
 use App\Models\Scopes\ScheduledConferenceScope;
 use App\Models\ScheduledConference;
@@ -130,7 +131,6 @@ class Application extends LaravelApplication
             AuthorRole::class,
             Topic::class,
             StaticPage::class,
-            PaymentItem::class,
             ScheduledConference::class,
             Proceeding::class,
             MailTemplate::class,
@@ -159,6 +159,8 @@ class Application extends LaravelApplication
             Submission::class,
             Stakeholder::class,
             StakeholderLevel::class,
+            RegistrationType::class,
+            Registration::class,
         ];
 
         foreach ($models as $model) {

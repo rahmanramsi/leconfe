@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Frontend\Conference\Pages\PaperGalley;
+use App\Providers\PanelProvider;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
@@ -36,7 +38,7 @@ class SubmissionGalley extends Model implements HasMedia, Sortable
 
     public function getUrl()
     {
-        return $this->remote_url ?? route('submission-files.view', $this->file->media->uuid);
+        return $this->remote_url ?? route(PaperGalley::getRouteName('conference'), ['galley' => $this->id, 'submission' => $this->submission_id]);
     }
 
     public function isPdf()

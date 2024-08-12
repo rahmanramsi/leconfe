@@ -1,7 +1,4 @@
-@use('Illuminate\Support\Str')
-@use('Carbon\Carbon')
 @use('App\Models\Enums\RegistrationPaymentState')
-@use('App\Models\Registration')
 <x-website::layouts.main>
     @if ($isLogged)
         <div class="space-y-6">
@@ -20,15 +17,13 @@
                     <td class="align-text-top pl-5">:</td>
                     <td class="pl-2">
                         <span @class([
-                            'inline-flex items-center rounded-md px-2 py-1 text-xs font-medium text-white ring-1 ring-inset ring-gray-500/10', 
-                            'bg-green-500' => $userRegistration->getState() === RegistrationPaymentState::Paid->value,
-                            'bg-yellow-500' => $userRegistration->getState() === RegistrationPaymentState::Unpaid->value,
-                            '!bg-red-500' => $userRegistration->trashed(),
+                            'badge', 
+                            'badge-success' => $userRegistration->getState() === RegistrationPaymentState::Paid->value,
+                            'badge-warning' => $userRegistration->getState() === RegistrationPaymentState::Unpaid->value,
+                            'badge-error' => $userRegistration->trashed(),
                         ])>
                             {{ 
-                                $userRegistration->trashed() ? 
-                                'Failed' :
-                                $userRegistration->getState();
+                                $userRegistration->trashed() ?  'Failed' : $userRegistration->getState();
                             }}
                         </span>
                     </td>
@@ -54,11 +49,11 @@
                         @php
                             $userRegistrationCost = $userRegistration->registrationPayment->cost;
                             $userRegistrationCurrency = Str::upper($userRegistration->registrationPayment->currency);
-                            $userRegistrationCostFormatted = money($userRegistrationCost, $userRegistrationCurrency);
+                            $userRegistrationCostFormatted = money($userRegistrationCost, $userRegistrationCurrency, true);
                         @endphp
                         {{ 
                             ($userRegistrationCost === 0 || $userRegistrationCurrency === 'FREE') ? 
-                            'Free' : "($userRegistrationCurrency) $userRegistrationCostFormatted"
+                            'Free' : "$userRegistrationCostFormatted"
                         }}
                     </td>
                 </tr>
@@ -66,7 +61,7 @@
                     <td class="align-text-top">Registration Date</td>
                     <td class="align-text-top pl-5">:</td>
                     <td class="pl-2">
-                        {{ Carbon::parse($userRegistration->created_at)->format('Y-M-d') }}
+                        {{ $userRegistration->created_at->format(Setting::get('format_date')) }}
                     </td>
                 </tr>
                 @if ($userRegistration->getState() === RegistrationPaymentState::Paid->value && $userRegistration->registrationType->currency !== 'free')
@@ -74,11 +69,21 @@
                         <td class="align-text-top">Payment Date</td>
                         <td class="align-text-top pl-5">:</td>
                         <td class="pl-2">
-                            {{ Carbon::parse($userRegistration->registrationPayment->paid_at)->format('Y-M-d') }}
+                            {{ $userRegistration->registrationPayment->paid_at->format(Setting::get('format_date')) }}
                         </td>
                     </tr>
                 @endif
             </table>
+            <div class="mt-4" x-data="{ isCancelling: false }">
+                <button class="btn btn-error btn-sm" x-show="!isCancelling" x-on:click="isCancelling = true">Cancel Registration</button>
+                <div class="space-y-2" x-show="isCancelling" x-cloak>
+                    <p class="mr-2">Are you sure you want to cancel your registration?</p>
+                    <div class="flex items-center gap-2">
+                        <button class="btn btn-sm btn-outline" x-on:click="isCancelling = false">No</button>
+                        <button class="btn btn-error btn-sm" wire:click="cancel">Yes</button>
+                    </div>
+                </div>
+            </div>
             @if ($userRegistration->getState() === RegistrationPaymentState::Unpaid->value && !$userRegistration->trashed())
                 <hr class="my-8">
                 <div class="w-full">
@@ -101,9 +106,9 @@
                                         'md:col-span-3' => count($payments) !== 1,
                                     ])>
                                         <h1 class="font-bold text-left">{{ $payment['name'] }}</h1>
-                                        <p class="mt-2">
+                                        <div class="user-content">
                                             {{ new Illuminate\Support\HtmlString($payment['detail']) }}
-                                        </p>
+                                        </div>
                                     </div>
                                 @endforeach
                                 
