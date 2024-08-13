@@ -89,6 +89,10 @@ class ListSession extends Page implements HasTable, HasForms
                 ->label(__('general.add_session'))
                 ->modalHeading(__('general.add_session'))
                 ->model(static::$model)
+                ->mutateFormDataUsing(function (array $data) {
+                    $data['timeline_id'] = $this->timeline->id;
+                    return $data;
+                })
                 ->form(fn(Form $form) => $this->form($form))
                 ->authorize('create', Session::class),
         ];
@@ -147,11 +151,6 @@ class ListSession extends Page implements HasTable, HasForms
                 Checkbox::make('require_attendance')
                     ->disabled(fn(?Model $record) => (bool) $record ? $record->timeline->isRequireAttendance() : false)
                     ->helperText(fn(?Model $record) => $record ? ($record->timeline->isRequireAttendance() ? __('general.timeline_are_requiring_attendance_this_is_disabled') : null) : null),
-                Select::make('timeline_id')
-                    ->label(__('general.belong_to_timeline'))
-                    ->options(Timeline::get()->pluck('name', 'id')->toArray())
-                    ->searchable()
-                    ->required(),
             ])
             ->columns(1);
     }

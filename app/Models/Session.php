@@ -53,19 +53,19 @@ class Session extends Model
         return $this->start_at->setTimezone(app()->getCurrentScheduledConference()->getMeta('timezone'));
     }
 
-    public function  getEndDate()
+    public function getEndDate()
     {
         return $this->end_at->setTimezone(app()->getCurrentScheduledConference()->getMeta('timezone'));
     }
 
     public function isFuture(): bool
     {
-        return $this->getStartDate->isFuture();
+        return $this->getStartDate()->isFuture();
     }
 
     public function isPast(): bool
     {
-        return $this->getEndDate->isPast();
+        return $this->getEndDate()->isPast();
     }
 
     public function isOngoing(): bool
