@@ -69,11 +69,13 @@ class TimelineResource extends Resource
                     TimePicker::make('time_start')
                         ->label(__("general.time_start"))
                         ->seconds(false)
+                        ->native(false)
                         ->required()
                         ->before('time_end'),
                     TimePicker::make('time_end')
                         ->label(__("general.time_end"))
                         ->seconds(false)
+                        ->native(false)
                         ->required()
                         ->after('time_start'),
                 ]),
