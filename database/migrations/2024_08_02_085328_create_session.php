@@ -21,8 +21,8 @@ return new class extends Migration
             $table->text('public_details')->nullable();
             $table->text('details')->nullable();
             $table->boolean('require_attendance')->default(false);
-            $table->timestamp('start_at');
-            $table->timestamp('end_at');
+            $table->timestamp('start_at')->nullable();
+            $table->timestamp('end_at')->nullable();
             $table->timestamps();
         });
     }
