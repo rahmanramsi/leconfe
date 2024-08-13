@@ -123,6 +123,7 @@ class TimelineResource extends Resource
                 TextColumn::make('date')
                     ->label(__('general.date'))
                     ->dateTime(Setting::get('format_date'))
+                    ->description(fn (Model $record) => $record->getEarliestTime()->format(Setting::get('format_time')) . ' - ' . $record->getLatestTime()->format(Setting::get('format_time')))
                     ->sortable(),
                 TextColumn::make('name')
                     ->label(__('general.name')),
