@@ -145,8 +145,7 @@ class RegistrantResource extends Resource
                                 ])
                             ])
                             ->columns(1);
-                    })
-                    ->visible(fn() => app()->getCurrentScheduledConference()->isAttendanceEnabled()),
+                    }),
                 Action::make(__('general.enroll_user'))
                     ->label('Enroll User')
                     ->url(fn() => RegistrantResource::getUrl('enroll'))
@@ -224,7 +223,7 @@ class RegistrantResource extends Resource
                         ->icon('heroicon-m-calendar-days')
                         ->color(Color::Blue)
                         ->url(fn(Model $record) => static::getUrl('attendance', ['record' => $record]))
-                        ->visible(fn(Model $record) => ($record->registrationPayment->state === RegistrationPaymentState::Paid->value) && app()->getCurrentScheduledConference()->isAttendanceEnabled())
+                        ->visible(fn(Model $record) => ($record->registrationPayment->state === RegistrationPaymentState::Paid->value))
                         ->authorize(fn () => auth()->user()->can('viewAny', RegistrationAttendance::class)),
                     DeleteAction::make()
                         ->label(__('general.trash'))

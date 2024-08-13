@@ -35,10 +35,6 @@ class RegistrationSetting extends Component implements HasForms
             ->schema([
                 Section::make(null)
                     ->schema([
-                        Toggle::make('meta.registration_attend')
-                            ->label(__('general.attendance_feature'))
-                            ->inline(false)
-                            ->disabled(fn () => auth()->user()->cannot('RegistrationSetting:update')),
                         TinyEditor::make('meta.registration_policy')
                             ->label(__('general.registration_policy'))
                             ->profile('basic')
