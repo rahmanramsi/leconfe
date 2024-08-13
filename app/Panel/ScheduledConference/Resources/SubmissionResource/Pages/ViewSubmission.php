@@ -64,8 +64,6 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
 
         $this->record = $this->resolveRecord($record);
 
-        dd($this->record->user->hasCompletedRegistration());
-
         abort_unless(static::getResource()::canView($this->getRecord()), 403);
     }
 
