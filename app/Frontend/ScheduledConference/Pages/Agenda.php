@@ -84,7 +84,7 @@ class Agenda extends Page
         }
 
         if($registration->registrationPayment->state !== RegistrationPaymentState::Paid->value) {
-            $this->errorMessage = __('general.youre_not_participant'). app()->getCurrentScheduledConference()->title;
+            $this->errorMessage = __('general.youre_not_participant') . app()->getCurrentScheduledConference()->title;
             return;
         }
 

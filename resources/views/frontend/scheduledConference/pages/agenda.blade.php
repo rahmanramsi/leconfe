@@ -19,7 +19,7 @@
         <div class="mt-4 relative overflow-x-auto">
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 border" lazy>
                 <thead>
-                    <tr class="bg-gray-100 border-b dark:bg-gray-700">
+                    <tr class="border-b bg-gray-100 text-gray-900 dark:bg-gray-700 dark:bg-gray-100">
                         <td class="px-6 pl-8 py-2 text-left">Time</td>
                         <td class="px-6 py-2 text-left">Session Name</td>
                         @if ($isParticipant)
@@ -40,18 +40,20 @@
                             <td class="px-6 py-4" {!! (!$timeline->canShown() || !$isParticipant) ? "colspan='3'" : "colspan='2'" !!}>
                                 <strong class="block font-medium text-gray-900 dark:text-white">
                                     {{ $timeline->name }}
-                                    @if ($timeline->isOngoing())
-                                        <span class="badge badge-success text-white mx-2">
-                                            On going
-                                        </span>
-                                    @elseif ($timeline->getEarliestTime()->isFuture())
-                                        <span class="badge badge-info text-white mx-2">
-                                            Not started
-                                        </span>
-                                    @elseif ($timeline->getLatestTime()->isPast())
-                                        <span class="badge mx-2">
-                                            Over
-                                        </span>
+                                    @if ($isParticipant)
+                                        @if ($timeline->isOngoing())
+                                            <span class="badge badge-success text-white mx-2">
+                                                On going
+                                            </span>
+                                        @elseif ($timeline->getEarliestTime()->isFuture())
+                                            <span class="badge badge-info text-white mx-2">
+                                                Not started
+                                            </span>
+                                        @elseif ($timeline->getLatestTime()->isPast())
+                                            <span class="badge mx-2">
+                                                Over
+                                            </span>
+                                        @endif
                                     @endif
                                 </strong>
                                 <p class="text-gray-500">
@@ -98,18 +100,20 @@
                             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                 <td class="px-6 pl-8 py-4 text-left w-fit text-nowrap">
                                     {{ $session->time_span }}
-                                    @if ($session->isOngoing())
-                                        <span class="badge badge-success  text-white mx-2">
-                                            On going
-                                        </span>
-                                    @elseif ($session->isFuture())
-                                        <span class="badge badge-info text-white mx-2">
-                                            Not Started
-                                        </span>
-                                    @elseif ($session->isPast())
-                                        <span class="badge mx-2">
-                                            Over
-                                        </span>
+                                    @if ($isParticipant)
+                                        @if ($session->isOngoing())
+                                            <span class="badge badge-success  text-white mx-2">
+                                                On going
+                                            </span>
+                                        @elseif ($session->isFuture())
+                                            <span class="badge badge-info text-white mx-2">
+                                                Not Started
+                                            </span>
+                                        @elseif ($session->isPast())
+                                            <span class="badge mx-2">
+                                                Over
+                                            </span>
+                                        @endif
                                     @endif
                                 </td>
                                 <td scope="row" class="px-6 py-4 whitespace-nowrap text-left text-wrap w-full"
