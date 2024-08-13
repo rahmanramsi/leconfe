@@ -21,7 +21,7 @@
                 <thead>
                     <tr class="border-b bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-gray-100">
                         <td class="px-6 pl-8 py-2 text-left">Time</td>
-                        <td class="px-6 py-2 text-left">Session Name</td>
+                        <td class="px-6 py-2 text-center">Session Name</td>
                         @if ($isParticipant)
                             <td class="px-6 py-2 text-center">Status</td>
                         @endif

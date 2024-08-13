@@ -81,31 +81,35 @@ class ParticipantRegister extends Page
         $registrationType = RegistrationType::where('id', $data['type'])->first();
         $isFree = $registrationType->currency === 'free';
 
-        $registration = Registration::create([
-            'user_id' => auth()->user()->id,
-            'registration_type_id' => $data['type'],
-        ]);
-
-        $registration->registrationPayment()->create([
-            'name' => $registrationType->type,
-            'description' => $registrationType->getMeta('description'),
-            'cost' => $registrationType->cost,
-            'currency' => $registrationType->currency,
-            'state' => $isFree ? RegistrationPaymentState::Paid : RegistrationPaymentState::Unpaid,
-            'paid_at' => $isFree ? now() : null,
-        ]);
-
-        User::whereHas('roles', function ($query) {
-            $query->whereHas('permissions', function ($query) {
-                $query->where('name', 'Registration:notified');
+        try {
+            $registration = Registration::create([
+                'user_id' => auth()->user()->id,
+                'registration_type_id' => $data['type'],
+            ]);
+    
+            $registration->registrationPayment()->create([
+                'name' => $registrationType->type,
+                'description' => $registrationType->getMeta('description'),
+                'cost' => $registrationType->cost,
+                'currency' => $registrationType->currency,
+                'state' => $isFree ? RegistrationPaymentState::Paid : RegistrationPaymentState::Unpaid,
+                'paid_at' => $isFree ? now() : null,
+            ]);
+    
+            User::whereHas('roles', function ($query) {
+                $query->whereHas('permissions', function ($query) {
+                    $query->where('name', 'Registration:notified');
+                });
+            })->get()->each(function ($user) use($registration) {
+                $user->notify(
+                    new NewRegistration(
+                        registration: $registration,
+                    )
+                );
             });
-        })->get()->each(function ($user) use($registration) {
-            $user->notify(
-                new NewRegistration(
-                    registration: $registration,
-                )
-            );
-        });
+        } catch (\Throwable $th) {
+            throw $th;
+        }
 
         return redirect(request()->header('Referer'));
     }
