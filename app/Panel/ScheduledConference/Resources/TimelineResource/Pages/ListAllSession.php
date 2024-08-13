@@ -116,14 +116,6 @@ class ListAllSession extends Page implements HasTable, HasForms
                             ->where('sessions.name', 'like', "%{$search}%");
                     })
                     ->sortable(),
-                TextColumn::make('public_details')
-                    ->label(__('general.public_details'))
-                    ->placeholder(__('general.empty'))
-                    ->formatStateUsing(fn() => __('general.not_empty')),
-                TextColumn::make('details')
-                    ->label(__('general.participant_details'))
-                    ->placeholder(__('general.empty'))
-                    ->formatStateUsing(fn() => __('general.not_empty')),
                 IconColumn::make('require_attendance')
                     ->icon(fn(Model $record) => match ($record->getRequiresAttendanceStatus()) {
                         'timeline' => 'heroicon-o-stop-circle',
