@@ -24,15 +24,13 @@ class Session extends Model
         'public_details',
         'details',
         'require_attendance',
-        'date',
-        'time_start',
-        'time_end',
+        'start_at',
+        'end_at',
     ];
 
     protected $casts = [
-        'date' => 'datetime',
-        'time_start' => 'datetime',
-        'time_end' => 'datetime',
+        'start_at' => 'datetime',
+        'end_at' => 'datetime',
     ];
 
     public const ATTENDANCE_STATUS_TIMELINE = 'timeline';
@@ -43,35 +41,31 @@ class Session extends Model
     {
         return Attribute::make(
             get: fn() => Str::squish(
-                $this->time_start->format(Setting::get('format_time')) .
+                $this->getStartDate()->format(Setting::get('format_time')) .
                 ' - ' .
-                $this->time_end->format(Setting::get('format_time'))
+                $this->getEndDate()->format(Setting::get('format_time'))
             ),
         );
     }
 
-    protected function dateStart(): Attribute
+    public function getStartDate()
     {
-        return Attribute::make(
-            get: fn() => $this->date->setTimeFromTimeString($this->time_start->format('H:i:s')),
-        );
+        return $this->start_at->setTimezone(app()->getCurrentScheduledConference()->getMeta('timezone'));
     }
 
-    protected function dateEnd(): Attribute
+    public function  getEndDate()
     {
-        return Attribute::make(
-            get: fn() => $this->date->setTimeFromTimeString($this->time_end->format('H:i:s')),
-        );
+        return $this->end_at->setTimezone(app()->getCurrentScheduledConference()->getMeta('timezone'));
     }
 
     public function isFuture(): bool
     {
-        return $this->date_start->isFuture();
+        return $this->getStartDate->isFuture();
     }
 
     public function isPast(): bool
     {
-        return $this->date_end->isPast();
+        return $this->getEndDate->isPast();
     }
 
     public function isOngoing(): bool

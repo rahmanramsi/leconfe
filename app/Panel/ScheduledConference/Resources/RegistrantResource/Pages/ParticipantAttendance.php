@@ -220,8 +220,8 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
                     ->label(__('general.time'))
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query
-                            ->orderBy('time_start', $direction)
-                            ->orderBy('time_end', $direction);
+                            ->orderBy('start_at', $direction)
+                            ->orderBy('end_at', $direction);
                     }),
                 TextColumn::make('name')
                     ->label(__('general.session_name'))

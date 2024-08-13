@@ -97,29 +97,29 @@ class Timeline extends Model
     public function getEarliestTime(): Carbon
     {
         $earliest_session = $this->sessions()
-            ->orderBy('time_start', 'ASC')
+            ->orderBy('start_at', 'ASC')
             ->limit(1)
             ->first();
 
         if (!$earliest_session) {
-            return Carbon::minValue();
+            return $this->date;
         }
 
-        return $earliest_session->date_start;
+        return $earliest_session->getStartDate();
     }
 
     public function getLatestTime(): Carbon
     {
         $latest_session = $this->sessions()
-            ->orderBy('time_end', 'DESC')
+            ->orderBy('end_at', 'DESC')
             ->limit(1)
             ->first();
 
         if (!$latest_session) {
-            return Carbon::minValue();
+            return $this->date;
         }
 
-        return $latest_session->date_end;
+        return $latest_session->getEndDate();
     }
 
     public function isOngoing(): bool

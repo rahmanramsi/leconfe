@@ -50,41 +50,6 @@ class TimelineResource extends Resource
         return __('general.timeline');
     }
 
-    public static function getSessionForm(): array
-    {
-        return [
-            TextInput::make('name')
-                ->label(__('general.session_name'))
-                ->required(),
-            TinyEditor::make('public_details')
-                ->minHeight(200)
-                ->profile('basic')
-                ->hint(__('general.detail_that_visible_to_all_user')),
-            TinyEditor::make('details')
-                ->minHeight(200)
-                ->profile('basic')
-                ->hint(__('general.detail_that_visible_only_to_participant')),
-            Grid::make(2)
-                ->schema([
-                    TimePicker::make('time_start')
-                        ->label(__("general.time_start"))
-                        ->seconds(false)
-                        ->native(false)
-                        ->required()
-                        ->before('time_end'),
-                    TimePicker::make('time_end')
-                        ->label(__("general.time_end"))
-                        ->seconds(false)
-                        ->native(false)
-                        ->required()
-                        ->after('time_start'),
-                ]),
-            Checkbox::make('require_attendance')
-                ->disabled(fn(?Model $record) => (bool) $record ? $record->timeline->isRequireAttendance() : false)
-                ->helperText(fn(?Model $record) => $record ? ($record->timeline->isRequireAttendance() ? __('general.timeline_are_requiring_attendance_this_is_disabled') : null) : null),
-        ];
-    }
-
     public static function form(Form $form): Form
     {
         return $form

@@ -128,8 +128,8 @@ class Agenda extends Page
         $timelines = Timeline::where('hide', false)
             ->with(['sessions' => function (Builder $query) {
                 $query
-                    ->orderBy('time_start', 'ASC')
-                    ->orderBy('time_end', 'ASC');
+                    ->orderBy('start_at', 'ASC')
+                    ->orderBy('end_at', 'ASC');
             }])
             ->orderBy('date', 'ASC')
             ->get();

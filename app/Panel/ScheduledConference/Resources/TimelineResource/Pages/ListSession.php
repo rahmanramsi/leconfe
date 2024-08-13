@@ -2,8 +2,10 @@
 
 namespace App\Panel\ScheduledConference\Resources\TimelineResource\Pages;
 
+use Carbon\Carbon;
 use Filament\Actions;
 use App\Models\Session;
+use Filament\Forms\Get;
 use App\Facades\Setting;
 use App\Models\Timeline;
 use Filament\Forms\Form;
@@ -14,6 +16,7 @@ use Filament\Support\Colors\Color;
 use Filament\Forms\Components\Grid;
 use App\Forms\Components\TinyEditor;
 use Filament\Support\Enums\MaxWidth;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Components\Checkbox;
@@ -87,11 +90,6 @@ class ListSession extends Page implements HasTable, HasForms
                 ->modalHeading(__('general.add_session'))
                 ->model(static::$model)
                 ->form(fn(Form $form) => $this->form($form))
-                ->mutateFormDataUsing(function (?array $data) {
-                    $data['timeline_id'] = $this->timeline->id;
-                    $data['date'] = $this->timeline->date;
-                    return $data;
-                })
                 ->authorize('create', Session::class),
         ];
     }
@@ -100,7 +98,60 @@ class ListSession extends Page implements HasTable, HasForms
     {
         return $form
             ->schema([
-                ...self::$resource::getSessionForm()
+                TextInput::make('name')
+                    ->label(__('general.session_name'))
+                    ->required(),
+                TinyEditor::make('public_details')
+                    ->minHeight(200)
+                    ->profile('basic')
+                    ->hint(__('general.detail_that_visible_to_all_user')),
+                TinyEditor::make('details')
+                    ->minHeight(200)
+                    ->profile('basic')
+                    ->hint(__('general.detail_that_visible_only_to_participant')),
+                Grid::make(2)
+                    ->schema([
+                        TimePicker::make('start_at')
+                            ->label(__("general.time_start"))
+                            ->seconds(false)
+                            ->native(false)
+                            ->dehydrateStateUsing(function (?Model $record, string $state) {
+                                if($record) {
+                                    $date = Carbon::createFromFormat('Y-m-d H:i:s', $state, app()->getCurrentScheduledConference()->getMeta('timezone'))->setDateFrom($record->timeline->date);
+                                    return $date->copy()->setTimezone('UTC');
+                                } else {
+                                    $timeline = $this->timeline;
+                                    $date = Carbon::createFromFormat('Y-m-d H:i:s', $state, app()->getCurrentScheduledConference()->getMeta('timezone'))->setDateFrom($timeline->date);
+                                    return $date->copy()->setTimezone('UTC');
+                                }
+                            })
+                            ->required()
+                            ->before('end_at'),
+                        TimePicker::make('end_at')
+                            ->label(__("general.time_end"))
+                            ->seconds(false)
+                            ->native(false)
+                            ->dehydrateStateUsing(function (?Model $record, string $state) {
+                                if($record) {
+                                    $date = Carbon::createFromFormat('Y-m-d H:i:s', $state, app()->getCurrentScheduledConference()->getMeta('timezone'))->setDateFrom($record->timeline->date);
+                                    return $date->copy()->setTimezone('UTC');
+                                } else {
+                                    $timeline = $this->timeline;
+                                    $date = Carbon::createFromFormat('Y-m-d H:i:s', $state, app()->getCurrentScheduledConference()->getMeta('timezone'))->setDateFrom($timeline->date);
+                                    return $date->copy()->setTimezone('UTC');
+                                }
+                            })
+                            ->required()
+                            ->after('start_at'),
+                    ]),
+                Checkbox::make('require_attendance')
+                    ->disabled(fn(?Model $record) => (bool) $record ? $record->timeline->isRequireAttendance() : false)
+                    ->helperText(fn(?Model $record) => $record ? ($record->timeline->isRequireAttendance() ? __('general.timeline_are_requiring_attendance_this_is_disabled') : null) : null),
+                Select::make('timeline_id')
+                    ->label(__('general.belong_to_timeline'))
+                    ->options(Timeline::get()->pluck('name', 'id')->toArray())
+                    ->searchable()
+                    ->required(),
             ])
             ->columns(1);
     }
@@ -118,8 +169,8 @@ class ListSession extends Page implements HasTable, HasForms
                     ->label(__('general.time'))
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query
-                            ->orderBy('time_start', $direction)
-                            ->orderBy('time_end', $direction);
+                            ->orderBy('start_at', $direction)
+                            ->orderBy('end_at', $direction);
                     }),
                 TextColumn::make('name')
                     ->label(__('general.session_name'))
