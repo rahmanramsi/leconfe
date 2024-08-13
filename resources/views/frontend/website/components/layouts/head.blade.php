@@ -13,7 +13,7 @@
 
     @if (isset($favicon) && !empty($favicon))
         <link rel="icon" type="image/x-icon" href="{{ $favicon }}" />
-    @else 
+    @else
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     @endif
 

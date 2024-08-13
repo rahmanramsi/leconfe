@@ -122,6 +122,7 @@ class PeerReview extends Component implements HasActions, HasForms
             })
             ->form([
                 Fieldset::make('Notification')
+                    ->label(__('general.notification'))
                     ->columns(1)
                     ->schema([
                         TextInput::make('email')
@@ -207,7 +208,7 @@ class PeerReview extends Component implements HasActions, HasForms
                             ->columnSpanFull(),
                     ]),
             ])
-            ->successNotificationTitle('Revision Requested')
+            ->successNotificationTitle(__('general.revision_requested'))
             ->action(function (Action $action, array $data) {
                 SubmissionUpdateAction::run([
                     'revision_required' => true,

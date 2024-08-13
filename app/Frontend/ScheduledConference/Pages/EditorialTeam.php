@@ -23,8 +23,8 @@ class EditorialTeam extends Page
     public function getBreadcrumbs(): array
     {
         return [
-            route(Home::getRouteName()) => 'Home',
-            'Editorial Team'
+            route(Home::getRouteName()) => __('general.home'),
+            __('general.editorial_team')
         ];
     }
 

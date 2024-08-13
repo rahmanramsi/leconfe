@@ -3,28 +3,19 @@
 namespace App\Panel\ScheduledConference\Resources\RegistrantResource\Pages;
 
 use Closure;
-use Carbon\Carbon;
 use App\Models\User;
-use Filament\Actions;
 use Filament\Forms\Get;
-use App\Facades\Setting;
 use Filament\Tables\Table;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use App\Models\Registration;
 use Filament\Facades\Filament;
 use App\Models\RegistrationType;
 use Illuminate\Support\HtmlString;
-use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Support\Enums\FontWeight;
-use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Fieldset;
-use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Enums\RegistrationPaymentState;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Tables\Actions\CreateAction;
@@ -32,6 +23,7 @@ use Filament\Tables\Columns\Layout\Split;
 use Filament\Tables\Columns\Layout\Stack;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\Placeholder;
+use App\Models\Enums\RegistrationPaymentState;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use App\Panel\ScheduledConference\Resources\RegistrantResource;
 use Illuminate\Contracts\Support\Htmlable;
@@ -50,7 +42,7 @@ class EnrollUser extends ListRecords
     public static function canAccess(array $parameters = []): bool
     {
         $user = auth()->user();
-        if ($user->can('Registrant:enroll')) {
+        if ($user->can('Registration:enroll')) {
             return true;
         }
         return false;
@@ -69,7 +61,7 @@ class EnrollUser extends ListRecords
     public static function getRegistrationTypeOptions(): array
     {
         $registrationTypeOptions = [];
-        $registrationTypes = RegistrationType::where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())->get();
+        $registrationTypes = RegistrationType::get();
         foreach ($registrationTypes as $registrationType) {
             if (!$registrationType->active) continue;
 
@@ -125,7 +117,7 @@ class EnrollUser extends ListRecords
                 ->searchable()
                 ->required()
                 ->rules([
-                    fn (): Closure => function (string $attribute, $value, Closure $fail) {
+                    fn(): Closure => function (string $attribute, $value, Closure $fail) {
                         $registrationType = RegistrationType::findOrFail($value);
                         if ($registrationType->getQuotaLeft() <= 0) {
                             $fail($registrationType->type . ' quota has ran out!');
@@ -150,8 +142,8 @@ class EnrollUser extends ListRecords
                         ->label(__('general.paid_Date'))
                         ->placeholder(__('general.select_registration_paid_date'))
                         ->prefixIcon('heroicon-m-calendar')
-                        ->formatStateUsing(fn () => now())
-                        ->visible(fn (Get $get) => $get('registrationPayment.state') === RegistrationPaymentState::Paid->value)
+                        ->formatStateUsing(fn() => now())
+                        ->visible(fn(Get $get) => $get('registrationPayment.state') === RegistrationPaymentState::Paid->value)
                         ->required()
                 ])
                 ->columns(1),
@@ -179,7 +171,7 @@ class EnrollUser extends ListRecords
                             $name = Str::of(Filament::getUserName($record))
                                 ->trim()
                                 ->explode(' ')
-                                ->map(fn (string $segment): string => filled($segment) ? mb_substr($segment, 0, 1) : '')
+                                ->map(fn(string $segment): string => filled($segment) ? mb_substr($segment, 0, 1) : '')
                                 ->join(' ');
 
                             return 'https://ui-avatars.com/api/?name=' . urlencode($name) . '&color=FFFFFF&background=111827&font-size=0.33';
@@ -192,16 +184,17 @@ class EnrollUser extends ListRecords
                         TextColumn::make('full_name')
                             ->weight(FontWeight::Medium)
                             ->searchable(
-                                query: fn ($query, $search) => $query
+                                query: fn($query, $search) => $query
                                     ->where('given_name', 'LIKE', "%{$search}%")
                                     ->orWhere('family_name', 'LIKE', "%{$search}%")
                             )
                             ->sortable(
-                                query: fn ($query, $direction) => $query
+                                query: fn($query, $direction) => $query
                                     ->orderBy('given_name', $direction)
                                     ->orderBy('family_name', $direction)
                             ),
                         TextColumn::make('email')
+                            ->label(__('general.email'))
                             ->wrap()
                             ->color('gray')
                             ->searchable()
@@ -209,11 +202,12 @@ class EnrollUser extends ListRecords
                             ->sortable()
                             ->icon('heroicon-m-envelope'),
                         TextColumn::make('affiliation')
+                            ->label(__('general.affiliation'))
                             ->size('sm')
                             ->wrap()
                             ->color('gray')
                             ->icon('heroicon-s-building-library')
-                            ->getStateUsing(fn (User $record) => $record->getMeta('affiliation')),
+                            ->getStateUsing(fn(User $record) => $record->getMeta('affiliation')),
                     ]),
                 ])
             ])
@@ -225,7 +219,7 @@ class EnrollUser extends ListRecords
                     ->color('gray')
                     ->button()
                     ->model(Registration::class)
-                    ->form(fn (?Model $record) => static::enrollForm($record))
+                    ->form(fn(?Model $record) => static::enrollForm($record))
                     ->createAnother(false)
                     ->modalSubmitActionLabel(__('general.enroll'))
                     ->mutateFormDataUsing(function (Model $record, $data) { // record are user model
@@ -245,6 +239,12 @@ class EnrollUser extends ListRecords
                             'state' => $data['registrationPayment']['state'],
                             'paid_at' => $data['registrationPayment']['state'] === RegistrationPaymentState::Paid->value ? $data['registrationPayment']['paid_at'] : null,
                         ]);
+
+                        $record->user->notify(
+                            new \App\Notifications\RegistrationEnroll(
+                                registration: $record,
+                            )
+                        );
                     })
             ])
             ->extremePaginationLinks();

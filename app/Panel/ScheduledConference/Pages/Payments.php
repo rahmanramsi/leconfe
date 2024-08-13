@@ -2,14 +2,13 @@
 
 namespace App\Panel\ScheduledConference\Pages;
 
-use Filament\Forms\Form;
 use Filament\Pages\Page;
 use Filament\Infolists\Infolist;
 use Filament\Infolists\Components\Tabs;
 use App\Infolists\Components\LivewireEntry;
 use App\Infolists\Components\VerticalTabs as InfolistsVerticalTabs;
-use App\Panel\ScheduledConference\Livewire\Payment\PaymentManuals;
-use App\Panel\ScheduledConference\Livewire\Payment\PaymentSettings;
+use App\Panel\ScheduledConference\Livewire\Payment\PaymentManualTable;
+use App\Panel\ScheduledConference\Livewire\Payment\PaymentSetting;
 use Illuminate\Contracts\Support\Htmlable;
 
 class Payments extends Page
@@ -39,11 +38,7 @@ class Payments extends Page
 
     public static function canAccess(): bool
     {
-        $user = auth()->user();
-        if($user->can('RegistrationSetting:viewAny')) {
-            return true;
-        }
-        return false;
+        return auth()->user()->can('PaymentSetting:viewAny');
     }
 
     public function infolist(Infolist $infolist): Infolist
@@ -63,7 +58,7 @@ class Payments extends Page
                                             ->icon('heroicon-o-credit-card')
                                             ->schema([
                                                 LivewireEntry::make('manual')
-                                                    ->livewire(PaymentManuals::class)
+                                                    ->livewire(PaymentManualTable::class)
                                             ]),
                                     ]),
                             ]),
@@ -71,7 +66,7 @@ class Payments extends Page
                             ->label(__('general.settings'))
                             ->schema([
                                 LivewireEntry::make('settings')
-                                    ->livewire(PaymentSettings::class)
+                                    ->livewire(PaymentSetting::class)
                             ])
                     ])
             ]);

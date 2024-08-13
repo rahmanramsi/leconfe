@@ -24,11 +24,12 @@ use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
 use App\Forms\Components\TinyEditor;
+use App\Models\Announcement;
 use App\Panel\ScheduledConference\Livewire\Registration\RegistrationTypePage;
 use Filament\Tables\Actions\ActionGroup;
 use Illuminate\Support\Collection;
 
-class PaymentManuals extends Component implements HasForms, HasTable
+class PaymentManualTable extends Component implements HasForms, HasTable
 {
     use InteractsWithForms, InteractsWithTable;
 
@@ -62,7 +63,7 @@ class PaymentManuals extends Component implements HasForms, HasTable
                 ->required(),
             TinyEditor::make('detail')
                 ->placeholder(__('general.input_payment_details'))
-                ->hint(__('general.add_instruction_here'))
+                ->helperText(__('general.add_instruction_here'))
                 ->profile('basic')
                 ->required(),
         ];
@@ -73,7 +74,7 @@ class PaymentManuals extends Component implements HasForms, HasTable
         return $table
             ->query(
                 PaymentManual::query()
-                    ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
+                    ->orderBy('order_column')
             )
             ->heading(__('general.manual_payment_list'))
             ->reorderable('order_column')
@@ -84,7 +85,7 @@ class PaymentManuals extends Component implements HasForms, HasTable
                     ->modalWidth('4xl')
                     ->model(PaymentManual::class)
                     ->form(static::manualPaymentForm())
-                    ->authorize('RegistrationSetting:create')
+                    ->authorize('create', PaymentManual::class)
             ])
             ->columns([
                 TextColumn::make('name')
@@ -108,15 +109,11 @@ class PaymentManuals extends Component implements HasForms, HasTable
             ->actions([
                 EditAction::make()
                     ->form(static::manualPaymentForm())
-                    ->authorize('RegistrationSetting:edit'),
+                    ->authorize(fn (Model $record) => auth()->user()->can('update', $record)),
                 ActionGroup::make([
                     DeleteAction::make()
-                        ->authorize('RegistrationSetting:delete'),
+                        ->authorize(fn (Model $record) => auth()->user()->can('delete', $record)),
                 ])
-            ])
-            ->bulkActions([
-                DeleteBulkAction::make()
-                    ->authorize('RegistrationSetting:delete'),
             ]);
     }
 

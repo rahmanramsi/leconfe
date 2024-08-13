@@ -24,8 +24,8 @@ class AnnouncementPage extends Page
     public function getBreadcrumbs(): array
     {
         return [
-            route(Home::getRouteName()) => 'Home',
-            route(Announcements::getRouteName()) => 'Announcements',
+            route(Home::getRouteName()) => __('general.home'),
+            route(Announcements::getRouteName()) => __('general.announcement'),
             $this->announcement->title,
         ];
     }

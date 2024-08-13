@@ -13,8 +13,10 @@ use App\Actions\ScheduledConferences\ScheduledConferenceUpdateAction;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Concerns\InteractsWithForms;
 use App\Forms\Components\TinyEditor;
+use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\Toggle;
 
-class RegistrationPolicies extends Component implements HasForms
+class RegistrationSetting extends Component implements HasForms
 {
     use InteractsWithForms;
 
@@ -35,8 +37,9 @@ class RegistrationPolicies extends Component implements HasForms
                     ->schema([
                         TinyEditor::make('meta.registration_policy')
                             ->label(__('general.registration_policy'))
+                            ->profile('basic')
                             ->minHeight(300)
-                            ->disabled(fn () =>  auth()->user()->cannot('RegistrationSetting:edit')),
+                            ->disabled(fn () => auth()->user()->cannot('RegistrationSetting:update')),
                     ]),
                 Actions::make([
                     Action::make('Save changes')
@@ -53,7 +56,7 @@ class RegistrationPolicies extends Component implements HasForms
                                 throw $th;
                             }
                         })
-                        ->authorize('RegistrationSetting:edit'),
+                        ->authorize('RegistrationSetting:update'),
                 ])->alignRight()
             ])->statePath('formData');
     }

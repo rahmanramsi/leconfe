@@ -2,24 +2,16 @@
 
 namespace App\Panel\ScheduledConference\Livewire;
 
-
-use App\Actions\Conferences\ConferenceUpdateAction;
-use App\Actions\ScheduledConferences\ScheduledConferenceUpdateAction;
-use App\Forms\Components\CssFileUpload;
-use Filament\Forms\Components\Actions;
-use Filament\Forms\Components\Actions\Action;
-use Filament\Forms\Components\BaseFileUpload;
-use Filament\Forms\Components\ColorPicker;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
-use Illuminate\Support\Str;
 use Livewire\Component;
-use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
-use App\Forms\Components\TinyEditor;
-use Stevebauman\Purify\Facades\Purify;
+use Filament\Forms\Form;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Actions;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Contracts\HasForms;
+use Filament\Forms\Components\Actions\Action;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Jackiedo\Timezonelist\Facades\Timezonelist;
+use App\Actions\ScheduledConferences\ScheduledConferenceUpdateAction;
 
 class SetupSetting extends Component implements HasForms
 {
@@ -49,30 +41,18 @@ class SetupSetting extends Component implements HasForms
             ->schema([
                 Section::make()
                     ->schema([
-                        SpatieMediaLibraryFileUpload::make('logo')
-                            ->collection('logo')
-                            ->label(__('general.logo'))
-                            ->image()
-                            ->imageResizeUpscale(false)
-                            ->conversion('thumb'),
-                        SpatieMediaLibraryFileUpload::make('thumbnail')
-                            ->label(__('general.scheduled_conference_thumbnail'))
-                            ->collection('thumbnail')
-                            ->helperText(__('general.image_representation_of_the_serie_will_uses'))
-                            ->image()
-                            ->conversion('thumb'),
-                        TinyEditor::make('meta.page_footer')
-                            ->label(__('general.page_footer'))
-                            ->profile('advanced')
-                            ->minHeight(300)
-                            ->dehydrateStateUsing(fn (?string $state) => Purify::clean($state)),
+                        Select::make('meta.timezone')
+                            ->options([
+                                ...Timezonelist::toArray(false)
+                            ])
+                            ->selectablePlaceholder(false)
+                            ->searchable()
+                            ->required()
                     ]),
-
                 Actions::make([
                     Action::make('save')
                         ->label(__('general.save'))
                         ->successNotificationTitle(__('general.saved'))
-                        ->failureNotificationTitle(__('general.data_could_not_saved'))
                         ->action(function (Action $action) {
                             $formData = $this->form->getState();
                             try {
@@ -83,7 +63,6 @@ class SetupSetting extends Component implements HasForms
                             }
                         }),
                 ])->alignLeft(),
-
             ])
             ->statePath('formData');
     }

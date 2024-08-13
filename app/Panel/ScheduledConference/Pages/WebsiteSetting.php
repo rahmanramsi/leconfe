@@ -2,23 +2,25 @@
 
 namespace App\Panel\ScheduledConference\Pages;
 
-use Filament\Infolists\Infolist;
 use Filament\Pages\Page;
+use Filament\Infolists\Infolist;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Filament\Infolists\Components\Tabs;
 use App\Infolists\Components\VerticalTabs;
+use Illuminate\Contracts\Support\Htmlable;
 use App\Infolists\Components\LivewireEntry;
 use App\Panel\Administration\Livewire\PartnerTable;
+use App\Panel\Administration\Livewire\SponsorTable;
 use App\Panel\Administration\Livewire\SidebarSetting;
 use App\Panel\Administration\Livewire\SponsorLevelTable;
-use App\Panel\Administration\Livewire\SponsorTable;
 use App\Panel\Conference\Livewire\NavigationMenuSetting;
-use App\Panel\ScheduledConference\Livewire\PrivacySetting;
-use App\Panel\ScheduledConference\Livewire\SetupSetting;
-use App\Panel\ScheduledConference\Livewire\SponsorSetting;
+use App\Panel\ScheduledConference\Livewire\AppearanceSetupSetting;
 use App\Panel\ScheduledConference\Livewire\ThemeSetting;
-use Illuminate\Contracts\Support\Htmlable;
+use App\Panel\ScheduledConference\Livewire\PrivacySetting;
+use App\Panel\ScheduledConference\Livewire\SponsorSetting;
+use App\Panel\ScheduledConference\Livewire\DateAndTimeSetting;
+use App\Panel\ScheduledConference\Livewire\SetupSetting;
 
 class WebsiteSetting extends Page
 {
@@ -74,12 +76,12 @@ class WebsiteSetting extends Page
 												LivewireEntry::make('setup-setting')
 													->livewire(ThemeSetting::class),
 											]),
-										VerticalTabs\Tab::make('Setup')
+										VerticalTabs\Tab::make('Appearance Setup')
                                             ->label(__('general.setup'))
 											->icon('heroicon-o-cog')
 											->schema([
-												LivewireEntry::make('setup-setting')
-													->livewire(SetupSetting::class),
+												LivewireEntry::make('appearance-setup-setting')
+													->livewire(AppearanceSetupSetting::class),
 											]),
 										VerticalTabs\Tab::make('Sidebar')
                                             ->label(__('general.sidebar'))
@@ -134,6 +136,14 @@ class WebsiteSetting extends Page
 											->schema([
 												LivewireEntry::make('navigation-menu-setting')
 													->livewire(PrivacySetting::class),
+											]),
+										VerticalTabs\Tab::make('Setup')
+                                            ->label(__('general.setup'))
+											->icon('heroicon-o-cog')
+											->schema([
+												LivewireEntry::make('setup-setting')
+													->livewire(SetupSetting::class)
+													->lazy(),
 											]),
 									]),
 							]),

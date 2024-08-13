@@ -33,11 +33,10 @@ use App\Actions\RegistrationTypes\RegistrationTypeCreateAction;
 use App\Actions\RegistrationTypes\RegistrationTypeDeleteAction;
 use App\Actions\RegistrationTypes\RegistrationTypeUpdateAction;
 use App\Facades\Setting;
-use App\Panel\ScheduledConference\Livewire\Payment\PaymentManualPage;
-use App\Panel\ScheduledConference\Livewire\Payment\PaymentManuals;
+use App\Panel\ScheduledConference\Livewire\Payment\PaymentManualTable;
 use Filament\Forms\Components\Textarea;
 
-class RegistrationTypes extends Component implements HasTable, HasForms
+class RegistrationTypeTable extends Component implements HasTable, HasForms
 {
     use InteractsWithForms, InteractsWithTable;
 
@@ -63,7 +62,7 @@ class RegistrationTypes extends Component implements HasTable, HasForms
                             ->minValue(1)
                             ->required(),
                     ]),
-                Select::make('level')
+                Select::make('level')                    
                     ->label(__('general.level'))
                     ->options(RegistrationType::getLevelOptions())
                     ->required(),
@@ -83,7 +82,7 @@ class RegistrationTypes extends Component implements HasTable, HasForms
                                 Select::make('currency')
                                     ->label(__('general.currency'))
                                     ->formatStateUsing(fn ($state) => ($state !== null) ? ($state !== 'free' ? $state : null) : null)
-                                    ->options(PaymentManuals::getCurrencyOptions())
+                                    ->options(PaymentManualTable::getCurrencyOptions())
                                     ->searchable()
                                     ->columnSpan(2)
                                     ->required(),

@@ -9,6 +9,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
+        "ext-gd": "*",
         "awcodes/filament-badgeable-column": "^2.3",
         "awcodes/shout": "^2.0",
         "calebporzio/sushi": "^2.4",
@@ -39,6 +40,7 @@
         "rahmanramsi/laravel-async-queue": "^1.0",
         "rahmanramsi/livewire-page-group": "^0.0.6",
         "rickselby/laravel-gate-cache": "^3.8",
+        "simplesoftwareio/simple-qrcode": "~4",
         "spatie/array-to-xml": "^3.3",
         "spatie/eloquent-sortable": "^4.0",
         "spatie/laravel-activitylog": "^4.7",

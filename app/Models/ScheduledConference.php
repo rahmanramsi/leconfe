@@ -101,6 +101,11 @@ class ScheduledConference extends Model implements HasMedia, HasAvatar, HasName
         return $this->getHomeUrl();
     }
 
+    public function timelines(): HasMany
+    {
+        return $this->hasMany(Timeline::class);
+    }
+
     public function registration(): HasMany
     {
         return $this->hasMany(Registration::class);

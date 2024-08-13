@@ -9,6 +9,8 @@ use App\Models\Enums\UserRole;
 use Livewire\Attributes\Title;
 use App\Models\RegistrationType;
 use App\Models\Timeline;
+use App\Models\User;
+use App\Notifications\NewRegistration;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -32,8 +34,7 @@ class ParticipantRegister extends Page
     {
         $isLogged = auth()->check();
         $userRegistration = !$isLogged ? null : Registration::withTrashed()
-            ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
-            ->whereUserId(auth()->user()->id)
+            ->where('user_id', auth()->user()->id)
             ->first();
         if ($userRegistration)
             return redirect(route(ParticipantRegisterStatus::getRouteName()));
@@ -50,7 +51,7 @@ class ParticipantRegister extends Page
     public function messages(): array
     {
         $message = [
-            'type' => 'Registration type have to selected.',
+            'type' => __('general.registration_type_have_to_selected'),
         ];
         return $message;
     }
@@ -80,19 +81,35 @@ class ParticipantRegister extends Page
         $registrationType = RegistrationType::where('id', $data['type'])->first();
         $isFree = $registrationType->currency === 'free';
 
-        $registration = Registration::create([
-            'user_id' => auth()->user()->id,
-            'registration_type_id' => $data['type'],
-        ]);
-
-        $registration->registrationPayment()->create([
-            'name' => $registrationType->type,
-            'description' => $registrationType->getMeta('description'),
-            'cost' => $registrationType->cost,
-            'currency' => $registrationType->currency,
-            'state' => $isFree ? RegistrationPaymentState::Paid : RegistrationPaymentState::Unpaid,
-            'paid_at' => $isFree ? now() : null,
-        ]);
+        try {
+            $registration = Registration::create([
+                'user_id' => auth()->user()->id,
+                'registration_type_id' => $data['type'],
+            ]);
+    
+            $registration->registrationPayment()->create([
+                'name' => $registrationType->type,
+                'description' => $registrationType->getMeta('description'),
+                'cost' => $registrationType->cost,
+                'currency' => $registrationType->currency,
+                'state' => $isFree ? RegistrationPaymentState::Paid : RegistrationPaymentState::Unpaid,
+                'paid_at' => $isFree ? now() : null,
+            ]);
+    
+            User::whereHas('roles', function ($query) {
+                $query->whereHas('permissions', function ($query) {
+                    $query->where('name', 'Registration:notified');
+                });
+            })->get()->each(function ($user) use($registration) {
+                $user->notify(
+                    new NewRegistration(
+                        registration: $registration,
+                    )
+                );
+            });
+        } catch (\Throwable $th) {
+            throw $th;
+        }
 
         return redirect(request()->header('Referer'));
     }
@@ -112,17 +129,14 @@ class ParticipantRegister extends Page
         $isLogged = auth()->check();
 
         $userRegistration = !$isLogged ? null : Registration::withTrashed()
-            ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
-            ->whereUserId(auth()->user()->id)
+            ->where('user_id', auth()->user()->id)
             ->first();
 
         $userModel = !$isLogged ? null : auth()->user();
 
         $userCountry = !$isLogged ? null : Country::find(auth()->user()->getMeta('country', null));
 
-        $registrationTypeList = RegistrationType::select('*')
-            ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
-            ->get();
+        $registrationTypeList = RegistrationType::select('*')->get();
 
         $registrationType = null;
         if (isset($this->formData['type'])) {
@@ -147,8 +161,8 @@ class ParticipantRegister extends Page
     public function getBreadcrumbs(): array
     {
         return [
-            route(Home::getRouteName()) => 'Home',
-            'Participant Registration',
+            route(Home::getRouteName()) => __('general.home'),
+            __('general.participant_registration'),
         ];
     }
 

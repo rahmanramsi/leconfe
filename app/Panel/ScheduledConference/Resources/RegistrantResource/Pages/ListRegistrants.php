@@ -19,11 +19,16 @@ class ListRegistrants extends ListRecords
 {
     protected static string $resource = RegistrantResource::class;
 
-    protected ?string $heading = 'Registrant';
+    protected ?string $heading = 'Registrants';
 
     public function getTabs(): array
     {
         return [
+            'all' => Tab::make()
+                ->label(__('general.all'))
+                ->badge(fn () => static::$resource::getEloquentQuery()
+                    ->count()
+                ),
             'paid' => Tab::make()
                 ->label(__('general.paid'))
                 ->modifyQueryUsing(
@@ -70,9 +75,6 @@ class ListRegistrants extends ListRecords
                         ->whereNotNull('deleted_at')
                         ->count()
                 ),
-            'all' => Tab::make()
-                ->label(__('general.all'))
-                ->badge(fn () => Registration::where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())->count()),
         ];
     }
 

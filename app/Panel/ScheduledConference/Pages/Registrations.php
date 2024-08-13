@@ -7,11 +7,11 @@ use Filament\Pages\Page;
 use Filament\Infolists\Infolist;
 use App\Infolists\Components\LivewireEntry;
 use App\Infolists\Components\VerticalTabs as InfolistsVerticalTabs;
-use App\Panel\ScheduledConference\Livewire\Registration\RegistrationPolicies;
-use App\Panel\ScheduledConference\Livewire\Registration\RegistrationTypes;
+use App\Panel\ScheduledConference\Livewire\Registration\RegistrationSetting;
+use App\Panel\ScheduledConference\Livewire\Registration\RegistrationTypeTable;
 use Illuminate\Contracts\Support\Htmlable;
 
-class RegistrationSettings extends Page
+class Registrations extends Page
 {
     protected static string $view = 'panel.scheduledConference.pages.registration-setting';
 
@@ -27,12 +27,12 @@ class RegistrationSettings extends Page
         return __('general.registrations');
     }
 
-
     public function getHeading(): string|Htmlable
     {
         return __('general.registrations_settings');
     }
 
+    protected static ?string $title = 'Registration Settings';
 
     protected static ?int $navigationSort = 2;
 
@@ -56,14 +56,14 @@ class RegistrationSettings extends Page
                             ->icon('heroicon-o-list-bullet')
                             ->schema([
                                 LivewireEntry::make('registrationType')
-                                    ->livewire(RegistrationTypes::class)
+                                    ->livewire(RegistrationTypeTable::class)
                             ]),
                         InfolistsVerticalTabs\Tab::make('Settings')
                             ->label(__('general.settings'))
                             ->icon('heroicon-o-cog-6-tooth')
                             ->schema([
                                 LivewireEntry::make('registrationPolicy')
-                                    ->livewire(RegistrationPolicies::class)
+                                    ->livewire(RegistrationSetting::class)
                             ]),
                     ]),
             ]);

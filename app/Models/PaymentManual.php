@@ -12,5 +12,10 @@ class PaymentManual extends Model
 {
     use BelongsToScheduledConference, HasShortflakePrimary, Cachable, HasFactory;
 
-    protected $guarded = ['id', 'scheduled_conference_id'];
+    protected $fillable = [
+        'name',
+        'currency',
+        'detail',
+        'order_column',
+    ];
 }

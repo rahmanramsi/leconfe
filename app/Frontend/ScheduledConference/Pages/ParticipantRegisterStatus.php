@@ -38,22 +38,19 @@ class ParticipantRegisterStatus extends Page
         $isLogged = auth()->check();
 
         $userRegistration = !$isLogged ? null : Registration::withTrashed()
-            ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
-            ->whereUserId(auth()->user()->id)
+            ->where('user_id', auth()->user()->id)
             ->first();
 
-        $paymentList = PaymentManual::select('*')
-            ->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId())
-            ->select(
-                'currency',
-                DB::raw('JSON_ARRAYAGG(JSON_OBJECT(
-                    "name", name,
-                    "currency", currency,
-                    "detail", detail
-                )) AS payments')
-            )
-            ->groupBy('currency')
-            ->get();
+        $paymentList = [];
+        $payments = PaymentManual::select('*')->get();
+
+        foreach ($payments as $payment) {
+            $paymentCurrencyCode = $payment->currency;
+            if(!isset($paymentList[$paymentCurrencyCode])) {
+                $paymentList[$paymentCurrencyCode] = [];
+            }
+            $paymentList[$paymentCurrencyCode][] = $payment;
+        }
 
         return [
             'currentScheduledConference' => $currentScheduledConference,
@@ -66,8 +63,8 @@ class ParticipantRegisterStatus extends Page
     public function getBreadcrumbs(): array
     {
         return [
-            route(Home::getRouteName()) => 'Home',
-            'Registration Status',
+            route(Home::getRouteName()) => __('general.home'),
+            __('general.registration_status'),
         ];
     }
 

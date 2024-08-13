@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->date('date')->nullable();
             $table->boolean('hide')->default(false);
+            $table->boolean('require_attendance')->default(false);
             $table->unsignedInteger('type')->nullable();
             $table->timestamps();
         });

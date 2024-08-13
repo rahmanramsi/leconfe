@@ -15,7 +15,6 @@ use App\Panel\ScheduledConference\Livewire\AuthorRoleTable;
 use App\Panel\ScheduledConference\Livewire\ReviewGuidance;
 use App\Panel\ScheduledConference\Livewire\ReviewSetupSetting;
 use App\Panel\ScheduledConference\Livewire\SubmissionFileTypeTable;
-use App\Panel\ScheduledConference\Livewire\TimelineTable;
 use App\Panel\ScheduledConference\Livewire\TopicTable;
 use App\Panel\ScheduledConference\Livewire\TrackTable;
 use Illuminate\Contracts\Support\Htmlable;
@@ -23,7 +22,6 @@ use Illuminate\Contracts\Support\Htmlable;
 class WorkflowSetting extends Page
 {
     protected static string $view = 'panel.scheduledConference.pages.workflow-setting';
-
 
     public static function getNavigationGroup(): string
     {
@@ -116,12 +114,6 @@ class WorkflowSetting extends Page
                                                     ->livewire(ReviewGuidance::class),
                                             ]),
                                     ]),
-                            ]),
-                        Tabs\Tab::make('Timeline')
-                            ->label(__('general.timeline'))
-                            ->schema([
-                                LivewireEntry::make('timeline-table')
-                                    ->livewire(TimelineTable::class),
                             ]),
                         Tabs\Tab::make('Emails')
                             ->label(__('general.email'))

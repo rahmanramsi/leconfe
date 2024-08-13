@@ -16,14 +16,14 @@ class About extends Page
 
     public function getTitle(): string|Htmlable
     {
-        return 'About the Conference';
+        return __('general.about_the_conference');
     }
 
     public function getBreadcrumbs(): array
     {
         return [
-            route(Home::getRouteName()) => 'Home',
-            'About',
+            route(Home::getRouteName()) => __('general.home'),
+            __('general.about'),
         ];
     }
 
