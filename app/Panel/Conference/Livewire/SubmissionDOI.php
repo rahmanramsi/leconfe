@@ -48,6 +48,7 @@ class SubmissionDOI extends Component implements HasForms, HasTable
             ->columns([
                 IndexColumn::make('no'),
                 TextColumn::make('title')
+                    ->wrap()
                     ->getStateUsing(fn (Submission $record) => $record->getMeta('title'))
                     ->searchable(query: function (Builder $query, string $search): Builder {
                         return $query
