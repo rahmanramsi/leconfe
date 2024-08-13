@@ -109,6 +109,7 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
                                 ]),
                             TimePicker::make('attendance_time')
                                 ->helperText(__('general.input_participant_attendance_time'))
+                                ->seconds(false)
                                 ->hint(function (Get $get) {
                                     if (!$get('timeline_id')) {
                                         return null;
@@ -324,6 +325,7 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
                                     ]),
                                 TimePicker::make('attendance_time')
                                     ->helperText(__('general.input_participant_attendance_time'))
+                                    ->seconds(false)
                                     ->hint(fn() => $record->time_span)
                                     ->required(),
                             ])

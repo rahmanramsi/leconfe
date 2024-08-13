@@ -68,10 +68,12 @@ class TimelineResource extends Resource
                 ->schema([
                     TimePicker::make('time_start')
                         ->label(__("general.time_start"))
+                        ->seconds(false)
                         ->required()
                         ->before('time_end'),
                     TimePicker::make('time_end')
                         ->label(__("general.time_end"))
+                        ->seconds(false)
                         ->required()
                         ->after('time_start'),
                 ]),
