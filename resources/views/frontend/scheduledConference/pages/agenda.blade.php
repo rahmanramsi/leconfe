@@ -19,7 +19,7 @@
         <div class="mt-4 relative overflow-x-auto">
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 border" lazy>
                 <thead>
-                    <tr class="border-b bg-gray-100 text-gray-900 dark:bg-gray-700 dark:bg-gray-100">
+                    <tr class="border-b bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-gray-100">
                         <td class="px-6 pl-8 py-2 text-left">Time</td>
                         <td class="px-6 py-2 text-left">Session Name</td>
                         @if ($isParticipant)
