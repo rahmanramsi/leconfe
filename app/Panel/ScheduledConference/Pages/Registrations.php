@@ -11,7 +11,7 @@ use App\Panel\ScheduledConference\Livewire\Registration\RegistrationSetting;
 use App\Panel\ScheduledConference\Livewire\Registration\RegistrationTypeTable;
 use Illuminate\Contracts\Support\Htmlable;
 
-class RegistrationSettings extends Page
+class Registrations extends Page
 {
     protected static string $view = 'panel.scheduledConference.pages.registration-setting';
 
