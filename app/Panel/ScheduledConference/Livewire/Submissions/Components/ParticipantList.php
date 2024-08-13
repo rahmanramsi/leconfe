@@ -61,6 +61,7 @@ class ParticipantList extends Component implements HasForms, HasTable
             ->columns([
                 Split::make([
                     SpatieMediaLibraryImageColumn::make('user.profile')
+                        ->label(__('general.profile'))
                         ->grow(false)
                         ->collection('profile')
                         ->conversion('avatar')
@@ -74,6 +75,7 @@ class ParticipantList extends Component implements HasForms, HasTable
                         ])
                         ->circular(),
                     TextColumn::make('user.fullName')
+                        ->label(__('general.full_name'))
                         ->description(
                             function (Model $record) {
                                 return $record->role->name;
@@ -81,22 +83,22 @@ class ParticipantList extends Component implements HasForms, HasTable
                         ),
                 ]),
             ])
-            ->heading('Participants')
+            ->heading(__('general.participants'))
             ->headerActions([
                 CreateAction::make()
-                    ->modalHeading('Assign Participant')
+                    ->modalHeading(__('general.assign_participant'))
                     ->authorize(fn () => auth()->user()->can('assignParticipant', $this->submission))
                     ->hidden($this->submission->isDeclined())
                     ->icon('lineawesome-user-plus-solid')
-                    ->label('Assign')
+                    ->label(__('general.assign'))
                     ->link()
                     ->color('primary')
                     ->size('xs')
                     ->extraModalFooterActions(function (Action $action) {
                         return [$action->makeModalSubmitAction('assignAnother', ['another' => true])
-                            ->label('Assign this & Assign another')];
+                            ->label(__('general.assign_and_another'))];
                     })
-                    ->modalSubmitActionLabel('Assign')
+                    ->modalSubmitActionLabel(__('general.assign'))
                     ->modalWidth('2xl')
                     ->mountUsing(function (Form $form): void {
                         $mailTemplate = MailTemplate::where('mailable', ParticipantAssignedMail::class)->first();
@@ -118,10 +120,10 @@ class ParticipantList extends Component implements HasForms, HasTable
                                             ->get()
                                             ->pluck('name', 'id');
                                     })
-                                    ->placeholder('Select Role')
+                                    ->placeholder(__('general.select_role'))
                                     ->columnSpan(1),
                                 Select::make('user_id')
-                                    ->label('Name')
+                                    ->label(__('general.name'))
                                     ->required()
                                     ->allowHtml()
                                     ->reactive()
@@ -166,24 +168,26 @@ class ParticipantList extends Component implements HasForms, HasTable
                                     })
                                     ->columnSpan(2),
                                 Fieldset::make()
-                                    ->label('Notification')
+                                    ->label(__('general.notification'))
                                     ->schema([
                                         TextInput::make('subject')
+                                            ->label(__('general.subject'))
                                             ->required()
                                             ->columnSpanFull()
                                             ->readOnly(),
                                         TinyEditor::make('message')
+                                            ->label(__('general.message'))
                                             ->minHeight(300)
                                             ->profile('email')
                                             ->columnSpanFull()
                                             ->toolbarSticky(false),
                                     ]),
                                 Checkbox::make('no-notification')
-                                    ->label("Don't Send Notification")
+                                    ->label(__('general.dont_send_notification'))
                                     ->columnSpanFull(),
                             ]),
                     ])
-                    ->successNotificationTitle('Participant Assigned')
+                    ->successNotificationTitle(__('general.participant_assigned'))
                     ->action(function (Action $action, array $data) {
                         $submissionParticipant = $this->submission->participants()->create([
                             'user_id' => $data['user_id'],
@@ -195,7 +199,7 @@ class ParticipantList extends Component implements HasForms, HasTable
                         Log::make(
                             name: 'submission',
                             subject: $this->submission,
-                            description: __('log.participant.assigned', [
+                            description: __('general.log.participant.assigned', [
                                 'name' => $submissionParticipant->user->fullName,
                                 'role' => $submissionParticipant->role->name,
                             ])
@@ -216,7 +220,7 @@ class ParticipantList extends Component implements HasForms, HasTable
                                             ->subjectUsing($data['subject'])
                                     );
                             } catch (\Exception $e) {
-                                $action->failureNotificationTitle('The email notification was not delivered.');
+                                $action->failureNotificationTitle(__('general.email_notification_was_not_delivered'));
                                 $action->failure();
                             }
                         }
@@ -233,16 +237,16 @@ class ParticipantList extends Component implements HasForms, HasTable
                     Action::make('notify-participant')
                         ->authorize('SubmissionParticipant:notify')
                         ->color('primary')
-                        ->modalHeading('Notify Participant')
+                        ->modalHeading(__('general.notify_participant'))
                         ->icon('iconpark-sendemail')
-                        ->modalSubmitActionLabel('Notify')
+                        ->modalSubmitActionLabel(__('general.notify'))
                         ->modalWidth('xl')
                         ->visible(
                             fn (Model $record): bool => $record->user->email !== auth()->user()->email
                         )
                         ->mountUsing(function (Form $form) {
                             $form->fill([
-                                'subject' => 'Notification from Leconfe', // should it use 'leconfe'
+                                'subject' => __('general.notification_from_leconfe'), // should it use 'leconfe'
                             ]);
                         })
                         ->form([
@@ -255,19 +259,20 @@ class ParticipantList extends Component implements HasForms, HasTable
                                             fn (SubmissionParticipant $record) => $record->user->email
                                         )
                                         ->required()
-                                        ->label('Target'),
+                                        ->label(__('general.target')),
                                     TextInput::make('subject')
+                                        ->label(__('general.subject'))
                                         ->required(),
                                     TinyEditor::make('message')
                                         ->minHeight(300)
                                         ->profile('email')
-                                        ->label('Message')
+                                        ->label(__('general.message'))
                                         ->required()
                                         ->columnSpanFull(),
                                 ]),
                         ])
-                        ->label('Notify')
-                        ->successNotificationTitle('Notification Sent')
+                        ->label(__('general.notify'))
+                        ->successNotificationTitle(__('general.notification_sent'))
                         ->action(function (Action $action, array $data) {
                             Mail::send(
                                 [],
@@ -285,13 +290,13 @@ class ParticipantList extends Component implements HasForms, HasTable
                         ->visible(
                             fn (Model $record): bool => $record->user->email !== auth()->user()->email && auth()->user()->canImpersonate()
                         )
-                        ->label('Login as')
+                        ->label(__('general.login_as'))
                         ->icon('iconpark-login')
                         ->color('primary')
                         ->redirectTo(SubmissionResource::getUrl('view', ['record' => $this->submission]))
                         ->action(function (SubmissionParticipant $record, Impersonate $action) {
                             if (! $action->impersonate($record->user)) {
-                                $action->failureNotificationTitle("User can't be impersonated");
+                                $action->failureNotificationTitle(__('general.user_cant_impersonated'));
                                 $action->failure();
                             }
                         }),
@@ -300,12 +305,12 @@ class ParticipantList extends Component implements HasForms, HasTable
                         ->color('danger')
                         ->icon('iconpark-deletethree-o')
                         ->visible(
-                            fn (SubmissionParticipant $record): bool => 
+                            fn (SubmissionParticipant $record): bool =>
                                 $record->user->email !== $this->submission->user->email &&
                                 ! in_array($this->submission->status, [SubmissionStatus::Published, SubmissionStatus::Declined, SubmissionStatus::Withdrawn])
                         )
-                        ->label('Remove')
-                        ->successNotificationTitle('Participant Removed')
+                        ->label(__('general.remove'))
+                        ->successNotificationTitle(__('general.participant_removed'))
                         ->action(function (Action $action, Model $record) {
                             $record->delete();
                             $action->success();

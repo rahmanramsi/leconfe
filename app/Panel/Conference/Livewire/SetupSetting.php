@@ -49,17 +49,19 @@ class SetupSetting extends Component implements HasForms
                 Section::make()
                     ->schema([
                         SpatieMediaLibraryFileUpload::make('logo')
+                            ->label(__('general.logo'))
                             ->collection('logo')
                             ->image()
                             ->imageResizeUpscale(false)
                             ->conversion('thumb'),
                         SpatieMediaLibraryFileUpload::make('thumbnail')
-                            ->label('Conference Thumbnail')
+                            ->label(__('general.conference_thumbnail'))
                             ->collection('thumbnail')
-                            ->helperText('An image representation of the serie that will be used in the list of series.')
+                            ->helperText(__('general.image_representation_of_the_serie_will_uses'))
                             ->image()
                             ->conversion('thumb'),
                         TinyEditor::make('meta.page_footer')
+                            ->label(__('general.page_footer'))
                             ->profile('advanced')
                             ->minHeight(300)
                             ->dehydrateStateUsing(fn (?string $state) => Purify::clean($state)),
@@ -67,9 +69,9 @@ class SetupSetting extends Component implements HasForms
 
                 Actions::make([
                     Action::make('save')
-                        ->label('Save')
-                        ->successNotificationTitle('Saved!')
-                        ->failureNotificationTitle('Data could not be saved.')
+                        ->label(__('general.save'))
+                        ->successNotificationTitle(__('general.saved'))
+                        ->failureNotificationTitle(__('general.data_could_not_saved.'))
                         ->action(function (Action $action) {
                             try {
                                 ConferenceUpdateAction::run($this->form->getRecord(), $this->form->getState());

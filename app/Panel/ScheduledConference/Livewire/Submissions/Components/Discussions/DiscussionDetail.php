@@ -31,7 +31,7 @@ class DiscussionDetail extends \Livewire\Component implements HasForms, HasTable
     {
         return $table
             ->query(fn () => $this->topic->discussions()->orderBy('created_at', 'desc'))
-            ->heading('Discussion')
+            ->heading(__('general.discussion'))
             ->actions([
                 DeleteAction::make()
                     ->authorize('Discussion:delete')
@@ -49,13 +49,13 @@ class DiscussionDetail extends \Livewire\Component implements HasForms, HasTable
                     Stack::make([
                         TextColumn::make('user.fullName')
                             ->description(fn ($record) => $record->created_at->format(Setting::get('format_date')))
-                            ->label('From'),
+                            ->label(__('general.form')),
                     ]),
                 ]),
                 Panel::make([
                     Split::make([
                         TextColumn::make('message')
-                            ->label('Message'),
+                            ->label(__('general.message')),
                         ViewColumn::make('attachment-list')
                             ->view('tables.custom-views.discussions.attachment-list')
                             ->alignCenter(),

@@ -52,16 +52,18 @@ class PaymentManualTable extends Component implements HasForms, HasTable
     {
         return [
             TextInput::make('name')
-                ->placeholder('Input a name for the payment method..')
+                ->label(__('general.name'))
+                ->placeholder(__('general.input_name_payment_method'))
                 ->required(),
             Select::make('currency')
+                ->label(__('general.currency'))
                 ->options(static::getCurrencyOptions())
-                ->placeholder('Select payment currency..')
+                ->placeholder(__('general.select_payment_currency'))
                 ->searchable()
                 ->required(),
             TinyEditor::make('detail')
-                ->placeholder('Input payment details..')
-                ->helperText('You may add some intruction here, such as bank account number, account name etc.')
+                ->placeholder(__('general.input_payment_details'))
+                ->helperText(__('general.add_instruction_here'))
                 ->profile('basic')
                 ->required(),
         ];

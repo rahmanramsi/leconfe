@@ -4,6 +4,7 @@ namespace App\Frontend\Website\Pages;
 
 use App\Models\Conference;
 use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Route;
 use Livewire\WithoutUrlPagination;
 use Livewire\WithPagination;
@@ -15,6 +16,11 @@ class Home extends Page
     use WithPagination, WithoutUrlPagination;
 
     protected static string $view = 'frontend.website.pages.home';
+
+    public function getTitle(): string|Htmlable
+    {
+        return __('general.home');
+    }
 
     protected function getViewData(): array
     {

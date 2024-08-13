@@ -43,8 +43,8 @@ class CallforAbstract extends Component implements HasActions, HasForms
             ->authorize('declineAbstract', $this->submission)
             ->modalWidth('2xl')
             ->record($this->submission)
-            ->modalHeading('Confirmation')
-            ->modalSubmitActionLabel('Decline')
+            ->modalHeading(__('general.confirmation'))
+            ->modalSubmitActionLabel(__('general.decline'))
             ->extraAttributes(['class' => 'w-full'], true)
             ->mountUsing(function (Form $form): void {
                 $mailTempalte = MailTemplate::where('mailable', DeclineAbstractMail::class)->first();
@@ -55,22 +55,26 @@ class CallforAbstract extends Component implements HasActions, HasForms
             })
             ->form([
                 Fieldset::make('Notification')
+                    ->label(__('general.notification'))
                     ->columns(1)
                     ->schema([
                         TextInput::make('email')
+                            ->label(__('general.email'))
                             ->disabled()
                             ->formatStateUsing(fn (Submission $record): string => $record->user->email),
                         TextInput::make('subject')
+                            ->label(__('general.subject'))
                             ->required(),
                         TinyEditor::make('message')
+                            ->label(__('general.message'))
                             ->minHeight(300)
                             ->profile('email'),
                         Checkbox::make('no-notification')
-                            ->label("Don't send notification to author")
+                            ->label(__('general.dont_send_notification_to_author'))
                             ->default(false),
                     ]),
             ])
-            ->successNotificationTitle('Submission declined')
+            ->successNotificationTitle(__('general.submission_declined'))
             ->successRedirectUrl(fn (): string => SubmissionResource::getUrl('view', ['record' => $this->submission]))
             ->action(function (Action $action, array $data) {
                 $this->submission->state()->decline();
@@ -86,7 +90,7 @@ class CallforAbstract extends Component implements HasActions, HasForms
                             )
                         );
                     } catch (\Exception $e) {
-                        $action->failureNotificationTitle('The email notification was not delivered.');
+                        $action->failureNotificationTitle(__('general.email_notification_was_not_delivered'));
                         $action->failure();
                     }
                 }
@@ -108,8 +112,8 @@ class CallforAbstract extends Component implements HasActions, HasForms
     public function acceptAction()
     {
         return Action::make('accept')
-            ->modalHeading('Confirmation')
-            ->modalSubmitActionLabel('Send for Review')
+            ->modalHeading(__('general.confirmation'))
+            ->modalSubmitActionLabel(__('general.send_for_review'))
             ->authorize('acceptAbstract', $this->submission)
             ->modalWidth('2xl')
             ->record($this->submission)
@@ -125,6 +129,7 @@ class CallforAbstract extends Component implements HasActions, HasForms
             })
             ->form([
                 Fieldset::make('Notification')
+                    ->label(__('general.notification'))
                     ->columns(1)
                     ->schema([
                         /**
@@ -135,16 +140,19 @@ class CallforAbstract extends Component implements HasActions, HasForms
                          *   UserNotificaiton::formSchema()
                          */
                         TextInput::make('email')
+                            ->label(__('general.email'))
                             ->disabled()
                             ->formatStateUsing(fn (Submission $record): string => $record->user->email),
                         TextInput::make('subject')
+                            ->label(__('general.subject'))
                             ->required(),
                         TinyEditor::make('message')
+                            ->label(__('general.message'))
                             ->minHeight(300)
                             ->profile('email')
                             ->toolbarSticky(false),
                         Checkbox::make('no-notification')
-                            ->label("Don't send notification to author")
+                            ->label(__('general.dont_send_notification_to_author'))
                             ->default(false),
                     ]),
             ])
@@ -172,7 +180,7 @@ class CallforAbstract extends Component implements HasActions, HasForms
                                         )
                                     );
                             } catch (\Exception $e) {
-                                $action->failureNotificationTitle('The email notification was not delivered.');
+                                $action->failureNotificationTitle(__('general.email_notification_was_not_delivered'));
                                 $action->failure();
                             }
                         }
@@ -196,7 +204,7 @@ class CallforAbstract extends Component implements HasActions, HasForms
                         $action->success();
                     } catch (\Throwable $th) {
                         Log::error($th->getMessage());
-                        $action->failureNotificationTitle('Failed to accept abstract');
+                        $action->failureNotificationTitle(__('general.failed_to_accept_abstract'));
                         $action->failure();
                     }
                 }

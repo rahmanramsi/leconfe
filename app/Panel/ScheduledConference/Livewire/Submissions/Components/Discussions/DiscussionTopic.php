@@ -42,11 +42,11 @@ class DiscussionTopic extends \Livewire\Component implements HasForms, HasTable
     {
         return [
             TextInput::make('name')
-                ->label('Topic Name')
-                ->placeholder('Topic Name')
+                ->label(__('general.topic_name'))
+                ->placeholder(__('general.topic_name'))
                 ->required(),
             CheckboxList::make('user_id')
-                ->label('Participants')
+                ->label(__('general.participants'))
                 ->default([Auth::id()])
                 ->rules('required|array|min:2')
                 ->disableOptionWhen(fn ($value): bool => $value == Auth::id()) // Can't remove self from participant
@@ -84,16 +84,16 @@ class DiscussionTopic extends \Livewire\Component implements HasForms, HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->heading('Discussion')
+            ->heading(__('general.discussion'))
             ->query(fn () => $this->submission->discussionTopics()->where('stage', $this->stage))
             ->recordAction('open-discussion-detail')
             ->actions([
                 ActionGroup::make([
                     Action::make('open-discussion-detail')
                         ->icon('lineawesome-eye-solid')
-                        ->label('Details')
+                        ->label(__('general.details'))
                         ->modalWidth('6xl')
-                        ->modalHeading(fn (Model $discussionTopic): string => "Discussion for topic {$discussionTopic->name}")
+                        ->modalHeading(fn (Model $discussionTopic): string => __('general.discussion_for_topic', ['variable' => $discussionTopic->name]))
                         ->modalSubmitAction(false)
                         ->infolist(function (Model $discussionTopic) {
                             return [
@@ -103,7 +103,7 @@ class DiscussionTopic extends \Livewire\Component implements HasForms, HasTable
                                         ['topic' => $discussionTopic]
                                     )->lazy(),
                                 Fieldset::make('form-discussion-detail')
-                                    ->label('Add Message')
+                                    ->label(__('general.add_message'))
                                     ->columns(1)
                                     ->schema([
                                         LivewireEntry::make('discussion-detail-form')
@@ -115,7 +115,7 @@ class DiscussionTopic extends \Livewire\Component implements HasForms, HasTable
                             ];
                         }),
                     Action::make('update-topic')
-                        ->label('Edit')
+                        ->label(__('general.edit'))
                         ->icon('lineawesome-edit-solid')
                         ->mountUsing(function ($record, Form $form) {
                             $form->fill([
@@ -125,7 +125,7 @@ class DiscussionTopic extends \Livewire\Component implements HasForms, HasTable
                         })
                         ->authorize('DiscussionTopic:update')
                         ->form($this->getFormSchema())
-                        ->successNotificationTitle('Topic updated successfully')
+                        ->successNotificationTitle(__('general.topic_updated_successfully'))
                         ->action(function (Action $action, array $data, Model $record) {
                             UpdateDiscussionTopic::run(
                                 $record,
@@ -136,11 +136,11 @@ class DiscussionTopic extends \Livewire\Component implements HasForms, HasTable
                         }),
                     Action::make('update-status-action')
                         ->authorize('DiscussionTopic:update')
-                        ->label(fn ($record): string => $record->open ? 'Close' : 'Open')
+                        ->label(fn ($record): string => $record->open ? __('general.close') : __('general.open'))
                         ->color(fn ($record): string => $record->open ? 'warning' : 'success')
                         ->icon(fn ($record): string => $record->open ? 'lineawesome-lock-solid' : 'lineawesome-unlock-solid')
                         ->requiresConfirmation()
-                        ->successNotificationTitle('Topic updated successfully')
+                        ->successNotificationTitle(__('general.topic_updated_successfully'))
                         ->action(function (Action $action, $record) {
                             $record->update(['open' => ! $record->open]);
                             $action->success();
@@ -154,11 +154,11 @@ class DiscussionTopic extends \Livewire\Component implements HasForms, HasTable
                     ->authorize('DiscussionTopic:create')
                     ->icon('lineawesome-plus-solid')
                     ->outlined()
-                    ->label('Topic')
+                    ->label(__('general.topic'))
                     ->modalWidth('xl')
                     ->form($this->getFormSchema())
-                    ->successNotificationTitle('Topic created successfully')
-                    ->failureNotificationTitle('Topic creation failed')
+                    ->successNotificationTitle(__('general.topic_created_successfully'))
+                    ->failureNotificationTitle(__('general.topic_createtion_failed'))
                     ->action(function (Action $action, array $data, Form $form) {
                         $form->validate();
 
@@ -181,7 +181,7 @@ class DiscussionTopic extends \Livewire\Component implements HasForms, HasTable
                                     );
                                 });
                         } catch (\Throwable $th) {
-                            $action->failureNotificationTitle('Failed to send notification to participants.');
+                            $action->failureNotificationTitle(__('general.failed_to_send_notification_to_participants'));
                             $action->failure();
                         } finally {
                             $action->success();
@@ -190,12 +190,14 @@ class DiscussionTopic extends \Livewire\Component implements HasForms, HasTable
             ])
             ->columns([
                 BadgeableColumn::make('name')
+                    ->label(__('general.name'))
                     ->suffixBadges([
                         Badge::make('status')
-                            ->label(fn ($record) => $record->open ? 'Open' : 'Closed')
+                            ->label(fn ($record) => $record->open ? __('general.open') : __('general.closed'))
                             ->color(fn ($record) => $record->open ? 'success' : 'danger'),
                     ]),
                 TextColumn::make('Last Update')
+                    ->label(__('general.last_update'))
                     ->getStateUsing(fn ($record) => $record->getLastSender()?->fullName ?? '-')
                     ->description(fn ($record): ?string => $record->getLastUpdate()),
             ]);

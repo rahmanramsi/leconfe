@@ -49,12 +49,12 @@ class AbstractDeclined extends Notification implements ShouldQueue
         return FilamentNotification::make('abstract-declined')
             ->icon('lineawesome-exclamation-circle-solid')
             ->iconColor('danger')
-            ->title('Abstract Declined')
+            ->title(__('general.abstract_declined'))
             ->body("Title: {$this->submission->getMeta('title')}")
             ->actions([
                 Action::make('view-abstract')
                     ->url(SubmissionResource::getUrl('view', ['record' => $this->submission, 'tenant' => $this->submission->conference]))
-                    ->label('View')
+                    ->label(__('general.view'))
                     ->markAsRead(),
             ])
             ->toDatabase();

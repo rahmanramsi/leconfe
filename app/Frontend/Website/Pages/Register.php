@@ -50,7 +50,7 @@ class Register extends Page
 
     public function getTitle(): string|Htmlable
     {
-        return $this->registerComplete ? 'Registration Complete' : 'Register';
+        return $this->registerComplete ? __('general.registration_complete') : __('general.register');
     }
 
     public function rules()
@@ -99,8 +99,8 @@ class Register extends Page
     public function getBreadcrumbs(): array
     {
         return [
-            url('/') => 'Home',
-            $this->registerComplete ? 'Register Complete' : 'Register',
+            url('/') => __('general.home'),
+            $this->getTitle(),
         ];
     }
 

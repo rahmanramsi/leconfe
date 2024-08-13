@@ -38,12 +38,12 @@ class NewDiscussionTopic extends Notification implements ShouldQueue
         return FilamentNotification::make('new-topic-created')
             ->icon('lineawesome-check-circle')
             ->iconColor('success')
-            ->title('New Discussion Topic Created')
+            ->title(__('general.new_discussion_topic_created'))
             ->body("Topic: {$this->topic->name}")
             ->actions([
                 Action::make('view-submission')
                     ->url(SubmissionResource::getUrl('view', ['record' => $this->topic->submission->getKey(), 'tenant' => $this->topic->submission->conference]))
-                    ->label('View')
+                    ->label(__('general.view'))
                     ->markAsRead(),
             ])
             ->toDatabase();

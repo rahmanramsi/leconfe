@@ -43,17 +43,19 @@ class LanguageSetting extends Component implements HasForms
 				Section::make()
 					->schema([
 						CheckboxList::make('languages')
+                            ->label(__('general.languages'))
 							->options(config('app.locales'))
 							->required(),
 						Radio::make('default_language')
 							->options(config('app.locales'))
+                            ->label(__('general.default_language'))
 							->required(),
 					]),
 				Actions::make([
 					Action::make('save')
-						->label('Save')
-						->successNotificationTitle('Saved!')
-						->failureNotificationTitle('Data could not be saved.')
+						->label(__('general.save'))
+						->successNotificationTitle(__('general.saved'))
+						->failureNotificationTitle(__('general.data_could_not_saved'))
 						->action(function (Action $action) {
 							$formData = $this->form->getState();
                             try {

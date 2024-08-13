@@ -2,22 +2,35 @@
 
 namespace App\Panel\ScheduledConference\Pages;
 
+use Filament\Forms\Form;
 use Filament\Pages\Page;
 use Filament\Infolists\Infolist;
 use App\Infolists\Components\LivewireEntry;
 use App\Infolists\Components\VerticalTabs as InfolistsVerticalTabs;
-use App\Panel\ScheduledConference\Livewire\Registration\RegistrationSetting;
-use App\Panel\ScheduledConference\Livewire\Registration\RegistrationTypeTable;
+use App\Panel\ScheduledConference\Livewire\Registration\RegistrationPolicies;
+use App\Panel\ScheduledConference\Livewire\Registration\RegistrationTypes;
+use Illuminate\Contracts\Support\Htmlable;
 
-class Registrations extends Page
+class RegistrationSettings extends Page
 {
     protected static string $view = 'panel.scheduledConference.pages.registration-setting';
 
-    protected static ?string $navigationGroup = 'Settings';
+    public static function getNavigationGroup(): string
+    {
+        return __('general.settings');
+    }
 
     protected static ?string $navigationIcon = 'heroicon-o-arrow-right-end-on-rectangle';
 
-    protected static ?string $navigationLabel = 'Registrations';
+    public static function getNavigationLabel(): string
+    {
+        return __('general.registrations');
+    }
+
+    public function getHeading(): string|Htmlable
+    {
+        return __('general.registrations_settings');
+    }
 
     protected static ?string $title = 'Registration Settings';
 
@@ -25,7 +38,11 @@ class Registrations extends Page
 
     public static function canAccess(): bool
     {
-        return auth()->user()->can('RegistrationSetting:viewAny');
+        $user = auth()->user();
+        if ($user->can('RegistrationSetting:viewAny')) {
+            return true;
+        }
+        return false;
     }
 
     public function infolist(Infolist $infolist): Infolist
@@ -35,16 +52,18 @@ class Registrations extends Page
                 InfolistsVerticalTabs\Tabs::make()
                     ->schema([
                         InfolistsVerticalTabs\Tab::make('Type')
+                            ->label(__('general.type'))
                             ->icon('heroicon-o-list-bullet')
                             ->schema([
                                 LivewireEntry::make('registrationType')
-                                    ->livewire(RegistrationTypeTable::class)
+                                    ->livewire(RegistrationTypes::class)
                             ]),
                         InfolistsVerticalTabs\Tab::make('Settings')
+                            ->label(__('general.settings'))
                             ->icon('heroicon-o-cog-6-tooth')
                             ->schema([
-                                LivewireEntry::make('registrationSettings')
-                                    ->livewire(RegistrationSetting::class)
+                                LivewireEntry::make('registrationPolicy')
+                                    ->livewire(RegistrationPolicies::class)
                             ]),
                     ]),
             ]);

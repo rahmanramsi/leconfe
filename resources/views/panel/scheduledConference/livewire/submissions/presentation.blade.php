@@ -18,14 +18,14 @@
             @if ($submission->stage != SubmissionStage::CallforAbstract)
                 @if ($submission->getEditors()->isEmpty())
                     <div class="px-4 py-3.5 text-base text-white rounded-lg border-2 border-primary-700 bg-primary-500">
-                        {{ $user->can('assignParticipant', $submission) ? 'Assign an editor to enable the editorial decisions for this stage.' : 'No editor assigned to this submission.' }}
+                        {{ $user->can('assignParticipant', $submission) ?  __('general.assign_an_editor_to_enable_the_editorial'): __('general.no_editor_assigned_this_submission') }}
                     </div>
                 @else
                     @if ($submissionDecision)
                         <div
-                            class="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:ring-white/10 space-y-3 py-5 px-6">
+                            class="px-6 py-5 space-y-3 overflow-hidden bg-white shadow-sm rounded-xl ring-1 ring-gray-950/5 dark:ring-white/10">
                             <div class="text-base">
-                               Submission send to editing
+                                {{ __('general.submission_send_to_editing') }}
                             </div>
                         </div>
                     @endif

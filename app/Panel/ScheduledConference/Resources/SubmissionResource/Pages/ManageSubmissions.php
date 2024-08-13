@@ -38,12 +38,14 @@ class ManageSubmissions extends ManageRecords
     {
         return [
             Action::make('Settings')
+                ->label(__('general.settings'))
                 ->button()
                 ->authorize('update', app()->getCurrentScheduledConference())
                 ->outlined()
                 ->icon('heroicon-o-cog')
                 ->url(WorkflowSetting::getUrl()),
             Action::make('create')
+                ->label(__('general.create'))
                 ->button()
                 ->disabled(
                     fn (): bool => !Timeline::isSubmissionOpen()
@@ -52,10 +54,10 @@ class ManageSubmissions extends ManageRecords
                 ->icon('heroicon-o-plus')
                 ->label(function (Action $action) {
                     if ($action->isDisabled()) {
-                        return 'Submission is not open';
+                        return __('general.submission_is_not_open');
                     }
 
-                    return 'Submission';
+                    return __('general.submissions');
                 }),
         ];
     }
@@ -134,7 +136,7 @@ class ManageSubmissions extends ManageRecords
     {
         $user = auth()->user();
         $tabs = [
-            static::TAB_MYQUEUE => $this->createTab('My Queue', static::TAB_MYQUEUE),
+            static::TAB_MYQUEUE => $this->createTab(__('general.my_queue'), static::TAB_MYQUEUE),
         ];
 
         if ($user->hasAnyRole([
@@ -142,8 +144,8 @@ class ManageSubmissions extends ManageRecords
             UserRole::ConferenceManager,
             UserRole::ConferenceEditor,
         ])) {
-            $tabs[static::TAB_UNASSIGNED] = $this->createTab('Unassigned', static::TAB_UNASSIGNED);
-            $tabs[static::TAB_ACTIVE] = $this->createTab('Active', static::TAB_ACTIVE);
+            $tabs[static::TAB_UNASSIGNED] = $this->createTab(__('general.unassigned'), static::TAB_UNASSIGNED);
+            $tabs[static::TAB_ACTIVE] = $this->createTab(__('general.active'), static::TAB_ACTIVE);
         }
 
         if ($user->hasAnyRole([
@@ -152,10 +154,10 @@ class ManageSubmissions extends ManageRecords
             UserRole::ConferenceManager,
             UserRole::ConferenceEditor,
         ])) {
-            $tabs[static::TAB_PRESENTATION] = $this->createTab('Presentation', static::TAB_PRESENTATION);
+            $tabs[static::TAB_PRESENTATION] = $this->createTab(__('general.presentation'), static::TAB_PRESENTATION);
         }
 
-        $tabs[static::TAB_ARCHIVED] = $this->createTab('Archived', static::TAB_ARCHIVED);
+        $tabs[static::TAB_ARCHIVED] = $this->createTab(__('general.archived'), static::TAB_ARCHIVED);
 
         return $tabs;
     }

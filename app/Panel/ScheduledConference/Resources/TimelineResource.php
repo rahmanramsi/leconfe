@@ -40,7 +40,15 @@ class TimelineResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-clock';
 
-    protected static ?string $navigationGroup = 'Conference';
+    public static function getNavigationGroup(): string
+    {
+        return __('general.conference');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('general.timeline');
+    }
 
     public static function getSessionForm(): array
     {
@@ -80,6 +88,7 @@ class TimelineResource extends Resource
                 Textarea::make('description')
                     ->maxLength(255),
                 DatePicker::make('date')
+                    ->label(__('general.date'))
                     ->required(),
                 Checkbox::make('require_attendance')
                     ->helperText('By turning this on, participants only need to attend here.'),
@@ -103,12 +112,7 @@ class TimelineResource extends Resource
             ->defaultSort('date')
             ->columns([
                 TextColumn::make('date')
-                    ->description(function (Model $record) {
-                        $time_start = $record->getEarliestTime()->format(Setting::get('format_time'));
-                        $time_end = $record->getLatestTime()->format(Setting::get('format_time'));
-
-                        return "$time_start -  $time_end";
-                    })
+                    ->label(__('general.date'))
                     ->dateTime(Setting::get('format_date'))
                     ->sortable(),
                 TextColumn::make('name'),

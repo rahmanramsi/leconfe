@@ -39,6 +39,7 @@ class CommitteeRoleResource extends Resource
         return $form
             ->schema([
                 TextInput::make('name')
+                    ->label(__('general.name'))
                     ->required()
                     ->unique(modifyRuleUsing: function (Unique $rule) {
                         return $rule
@@ -54,10 +55,11 @@ class CommitteeRoleResource extends Resource
             ->columns([
                 IndexColumn::make('no'),
                 Tables\Columns\TextColumn::make('name')
+                    ->label(__('general.name'))
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('committees_count')
-                    ->label('Committees')
+                    ->label(__('general.committees'))
                     ->counts('committees')
                     ->badge()
                     ->color(fn (int $state) => $state > 0 ? 'primary' : 'gray'),
@@ -73,7 +75,7 @@ class CommitteeRoleResource extends Resource
                         try {
                             $speakerCount = $record->committees()->count();
                             if ($speakerCount > 0) {
-                                throw new \Exception('Cannot delete '.$record->name.', there are '.static::$roleType.' who are still associated with this role');
+                                throw new \Exception(__('general.cannot_delete_role_commites',['name' => $record->name,'roleType' => static::$roleType]));
                             }
 
                             return $record->delete();
@@ -90,14 +92,14 @@ class CommitteeRoleResource extends Resource
             ->emptyStateActions([
                 // Tables\Actions\CreateAction::make(),
             ])
-            ->heading('Committee Roles Table')
+            ->heading(__('general.committee_roles_table'))
             ->headerActions([
                 Tables\Actions\CreateAction::make()
                     ->mutateFormDataUsing(function (array $data): array {
                         return $data;
                     })
-                    ->label('New Committee Role')
-                    ->modalHeading('New Committee` Role'),
+                    ->label(__('general.new_committee_role'))
+                    ->modalHeading(__('general.new_committee_role')),
             ]);
     }
 

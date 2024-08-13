@@ -20,7 +20,7 @@ class DeclinedSubmissionState extends BaseSubmissionState
         Log::make(
             name: 'submission',
             subject: $this->submission,
-            description: __('log.submission.abstract_accepted')
+            description: __('general.log.submission.abstract_accepted')
         )
             ->by(auth()->user())
             ->save();
@@ -39,7 +39,7 @@ class DeclinedSubmissionState extends BaseSubmissionState
         Log::make(
             name: 'submission',
             subject: $this->submission,
-            description: __('log.submission.send_to_editing')
+            description: __('general.log.submission.send_to_editing')
         )
             ->by(auth()->user())
             ->save();
@@ -57,7 +57,7 @@ class DeclinedSubmissionState extends BaseSubmissionState
         Log::make(
             name: 'submission',
             subject: $this->submission,
-            description: __('log.submission.skip_review')
+            description: __('general.log.submission.skip_review')
         )
             ->by(auth()->user())
             ->save();
@@ -74,7 +74,7 @@ class DeclinedSubmissionState extends BaseSubmissionState
         Log::make(
             name: 'submission',
             subject: $this->submission,
-            description: __('log.submission.revision_required')
+            description: __('general.log.submission.revision_required')
         )
             ->by(auth()->user())
             ->save();

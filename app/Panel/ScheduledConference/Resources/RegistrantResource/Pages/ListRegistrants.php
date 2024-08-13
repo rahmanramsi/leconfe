@@ -25,36 +25,39 @@ class ListRegistrants extends ListRecords
     {
         return [
             'all' => Tab::make()
+                ->label(__('general.all'))
                 ->badge(fn () => static::$resource::getEloquentQuery()
                     ->count()
                 ),
             'paid' => Tab::make()
+                ->label(__('general.paid'))
                 ->modifyQueryUsing(
                     fn (Builder $query) => $query
-                        ->WhereNull('deleted_at')  
+                        ->WhereNull('deleted_at')
                         ->whereHas('registrationPayment', function ($query) {
                             $query->where('state', RegistrationPaymentState::Paid->value);
                         })
                 )
                 ->badge(
                     fn () => static::$resource::getEloquentQuery()
-                        ->WhereNull('deleted_at')  
+                        ->WhereNull('deleted_at')
                         ->whereHas('registrationPayment', function ($query) {
                             $query->where('state', RegistrationPaymentState::Paid->value);
                         })
                         ->count()
                 ),
             'unpaid' => Tab::make()
+                ->label(__('general.unpaid'))
                 ->modifyQueryUsing(
                     fn (Builder $query) => $query
-                        ->WhereNull('deleted_at') 
+                        ->WhereNull('deleted_at')
                         ->whereHas('registrationPayment', function ($query) {
                             $query->where('state', RegistrationPaymentState::Unpaid->value);
                         })
                 )
                 ->badge(
                     fn () => static::$resource::getEloquentQuery()
-                        ->WhereNull('deleted_at')    
+                        ->WhereNull('deleted_at')
                         ->whereHas('registrationPayment', function ($query) {
                             $query->where('state', RegistrationPaymentState::Unpaid->value);
                         })
@@ -62,13 +65,14 @@ class ListRegistrants extends ListRecords
                 )
                 ->badgeColor(Color::Yellow),
             'trash' => Tab::make()
+                ->label(__('general.trash'))
                 ->modifyQueryUsing(
                     fn (Builder $query) => $query
                         ->whereNotNull('deleted_at')
                 )
                 ->badge(
                     fn () => static::$resource::getEloquentQuery()
-                        ->whereNotNull('deleted_at')    
+                        ->whereNotNull('deleted_at')
                         ->count()
                 ),
         ];

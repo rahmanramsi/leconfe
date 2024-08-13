@@ -39,15 +39,16 @@ class TrackTable extends Component implements HasForms, HasTable
     {
         return $table
             ->query(Track::query())
-            ->heading('Tracks')
+            ->heading(__('general.track'))
             ->columns([
                 IndexColumn::make('no')
                     ->label('No.'),
-                TextColumn::make('title'),
+                TextColumn::make('title')
+                    ->label(__('general.title')),
             ])
             ->headerActions([
                 CreateAction::make()
-                    ->label('New Track')
+                    ->label(__('general.new_track'))
                     ->modalWidth(MaxWidth::ThreeExtraLarge)
                     ->form(fn (Form $form) => $this->form($form))
                     ->using(fn (array $data) => TrackCreateAction::run($data))
@@ -65,9 +66,9 @@ class TrackTable extends Component implements HasForms, HasTable
                     ->using(function(Track $record, DeleteAction $action) {
                         try {
                             $record->delete();
-                        
+
                         } catch (\Throwable $th) {
-                            
+
                             $action->failureNotificationTitle($th->getMessage());
                             return false;
                         }
@@ -84,15 +85,15 @@ class TrackTable extends Component implements HasForms, HasTable
                 Grid::make()
                     ->schema([
                         TextInput::make('title')
-                            ->label('Track Title')
+                            ->label(__('general.track_title'))
                             ->required(),
                         TextInput::make('abbreviation')
-                            ->label('Abbreviation')
+                            ->label(__('general.abbreviation'))
                             ->alpha()
                             ->required(),
                     ]),
                 TinyEditor::make('meta.policy')
-                    ->label('Track Policy')
+                    ->label(__('general.track_policy'))
                     ->profile('advanced'),
             ]);
     }

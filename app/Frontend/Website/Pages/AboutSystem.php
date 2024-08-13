@@ -25,6 +25,7 @@ class AboutSystem extends Page
     public function getViewData(): array
     {
         return [
+            'name' => app()->getSite()->name,
             'version' => app()->getInstalledVersion(),
         ];
     }

@@ -1,16 +1,16 @@
 <x-filament-panels::page class="flex flex-col gap-y-6" x-data="{ activeTab: 'Proceeding Data' }" x-cloak>
         <x-filament::tabs class="">
-            <x-filament::tabs.item 
+            <x-filament::tabs.item
                 alpine-active="activeTab === 'Proceeding Data'"
                 x-on:click="activeTab = 'Proceeding Data'"
                 >
-                Proceeding Data
+                {{ __('general.proceeding_data') }}
             </x-filament::tabs.item>
-            <x-filament::tabs.item 
+            <x-filament::tabs.item
                 alpine-active="activeTab === 'Articles'"
                 x-on:click="activeTab = 'Articles'"
                 >
-                Articles
+                {{ __('general.articles') }}
             </x-filament::tabs.item>
         </x-filament::tabs>
         <div x-show="activeTab === 'Proceeding Data'">
@@ -21,7 +21,7 @@
 
                 @can('update', $this->getRecord())
                     <x-filament::button type="submit" icon="iconpark-save-o">
-                        Save
+                        {{ __('general.save') }}
                     </x-filament::button>
                 @endcan
             </form>

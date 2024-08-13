@@ -38,7 +38,7 @@ class SubmissionWithdrawRequested extends Notification implements ShouldQueue
             ->actions([
                 Action::make('view-submission')
                     ->url(SubmissionResource::getUrl('view', ['record' => $this->submission, 'tenant' => $this->submission->conference]))
-                    ->label('View')
+                    ->label(__('general.view'))
                     ->markAsRead(),
             ])
             ->toDatabase();

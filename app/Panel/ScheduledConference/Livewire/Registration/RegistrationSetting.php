@@ -40,15 +40,16 @@ class RegistrationSetting extends Component implements HasForms
                             ->inline(false)
                             ->disabled(fn () => auth()->user()->cannot('RegistrationSetting:update')),
                         TinyEditor::make('meta.registration_policy')
-                            ->label('Registration Policy')
+                            ->label(__('general.registration_policy'))
                             ->profile('basic')
                             ->minHeight(300)
                             ->disabled(fn () => auth()->user()->cannot('RegistrationSetting:update')),
                     ]),
                 Actions::make([
                     Action::make('Save changes')
-                        ->successNotificationTitle('Saved!')
-                        ->failureNotificationTitle('Data could not be saved.')
+                        ->label(__('general.save_changes'))
+                        ->successNotificationTitle(__('general.saved'))
+                        ->failureNotificationTitle(__('general.data_could_not_saved'))
                         ->action(function (Action $action) {
                             $formData = $this->form->getState();
                             try {

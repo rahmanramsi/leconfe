@@ -54,88 +54,92 @@ class MastHeadSetting extends Component implements HasForms
             ->schema([
                 Section::make()
                     ->schema([
-                        Section::make('Scheduled Conference Identity')
-                            ->description('Information about the scheduled conference')
+                        Section::make(__('general.scheduled_conference_identity'))
+                            ->description(__('general.information_about_the_scheduled_conference'))
                             ->aside()
                             ->schema([
                                 TextInput::make('title')
-                                    ->label('Title')
+                                    ->label(__('general.title'))
                                     ->autofocus()
                                     ->autocomplete()
                                     ->required()
-                                    ->placeholder('Enter the title of the scheduled conference'),
+                                    ->placeholder(__('general.enter_the_title_of_the_scheduled_conference')),
                                 Grid::make()
                                     ->schema([
                                         DatePicker::make('date_start')
-                                            ->label('Start Date')
-                                            ->placeholder('Enter the start date of the serie')
+                                            ->label(__('general.start_date'))
+                                            ->placeholder(__('general.enter_the_start_date_of_the_serie'))
                                             ->requiredWith('date_end'),
                                         DatePicker::make('date_end')
-                                            ->label('End Date')
+                                            ->label(__('general.end_date'))
                                             ->afterOrEqual('date_start')
                                             ->requiredWith('date_start')
-                                            ->placeholder('Enter the end date of the serie'),
+                                            ->placeholder(__('general.enter_the_end_date_of_the_serie')),
                                     ]),
                                 Textarea::make('meta.description')
+                                    ->label(__('general.description'))
                                     ->rows(3)
                                     ->autosize()
                                     ->columnSpanFull()
-                                    ->hint('Recommended length: 50-160 characters')
-                                    ->helperText('A short description of the website. This will used to help search engines understand the website.'),
+                                    ->hint(__('general.recommended_description_length'))
+                                    ->helperText(__('general.short_description_of_the_website')),
                                 TextInput::make('meta.acronym')
+                                    ->label(__('general.acronym'))
                                     ->rule('alpha_dash')
-                                    ->helperText('The popularly known as or jargon name (e.g. SIGGRAPH for "Special Interest Group on Computer Graphics"). Authors commonly cite the conference acronym rather than the full conference or proceedings name, so it is best to fill this element when it is available.'),
+                                    ->helperText(__('general.acronym_rather_than_the_full_conference')),
                                 TextInput::make('meta.theme')
-                                    ->helperText('The theme is the slogan or special emphasis of a conference in a particular year. It differs from the subject of a conference in that the subject is stable over the years while the theme may vary from year to year. For example, the American Society for Information Science and Technology conference theme was "Knowledge: Creation, Organization and Use" in 1999 and "Defining Information Architecture" in 2000.')
+                                    ->label(__('general.theme'))
+                                    ->helperText(__('general.theme_information'))
                                     ->columnSpanFull(),
                                 TextInput::make('meta.location')
-                                    ->helperText('The location of the conference. The city, state, province or country of the conference may be provided as appropriate')
+                                    ->label(__('general.location'))
+                                    ->helperText(__('general.location_description'))
                             ]),
-                        Section::make('Publishing Details')
-                            ->description('These details may be included in metadata provided to third-party archival bodies.')
+                        Section::make(__('general.publishing_details'))
+                            ->description(__('general.publishing_detail_included_in_metadata'))
                             ->aside()
                             ->schema([
                                 Select::make('meta.publisher_location')
-                                    ->label('Country')
-                                    ->placeholder('Select a country')
+                                    ->label(__('general.country'))
+                                    ->placeholder(__('general.select_a_country'))
                                     ->searchable()
                                     ->options(fn () => Country::all()->mapWithKeys(fn ($country) => [$country->name => $country->flag . ' ' . $country->name]))
                                     ->optionsLimit(250),
                                 TextInput::make('meta.publisher_name')
-                                    ->label('Publisher'),
+                                    ->label(__('general.publisher')),
                                 TextInput::make('meta.publisher_url')
                                     ->url()
                                     ->validationMessages([
-                                        'url' => 'The URL must be a valid URL.'
+                                        'url' => __('general.url_must_be_valid')
                                     ])
-                                    ->label('URL')
+                                    ->label(__('general.url'))
                             ]),
-                        Section::make('Key Information')
-                            ->description('Provide a short description of your conference and identify editors, managing directors and other members of your editorial team.')
+                        Section::make(__('general.key_information'))
+                            ->description(__('general.key_information_pricide_a_short_description'))
                             ->aside()
                             ->schema([
                                 TinyEditor::make('meta.summary')
-                                    ->label('Conference Summary'),
+                                    ->label(__('general.conference_summary')),
                                 TinyEditor::make('meta.editorial_team')
-                                    ->label('Editorial Team')
+                                    ->label(__('general.editorial_team'))
                                     ->profile('basic')
                                     ->minHeight(100),
 
                             ]),
-                        Section::make('Description')
+                        Section::make(__('general.description'))
                             ->aside()
-                            ->description('Include any information about your conference which may be of interest to readers, authors or reviewers.')
+                            ->description(__('general.include_about_your_conference'))
                             ->schema([
                                 TinyEditor::make('meta.about')
-                                    ->label('About the Scheduled Conference')
+                                    ->label(__('general.about_the_scheduled_conference'))
                                     ->profile('basic'),
                             ])
                     ]),
                 Actions::make([
                     Action::make('save')
-                        ->label('Save')
-                        ->successNotificationTitle('Saved!')
-                        ->failureNotificationTitle('Data could not be saved.')
+                        ->label(__('general.save'))
+                        ->successNotificationTitle(__('general.saved'))
+                        ->failureNotificationTitle(__('general.data_could_not_saved'))
                         ->action(function (Action $action) {
                             $formData = $this->form->getState();
                             try {

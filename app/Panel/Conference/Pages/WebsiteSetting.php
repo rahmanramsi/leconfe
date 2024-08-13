@@ -17,16 +17,31 @@ use App\Panel\Administration\Livewire\SponsorTable;
 use App\Panel\Conference\Livewire\NavigationMenuSetting;
 use App\Panel\Conference\Livewire\SetupSetting;
 use App\Panel\Conference\Livewire\ThemeSetting;
+use Illuminate\Contracts\Support\Htmlable;
 
 class WebsiteSetting extends Page
 {
 	protected static string $view = 'panel.conference.pages.website-setting';
 
-	protected static ?string $navigationGroup = 'Settings';
+    public static function getNavigationGroup(): string
+    {
+        return __('general.settings');
+    }
 
 	protected static ?string $navigationIcon = 'heroicon-o-globe-alt';
 
-	protected static ?string $navigationLabel = 'Website';
+
+    public static function getNavigationLabel(): string
+    {
+        return __('general.website');
+    }
+
+    public function getHeading(): string|Htmlable
+    {
+        return __('general.website_setting');
+    }
+
+
 
 	public function mount(): void
 	{
@@ -46,22 +61,26 @@ class WebsiteSetting extends Page
 					->contained(false)
 					->tabs([
 						Tabs\Tab::make('Appearance')
+                            ->label(__('general.appearance'))
 							->schema([
 								VerticalTabs\Tabs::make()
 									->schema([
 										VerticalTabs\Tab::make('Theme')
+                                            ->label(__('general.theme'))
 											->icon('heroicon-o-adjustments-horizontal')
 											->schema([
 												LivewireEntry::make('setup-setting')
 													->livewire(ThemeSetting::class),
 											]),
 										VerticalTabs\Tab::make('Setup')
+                                            ->label(__('general.setup'))
 											->icon('heroicon-o-cog')
 											->schema([
 												LivewireEntry::make('setup-setting')
 													->livewire(SetupSetting::class),
 											]),
 										VerticalTabs\Tab::make('Sidebar')
+                                            ->label(__('general.sidebar'))
 											->icon('heroicon-o-view-columns')
 											->schema([
 												LivewireEntry::make('sidebar-setting')
@@ -70,22 +89,26 @@ class WebsiteSetting extends Page
 									]),
 							]),
 						Tabs\Tab::make('Setup')
+                            ->label(__('general.setup'))
 							->schema([
 								VerticalTabs\Tabs::make()
 									->schema([
 										VerticalTabs\Tab::make('Navigation Menu')
+                                            ->label(__('general.navigation_menu'))
 											->icon('heroicon-o-list-bullet')
 											->schema([
 												LivewireEntry::make('navigation-menu-setting')
 													->livewire(NavigationMenuSetting::class),
 											]),
 										VerticalTabs\Tab::make('Languages')
+                                            ->label(__('general.languages'))
 											->icon('heroicon-o-language')
 											->schema([
 												LivewireEntry::make('language-setting')
 													->livewire(LanguageSetting::class),
 											]),
 										VerticalTabs\Tab::make('Date & Time')
+                                            ->label(__('general.date_and_time'))
 											->icon('heroicon-o-clock')
 											->schema([
 												LivewireEntry::make('date_and_time')

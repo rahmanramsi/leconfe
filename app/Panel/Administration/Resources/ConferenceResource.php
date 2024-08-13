@@ -32,6 +32,18 @@ class ConferenceResource extends Resource
 {
     protected static ?string $model = Conference::class;
 
+    public static function getNavigationLabel(): string
+    {
+        // This returns the label for the dashboard navigation.
+        return __('general.conference');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('general.conference');
+    }
+
+
     protected static ?string $navigationIcon = 'heroicon-o-window';
 
     public static function form(Form $form): Form
@@ -39,11 +51,12 @@ class ConferenceResource extends Resource
         return $form
             ->schema([
                 TextInput::make('name')
+                    ->label(__('general.name'))
                     ->columnSpanFull()
                     ->required(),
                 TextInput::make('path')
-                    ->label('Path')
-                    ->helperText('The path of the conference. This will be used in the URL of the conference.')
+                    ->label(__('general.path'))
+                    ->helperText(__('general.url_path'))
                     ->required()
                     ->rule('alpha_dash')
                     ->unique(ignoreRecord: true)
@@ -59,10 +72,12 @@ class ConferenceResource extends Resource
             ->columns([
                 IndexColumn::make('no'),
                 TextColumn::make('name')
+                    ->label(__('general.name'))
                     ->searchable(),
             ])
             ->actions([
                 Tables\Actions\Action::make('open-conference')
+                    ->label(__('general.open_conference'))
                     ->icon('heroicon-o-link')
                     ->button()
                     ->color('gray')

@@ -50,13 +50,18 @@ class RegistrantResource extends Resource
 {
     protected static ?string $model = Registration::class;
 
-    protected static ?string $modelLabel = 'Registration';
-
     protected static ?string $navigationIcon = 'heroicon-o-user-plus';
 
-    protected static ?string $navigationGroup = 'Conference';
 
-    protected static ?string $navigationLabel = 'Registrants';
+    public static function getNavigationLabel(): string
+    {
+        return __('general.registration');
+    }
+
+    public static function getNavigationGroup(): string
+    {
+        return __('general.conference');
+    }
 
     public static function canAccess(): bool
     {
@@ -71,12 +76,13 @@ class RegistrantResource extends Resource
                     ->relationship('registrationPayment')
                     ->schema([
                         Select::make('state')
+                            ->label(__('general.state'))
                             ->options(RegistrationPaymentState::array())
                             ->native(false)
                             ->required()
                             ->live(),
                         DatePicker::make('paid_at')
-                            ->label('Paid Date')
+                            ->label(__('general.paid_date'))
                             ->placeholder('Select registration paid date..')
                             ->prefixIcon('heroicon-m-calendar')
                             ->formatStateUsing(fn() => now())
@@ -98,7 +104,7 @@ class RegistrantResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->heading('Registrant List')
+            ->heading(__('general.registrant_list'))
             ->headerActions([
                 Action::make('attendance_qr_code')
                     ->label('Attendance QR Code')
@@ -140,14 +146,14 @@ class RegistrantResource extends Resource
                             ->columns(1);
                     })
                     ->visible(fn() => app()->getCurrentScheduledConference()->isAttendanceEnabled()),
-                Action::make('enroll_user')
+                Action::make(__('general.enroll_user'))
                     ->label('Enroll User')
                     ->url(fn() => RegistrantResource::getUrl('enroll'))
                     ->authorize('enroll', Registration::class)
             ])
             ->columns([
                 SpatieMediaLibraryImageColumn::make('user.profile')
-                    ->label('Profile')
+                    ->label(__('general.profile'))
                     ->grow(false)
                     ->collection('profile')
                     ->conversion('avatar')
@@ -167,11 +173,11 @@ class RegistrantResource extends Resource
                     ])
                     ->circular(),
                 TextColumn::make('user.full_name')
-                    ->label('User')
+                    ->label(__('general.user'))
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('registrationPayment.name')
-                    ->label('Type')
+                    ->label(__('general.type'))
                     ->description(function (Model $record) {
                         if ($record->registrationPayment->currency === 'free') {
                             return 'Free';
@@ -182,15 +188,15 @@ class RegistrantResource extends Resource
                         return $cost;
                     }),
                 TextColumn::make('registrationPayment.state')
-                    ->label('State')
+                    ->label(__('general.state'))
                     ->badge()
                     ->color(fn (Model $record) => RegistrationPaymentState::from($record->getState())->getColor()),
                 TextColumn::make('created_at')
-                    ->label('Registration Date')
+                    ->label(__('general.registration_date'))
                     ->date(Setting::get('format_date'))
                     ->sortable(),
             ])
-            ->emptyStateHeading('No Registrant')
+            ->emptyStateHeading(__('general.no_registrant'))
             ->filters([
                 SelectFilter::make('type')
                     ->relationship('RegistrationType', 'type', modifyQueryUsing: fn($query) => $query->where('active', '!=', false))
@@ -199,8 +205,8 @@ class RegistrantResource extends Resource
             ])
             ->actions([
                 EditAction::make()
-                    ->label('Decision')
-                    ->modalHeading('Paid Status Decision')
+                    ->label(__('general.decision'))
+                    ->modalHeading(__('general.paid_status_decision'))
                     ->modalWidth('lg')
                     ->after(function (Model $record) {
                         $record->user->notify(
@@ -220,13 +226,13 @@ class RegistrantResource extends Resource
                         ->visible(fn(Model $record) => ($record->registrationPayment->state === RegistrationPaymentState::Paid->value) && app()->getCurrentScheduledConference()->isAttendanceEnabled())
                         ->authorize(fn () => auth()->user()->can('viewAny', RegistrationAttendance::class)),
                     DeleteAction::make()
-                        ->label('Trash')
+                        ->label(__('general.trash'))
                         ->authorize(fn (Model $record) => auth()->user()->can('delete', $record)),
                     RestoreAction::make()
                         ->color(Color::Green)
                         ->authorize(fn (Model $record) => auth()->user()->can('delete', $record)),
                     ForceDeleteAction::make()
-                        ->label('Delete')
+                        ->label(__('general.delete'))
                         ->authorize(fn (Model $record) => auth()->user()->can('delete', $record)),
                 ]),
             ])
@@ -236,7 +242,7 @@ class RegistrantResource extends Resource
             ])
             ->groups([
                 Group::make('registrationPayment.name')
-                    ->label('Type')
+                    ->label(__('general.type'))
                     ->collapsible(),
             ])
             ->defaultGroup('registrationPayment.name');

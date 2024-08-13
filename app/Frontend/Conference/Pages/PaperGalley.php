@@ -2,6 +2,7 @@
 
 namespace App\Frontend\Conference\Pages;
 
+use App\Facades\Hook;
 use App\Models\Enums\SubmissionStatus;
 use App\Models\Media;
 use App\Models\Submission;
@@ -30,14 +31,11 @@ class PaperGalley extends Page
 
         abort_if(! $media, 404);
 
-        return response()
-            ->file($media->getPath(), [
-                'Content-Type' => $media->mime_type,
-                'Content-Disposition' => 'inline; filename="'.$media->file_name.'"',
-                'Content-Length' => $media->size,
-                'Content-Transfer-Encoding' => 'binary',
-                'Accept-Ranges' => 'bytes',
-            ]);
+        if(!Hook::call('frontend.paper.galley', $galley)){
+            return response()
+                ->download($media->getPath(), $media->file_name);
+        }
+        
     }
 
     public static function routes(PageGroup $pageGroup): void

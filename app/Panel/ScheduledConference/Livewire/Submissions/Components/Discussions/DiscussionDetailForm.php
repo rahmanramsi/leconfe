@@ -34,7 +34,7 @@ class DiscussionDetailForm extends \Livewire\Component implements HasForms
         $this->form->validate();
 
         if (! $this->topic->open) {
-            return abort('403', 'Discussion is closed.');
+            return abort('403', __('general.discussion_is_closed'));
         }
 
         $formData = $this->form->getState();
@@ -51,8 +51,8 @@ class DiscussionDetailForm extends \Livewire\Component implements HasForms
 
         Notification::make('discussion-added')
             ->success()
-            ->title('Discussion Added')
-            ->body('Discussion has been added successfully.')
+            ->title(__('general.discussion_added'))
+            ->body(__('general.discussion_added_has_been_added_succesfully'))
             ->send();
 
         $this->form->fill([
@@ -71,13 +71,15 @@ class DiscussionDetailForm extends \Livewire\Component implements HasForms
                 Shout::make('discussion-alert')
                     ->type('warning')
                     ->hidden(fn (): bool => $this->topic->open)
-                    ->content('Can not add message to closed discussion.'),
+                    ->content(__('general.can_not_add_message_to_closed_discussion')),
                 Textarea::make('message')
-                    ->placeholder('Message')
+                    ->label(__('general.message'))
+                    ->placeholder(__('general.message'))
                     ->columnSpanFull()
                     ->required()
                     ->rows(5),
                 SpatieMediaLibraryFileUpload::make('attachments')
+                    ->label(__('general.attachments'))
                     ->collection('discussion-attachment')
                     ->disk('private-files')
                     ->dehydrated()

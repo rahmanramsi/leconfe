@@ -1,9 +1,9 @@
-<x-filament::section heading="References">
+<x-filament::section heading="{{ __('general.references') }}">
     <form wire:submit='submit' class="space-y-4">
         {{ $this->form }}
         @can('editing', $submission)
             <x-filament::button type="submit" icon="iconpark-save-o">
-                Submit
+                {{ __('general.submit') }}
             </x-filament::button>
         @endcan
     </form>

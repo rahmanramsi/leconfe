@@ -14,6 +14,7 @@ use Filament\Infolists\Concerns\InteractsWithInfolists;
 use Filament\Infolists\Contracts\HasInfolists;
 use Filament\Infolists\Infolist;
 use Filament\Pages\Page;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,15 +24,27 @@ class DistributionSetting extends Page implements HasForms, HasInfolists
 
     protected static ?int $navigationSort = 3;
 
-    protected static ?string $navigationGroup = 'Settings';
-
     protected static ?string $navigationIcon = 'heroicon-o-window';
 
     protected static string $view = 'panel.conference.pages.distribution';
 
-    protected ?string $heading = 'Distribution Settings';
 
-    protected static ?string $navigationLabel = 'Distribution';
+    public static function getNavigationLabel(): string
+    {
+        return __('general.distribution');
+    }
+
+    public function getHeading(): string|Htmlable
+    {
+        return __('general.distribution_settings');
+    }
+
+
+    public static function getNavigationGroup(): string
+    {
+        return __('general.settings');
+    }
+
 
     public function mount(): void
     {
@@ -55,11 +68,13 @@ class DistributionSetting extends Page implements HasForms, HasInfolists
                                 InfolistsVerticalTabs\Tabs::make()
                                     ->schema([
                                         InfolistsVerticalTabs\Tab::make('Setup')
+                                            ->label(__('general.setup'))
                                             ->schema([
                                                 LivewireEntry::make('doi-setting')
                                                     ->livewire(DOISetup::class),
                                             ]),
                                         InfolistsVerticalTabs\Tab::make('Registration')
+                                            ->label(__('general.registration'))
                                             ->schema([
                                                 LivewireEntry::make('doi-registration')
                                                     ->livewire(DOIRegistration::class),
@@ -67,6 +82,7 @@ class DistributionSetting extends Page implements HasForms, HasInfolists
                                     ]),
                             ]),
                         Tabs\Tab::make('Search Indexing')
+                            ->label(__('general.search_indexing'))
                             ->icon('heroicon-o-magnifying-glass')
                             ->schema([
                                 LivewireEntry::make('sidebar-setting')

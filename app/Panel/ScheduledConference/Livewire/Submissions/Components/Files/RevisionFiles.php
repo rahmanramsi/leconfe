@@ -10,9 +10,16 @@ class RevisionFiles extends SubmissionFilesTable
 {
     protected ?string $category = SubmissionFileCategory::REVISION_FILES;
 
-    protected string $tableHeading = 'Revisions';
+    protected string $tableHeading;
 
-    protected string $tableDescription = 'Upload your revision files here.';
+    protected string $tableDescription;
+
+    public function __construct()
+    {
+        $this->tableHeading = __('general.revisions');
+        $this->tableDescription = __('general.upload_your_reviews_files_here');
+    }
+
 
     public function isViewOnly(): bool
     {
@@ -27,7 +34,7 @@ class RevisionFiles extends SubmissionFilesTable
     {
         return [
             Shout::make('information')
-                ->content('After uploading files, system will send notification to the editor.'),
+                ->content(__('general.after_uploading_files_system_will_send_notification_to_editor')),
             ...parent::uploadFormSchema(),
         ];
     }

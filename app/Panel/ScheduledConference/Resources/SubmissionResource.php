@@ -31,6 +31,17 @@ class SubmissionResource extends Resource
         return $record?->getMeta('title') ?? static::getModelLabel();
     }
 
+    public static function getNavigationLabel(): string
+    {
+        return __('general.submissions');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('general.submissions');
+    }
+
+
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->with(['meta', 'user', 'reviews','participants'])->orderBy('updated_at', 'desc');
@@ -91,7 +102,7 @@ class SubmissionResource extends Resource
                                 $isEditorAssigned = $record->editors_count;
 
                                 if (! $isEditorAssigned && $record->stage != SubmissionStage::Wizard) {
-                                    return 'No Editor Assigned';
+                                    return __('general.no_editor_assigned');
                                 }
                             }),
                         Tables\Columns\TextColumn::make('reviewed')
@@ -105,7 +116,7 @@ class SubmissionResource extends Resource
                                 }
 
                                 if($review->reviewSubmitted()){
-                                    return 'Reviewed';
+                                    return __('general.reviewed');
                                 }
                             }),
                         Tables\Columns\TextColumn::make('withdrawn-notification')
@@ -116,7 +127,7 @@ class SubmissionResource extends Resource
                             ->color('danger')
                             ->getStateUsing(function (Submission $record) {
                                 if (filled($record->withdrawn_reason)) {
-                                    return 'Pending Withdrawal';
+                                    return __('general.pending_withdrawal');
                                 }
                             }),
                     ]),
@@ -124,6 +135,7 @@ class SubmissionResource extends Resource
             ])
             ->actions([
                 Tables\Actions\Action::make('view')
+                    ->label(__('general.view'))
                     ->icon('lineawesome-eye-solid')
                     ->authorize(function (Submission $record) {
                         return auth()->user()->can('view', $record);

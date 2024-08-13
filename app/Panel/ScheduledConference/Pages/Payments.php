@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Panel\ScheduledConference\Pages;  
+namespace App\Panel\ScheduledConference\Pages;
 
 use Filament\Pages\Page;
 use Filament\Infolists\Infolist;
@@ -9,20 +9,32 @@ use App\Infolists\Components\LivewireEntry;
 use App\Infolists\Components\VerticalTabs as InfolistsVerticalTabs;
 use App\Panel\ScheduledConference\Livewire\Payment\PaymentManualTable;
 use App\Panel\ScheduledConference\Livewire\Payment\PaymentSetting;
+use Illuminate\Contracts\Support\Htmlable;
 
 class Payments extends Page
 {
     protected static string $view = 'panel.scheduledConference.pages.payment';
 
-    protected static ?string $navigationGroup = 'Settings';
+
+    public static function getNavigationGroup(): string
+    {
+        return __('general.settings');
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('general.payments');
+    }
+
+    public function getHeading(): string|Htmlable
+    {
+        return __('general.payment_methods');
+    }
 
     protected static ?string $navigationIcon = 'heroicon-o-banknotes';
 
-    protected static ?string $navigationLabel = 'Payments';
-
     protected static ?int $navigationSort = 3;
 
-    protected static ?string $title = 'Payment Methods';
 
     public static function canAccess(): bool
     {
@@ -37,10 +49,12 @@ class Payments extends Page
                     ->contained(false)
                     ->schema([
                         Tabs\Tab::make('Payment')
+                            ->label(__('general.payment'))
                             ->schema([
                                 InfolistsVerticalTabs\Tabs::make()
                                     ->schema([
                                         InfolistsVerticalTabs\Tab::make('Manual')
+                                            ->label(__('general.manual'))
                                             ->icon('heroicon-o-credit-card')
                                             ->schema([
                                                 LivewireEntry::make('manual')
@@ -49,6 +63,7 @@ class Payments extends Page
                                     ]),
                             ]),
                         Tabs\Tab::make('Settings')
+                            ->label(__('general.settings'))
                             ->schema([
                                 LivewireEntry::make('settings')
                                     ->livewire(PaymentSetting::class)
