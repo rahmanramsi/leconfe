@@ -23,6 +23,14 @@ class Logout extends BaseNavigationItemType
 
     public static function getUrl(NavigationMenuItem $navigationMenuItem): string
     {
-        return route('logout');
+        if (app()->getCurrentScheduledConferenceId()) {
+            return route('livewirePageGroup.scheduledConference.pages.logout');
+        }
+
+        if (app()->getCurrentConferenceId()) {
+            return route('livewirePageGroup.conference.pages.logout');
+        }
+
+        return route('livewirePageGroup.website.pages.logout');
     }
 }
