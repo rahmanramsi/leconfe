@@ -792,7 +792,7 @@ return [
     'referer' => 'Referer',
     'participant_registration' => 'Regjistrimi i Pjesëmarrësve',
     'registration_status' => 'Statusi i Regjistrimit',
-
+    'timelines' => 'Kohëzgjatjet',
 
 
 

@@ -107,7 +107,7 @@ class ParticipantRegister extends Page
             );
         });
 
-        return redirect(request()->header(__('general.referer')));
+        return redirect(request()->header('Referer'));
     }
 
     public function cancel()
@@ -158,7 +158,7 @@ class ParticipantRegister extends Page
     {
         return [
             route(Home::getRouteName()) => __('general.home'),
-            __('gemeral.participant_registration'),
+            __('general.participant_registration'),
         ];
     }
 

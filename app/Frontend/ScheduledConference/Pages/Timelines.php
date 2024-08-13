@@ -19,7 +19,7 @@ class Timelines extends Page
     {
         return [
             route(Home::getRouteName()) => __('general.home'),
-            __('general.timeline'),
+            __('general.timelines'),
         ];
     }
 

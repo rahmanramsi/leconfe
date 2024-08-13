@@ -773,7 +773,7 @@ return [
     'referer' => 'Pengarah',
     'participant_registration' => 'Pendaftaran Peserta',
     'registration_status' => 'Status Pendaftaran',
-
+    'timelines' => 'Garis Waktu',
 
 
 

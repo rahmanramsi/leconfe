@@ -800,6 +800,7 @@ return [
     'referer' => "Referer",
     'participant_registration' => "Participant Registration",
     'registration_status' => "Registration Status",
+    'timelines' => "Timelines",
 
 
 ];

@@ -792,7 +792,7 @@ return [
     'referer' => 'المرجع',
     'participant_registration' => 'تسجيل المشاركين',
     'registration_status' => 'حالة التسجيل',
-
+    'timelines' => 'الخطوط الزمنية',
 
 
 ];
