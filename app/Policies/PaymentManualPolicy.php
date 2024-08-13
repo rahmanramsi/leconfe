@@ -11,36 +11,30 @@ class PaymentManualPolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(User $user)
     {
         if ($user->can('PaymentManual:create')) {
             return true;
         }
-
-        return false;
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, PaymentManual $paymentManual): bool
+    public function update(User $user, PaymentManual $paymentManual)
     {
         if ($user->can('PaymentManual:update')) {
             return true;
         }
-
-        return false;
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, PaymentManual $paymentManual): bool
+    public function delete(User $user, PaymentManual $paymentManual)
     {
         if ($user->can('PaymentManual:delete')) {
             return true;
         }
-
-        return false;
     }
 }
