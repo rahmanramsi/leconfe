@@ -12,7 +12,7 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use App\Actions\ScheduledConferences\ScheduledConferenceUpdateAction;
 use Filament\Forms\Components\Section;
 
-class PaymentSettings extends Component implements HasForms
+class PaymentSetting extends Component implements HasForms
 {
     use InteractsWithForms;
 
