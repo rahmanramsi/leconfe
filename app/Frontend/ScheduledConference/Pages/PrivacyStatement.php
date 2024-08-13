@@ -17,8 +17,8 @@ class PrivacyStatement extends Page
     public function getBreadcrumbs(): array
     {
         return [
-            route(Home::getRouteName()) => 'Home',
-            'Privacy Statement',
+            route(Home::getRouteName()) => __('general.home'),
+            __('general.privacy_statement'),
         ];
     }
 

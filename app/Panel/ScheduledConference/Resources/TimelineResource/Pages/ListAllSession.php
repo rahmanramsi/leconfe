@@ -63,8 +63,8 @@ class ListAllSession extends Page implements HasTable, HasForms
     {
         return [
             Actions\CreateAction::make()
-                ->label('Add session')
-                ->modalHeading('Add Session')
+                ->label(__('general.add_session'))
+                ->modalHeading(__('general.add_session'))
                 ->model(static::$model)
                 ->form(fn(Form $form) => $this->form($form))
                 ->mutateFormDataUsing(function (array $data) {
@@ -84,7 +84,7 @@ class ListAllSession extends Page implements HasTable, HasForms
             ->schema([
                 ...self::$resource::getSessionForm(),
                 Select::make('timeline_id')
-                    ->label('Belong to timeline')
+                    ->label(__('general.belong_to_timeline'))
                     ->options(Timeline::get()->pluck('name', 'id')->toArray())
                     ->searchable()
                     ->required(),
@@ -103,27 +103,27 @@ class ListAllSession extends Page implements HasTable, HasForms
             )
             ->columns([
                 TextColumn::make('time_span')
-                    ->label('Time')
+                    ->label(__('general.time'))
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query
                             ->orderBy('time_start', $direction)
                             ->orderBy('time_end', $direction);
                     }),
                 TextColumn::make('name')
-                    ->label('Session name')
+                    ->label(__('general.session_name'))
                     ->searchable(query: function (Builder $query, string $search): Builder {
                         return $query
                             ->where('sessions.name', 'like', "%{$search}%");
                     })
                     ->sortable(),
                 TextColumn::make('public_details')
-                    ->label('Public Details')
-                    ->placeholder('Empty')
-                    ->formatStateUsing(fn() => 'Not Empty'),
+                    ->label(__('general.public_details'))
+                    ->placeholder(__('general.empty'))
+                    ->formatStateUsing(fn() => __('general.not_empty')),
                 TextColumn::make('details')
-                    ->label('Participant Details')
-                    ->placeholder('Empty')
-                    ->formatStateUsing(fn() => 'Not Empty'),
+                    ->label(__('general.participant_details'))
+                    ->placeholder(__('general.empty'))
+                    ->formatStateUsing(fn() => __('general.not_empty')),
                 IconColumn::make('require_attendance')
                     ->icon(fn(Model $record) => match ($record->getRequiresAttendanceStatus()) {
                         'timeline' => 'heroicon-o-stop-circle',
@@ -137,14 +137,14 @@ class ListAllSession extends Page implements HasTable, HasForms
                     })
                     ->tooltip(
                         fn(Model $record) => $record->getRequiresAttendanceStatus() === 'timeline' ?
-                            "Attendance are'nt required because the timeline had it active." : null
+                            __('general.attendance_arent_required') : null
                     )
                     ->alignCenter(),
             ])
             ->defaultSort('time_span')
             ->actions([
                 EditAction::make()
-                    ->modalHeading('Edit Session')
+                    ->modalHeading(__('general.edit_session'))
                     ->model(static::$model)
                     ->form(fn(Form $form) => $this->form($form))
                     ->authorize(fn(Model $record) => auth()->user()->can('update', $record)),

@@ -18,8 +18,8 @@ class Timelines extends Page
     public function getBreadcrumbs(): array
     {
         return [
-            route(Home::getRouteName()) => 'Home',
-            'Timelines',
+            route(Home::getRouteName()) => __('general.home'),
+            __('general.timeline'),
         ];
     }
 
@@ -28,7 +28,7 @@ class Timelines extends Page
         return [
             'timelines' => Timeline::query()
                 ->where('hide', false)
-                ->orderBy('date')    
+                ->orderBy('date')
                 ->get(),
         ];
     }

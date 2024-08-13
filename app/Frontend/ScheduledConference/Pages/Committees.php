@@ -18,8 +18,8 @@ class Committees extends Page
     public function getBreadcrumbs(): array
     {
         return [
-            route(Home::getRouteName()) => 'Home',
-            'Committees',
+            route(Home::getRouteName()) => __('general.home'),
+            __('general.committees'),
         ];
     }
 

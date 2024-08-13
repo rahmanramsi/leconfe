@@ -68,7 +68,7 @@ class Agenda extends Page
     public function confirm(): void
     {
         if(!auth()->check()) {
-            $this->errorMessage = "You're not logged in";
+            $this->errorMessage = __('general.youre_not_logged_in');
             return;
         }
 
@@ -79,12 +79,12 @@ class Agenda extends Page
             ->first();
 
         if(!$registration) {
-            $this->errorMessage = "You're not registrant of " . app()->getCurrentScheduledConference()->title;
+            $this->errorMessage = __('general.youre_not_registrant') . app()->getCurrentScheduledConference()->title;
             return;
         }
 
-        if($registration->registrationPayment->state !== RegistrationPaymentState::Paid->value) { 
-            $this->errorMessage = "You're not participant of " . app()->getCurrentScheduledConference()->title;
+        if($registration->registrationPayment->state !== RegistrationPaymentState::Paid->value) {
+            $this->errorMessage = __('general.youre_not_participant'). app()->getCurrentScheduledConference()->title;
             return;
         }
 
@@ -93,7 +93,7 @@ class Agenda extends Page
             $timeline = $this->timelineData;
 
             if(!$timeline) {
-                $this->errorMessage = "Invalid event selection";
+                $this->errorMessage = __('general.invalid_event_selection');
                 return;
             }
 
@@ -102,11 +102,11 @@ class Agenda extends Page
                 'registration_id' => $registration->id,
             ]);
         } else {
-            
+
             $session = $this->sessionData;
 
             if(!$session) {
-                $this->errorMessage = "Invalid event selection";
+                $this->errorMessage = __('general.invalid_event_selection');
                 return;
             }
 
@@ -160,8 +160,8 @@ class Agenda extends Page
     public function getBreadcrumbs(): array
     {
         return [
-            route(Home::getRouteName()) => 'Home',
-            'Agenda',
+            route(Home::getRouteName()) => __('general.home'),
+            __('general.agenda'),
         ];
     }
 

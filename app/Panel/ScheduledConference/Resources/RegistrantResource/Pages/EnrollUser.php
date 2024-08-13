@@ -194,6 +194,7 @@ class EnrollUser extends ListRecords
                                     ->orderBy('family_name', $direction)
                             ),
                         TextColumn::make('email')
+                            ->label(__('general.email'))
                             ->wrap()
                             ->color('gray')
                             ->searchable()
@@ -201,6 +202,7 @@ class EnrollUser extends ListRecords
                             ->sortable()
                             ->icon('heroicon-m-envelope'),
                         TextColumn::make('affiliation')
+                            ->label(__('general.affiliation'))
                             ->size('sm')
                             ->wrap()
                             ->color('gray')

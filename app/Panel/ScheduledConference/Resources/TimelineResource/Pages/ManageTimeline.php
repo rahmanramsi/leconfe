@@ -21,7 +21,7 @@ class ManageTimeline extends ListRecords
                 ->url(fn () => static::$resource::getUrl('all-session'))
                 ->authorize('viewAny', Session::class),
             Actions\CreateAction::make()
-                ->modalHeading('Add Timeline')
+                ->modalHeading(__('general.add_timeline'))
                 ->modalWidth(MaxWidth::ExtraLarge)
                 ->model(Timeline::class)
                 ->authorize('create', Timeline::class),

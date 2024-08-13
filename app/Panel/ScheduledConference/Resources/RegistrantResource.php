@@ -107,11 +107,11 @@ class RegistrantResource extends Resource
             ->heading(__('general.registrant_list'))
             ->headerActions([
                 Action::make('attendance_qr_code')
-                    ->label('Attendance QR Code')
+                    ->label(__('general.attendance_qr_code'))
                     ->icon('heroicon-m-qr-code')
                     ->color('gray')
                     ->modalHeading(app()->getCurrentScheduledConference()->title)
-                    ->modalDescription('Attendance QR Code')
+                    ->modalDescription(__('general.attendance_qr_code'))
                     ->modalSubmitAction(false)
                     ->infolist(function (Infolist $infolist): Infolist {
                         return $infolist
@@ -123,14 +123,15 @@ class RegistrantResource extends Resource
                                             'currentScheduledConference' => app()->getCurrentScheduledConference(),
                                             'attendanceRedirectUrl' => route('livewirePageGroup.scheduledConference.pages.agenda'),
                                             'QrCodeImageSize' => 400,
-                                            'QrCodeFooterText' => 'Please scan this QR Code to confirm your attendance.',
+                                            'QrCodeFooterText' => __('general.please_scan_qr_code_confirm_attendance'),
                                         ]),
                                     Fieldset::make('')
                                         ->schema([
-                                            TextEntry::make('title'),
+                                            TextEntry::make('title')
+                                            ->label(__('general.title')),
                                             TextEntry::make('description')
                                                 ->getStateUsing(fn(Model $record) => $record->getMeta('description'))
-                                                ->placeholder('Description Empty')
+                                                ->placeholder(__('general.description_empty'))
                                                 ->lineClamp(8),
                                             InfolistGrid::make(2)
                                                 ->schema([
@@ -219,7 +220,7 @@ class RegistrantResource extends Resource
                     ->authorize(fn (Model $record) => auth()->user()->can('update', $record)),
                 ActionGroup::make([
                     Action::make('attendance')
-                        ->label('Attendance')
+                        ->label(__('general.attendance'))
                         ->icon('heroicon-m-calendar-days')
                         ->color(Color::Blue)
                         ->url(fn(Model $record) => static::getUrl('attendance', ['record' => $record]))

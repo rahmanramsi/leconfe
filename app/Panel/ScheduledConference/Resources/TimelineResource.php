@@ -54,28 +54,30 @@ class TimelineResource extends Resource
     {
         return [
             TextInput::make('name')
-                ->label('Session name')
+                ->label(__('general.session_name'))
                 ->required(),
             TinyEditor::make('public_details')
                 ->minHeight(200)
                 ->profile('basic')
-                ->hint('Detail that visible to all user'),
+                ->hint(__('general.detail_that_visible_to_all_user')),
             TinyEditor::make('details')
                 ->minHeight(200)
                 ->profile('basic')
-                ->hint('Detail that visible only to participant'),
+                ->hint(__('general.detail_that_visible_only_to_participant')),
             Grid::make(2)
                 ->schema([
                     TimePicker::make('time_start')
+                        ->label(__("general.time_start"))
                         ->required()
                         ->before('time_end'),
                     TimePicker::make('time_end')
+                        ->label(__("general.time_end"))
                         ->required()
                         ->after('time_start'),
                 ]),
             Checkbox::make('require_attendance')
                 ->disabled(fn(?Model $record) => (bool) $record ? $record->timeline->isRequireAttendance() : false)
-                ->helperText(fn(?Model $record) => $record ? ($record->timeline->isRequireAttendance() ? 'Timeline are requiring attendance, this is disabled.' : null) : null),
+                ->helperText(fn(?Model $record) => $record ? ($record->timeline->isRequireAttendance() ? __('general.timeline_are_requiring_attendance_this_is_disabled') : null) : null),
         ];
     }
 
@@ -93,7 +95,7 @@ class TimelineResource extends Resource
                     ->label(__('general.date'))
                     ->required(),
                 Checkbox::make('require_attendance')
-                    ->helperText('By turning this on, participants only need to attend here.'),
+                    ->helperText(__('general.by_turning_this_on_participants_only_need_attend_here')),
                 Select::make('type')
                     ->label(__('general.type'))
                     ->options(Timeline::getTypes())
@@ -154,7 +156,7 @@ class TimelineResource extends Resource
                     }),
                 ActionGroup::make([
                     Action::make('session')
-                        ->label('Details')
+                        ->label(__('general.details'))
                         ->icon('heroicon-m-calendar-days')
                         ->color(Color::Blue)
                         ->url(fn(Model $record) => static::getUrl('session', ['record' => $record]))

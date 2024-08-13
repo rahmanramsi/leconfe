@@ -51,7 +51,7 @@ class ParticipantRegister extends Page
     public function messages(): array
     {
         $message = [
-            'type' => 'Registration type have to selected.',
+            'type' => __('general.registration_type_have_to_selected'),
         ];
         return $message;
     }
@@ -107,7 +107,7 @@ class ParticipantRegister extends Page
             );
         });
 
-        return redirect(request()->header('Referer'));
+        return redirect(request()->header(__('general.referer')));
     }
 
     public function cancel()
@@ -157,8 +157,8 @@ class ParticipantRegister extends Page
     public function getBreadcrumbs(): array
     {
         return [
-            route(Home::getRouteName()) => 'Home',
-            'Participant Registration',
+            route(Home::getRouteName()) => __('general.home'),
+            __('gemeral.participant_registration'),
         ];
     }
 

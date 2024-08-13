@@ -74,40 +74,41 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
     {
         return [
             Actions\Action::make('mark_in_day')
-                ->label('Mark in (Day)')
+                ->label(__('general.mark_in_day'))
                 ->icon('heroicon-m-finger-print')
                 ->color(Color::Green)
                 ->modalWidth('2xl')
-                ->successNotificationTitle('Saved!')
-                ->failureNotificationTitle('Data could not be saved.')
+                ->successNotificationTitle(__('general.saved'))
+                ->failureNotificationTitle(__('general.data_could_not_saved'))
                 ->form(function (Form $form) {
                     return $form
                         ->schema([
                             Select::make('timeline_id')
-                                ->label('Timeline')
+                                ->label(__('general.timeline'))
                                 ->options(static::getTimelineListOption(self::DAY_ATTENDANCE_MARK_TYPE_IN, $this->registration))
                                 ->searchable()
                                 ->required()
                                 ->live(),
                             Fieldset::make('Attendance date')
+                                ->label(__('general.attendance_date'))
                                 ->schema([
                                     Placeholder::make('attendance_date')
                                         ->label('')
                                         ->content(function (Get $get) {
                                             if (!$get('timeline_id')) {
-                                                return 'Select the timeline first.';
+                                                return __('general.select_the_timeline_first');
                                             }
 
                                             $timeline = Timeline::where('id', $get('timeline_id'))->first();
                                             if (!$timeline) {
-                                                return 'Select valid timeline.';
+                                                return __('general.select_valid_timeline');
                                             }
 
                                             return $timeline->date->format(Setting::get('format_date'));
                                         }),
                                 ]),
                             TimePicker::make('attendance_time')
-                                ->helperText('Input participant attendance time.')
+                                ->helperText(__('general.input_participant_attendance_time'))
                                 ->hint(function (Get $get) {
                                     if (!$get('timeline_id')) {
                                         return null;
@@ -143,18 +144,18 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
                 })
                 ->authorize('markIn', RegistrationAttendance::class),
             Actions\Action::make('mark_out_day')
-                ->label('Mark out (Day)')
+                ->label(__('general.mark_out_day'))
                 ->icon('heroicon-m-finger-print')
                 ->color(Color::Red)
                 ->requiresConfirmation()
                 ->modalWidth('2xl')
-                ->successNotificationTitle('Saved!')
-                ->failureNotificationTitle('Data could not be saved.')
+                ->successNotificationTitle(__('general.saved'))
+                ->failureNotificationTitle(__('general.data_could_not_saved'))
                 ->form(function (Form $form) {
                     return $form
                         ->schema([
                             Select::make('timeline_id')
-                                ->label('Timeline')
+                                ->label(__('general.timeline'))
                                 ->options(static::getTimelineListOption(self::DAY_ATTENDANCE_MARK_TYPE_OUT, $this->registration))
                                 ->searchable()
                                 ->required(),
@@ -214,14 +215,14 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
             )
             ->columns([
                 TextColumn::make('time_span')
-                    ->label('Time')
+                    ->label(__('general.time'))
                     ->sortable(query: function (Builder $query, string $direction): Builder {
                         return $query
                             ->orderBy('time_start', $direction)
                             ->orderBy('time_end', $direction);
                     }),
                 TextColumn::make('name')
-                    ->label('Session name')
+                    ->label(__('general.session_name'))
                     ->searchable(query: function (Builder $query, string $search): Builder {
                         return $query
                             ->where('sessions.name', 'like', "%{$search}%");
@@ -239,14 +240,14 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
                     })
                     ->tooltip(
                         fn(Model $record) => match ($record->getRequiresAttendanceStatus()) {
-                            'not-required' => "Attendance are'nt required.",
-                            'timeline' => "Attendance are'nt required because per day attendance are required.",
+                            'not-required' => __('general.attendance_required'),
+                            'timeline' => __('general.attendance_required_per_day_attendance'),
                             default => null,
                         }
                     )
                     ->alignCenter(),
                 IconColumn::make('attended')
-                    ->label('Attendance Status')
+                    ->label(__('general.attendance_status'))
                     ->getStateUsing(function (Model $record) {
                         if ($this->registration->isAttended($record->timeline)) {
                             return true;
@@ -264,7 +265,7 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
                     ->falseColor(Color::Red)
                     ->tooltip(function (Model $record) {
                         if ($record->timeline->isRequireAttendance()) {
-                            return 'Per day attendance are required, mark in and out on top of the page.';
+                            return __('general.attendance_per_day_required');
                         }
                     })
                     ->boolean()
@@ -281,7 +282,7 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
 
                         return null;
                     })
-                    ->label('Attendance Time')
+                    ->label(__('general.attendance_time'))
                     ->placeholder('-')
                     ->dateTime(Setting::get('format_time')),
             ])
@@ -291,7 +292,7 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
                     ->label('')
                     ->getDescriptionFromRecordUsing(function (Model $record): string {
                         $date = $record->timeline->date->format(Setting::get('format_date'));
-                        $attendanceRequire = $record->timeline->isRequireAttendance() ? "(Per day attendance are required)" : null;
+                        $attendanceRequire = $record->timeline->isRequireAttendance() ? __('general.per_day_attendance_are_required') : null;
 
                         return "$date $attendanceRequire";
                     })
@@ -309,19 +310,20 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
                     ->icon('heroicon-m-finger-print')
                     ->color(Color::Green)
                     ->modalWidth('xl')
-                    ->successNotificationTitle('Saved!')
-                    ->failureNotificationTitle('Data could not be saved.')
+                    ->successNotificationTitle(__('general.saved'))
+                    ->failureNotificationTitle(__('general.data_could_not_saved'))
                     ->form(function (Form $form, Model $record) {
                         return $form
                             ->schema([
                                 Fieldset::make('Attendance date')
+                                    ->label(__('general.attendance_date'))
                                     ->schema([
                                         Placeholder::make('attendance_date')
                                             ->label('')
                                             ->content(fn() => $record->date->format(Setting::get('format_date'))),
                                     ]),
                                 TimePicker::make('attendance_time')
-                                    ->helperText('Input participant attendance time.')
+                                    ->helperText(__('general.input_participant_attendance_time'))
                                     ->hint(fn() => $record->time_span)
                                     ->required(),
                             ])
@@ -351,8 +353,8 @@ class ParticipantAttendance extends Page implements HasForms, HasTable
                     ->icon('heroicon-m-finger-print')
                     ->color(Color::Red)
                     ->requiresConfirmation()
-                    ->successNotificationTitle('Saved!')
-                    ->failureNotificationTitle('Data could not be saved.')
+                    ->successNotificationTitle(__('general.saved'))
+                    ->failureNotificationTitle(__('general.data_could_not_saved'))
                     ->action(function (Model $record, Action $action) {
                         $attendance = $this->registration->getAttendance($record);
 

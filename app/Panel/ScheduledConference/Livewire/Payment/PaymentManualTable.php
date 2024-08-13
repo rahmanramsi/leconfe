@@ -76,12 +76,12 @@ class PaymentManualTable extends Component implements HasForms, HasTable
                 PaymentManual::query()
                     ->orderBy('order_column')
             )
-            ->heading('Manual Payment List')
+            ->heading(__('general.manual_payment_list'))
             ->reorderable('order_column')
             ->headerActions([
                 CreateAction::make()
-                    ->label("Add Manual Payment")
-                    ->modalHeading('Create new manual payment')
+                    ->label(__('general.add_manual_payment'))
+                    ->modalHeading(__('general.create_new_manual_payment'))
                     ->modalWidth('4xl')
                     ->model(PaymentManual::class)
                     ->form(static::manualPaymentForm())
@@ -89,9 +89,11 @@ class PaymentManualTable extends Component implements HasForms, HasTable
             ])
             ->columns([
                 TextColumn::make('name')
+                    ->label(__('general.name'))
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('currency')
+                    ->label(__('general.currency'))
                     ->formatStateUsing(fn ($state) => currency($state))
                     ->badge()
                     ->searchable()
@@ -100,10 +102,10 @@ class PaymentManualTable extends Component implements HasForms, HasTable
             ->groups([
                 Group::make('currency')
                     ->getTitleFromRecordUsing(fn (Model $record): string => Str::upper($record->currency))
-                    ->label('Currency')
+                    ->label(__('general.currency'))
                     ->collapsible()
             ])
-            ->emptyStateHeading('Manual payment are empty')
+            ->emptyStateHeading(__('general.manual_payment_are_empty'))
             ->actions([
                 EditAction::make()
                     ->form(static::manualPaymentForm())

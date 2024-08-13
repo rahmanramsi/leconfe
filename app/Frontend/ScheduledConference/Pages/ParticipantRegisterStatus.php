@@ -43,7 +43,7 @@ class ParticipantRegisterStatus extends Page
 
         $paymentList = [];
         $payments = PaymentManual::select('*')->get();
-        
+
         foreach ($payments as $payment) {
             $paymentCurrencyCode = $payment->currency;
             if(!isset($paymentList[$paymentCurrencyCode])) {
@@ -63,8 +63,8 @@ class ParticipantRegisterStatus extends Page
     public function getBreadcrumbs(): array
     {
         return [
-            route(Home::getRouteName()) => 'Home',
-            'Registration Status',
+            route(Home::getRouteName()) => __('general.home'),
+            __('general.registration_status'),
         ];
     }
 

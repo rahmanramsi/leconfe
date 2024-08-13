@@ -15,11 +15,11 @@ class Announcements extends Page
     public function getBreadcrumbs(): array
     {
         return [
-            route(Home::getRouteName()) => 'Home',
-            'Announcements',
+            route(Home::getRouteName()) => __('general.home'),
+            __('general.announcement'),
         ];
     }
-    
+
     protected function getViewData(): array
     {
         return [
