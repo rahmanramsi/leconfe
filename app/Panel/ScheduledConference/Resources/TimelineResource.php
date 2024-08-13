@@ -84,8 +84,10 @@ class TimelineResource extends Resource
         return $form
             ->schema([
                 TextInput::make('name')
+                    ->label(__('general.name'))
                     ->required(),
                 Textarea::make('description')
+                    ->label(__('general.description'))
                     ->maxLength(255),
                 DatePicker::make('date')
                     ->label(__('general.date'))
@@ -93,8 +95,9 @@ class TimelineResource extends Resource
                 Checkbox::make('require_attendance')
                     ->helperText('By turning this on, participants only need to attend here.'),
                 Select::make('type')
+                    ->label(__('general.type'))
                     ->options(Timeline::getTypes())
-                    ->helperText('Type that integrates with the workflow process.')
+                    ->helperText(__('general.type_integrates_with_workflow_process'))
                     ->unique(
                         ignorable: fn() => $form->getRecord(),
                         modifyRuleUsing: fn(Unique $rule) => $rule->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId()),
@@ -108,14 +111,15 @@ class TimelineResource extends Resource
     {
         return $table
             ->query(Timeline::query())
-            ->heading('Timeline')
+            ->heading(__('general.timeline'))
             ->defaultSort('date')
             ->columns([
                 TextColumn::make('date')
                     ->label(__('general.date'))
                     ->dateTime(Setting::get('format_date'))
                     ->sortable(),
-                TextColumn::make('name'),
+                TextColumn::make('name')
+                    ->label(__('general.name')),
                 TextColumn::make('sessions_count')
                     ->label('Session')
                     ->counts('sessions')
@@ -123,14 +127,14 @@ class TimelineResource extends Resource
                     ->color(Color::Blue)
                     ->alignCenter(),
                 IconColumn::make('require_attendance')
-                    ->boolean()
                     ->trueIcon('heroicon-o-check-circle')
                     ->trueColor(Color::Green)
                     ->falseIcon('heroicon-o-x-circle')
                     ->falseColor(Color::Red)
+                    ->boolean()
                     ->alignCenter(),
                 ToggleColumn::make('hide')
-                    ->label('Hidden'),
+                    ->label(__('general.hidden')),
             ])
             ->recordUrl(fn(Model $record) => static::getUrl('session', ['record' => $record]))
             ->filters([
