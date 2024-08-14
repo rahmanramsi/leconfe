@@ -50,12 +50,14 @@ class Session extends Model
 
     public function getStartDate()
     {
-        return $this->start_at->setTimezone(app()->getCurrentScheduledConference()->getMeta('timezone'));
+        $timezone = app()->getCurrentScheduledConference()->getMeta('timezone');
+        return $this->start_at->setTimezone($timezone);
     }
 
     public function getEndDate()
     {
-        return $this->end_at->setTimezone(app()->getCurrentScheduledConference()->getMeta('timezone'));
+        $timezone = app()->getCurrentScheduledConference()->getMeta('timezone');
+        return $this->end_at->setTimezone($timezone);
     }
 
     public function isFuture(): bool

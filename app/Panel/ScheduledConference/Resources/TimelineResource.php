@@ -2,7 +2,9 @@
 
 namespace App\Panel\ScheduledConference\Resources;
 
+use Carbon\Carbon;
 use App\Models\Role;
+use App\Models\Session;
 use App\Facades\Setting;
 use App\Models\Timeline;
 use Filament\Forms\Form;
@@ -13,7 +15,6 @@ use App\Tables\Columns\IndexColumn;
 use Filament\Forms\Components\Grid;
 use Filament\Tables\Actions\Action;
 use App\Forms\Components\TinyEditor;
-use App\Models\Session;
 use Filament\Support\Enums\MaxWidth;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
@@ -117,12 +118,12 @@ class TimelineResource extends Resource
                     ->modalWidth(MaxWidth::ExtraLarge)
                     ->model(Timeline::class)
                     ->after(function (Model $record, array $data) {
-                        $date = $data['date'];
+                        $date = Carbon::parse($data['date'], 'UTC');
                         foreach($record->sessions as $session) {
-                            $session->date = $date;
+                            $session->start_at = $session->start_at->copy()->setDateFrom($date);
+                            $session->end_at = $session->end_at->copy()->setDateFrom($date);
                             $session->save();
                         }
-                        return $data;
                     }),
                 ActionGroup::make([
                     Action::make('session')

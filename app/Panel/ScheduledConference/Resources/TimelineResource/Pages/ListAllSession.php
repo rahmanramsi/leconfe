@@ -104,6 +104,7 @@ class ListAllSession extends Page implements HasTable, HasForms
                             ->label(__("general.time_start"))
                             ->seconds(false)
                             ->native(false)
+                            ->formatStateUsing(fn (?Model $record) => $record ? $record->getStartDate() : null)
                             ->dehydrateStateUsing(function (Get $get, ?Model $record, string $state) {
                                 if($record) {
                                     $date = Carbon::createFromFormat('Y-m-d H:i:s', $state, app()->getCurrentScheduledConference()->getMeta('timezone'))->setDateFrom($record->timeline->date);
@@ -120,6 +121,7 @@ class ListAllSession extends Page implements HasTable, HasForms
                             ->label(__("general.time_end"))
                             ->seconds(false)
                             ->native(false)
+                            ->formatStateUsing(fn (?Model $record) => $record ? $record->getEndDate() : null)
                             ->dehydrateStateUsing(function (Get $get, ?Model $record, string $state) {
                                 if($record) {
                                     $date = Carbon::createFromFormat('Y-m-d H:i:s', $state, app()->getCurrentScheduledConference()->getMeta('timezone'))->setDateFrom($record->timeline->date);
