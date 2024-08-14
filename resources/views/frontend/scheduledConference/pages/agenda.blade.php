@@ -40,9 +40,6 @@
                             <td class="px-6 py-4" {!! (!$timeline->canShown() || !$isParticipant) ? "colspan='3'" : "colspan='2'" !!}>
                                 <strong class="block font-medium text-gray-900 dark:text-white">
                                     {{ $timeline->name }}
-                                    <br>{{ $timeline->getEarliestTime() }}
-                                    <br>{{ now() }}
-                                    <br>{{ $timeline->getLatestTime() }}
                                     @if ($isParticipant)
                                         @if ($timeline->isOngoing())
                                             <span class="badge badge-success text-white mx-2">
