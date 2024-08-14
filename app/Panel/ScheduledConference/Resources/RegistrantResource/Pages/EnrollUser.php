@@ -231,20 +231,25 @@ class EnrollUser extends ListRecords
                     })
                     ->after(function (Model $record, $data) { // record are registration model
                         $registrationType = RegistrationType::where('id', $record->registration_type_id)->first();
-                        $record->registrationPayment()->create([
-                            'name' => $registrationType->type,
-                            'description' => $registrationType->getMeta('description'),
-                            'cost' => $registrationType->cost,
-                            'currency' => $registrationType->currency,
-                            'state' => $data['registrationPayment']['state'],
-                            'paid_at' => $data['registrationPayment']['state'] === RegistrationPaymentState::Paid->value ? $data['registrationPayment']['paid_at'] : null,
-                        ]);
 
-                        $record->user->notify(
-                            new \App\Notifications\RegistrationEnroll(
-                                registration: $record,
-                            )
-                        );
+                        try {
+                            $record->registrationPayment()->create([
+                                'name' => $registrationType->type,
+                                'description' => $registrationType->getMeta('description'),
+                                'cost' => $registrationType->cost,
+                                'currency' => $registrationType->currency,
+                                'state' => $data['registrationPayment']['state'],
+                                'paid_at' => $data['registrationPayment']['state'] === RegistrationPaymentState::Paid->value ? $data['registrationPayment']['paid_at'] : null,
+                            ]);
+    
+                            $record->user->notify(
+                                new \App\Notifications\RegistrationEnroll(
+                                    registration: $record,
+                                )
+                            );
+                        } catch (\Throwable $th) {
+                            throw $th;
+                        }
                     })
             ])
             ->extremePaginationLinks();

@@ -209,11 +209,15 @@ class RegistrantResource extends Resource
                     ->modalHeading(__('general.paid_status_decision'))
                     ->modalWidth('lg')
                     ->after(function (Model $record) {
-                        $record->user->notify(
-                            new RegistrationPaymentDecision(
-                                registration: $record
-                            )
-                        );
+                        try {
+                            $record->user->notify(
+                                new RegistrationPaymentDecision(
+                                    registration: $record
+                                )
+                            );
+                        } catch (\Throwable $th) {
+                            throw $th;
+                        }
                     })
                     ->hidden(fn(Model $record) => $record->trashed())
                     ->authorize(fn (Model $record) => auth()->user()->can('update', $record)),
