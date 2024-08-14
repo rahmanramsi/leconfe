@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Mail\Templates\VerifyUserEmail;
+use App\Models\Enums\RegistrationPaymentState;
 use App\Models\Enums\UserRole;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
@@ -134,6 +135,26 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasMedia,
         return $this->hasMany(Registration::class);
     }
 
+    public function isRegistrationFinished($scheduledConferenceId): bool
+    {
+        $userRegistration = $this->registration()
+            ->where('scheduled_conference_id', $scheduledConferenceId)
+            ->first();
+
+        if(!$userRegistration) {
+            return false;
+        }
+        
+        if(!($userRegistration->registrationPayment)) {
+            return false;
+        }
+
+        if($userRegistration->registrationPayment->state !== RegistrationPaymentState::Paid->value) {
+            return false;
+        }
+
+        return true;
+    }
    
     public function getFilamentAvatarUrl(): ?string
     {
