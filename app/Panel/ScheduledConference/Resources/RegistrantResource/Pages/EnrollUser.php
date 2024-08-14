@@ -233,6 +233,7 @@ class EnrollUser extends ListRecords
                         $registrationType = RegistrationType::where('id', $record->registration_type_id)->first();
                         $record->registrationPayment()->create([
                             'name' => $registrationType->type,
+                            'level' => $registrationType->level,
                             'description' => $registrationType->getMeta('description'),
                             'cost' => $registrationType->cost,
                             'currency' => $registrationType->currency,

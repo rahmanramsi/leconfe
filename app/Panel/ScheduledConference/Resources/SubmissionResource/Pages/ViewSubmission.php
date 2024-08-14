@@ -47,6 +47,7 @@ use App\Panel\ScheduledConference\Livewire\Submissions\Components\GalleyList;
 use App\Panel\ScheduledConference\Livewire\Submissions\Components\ActivityLogList;
 use App\Panel\ScheduledConference\Livewire\Submissions\Components\ContributorList;
 use App\Panel\ScheduledConference\Livewire\Submissions\Components\SubmissionProceeding;
+use App\Panel\ScheduledConference\Livewire\Submissions\Payment;
 use App\Panel\ScheduledConference\Livewire\Submissions\Presentation;
 use Filament\Support\Enums\MaxWidth;
 
@@ -388,6 +389,15 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                                             ->schema([
                                                 LivewireEntry::make('call-for-abstract')
                                                     ->livewire(CallforAbstract::class, [
+                                                        'submission' => $this->record,
+                                                    ]),
+                                            ]),
+                                        Tab::make('payment')
+                                            ->label(__('general.payment'))
+                                            ->icon('heroicon-o-credit-card')
+                                            ->schema([
+                                                LivewireEntry::make('payment')
+                                                    ->livewire(Payment::class, [
                                                         'submission' => $this->record,
                                                     ]),
                                             ]),

@@ -20,7 +20,7 @@
                             'badge', 
                             'badge-success' => $userRegistration->getState() === RegistrationPaymentState::Paid->value,
                             'badge-warning' => $userRegistration->getState() === RegistrationPaymentState::Unpaid->value,
-                            'badge-error' => $userRegistration->trashed(),
+                            '!badge-error' => $userRegistration->trashed(),
                         ])>
                             {{ 
                                 $userRegistration->trashed() ?  'Failed' : $userRegistration->getState()
@@ -74,18 +74,25 @@
                     </tr>
                 @endif
             </table>
-            @if($userRegistration->getState() === RegistrationPaymentState::Unpaid->value)
-            <div class="mt-4" x-data="{ isCancelling: false }">
-                <button class="btn btn-error btn-sm" x-show="!isCancelling" x-on:click="isCancelling = true">Cancel Registration</button>
-                <div class="space-y-2" x-show="isCancelling" x-cloak>
-                    <p class="mr-2">Are you sure you want to cancel your registration?</p>
-                    <div class="flex items-center gap-2">
-                        <button class="btn btn-sm btn-outline" x-on:click="isCancelling = false">No</button>
-                        <button class="btn btn-error btn-sm" wire:click="cancel">Yes</button>
-                    </div>
+            @if($userRegistration->getState() === RegistrationPaymentState::Paid->value && $userRegistration->registrationPayment->level === App\Models\RegistrationType::LEVEL_AUTHOR && !$userRegistration->trashed())
+                <div class="mt-4">
+                    <a class="btn btn-success btn-sm" href="{{ App\Panel\ScheduledConference\Resources\SubmissionResource::getUrl('index', panel: App\Providers\PanelProvider::PANEL_SCHEDULED_CONFERENCE) }}">
+                        Submission
+                    </a>
                 </div>
-            </div>
+            @elseif($userRegistration->getState() === RegistrationPaymentState::Unpaid->value || $userRegistration->trashed())
+                <div class="mt-4" x-data="{ isCancelling: false }">
+                    <button class="btn btn-error btn-sm" x-show="!isCancelling" x-on:click="isCancelling = true">Cancel Registration</button>
+                    <div class="space-y-2" x-show="isCancelling" x-cloak>
+                        <p class="mr-2">Are you sure you want to cancel your registration?</p>
+                        <div class="flex items-center gap-2">
+                            <button class="btn btn-sm btn-outline" x-on:click="isCancelling = false">No</button>
+                            <button class="btn btn-error btn-sm" wire:click="cancel">Yes</button>
+                        </div>
+                    </div>
+                </div>  
             @endif
+
             @if ($userRegistration->getState() === RegistrationPaymentState::Unpaid->value && !$userRegistration->trashed())
                 <hr class="my-8">
                 <div class="w-full">
@@ -121,6 +128,7 @@
                     @endif
                 </div>
             @endif
+
             @if(!empty($currentScheduledConference->getMeta('payment_policy')))
                 <hr class="my-8">
                 <div class="w-full text-wrap ">
