@@ -42,15 +42,15 @@
                                     {{ $timeline->name }}
                                     @if ($isParticipant)
                                         @if ($timeline->isOngoing())
-                                            <span class="badge badge-success text-white mx-2">
+                                            <span class="badge text-xs badge-success text-white mx-2">
                                                 On going
                                             </span>
                                         @elseif ($timeline->getEarliestTime()->isFuture())
-                                            <span class="badge badge-info text-white mx-2">
+                                            <span class="badge text-xs badge-info text-white mx-2">
                                                 Not started
                                             </span>
                                         @elseif ($timeline->getLatestTime()->isPast())
-                                            <span class="badge mx-2">
+                                            <span class="badge text-xs mx-2">
                                                 Over
                                             </span>
                                         @endif
@@ -102,15 +102,15 @@
                                     {{ $session->time_span }}
                                     @if ($isParticipant)
                                         @if ($session->isOngoing())
-                                            <span class="badge badge-success  text-white mx-2">
+                                            <span class="badge text-xs badge-success  text-white mx-2">
                                                 On going
                                             </span>
                                         @elseif ($session->isFuture())
-                                            <span class="badge badge-info text-white mx-2">
+                                            <span class="badge text-xs badge-info text-white mx-2">
                                                 Not Started
                                             </span>
                                         @elseif ($session->isPast())
-                                            <span class="badge mx-2">
+                                            <span class="badge text-xs mx-2">
                                                 Over
                                             </span>
                                         @endif
