@@ -119,9 +119,10 @@ class TimelineResource extends Resource
                     ->model(Timeline::class)
                     ->after(function (Model $record, array $data) {
                         $date = Carbon::parse($data['date'], 'UTC');
+                        $timezone = app()->getCurrentScheduledConference()->getMeta('timezone');
                         foreach($record->sessions as $session) {
-                            $session->start_at = $session->start_at->copy()->setDateFrom($date);
-                            $session->end_at = $session->end_at->copy()->setDateFrom($date);
+                            $session->start_at = $session->start_at->copy()->setTimezone($timezone)->setDateFrom($date)->setTimezone('UTC');
+                            $session->end_at = $session->end_at->copy()->setTimezone($timezone)->setDateFrom($date)->setTimezone('UTC');
                             $session->save();
                         }
                     }),
