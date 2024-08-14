@@ -157,7 +157,13 @@ class PanelProvider extends ServiceProvider
         return $panel
             ->maxContentWidth('full')
             ->renderHook(
-                'panels::scripts.before',
+                PanelsRenderHook::FOOTER,
+                fn () => Blade::render(<<<'Blade'
+                        <x-footer-platform-panel />
+                    Blade)
+            )
+            ->renderHook(
+                PanelsRenderHook::SCRIPTS_BEFORE,
                 fn () => Blade::render(<<<'Blade'
                         @vite(['resources/panel/js/panel.js'])
                     Blade)

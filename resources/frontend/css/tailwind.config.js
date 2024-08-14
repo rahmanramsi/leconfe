@@ -5,6 +5,7 @@ import defaultTheme from 'tailwindcss/defaultTheme'
 /** @type {import('tailwindcss').Config} */
 export default {
     content: [
+        './resources/views/components/**/*.blade.php',
         './resources/views/frontend/**/*.blade.php',
         './resources/views/errors/**/*.blade.php',
         './stubs/plugins/**/*.blade.php',
@@ -42,9 +43,6 @@ export default {
                     ...require("daisyui/src/theming/themes")["winter"],
                     primary: '#1c3569',
                     'primary-content': '#ffffff',
-                    warning: '#FACC15',
-                    error: '#ff5861',
-                    success: '#4ADE80',
                     'base-100': '#F1F6FA',
                     'base-content' : '#000000',
                     '--rounded-box': '0px',

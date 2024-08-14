@@ -59,7 +59,7 @@ class Dashboard extends Page implements HasInfolists
                                         ->title(__('general.session_cleared'))
                                         ->body(__('general.notification_successfully_cleared')),
                                 )
-                                ->extraAttributes(['class' => 'w-48'])
+                                ->extraAttributes(['class' => 'w-64'])
                                 ->action(fn (Action $action) => $this->expireUserSession($action)),
                         ]),
                         Actions::make([
@@ -74,7 +74,7 @@ class Dashboard extends Page implements HasInfolists
                                         ->title(__('general.successfully_cleared'))
                                         ->body(__('general.data_caches_cleared_successfully')),
                                 )
-                                ->extraAttributes(['class' => 'w-48'])
+                                ->extraAttributes(['class' => 'w-64'])
                                 ->action(function (Action $action) {
                                     $this->runArtisanCommand('cache:clear', $action);
                                     $this->runArtisanCommand('optimize:clear', $action);
@@ -92,7 +92,7 @@ class Dashboard extends Page implements HasInfolists
                                         ->title(__('general.successfully_cleared'))
                                         ->body(__('general.view_caches_cleared_successfully')),
                                 )
-                                ->extraAttributes(['class' => 'w-48'])
+                                ->extraAttributes(['class' => 'w-64'])
                                 ->action(function (Action $action) {
                                     $this->runArtisanCommand('view:clear', $action);
                                     $this->runArtisanCommand('icons:cache', $action);

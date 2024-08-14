@@ -19,11 +19,11 @@ class Sitemap extends Page
 {
     function __invoke()
     {
-        // $sitemap = Cache::remember(
-        //     'sitemap_' . app()->getCurrentConferenceId(),
-        //     Carbon::now()->addHour(),
-        //     fn () => $this->generateSitemap(),
-        // );
+        $sitemap = Cache::remember(
+            'sitemap_' . app()->getCurrentConferenceId(),
+            Carbon::now()->addMinutes(30),
+            fn () => $this->generateSitemap(),
+        );
 
         $sitemap = $this->generateSitemap();
 
@@ -56,7 +56,7 @@ class Sitemap extends Page
             );
 
         Proceeding::query()
-            ->with(['conference', 'submissions' => ['galleys.file.media']])
+            ->with(['conference', 'submissions' => ['galleys.file.media', 'conference']])
             ->published()
             ->lazy()->each(function (Proceeding $proceeding) use ($sitemap) {
                 $sitemap->add(

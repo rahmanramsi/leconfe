@@ -74,6 +74,7 @@
                     </tr>
                 @endif
             </table>
+            @if($userRegistration->getState() === RegistrationPaymentState::Unpaid->value)
             <div class="mt-4" x-data="{ isCancelling: false }">
                 <button class="btn btn-error btn-sm" x-show="!isCancelling" x-on:click="isCancelling = true">Cancel Registration</button>
                 <div class="space-y-2" x-show="isCancelling" x-cloak>
@@ -84,6 +85,7 @@
                     </div>
                 </div>
             </div>
+            @endif
             @if ($userRegistration->getState() === RegistrationPaymentState::Unpaid->value && !$userRegistration->trashed())
                 <hr class="my-8">
                 <div class="w-full">

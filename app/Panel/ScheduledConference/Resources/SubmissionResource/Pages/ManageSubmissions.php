@@ -110,7 +110,7 @@ class ManageSubmissions extends ManageRecords
         }
 
 
-        if ($user->hasRole(UserRole::Author)) {
+        if ($user->hasAnyRole([UserRole::Author, UserRole::Reader]) || $user->roles->isEmpty()) {
             $query->orWhere(fn ($query) => $query->where('user_id', $user->id)
                 ->when($tab == static::TAB_PRESENTATION, fn ($query) =>  $query->whereIn('status', [
                     SubmissionStatus::OnPresentation,
