@@ -25,6 +25,9 @@ export default {
                     a: {
                         'text-decoration': 'none',
                     },
+                    tr: {
+                        'border-bottom-width': '0px',
+                    },
                   },
                 },
               }),
