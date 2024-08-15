@@ -6,13 +6,8 @@
 <div class="navbar-publisher navbar-container bg-white shadow z-[51] text-gray-800 sticky top-0">
     <div class="navbar mx-auto max-w-7xl items-center h-full">
         <div class="navbar-start items-center gap-x-4 w-max">
-            <x-website::link :href="url('')">
-                <img
-                    src="{{ app()->getSite()->getFirstMedia('logo')?->getAvailableUrl(['thumb', 'thumb-xl']) }}"
-                    class="max-h-12 w-auto"
-                />
-            </x-website::link>
-            @if(app()->getCurrentConference() || app()->getCurrentScheduledConference())
+            <x-website::logo :headerLogo="app()->getSite()->getFirstMedia('logo')?->getAvailableUrl(['thumb', 'thumb-xl'])" :headerLogoAltText="app()->getSite()->getMeta('name')" homeUrl="/"/>
+            @if(App\Models\Conference::exists())
                 @livewire(App\Livewire\GlobalNavigation::class)
             @endif
 
