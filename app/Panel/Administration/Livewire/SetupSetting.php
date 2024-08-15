@@ -14,6 +14,8 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Livewire\Component;
 use App\Forms\Components\TinyEditor;
+use Filament\Forms\Components\Select;
+use Squire\Models\Country;
 use Stevebauman\Purify\Facades\Purify;
 
 class SetupSetting extends Component implements HasForms
@@ -56,6 +58,24 @@ class SetupSetting extends Component implements HasForms
                             ->autosize()
                             ->hint(__('general.recommended_description_length'))
                             ->helperText(__('general.short_description_of_the_website')),
+                        Section::make(__('general.publishing_details'))
+                            ->description(__('general.publishing_detail_included_in_metadata'))
+                            ->schema([
+                                Select::make('meta.publisher_location')
+                                    ->label(__('general.country'))
+                                    ->placeholder(__('general.select_a_country'))
+                                    ->searchable()
+                                    ->options(fn () => Country::all()->mapWithKeys(fn ($country) => [$country->name => $country->flag . ' ' . $country->name]))
+                                    ->optionsLimit(250),
+                                TextInput::make('meta.publisher_name')
+                                    ->label(__('general.publisher')),
+                                TextInput::make('meta.publisher_url')
+                                    ->url()
+                                    ->validationMessages([
+                                        'url' => __('general.url_must_be_valid')
+                                    ])
+                                    ->label(__('general.url'))
+                            ]),
                         TinyEditor::make('meta.about')
                             ->label(__('general.about_site'))
                             ->profile('advanced')

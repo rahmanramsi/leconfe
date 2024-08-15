@@ -229,7 +229,7 @@ class ExportArticleCrossref
 
 	protected function createProceedingsSeriesMetadata(): array
 	{
-		$scheduledConference 		= $this->submission->scheduledConference;
+		$site						= app()->getSite();
 		$proceeding = $this->submission->proceeding;
 
 		$metadata =  [
@@ -241,12 +241,12 @@ class ExportArticleCrossref
 			$metadata['volume'] = $proceeding->volume;
 		}
 
-		if ($scheduledConference->getMeta('publisher_name')) {
-			$metadata['publisher']['publisher_name'] = $scheduledConference->getMeta('publisher_name');
+		if ($site->getMeta('publisher_name')) {
+			$metadata['publisher']['publisher_name'] = $site->getMeta('publisher_name');
 		}
 
-		if ($scheduledConference->getMeta('publisher_location')) {
-			$metadata['publisher']['publisher_place'] = $scheduledConference->getMeta('publisher_location');
+		if ($site->getMeta('publisher_location')) {
+			$metadata['publisher']['publisher_place'] = $site->getMeta('publisher_location');
 		}
 
 		if ($proceeding->published_at) {
