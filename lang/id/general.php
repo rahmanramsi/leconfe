@@ -389,7 +389,7 @@ return [
     'submission_complete' => 'Pengajuan selesai',
     'submission_payment' => 'Pembayaran Pengajuan',
     'submitted_abstract' => 'Anda telah mengirimkan abstrak Anda, dan email telah dikirim untuk memberi tahu Anda. Manajer akan meninjau pengajuan Anda dan mengirimkan email lain setelah mereka selesai.',
-    'go_to_submission_page' => 'Pergi ke <a href="{{ App\Panel\ScheduledConference\Resources\SubmissionResource::getUrl("index") }}" class="text-primary-700">Halaman Pengajuan</a> untuk memeriksa status pengajuan Anda.',
+    'go_to_submission_page' => 'Pergi ke <a href=":url" class="text-primary-700">Halaman Pengajuan</a> untuk memeriksa status pengajuan Anda.',
     'scheduled_conference_identity' => 'Identitas Konferensi Terjadwal',
     'information_about_the_scheduled_conference' => 'Informasi tentang konferensi terjadwal',
     'enter_the_title_of_the_scheduled_conference' => 'Masukkan judul konferensi terjadwal',
