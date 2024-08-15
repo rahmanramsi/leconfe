@@ -193,7 +193,7 @@ class RegistrantResource extends Resource
                             return 'Free';
                         }
 
-                        $cost = money($record->registrationPayment->cost, $record->registrationPayment->currency, true);
+                        $cost = fixed_money($record->registrationPayment->cost, $record->registrationPayment->currency, true);
 
                         return $cost;
                     }),

@@ -162,7 +162,7 @@ class RegistrationTypeTable extends Component implements HasTable, HasForms
                     ->badge()
                     ->color(Color::Blue),
                 TextColumn::make('price')
-                    ->getStateUsing(fn (Model $record) => ($record->cost === 0) ? 'Free' : money($record->cost, $record->currency, true)),
+                    ->getStateUsing(fn (Model $record) => ($record->cost === 0) ? 'Free' : fixed_money($record->cost, $record->currency, true)),
                 ToggleColumn::make('active')
                     ->label(__('general.active'))
                     ->onColor(Color::Green)

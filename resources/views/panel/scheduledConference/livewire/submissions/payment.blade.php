@@ -100,7 +100,7 @@
                                 <td class="w-fit font-semibold">Cost</td>
                                 <td class="pl-3">:</td>
                                 <td class="text-left py-2">
-                                    {{ money($authorRegistration->registrationPayment->cost, $authorRegistration->registrationPayment->currency, true) }}
+                                    {{ fixed_money($authorRegistration->registrationPayment->cost, $authorRegistration->registrationPayment->currency, true) }}
                                 </td>
                             </tr>
                             <tr>

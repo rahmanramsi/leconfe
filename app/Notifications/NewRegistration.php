@@ -45,7 +45,7 @@ class NewRegistration extends Notification
 
     public function toDatabase(object $notifiable)
     {
-        $registrationCost = money($this->registration->registrationPayment->cost, $this->registration->registrationPayment->currency, true);
+        $registrationCost = fixed_money($this->registration->registrationPayment->cost, $this->registration->registrationPayment->currency, true);
         
         return FilamentNotification::make()
             ->icon('heroicon-m-user-plus')

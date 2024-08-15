@@ -17,7 +17,7 @@
                         <tr>
                             <td class="font-semibold">Cost</td>
                             <td>:</td>
-                            <td class="text-center">{{ money($registrationType->cost, $registrationType->currency) }} ({{ currency($registrationType->currency)->getName() }})</td>
+                            <td class="text-center">{{ fixed_money($registrationType->cost, $registrationType->currency) }} ({{ fixed_currency($registrationType->currency)->getName() }})</td>
                         </tr>
                     @endif
                     <tr>

@@ -22,7 +22,7 @@ class NewRegistrationMail extends TemplateMailable
         $this->conferenceName = $registration->scheduledConference->title;
         $this->registrantName = $registration->user->full_name;
         $this->registrationType = $registration->registrationPayment->name;
-        $this->registrationCost = money($registration->registrationPayment->cost, $registration->registrationPayment->currency, true);
+        $this->registrationCost = fixed_money($registration->registrationPayment->cost, $registration->registrationPayment->currency, true);
         $this->registrationStatus = $registration->registrationPayment->state;
     }
 
