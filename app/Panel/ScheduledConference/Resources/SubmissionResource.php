@@ -113,11 +113,11 @@ class SubmissionResource extends Resource
                             ->color('warning')
                             ->getStateUsing(function (Submission $record) {
                                 $isEditorAssigned = $record->editors_count;
-                                
+
                                 $isPaid = $record->user->isRegistrationFinished();
 
                                 if ($isEditorAssigned && !$isPaid && $record->stage != SubmissionStage::Wizard) {
-                                    return 'Waiting for payment';
+                                    return __('general.waiting_for_payment');
                                 }
                             }),
                         Tables\Columns\TextColumn::make('reviewed')
