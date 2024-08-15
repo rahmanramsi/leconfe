@@ -132,9 +132,6 @@ class ContributorList extends \Livewire\Component implements HasForms, HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->reorderable(
-                fn () => $this->viewOnly ? false : 'order_column'
-            )
             ->heading(__('general.contributors'))
             ->query(
                 fn (): Builder => $this->getQuery()
@@ -143,9 +140,6 @@ class ContributorList extends \Livewire\Component implements HasForms, HasTable
                 ActionGroup::make([
                     EditAction::make()
                         ->modalWidth('3xl')
-                        ->hidden(
-                            fn (Model $record): bool => $record->email == auth()->user()->email
-                        )
                         ->mutateRecordDataUsing(function (array $data, Model $record) {
                             $data['meta'] = $record->getAllMeta();
                             return $data;
@@ -153,10 +147,7 @@ class ContributorList extends \Livewire\Component implements HasForms, HasTable
                         ->form($this->getContributorFormSchema())
                         ->using(fn (array $data, Author $record) => AuthorUpdateAction::run($data, $record)),
                     DeleteAction::make()
-                        ->using(fn (array $data, Model $record) => AuthorDeleteAction::run($record, $data))
-                        ->hidden(
-                            fn (Model $record): bool => $record->email == auth()->user()->email
-                        ),
+                        ->using(fn (array $data, Model $record) => AuthorDeleteAction::run($record, $data)),
                 ])
                 ->hidden($this->viewOnly),
             ])
@@ -195,14 +186,7 @@ class ContributorList extends \Livewire\Component implements HasForms, HasTable
                         ->circular()
                         ->toggleable(! $this->viewOnly),
                     Stack::make([
-                        TextColumn::make('fullName')
-                            ->formatStateUsing(function (Model $record) {
-                                if ($record->email == auth()->user()->email) {
-                                    return $record->fullName.' (You)';
-                                }
-
-                                return $record->fullName;
-                            }),
+                        TextColumn::make('fullName'),
                         TextColumn::make('affiliation')
                             ->size('xs')
                             ->getStateUsing(
