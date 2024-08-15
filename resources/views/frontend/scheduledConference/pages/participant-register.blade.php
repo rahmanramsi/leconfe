@@ -115,7 +115,7 @@
                             <p class="mt-2">{{ __('general.if_you_feel_this_is_not_your_account_please_log_out_and_use_your_account') }}</p>
                         @else
                             <p>
-                                {!! __('general.currentyly_not_logged_in', ['url' => {{ app()->getLoginUrl() }} ]) !!}
+                                {!! __('general.currently_not_logged_in', ['url' => app()->getLoginUrl() ]) !!}
                             </p>
                         @endif
                         <hr class="my-8">
@@ -162,7 +162,7 @@
                     </div>
 
                     <p class="mt-2">
-                        {{ __('general.is_mistake_you_can_cancel') }}
+                        {!! __('general.is_mistake_you_can_cancel') !!}
                     </p>
                     <hr class="my-8">
                     <p class="mb-2">{{ __('general.please_double_check_your_account') }}</p>
