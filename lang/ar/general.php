@@ -390,7 +390,7 @@ return [
     'submission_complete' => 'الاستلام مكتمل',
     'submission_payment' => 'دفع الاستلام',
     'submitted_abstract' => 'لقد قمت بتقديم ملخصك، وتم إرسال بريد إلكتروني لإعلامك. سيتحقق المدير من استلامك ويرسل لك بريدًا إلكترونيًا آخر بمجرد الانتهاء.',
-    'go_to_submission_page' => 'انتقل إلى <a href="{{ App\Panel\ScheduledConference\Resources\SubmissionResource::getUrl("index") }}" class="text-primary-700">صفحة الاستلامات</a> للتحقق من حالة تقديمك.',
+    'go_to_submission_page' => 'انتقل إلى <a href=":href" class="text-primary-700">صفحة الاستلامات</a> للتحقق من حالة تقديمك.',
     'scheduled_conference_identity' => 'هوية المؤتمر المجدول',
     'information_about_the_scheduled_conference' => 'معلومات عن المؤتمر المجدول',
     'enter_the_title_of_the_scheduled_conference' => 'أدخل عنوان المؤتمر المجدول',

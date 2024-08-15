@@ -18,6 +18,7 @@ class RegistrationPayment extends Model
     protected $fillable = [
         'type',
         'name',
+        'level',
         'description',
         'cost',
         'currency',
