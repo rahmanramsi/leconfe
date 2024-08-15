@@ -8,6 +8,7 @@ export default {
         './resources/views/components/**/*.blade.php',
         './resources/views/frontend/**/*.blade.php',
         './resources/views/errors/**/*.blade.php',
+        './resources/views/livewire/**/*.blade.php',
         './stubs/plugins/**/*.blade.php',
         './plugins/**/*.blade.php',
     ],
