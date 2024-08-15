@@ -802,7 +802,7 @@ return [
     'see_your_registration_status' => 'Lihat <a class="text-blue-500 hover:underline" href=":route">status pendaftaran</a> Anda untuk mendapatkan informasi lebih lanjut tentang proses pembayaran atau periksa metode pembayaran manual di samping.',
     'you_did_not_register_as_an_author' => "Anda tidak mendaftar sebagai penulis, lihat status pendaftaran Anda, daftar ulang sebagai penulis untuk melanjutkan proses pengajuan.",
     'author_registration_details' => "Detail Pendaftaran Penulis",
-    'registration_page_rsaquo' => "Halaman Pendaftaran &rsaquo;",
+    'registration_page' => "Halaman Pendaftaran",
     'make_sure_to_register_as_an_author_not_participant' => "Pastikan untuk mendaftar sebagai penulis, bukan sebagai peserta.",
     'you_are_not_participant_of_this_conference' => 'Anda bukan peserta konferensi ini, harap mulai proses <a class="text-blue-500 hover:underline" href=":route">pendaftaran</a> dan selesaikan pembayaran untuk melanjutkan proses pengajuan Anda.',
 

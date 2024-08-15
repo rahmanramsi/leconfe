@@ -821,7 +821,7 @@ return [
     'see_your_registration_status' => 'اطلع على <a class="text-blue-500 hover:underline" href=":route">حالة تسجيلك</a> للحصول على مزيد من المعلومات حول عملية الدفع أو تحقق من طرق الدفع اليدوية على الجانب.',
     'you_did_not_register_as_an_author' => "لم تسجل ككاتب، اطلع على حالة تسجيلك، وسجل ككاتب للاستمرار في عملية التقديم.",
     'author_registration_details' => "تفاصيل تسجيل المؤلف",
-    'registration_page_rsaquo' => "صفحة التسجيل &rsaquo;",
+    'registration_page' => "صفحة التسجيل ",
     'make_sure_to_register_as_an_author_not_participant' => "تأكد من التسجيل كمؤلف، وليس كمشارك.",
     'you_are_not_participant_of_this_conference' => 'أنت لست مشاركًا في هذه المؤتمر، يرجى بدء <a class="text-blue-500 hover:underline" href=":route">عملية التسجيل</a> وإكمال الدفع للاستمرار في عملية التقديم.',
 

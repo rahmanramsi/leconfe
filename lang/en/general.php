@@ -830,7 +830,7 @@ return [
     'see_your_registration_status' => 'See your <a class="text-blue-500 hover:underline" href=":route">registration status</a> to get more info about the payment process or check out the manual payment methods on the side.',
     'you_did_not_register_as_an_author' => "You did not register as an author, see your registration status, re-register as an author to continue the submission process.",
     'author_registration_details' => "Author Registration Details",
-    'registration_page_rsaquo' => "Registration Page &rsaquo;",
+    'registration_page' => "Registration Page",
     'make_sure_to_register_as_an_author_not_participant' => "Make sure to register as an author, not an participant.",
     'you_are_not_participant_of_this_conference' => 'You are not participant of this conference, Please start the <a class="text-blue-500 hover:underline" href=":route">registration</a> process, and complete the payment to continue your submission process.',
 

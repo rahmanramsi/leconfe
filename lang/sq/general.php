@@ -821,7 +821,7 @@ return [
     'see_your_registration_status' => 'Shikoni statusin tuaj të <a class="text-blue-500 hover:underline" href=":route">regjistrimit</a> për të marrë më shumë informacion mbi procesin e pagesës ose kontrolloni metodat manuale të pagesës në anën.',
     'you_did_not_register_as_an_author' => "Ju nuk jeni regjistruar si autor, shikoni statusin tuaj të regjistrimit, regjistrohuni përsëri si autor për të vazhduar procesin e dorëzimit.",
     'author_registration_details' => "Detajet e Regjistrimit të Autorit",
-    'registration_page_rsaquo' => "Faqja e Regjistrimit &rsaquo;",
+    'registration_page' => "Faqja e Regjistrimit",
     'make_sure_to_register_as_an_author_not_participant' => "Sigurohuni që të regjistroheni si autor, jo si pjesëmarrës.",
     'you_are_not_participant_of_this_conference' => 'Ju nuk jeni pjesëmarrës në këtë konferencë, ju lutemi filloni procesin e <a class="text-blue-500 hover:underline" href=":route">regjistrimit</a> dhe përfundoni pagesën për të vazhduar procesin tuaj të dorëzimit.',
 

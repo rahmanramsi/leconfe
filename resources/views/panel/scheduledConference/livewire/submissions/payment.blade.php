@@ -52,7 +52,7 @@
                         </x-slot>
 
                         <x-slot name="headerEnd">
-                            <a href="{{ route('livewirePageGroup.scheduledConference.pages.participant-registration') }}" class="text-sm text-blue-500 hover:text-blue-700 hover:underline">{{ __('general.registration_page_rsaquo') }}</a>
+                            <a href="{{ route('livewirePageGroup.scheduledConference.pages.participant-registration') }}" class="text-sm text-blue-500 hover:text-blue-700 hover:underline">{{ __('general.registration_page') }} &rsaquo;</a>
                         </x-slot>
 
                         <table class="w-full text-sm">
@@ -73,7 +73,7 @@
                                         </x-filament::badge>
                                     @elseif ($authorRegistration->registrationPayment->state === App\Models\Enums\RegistrationPaymentState::Unpaid->value && !$authorRegistration->trashed())
                                         <x-filament::badge color="warning" class="!w-fit">
-                                            {{ __('general.unassigned') }}
+                                            {{ __('general.unpaid') }}
                                         </x-filament::badge>
                                     @else
                                         <x-filament::badge color="error" class="!w-fit">
