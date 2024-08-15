@@ -1,3 +1,9 @@
+@props([
+    'homeUrl' => '/',
+    'headerLogo' => null,
+    'headerLogoAltText' => config('app.name'),
+])
+
 @if ($headerLogo)
     <x-website::link {{ $attributes }} :href="$homeUrl">
         <img
@@ -9,7 +15,7 @@
 @else
     <x-website::link
         :href="$homeUrl"
-        {{ $attributes->merge(['class' => 'text-lg sm:text-lg text-primary-content']) }}
+        {{ $attributes->merge(['class' => 'text-lg sm:text-lg']) }}
     >
         {{ $headerLogoAltText }}
     </x-website::link>

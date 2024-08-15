@@ -95,25 +95,6 @@ class MastHeadSetting extends Component implements HasForms
                                     ->label(__('general.location'))
                                     ->helperText(__('general.location_description'))
                             ]),
-                        Section::make(__('general.publishing_details'))
-                            ->description(__('general.publishing_detail_included_in_metadata'))
-                            ->aside()
-                            ->schema([
-                                Select::make('meta.publisher_location')
-                                    ->label(__('general.country'))
-                                    ->placeholder(__('general.select_a_country'))
-                                    ->searchable()
-                                    ->options(fn () => Country::all()->mapWithKeys(fn ($country) => [$country->name => $country->flag . ' ' . $country->name]))
-                                    ->optionsLimit(250),
-                                TextInput::make('meta.publisher_name')
-                                    ->label(__('general.publisher')),
-                                TextInput::make('meta.publisher_url')
-                                    ->url()
-                                    ->validationMessages([
-                                        'url' => __('general.url_must_be_valid')
-                                    ])
-                                    ->label(__('general.url'))
-                            ]),
                         Section::make(__('general.key_information'))
                             ->description(__('general.key_information_pricide_a_short_description'))
                             ->aside()

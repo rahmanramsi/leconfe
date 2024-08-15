@@ -17,7 +17,7 @@
                             x-transition:leave-start="translate-x-0" x-transition:leave-end="-translate-x-full"
                             class="w-screen max-w-xs">
                             <div
-                                class="flex flex-col h-full pt-[5rem] pb-5 px-4 sm:px-6 overflow-y-scroll bg-white border-r shadow-lg border-neutral-100/70 justify-between">
+                                class="flex flex-col h-full pb-5 px-4 sm:px-6 overflow-y-scroll bg-white border-r shadow-lg border-neutral-100/70 justify-between">
                                 <x-website::navigation-mobile.items :items="$items" />
                                 <div class="flex flex-col gap-2">
                                     @if (\Filament\Facades\Filament::getDefaultPanel()->auth()->user())
