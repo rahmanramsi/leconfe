@@ -97,12 +97,16 @@ class RegistrantResource extends Resource
                         }
 
                         if($record) {
-                            $record->user->notify(
-                                new RegistrationPaymentDecision(
-                                    registration: $record,
-                                    state: $data['state'],
-                                )
-                            );
+                            try {
+                                $record->user->notify(
+                                    new RegistrationPaymentDecision(
+                                        registration: $record,
+                                        state: $data['state'],
+                                    )
+                                );
+                            } catch (\Throwable $th) {
+                                throw $th;
+                            }
                         }
 
                         return $data;
