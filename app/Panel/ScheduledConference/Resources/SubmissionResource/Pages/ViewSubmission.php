@@ -339,7 +339,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
     {
         $badgeHtml = '<div class="flex items-center gap-x-2">';
 
-        if($this->record->user->isRegistrationFinished()) {
+        if($this->record->isPaymentComplete()) {
             $badgeHtml .= match ($this->record->status) {
                 SubmissionStatus::Incomplete => '<x-filament::badge color="gray" class="w-fit">' . __("general.incomplete") . '</x-filament::badge>',
                 SubmissionStatus::Queued => '<x-filament::badge color="primary" class="w-fit">' . __("general.queued") . '</x-filament::badge>',
@@ -379,7 +379,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                             ->schema([
                                 Tabs::make()
                                     ->activeTab(function () {
-                                        if(!$this->record->user->isRegistrationFinished()) {
+                                        if(!$this->record->isPaymentComplete()) {
                                             return 2;
                                         }
 

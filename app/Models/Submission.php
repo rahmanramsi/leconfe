@@ -230,7 +230,7 @@ class Submission extends Model implements HasMedia, Sortable
 
     public function isPaymentComplete(): bool
     {
-        return $this->user->isRegistrationFinished();
+        return $this->user->isRegisteredAsAuthor();
     }
 
     /**

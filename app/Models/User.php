@@ -135,7 +135,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasMedia,
         return $this->hasMany(Registration::class);
     }
 
-    public function isRegistrationFinished(): bool
+    public function isRegisteredAsAuthor(): bool
     {
         $userRegistration = Registration::select('*')
             ->where('user_id', $this->id)
@@ -150,6 +150,10 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasMedia,
         }
 
         if($userRegistration->registrationPayment->state !== RegistrationPaymentState::Paid->value) {
+            return false;
+        }
+
+        if($userRegistration->registrationPayment->level !== RegistrationType::LEVEL_AUTHOR) {
             return false;
         }
 
