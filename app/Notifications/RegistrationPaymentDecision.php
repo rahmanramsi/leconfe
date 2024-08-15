@@ -23,7 +23,7 @@ class RegistrationPaymentDecision extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct(public Registration $registration)
+    public function __construct(public Registration $registration, public string $state)
     {
         //
     }
@@ -49,7 +49,7 @@ class RegistrationPaymentDecision extends Notification
 
     public function toDatabase(object $notifiable)
     {
-        $paymentStatus = Str::lower($this->registration->registrationPayment->state);
+        $paymentStatus = Str::lower($this->state);
         
         return FilamentNotification::make()
             ->title('Participant Registration')

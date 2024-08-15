@@ -89,12 +89,22 @@ class RegistrantResource extends Resource
                             ->visible(fn(Get $get): bool => $get('state') === RegistrationPaymentState::Paid->value)
                             ->required(),
                     ])
-                    ->mutateRelationshipDataBeforeSaveUsing(function (?array $data) {
+                    ->mutateRelationshipDataBeforeSaveUsing(function (?Model $record, ?array $data) {
                         if ($data['state'] !== RegistrationPaymentState::Paid->value) {
                             $data['paid_at'] = null;
                         } else {
                             $data['type'] = RegistrationPaymentType::Manual->value;
                         }
+
+                        if($record) {
+                            $record->user->notify(
+                                new RegistrationPaymentDecision(
+                                    registration: $record,
+                                    state: $data['state'],
+                                )
+                            );
+                        }
+
                         return $data;
                     })
             ])
@@ -208,13 +218,6 @@ class RegistrantResource extends Resource
                     ->label(__('general.decision'))
                     ->modalHeading(__('general.paid_status_decision'))
                     ->modalWidth('lg')
-                    ->after(function (Model $record) {
-                        $record->user->notify(
-                            new RegistrationPaymentDecision(
-                                registration: $record
-                            )
-                        );
-                    })
                     ->hidden(fn(Model $record) => $record->trashed())
                     ->authorize(fn (Model $record) => auth()->user()->can('update', $record)),
                 ActionGroup::make([
