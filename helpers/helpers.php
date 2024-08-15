@@ -21,7 +21,7 @@ if (! function_exists('fixed_money')) {
 if (! function_exists('fixed_currency')) {
     function fixed_currency(?string $currency = null): ?Currency
     {
-        if($currency == 'free') {
+        if(strcasecmp($currency, 'free') == 0) {
             return null;
         }
 
