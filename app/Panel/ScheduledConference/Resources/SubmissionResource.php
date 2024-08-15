@@ -105,6 +105,21 @@ class SubmissionResource extends Resource
                                     return __('general.no_editor_assigned');
                                 }
                             }),
+                        Tables\Columns\TextColumn::make('waiting-payment')
+                            ->badge()
+                            ->extraAttributes([
+                                'class' => 'mt-2',
+                            ])
+                            ->color('warning')
+                            ->getStateUsing(function (Submission $record) {
+                                $isEditorAssigned = $record->editors_count;
+                                
+                                $isPaid = $record->user->isRegistrationFinished();
+
+                                if ($isEditorAssigned && !$isPaid && $record->stage != SubmissionStage::Wizard) {
+                                    return 'Waiting for payment';
+                                }
+                            }),
                         Tables\Columns\TextColumn::make('reviewed')
                             ->badge()
                             ->color('success')

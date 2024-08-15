@@ -39,14 +39,14 @@ class Payment extends Component implements HasActions, HasForms
 
     public function getViewData(): array
     {
-        $user = auth()->user();
-        $userRegistration = Registration::where('user_id', $user->id)->first();
-        $registrationStatus = Timeline::isRegistrationOpen();
+        $author = $this->submission->user;
+        $authorRegistration = Registration::where('user_id', $this->submission->user->id)->first();
+        $isRegistrationOpen = Timeline::isRegistrationOpen();
 
         return [
-            'user' => $user,
-            'userRegistration' => $userRegistration,
-            'registrationStatus' => $registrationStatus,
+            'author' => $author,
+            'authorRegistration' => $authorRegistration,
+            'isRegistrationOpen' => $isRegistrationOpen,
         ];
     }
 

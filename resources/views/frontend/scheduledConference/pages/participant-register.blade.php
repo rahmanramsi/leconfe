@@ -219,7 +219,7 @@
     @else
         <div class="my-6 w-full">
             <p class="text-lg">
-                Registration currently closed.
+                Registration are closed.
             </p>
         </div>
     @endif

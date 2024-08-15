@@ -228,6 +228,11 @@ class Submission extends Model implements HasMedia, Sortable
         return $this->status == SubmissionStatus::Incomplete;
     }
 
+    public function isPaymentComplete(): bool
+    {
+        return $this->user->isRegistrationFinished();
+    }
+
     /**
      * Get all the editors of this submission
      */

@@ -135,10 +135,10 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasMedia,
         return $this->hasMany(Registration::class);
     }
 
-    public function isRegistrationFinished($scheduledConferenceId): bool
+    public function isRegistrationFinished(): bool
     {
-        $userRegistration = $this->registration()
-            ->where('scheduled_conference_id', $scheduledConferenceId)
+        $userRegistration = Registration::select('*')
+            ->where('user_id', $this->id)
             ->first();
 
         if(!$userRegistration) {

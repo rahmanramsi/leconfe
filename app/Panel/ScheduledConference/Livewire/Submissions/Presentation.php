@@ -66,7 +66,8 @@ class Presentation extends Component implements HasActions, HasForms
                         $action->failure();
                     }
                 }
-            );
+            )
+            ->disabled(fn () => !$this->submission->isPaymentComplete());
     }
 
     public function render()

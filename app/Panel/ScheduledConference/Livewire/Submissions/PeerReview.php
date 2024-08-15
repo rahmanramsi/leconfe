@@ -101,7 +101,8 @@ class PeerReview extends Component implements HasActions, HasForms
                 );
 
                 $action->success();
-            });
+            })
+            ->disabled(fn () => !$this->submission->isPaymentComplete());
     }
 
     public function acceptSubmissionAction()
@@ -166,7 +167,8 @@ class PeerReview extends Component implements HasActions, HasForms
                 );
 
                 $action->success();
-            });
+            })
+            ->disabled(fn () => !$this->submission->isPaymentComplete());
     }
 
     public function requestRevisionAction()
@@ -237,7 +239,8 @@ class PeerReview extends Component implements HasActions, HasForms
                 );
 
                 $action->success();
-            });
+            })
+            ->disabled(fn () => !$this->submission->isPaymentComplete());
     }
 
     public function skipReviewAction()
@@ -259,7 +262,8 @@ class PeerReview extends Component implements HasActions, HasForms
 
                 $action->success();
             })
-            ->requiresConfirmation();
+            ->requiresConfirmation()
+            ->disabled(fn () => !$this->submission->isPaymentComplete());
     }
 
     public function render()
