@@ -19,6 +19,7 @@
                                     <tr>
                                         <td>{{ __('general.registration_type') }}</td>
                                         <td>{{ __('general.quota') }}</td>
+                                        <td>{{ __('general.level') }}</td>
                                         <td>{{ __('general.cost') }}</td>
                                     </tr>
                                 </thead>
@@ -36,6 +37,15 @@
                                                     <strong>
                                                         {{ $type->getPaidParticipantCount() }}/{{ $type->quota }}
                                                     </strong>
+                                                </td>
+                                                <td>
+                                                    {{ 
+                                                        match ($type->level) {
+                                                            App\Models\RegistrationType::LEVEL_PARTICIPANT => 'Participant',
+                                                            App\Models\RegistrationType::LEVEL_AUTHOR => 'Author',
+                                                            default => 'None',
+                                                        }    
+                                                    }}
                                                 </td>
                                                 <td>
                                                     @php

@@ -36,6 +36,19 @@
                     </td>
                 </tr>
                 <tr>
+                    <td class="align-text-top">{{ __('general.level') }}</td>
+                    <td class="pl-5 align-text-top">:</td>
+                    <td class="pl-2">
+                        {{ 
+                            match ($userRegistration->registrationPayment->level) {
+                                App\Models\RegistrationType::LEVEL_PARTICIPANT => 'Participant',
+                                App\Models\RegistrationType::LEVEL_AUTHOR => 'Author',
+                                default => 'None',
+                            }    
+                        }}
+                    </td>
+                </tr>
+                <tr>
                     <td class="align-text-top">{{ __('general.description') }}</td>
                     <td class="pl-5 align-text-top">:</td>
                     <td class="pl-2">

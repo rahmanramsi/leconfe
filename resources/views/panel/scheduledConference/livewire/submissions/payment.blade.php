@@ -90,6 +90,19 @@
                                 </td>
                             </tr>
                             <tr>
+                                <td class="font-semibold w-fit">{{ __('general.level') }}</td>
+                                <td class="pl-3">:</td>
+                                <td class="py-2 text-left">
+                                    {{ 
+                                        match ($authorRegistration->registrationPayment->level) {
+                                            App\Models\RegistrationType::LEVEL_PARTICIPANT => 'Participant',
+                                            App\Models\RegistrationType::LEVEL_AUTHOR => 'Author',
+                                            default => 'None',
+                                        }    
+                                    }}
+                                </td>
+                            </tr>
+                            <tr>
                                 <td class="font-semibold w-fit">{{ __('general.description') }}</td>
                                 <td class="pl-3">:</td>
                                 <td class="py-2 text-left">
