@@ -45,8 +45,8 @@ class NewRegistration extends Notification
 
     public function toDatabase(object $notifiable)
     {
-        $registrationCost = fixed_money($this->registration->registrationPayment->cost, $this->registration->registrationPayment->currency, true);
-        
+        $registrationCost = fixedMoney($this->registration->registrationPayment->cost, $this->registration->registrationPayment->currency, true);
+
         return FilamentNotification::make()
             ->icon('heroicon-m-user-plus')
             ->iconColor('primary')
@@ -59,7 +59,7 @@ class NewRegistration extends Notification
             ->actions([
                 Action::make('new-registrant')
                     ->label('Go to registrant list')
-                    ->url(fn () => RegistrantResource::getUrl('index', panel: PanelProvider::PANEL_SCHEDULED_CONFERENCE)),
+                    ->url(fn() => RegistrantResource::getUrl('index', panel: PanelProvider::PANEL_SCHEDULED_CONFERENCE)),
             ])
             ->getDatabaseMessage();
     }

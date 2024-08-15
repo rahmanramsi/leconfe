@@ -3,8 +3,8 @@
 use Akaunting\Money\Currency;
 use Akaunting\Money\Money;
 
-if (! function_exists('fixed_money')) {
-    function fixed_money(mixed $amount, string $currency = null, bool $convert = null): Money | string
+if (! function_exists('fixedMoney')) {
+    function fixedMoney(mixed $amount, string $currency = null, bool $convert = null): Money | string
     {
         if(strcasecmp($currency, 'free') == 0) {
             return "Free";
@@ -18,8 +18,8 @@ if (! function_exists('fixed_money')) {
     }
 }
 
-if (! function_exists('fixed_currency')) {
-    function fixed_currency(?string $currency = null): ?Currency
+if (! function_exists('fixedCurrency')) {
+    function fixedCurrency(?string $currency = null): ?Currency
     {
         if(strcasecmp($currency, 'free') == 0) {
             return null;

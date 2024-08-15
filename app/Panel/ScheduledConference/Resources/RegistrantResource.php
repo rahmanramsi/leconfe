@@ -96,7 +96,7 @@ class RegistrantResource extends Resource
                             $data['type'] = RegistrationPaymentType::Manual->value;
                         }
 
-                        if($record) {
+                        if ($record) {
                             try {
                                 $record->user->notify(
                                     new RegistrationPaymentDecision(
@@ -142,7 +142,7 @@ class RegistrantResource extends Resource
                                     Fieldset::make('')
                                         ->schema([
                                             TextEntry::make('title')
-                                            ->label(__('general.title')),
+                                                ->label(__('general.title')),
                                             TextEntry::make('description')
                                                 ->getStateUsing(fn(Model $record) => $record->getMeta('description'))
                                                 ->placeholder(__('general.description_empty'))
@@ -197,14 +197,14 @@ class RegistrantResource extends Resource
                             return 'Free';
                         }
 
-                        $cost = fixed_money($record->registrationPayment->cost, $record->registrationPayment->currency, true);
+                        $cost = fixedMoney($record->registrationPayment->cost, $record->registrationPayment->currency, true);
 
                         return $cost;
                     }),
                 TextColumn::make('registrationPayment.state')
                     ->label(__('general.state'))
                     ->badge()
-                    ->color(fn (Model $record) => RegistrationPaymentState::from($record->getState())->getColor()),
+                    ->color(fn(Model $record) => RegistrationPaymentState::from($record->getState())->getColor()),
                 TextColumn::make('created_at')
                     ->label(__('general.registration_date'))
                     ->date(Setting::get('format_date'))
@@ -223,7 +223,7 @@ class RegistrantResource extends Resource
                     ->modalHeading(__('general.paid_status_decision'))
                     ->modalWidth('lg')
                     ->hidden(fn(Model $record) => $record->trashed())
-                    ->authorize(fn (Model $record) => auth()->user()->can('update', $record)),
+                    ->authorize(fn(Model $record) => auth()->user()->can('update', $record)),
                 ActionGroup::make([
                     Action::make('attendance')
                         ->label(__('general.attendance'))
@@ -231,16 +231,16 @@ class RegistrantResource extends Resource
                         ->color(Color::Blue)
                         ->url(fn(Model $record) => static::getUrl('attendance', ['record' => $record]))
                         ->visible(fn(Model $record) => ($record->registrationPayment->state === RegistrationPaymentState::Paid->value))
-                        ->authorize(fn () => auth()->user()->can('viewAny', RegistrationAttendance::class)),
+                        ->authorize(fn() => auth()->user()->can('viewAny', RegistrationAttendance::class)),
                     DeleteAction::make()
                         ->label(__('general.trash'))
-                        ->authorize(fn (Model $record) => auth()->user()->can('delete', $record)),
+                        ->authorize(fn(Model $record) => auth()->user()->can('delete', $record)),
                     RestoreAction::make()
                         ->color(Color::Green)
-                        ->authorize(fn (Model $record) => auth()->user()->can('delete', $record)),
+                        ->authorize(fn(Model $record) => auth()->user()->can('delete', $record)),
                     ForceDeleteAction::make()
                         ->label(__('general.delete'))
-                        ->authorize(fn (Model $record) => auth()->user()->can('delete', $record)),
+                        ->authorize(fn(Model $record) => auth()->user()->can('delete', $record)),
                 ]),
             ])
             ->bulkActions([

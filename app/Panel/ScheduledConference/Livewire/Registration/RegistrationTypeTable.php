@@ -52,8 +52,8 @@ class RegistrationTypeTable extends Component implements HasTable, HasForms
                             ->required()
                             ->columnSpan(3)
                             ->unique(
-                                ignorable: fn () => $form->getRecord(),
-                                modifyRuleUsing: fn (Unique $rule) => $rule->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId()),
+                                ignorable: fn() => $form->getRecord(),
+                                modifyRuleUsing: fn(Unique $rule) => $rule->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId()),
                             ),
                         TextInput::make('quota')
                             ->label(__('general.participant_quota'))
@@ -62,7 +62,7 @@ class RegistrationTypeTable extends Component implements HasTable, HasForms
                             ->minValue(1)
                             ->required(),
                     ]),
-                Select::make('level')                    
+                Select::make('level')
                     ->label(__('general.level'))
                     ->options(RegistrationType::getLevelOptions())
                     ->required(),
@@ -72,7 +72,7 @@ class RegistrationTypeTable extends Component implements HasTable, HasForms
                     ->placeholder(__('general.input_description')),
                 Checkbox::make('free')
                     ->label(__('general.set_as_free'))
-                    ->formatStateUsing(fn ($record) => isset($record->cost) ? $record->cost == 0 : false)
+                    ->formatStateUsing(fn($record) => isset($record->cost) ? $record->cost == 0 : false)
                     ->live(),
                 Fieldset::make('Registration Cost')
                     ->label(__('general.registration_cost'))
@@ -81,7 +81,7 @@ class RegistrationTypeTable extends Component implements HasTable, HasForms
                             ->schema([
                                 Select::make('currency')
                                     ->label(__('general.currency'))
-                                    ->formatStateUsing(fn ($state) => ($state !== null) ? ($state !== 'free' ? $state : null) : null)
+                                    ->formatStateUsing(fn($state) => ($state !== null) ? ($state !== 'free' ? $state : null) : null)
                                     ->options(PaymentManualTable::getCurrencyOptions())
                                     ->searchable()
                                     ->columnSpan(2)
@@ -95,7 +95,7 @@ class RegistrationTypeTable extends Component implements HasTable, HasForms
                                     ->rules(['gte:1']),
                             ])
                     ])
-                    ->visible(fn (Get $get) => !$get('free'))
+                    ->visible(fn(Get $get) => !$get('free'))
                     ->columns(1),
                 Grid::make(2)
                     ->schema([
@@ -130,7 +130,7 @@ class RegistrationTypeTable extends Component implements HasTable, HasForms
                     ->modalHeading(__('general.create_type'))
                     ->modalWidth('4xl')
                     ->model(RegistrationType::class)
-                    ->form(fn (Form $form) => $this->form($form))
+                    ->form(fn(Form $form) => $this->form($form))
                     ->mutateFormDataUsing(function ($data) {
                         if ($data['free']) {
                             $data['cost'] = 0;
@@ -138,7 +138,7 @@ class RegistrationTypeTable extends Component implements HasTable, HasForms
                         }
                         return $data;
                     })
-                    ->using(fn (array $data) => RegistrationTypeCreateAction::run($data))
+                    ->using(fn(array $data) => RegistrationTypeCreateAction::run($data))
                     ->authorize('RegistrationSetting:create'),
             ])
             ->columns([
@@ -158,11 +158,11 @@ class RegistrationTypeTable extends Component implements HasTable, HasForms
                     }),
                 TextColumn::make('quota')
                     ->label(__('general.quota'))
-                    ->formatStateUsing(fn (Model $record) => $record->getPaidParticipantCount() . '/' . $record->quota)
+                    ->formatStateUsing(fn(Model $record) => $record->getPaidParticipantCount() . '/' . $record->quota)
                     ->badge()
                     ->color(Color::Blue),
                 TextColumn::make('price')
-                    ->getStateUsing(fn (Model $record) => ($record->cost === 0) ? 'Free' : fixed_money($record->cost, $record->currency, true)),
+                    ->getStateUsing(fn(Model $record) => ($record->cost === 0) ? 'Free' : fixedMoney($record->cost, $record->currency, true)),
                 ToggleColumn::make('active')
                     ->label(__('general.active'))
                     ->onColor(Color::Green)
@@ -173,8 +173,8 @@ class RegistrationTypeTable extends Component implements HasTable, HasForms
             ->actions([
                 ActionGroup::make([
                     EditAction::make()
-                        ->form(fn (Form $form) => $this->form($form))
-                        ->using(fn (Model $record, array $data) => RegistrationTypeUpdateAction::run($record, $data))
+                        ->form(fn(Form $form) => $this->form($form))
+                        ->using(fn(Model $record, array $data) => RegistrationTypeUpdateAction::run($record, $data))
                         ->mutateRecordDataUsing(function ($record, $data) {
                             $data['meta'] = $record->getAllMeta();
                             return $data;
@@ -188,7 +188,7 @@ class RegistrationTypeTable extends Component implements HasTable, HasForms
                         })
                         ->authorize('RegistrationSetting:edit'),
                     DeleteAction::make()
-                        ->using(fn (Model $record) => RegistrationTypeDeleteAction::run($record))
+                        ->using(fn(Model $record) => RegistrationTypeDeleteAction::run($record))
                         ->authorize('RegistrationSetting:delete'),
                 ])
             ])

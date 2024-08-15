@@ -42,8 +42,8 @@ class RegistrationEnroll extends Notification
 
     public function toDatabase(object $notifiable)
     {
-        $registrationCost = fixed_money($this->registration->registrationPayment->cost, $this->registration->registrationPayment->currency, true);
-        
+        $registrationCost = fixedMoney($this->registration->registrationPayment->cost, $this->registration->registrationPayment->currency, true);
+
         return FilamentNotification::make()
             ->title('Registration')
             ->body("
@@ -55,7 +55,7 @@ class RegistrationEnroll extends Notification
             ->actions([
                 Action::make('registration-status')
                     ->label('Registration Status')
-                    ->url(fn () => route('livewirePageGroup.scheduledConference.pages.registration-status', [
+                    ->url(fn() => route('livewirePageGroup.scheduledConference.pages.registration-status', [
                         'conference' => $this->registration->scheduledConference->conference,
                         'serie' => $this->registration->scheduledConference->path,
                     ])),
