@@ -1,7 +1,8 @@
 <div class="platform-footer">
-	<div class="mx-auto h-full w-full px-4 md:px-6 lg:px-8 max-w-full flex">
-		<a href="https://leconfe.com" target="_blank" class="ms-auto">
-			<img src="{{ Vite::asset('resources/assets/images/footer.png') }}" class="h-20" alt="leconfe-logo-footer">
+	<div class="mx-auto p-2 flex">
+		<a href="https://leconfe.com" rel="external" target="_blank" class="mx-auto flex items-center text-sm gap-x-2">
+			<img src="{{ Vite::asset('resources/assets/images/logo.png') }}" class="h-4" alt="leconfe-logo-footer">
+			<span class="font-medium text-gray-500">Leconfe : a simplify conference platform</span>
 		</a>
 	</div>
 </div>
