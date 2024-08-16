@@ -35,7 +35,7 @@
                         x-transition
                         x-anchor.bottom-end="$refs.button"
                         x-cloak
-                        class="navbar-dropdown-content text-neutral-800"
+                        class="navbar-dropdown-content text-gray-800"
                         >
                         <div class="flex flex-col divide-y mt-1 min-w-[12rem] bg-white rounded-md shadow-md">
                             @foreach ($item->children as $key => $childItem)
