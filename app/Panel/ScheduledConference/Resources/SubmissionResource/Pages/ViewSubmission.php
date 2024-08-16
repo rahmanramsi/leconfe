@@ -339,7 +339,9 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
     {
         $badgeHtml = '<div class="flex items-center gap-x-2">';
 
-        if($this->record->isPaymentComplete()) {
+        if(!$this->record->isPaymentComplete() && $this->record->isStatusRequirePayment()) {
+            $badgeHtml .= '<x-filament::badge color="warning" class="w-fit">' . 'Waiting Payment' . '</x-filament::badge>';
+        } else {
             $badgeHtml .= match ($this->record->status) {
                 SubmissionStatus::Incomplete => '<x-filament::badge color="gray" class="w-fit">' . __("general.incomplete") . '</x-filament::badge>',
                 SubmissionStatus::Queued => '<x-filament::badge color="primary" class="w-fit">' . __("general.queued") . '</x-filament::badge>',
@@ -350,8 +352,6 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                 SubmissionStatus::Withdrawn => '<x-filament::badge color="danger" class="w-fit">' . __("general.withdrawn") . '</x-filament::badge>',
                 default => null,
             };
-        } else {
-            $badgeHtml .= '<x-filament::badge color="warning" class="w-fit">' . 'Waiting Payment' . '</x-filament::badge>';
         }
 
         $badgeHtml .= '</div>';
@@ -379,9 +379,10 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                             ->schema([
                                 Tabs::make()
                                     ->activeTab(function () {
-                                        if(!$this->record->isPaymentComplete()) {
+                                        if(!$this->record->isPaymentComplete() && $this->record->isStageRequirePayment()) {
                                             return 2;
                                         }
+
 
                                         return match ($this->record->stage) {
                                             SubmissionStage::CallforAbstract => 1,

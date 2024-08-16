@@ -112,11 +112,7 @@ class SubmissionResource extends Resource
                             ])
                             ->color('warning')
                             ->getStateUsing(function (Submission $record) {
-                                $isEditorAssigned = $record->editors_count;
-
-                                $isPaid = $record->isPaymentComplete();
-
-                                if ($isEditorAssigned && !$isPaid && $record->stage != SubmissionStage::Wizard) {
+                                if (!$record->isPaymentComplete() && $record->isStageRequirePayment()) {
                                     return __('general.waiting_for_payment');
                                 }
                             }),

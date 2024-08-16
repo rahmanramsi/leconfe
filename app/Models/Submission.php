@@ -233,6 +233,29 @@ class Submission extends Model implements HasMedia, Sortable
         return $this->user->isRegisteredAsAuthor();
     }
 
+    public function isStatusRequirePayment(): bool
+    {
+        if ($this->status === SubmissionStatus::OnReview ||
+            $this->status === SubmissionStatus::Published ||
+            $this->status === SubmissionStatus::Editing) {
+                return true;
+            }
+
+        return false;
+    }
+
+    public function isStageRequirePayment(): bool
+    {
+        if ($this->stage === SubmissionStage::PeerReview ||
+            $this->stage === SubmissionStage::Presentation ||
+            $this->stage === SubmissionStage::Editing ||
+            $this->stage === SubmissionStage::Proceeding) {
+                return true;
+            }
+
+        return false;
+    }
+
     /**
      * Get all the editors of this submission
      */
