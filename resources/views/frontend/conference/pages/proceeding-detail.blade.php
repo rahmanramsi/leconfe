@@ -7,7 +7,7 @@
        
         <div class="proceeding-toc space-y-6">
             <div class="proceeding-detail">
-                <x-website::heading-title :title="$proceeding->seriesTitle()" />
+                <x-website::heading-title tag="h1" :title="$proceeding->seriesTitle()" />
                 <div class="flex flex-col sm:flex-row gap-4">
                     @if($proceeding->getFirstMediaUrl('cover'))
                         <div class="cover max-w-56 grow">

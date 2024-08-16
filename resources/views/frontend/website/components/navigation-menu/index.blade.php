@@ -12,31 +12,28 @@
             @if ($item->children->isEmpty())
                 <li>
                     <x-website::link
-                        class="navigation-menu-item btn no-animation btn-ghost btn-sm text-primary-content rounded-full inline-flex items-center justify-center px-4 transition-colors focus:outline-none disabled:opacity-50 disabled:pointer-events-none group w-max gap-0 ease-out duration-300"
+                        class="navigation-menu-item btn no-animation btn-ghost btn-sm rounded-lg inline-flex items-center justify-center px-4 transition-colors focus:outline-none disabled:opacity-50 disabled:pointer-events-none group w-max gap-0 ease-out duration-300"
                         :href="$item->getUrl()"
                         >
                         <span>{{ $item->getLabel() }}</span>
                     </x-website::link>
                 </li>
             @else
-                <li x-data="{ open: false }" @@mouseover="open = true" @@mouseleave="open = false">
+                <li x-data="{ open: false }" 
+                    x-on:mouseover="open = true" x-on:mouseleave="open = false"
+                    >
                     <button 
                         x-ref="button"
                         @@click="open = !open"
-                        class="navigation-menu-item btn btn-ghost no-animation btn-sm text-primary-content rounded-full inline-flex items-center justify-center px-4 transition-colors focus:outline-none disabled:opacity-50 disabled:pointer-events-none group w-max gap-0 ease-out duration-300"
+                        class="navigation-menu-item btn btn-ghost no-animation btn-sm rounded-lg inline-flex items-center justify-center px-4 transition-colors focus:outline-none disabled:opacity-50 disabled:pointer-events-none group w-max gap-0 ease-out duration-300"
                         >
                         <span>{{ $item->getLabel() }}</span>
-                        <svg :class="{ '-rotate-180': open}"
-                            class="transition relative top-[1px] ml-1 h-3 w-3" xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" aria-hidden="true">
-                            <polyline points="6 9 12 15 18 9"></polyline>
-                        </svg>
+                        <x-heroicon-m-chevron-down class="transition relative top-[1px] ml-1 h-3 w-3" x-bind:class="{ '-rotate-180': open}" />
                     </button>
                     <div 
                         x-show="open"
                         x-transition
-                        x-anchor.bottom-start="$refs.button"
+                        x-anchor.bottom-end="$refs.button"
                         x-cloak
                         class="navbar-dropdown-content text-neutral-800"
                         >

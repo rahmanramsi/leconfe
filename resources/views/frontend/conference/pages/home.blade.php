@@ -14,20 +14,18 @@
     <div class="scheduled-conferences space-y-6">
         @if($nextScheduledConference)
             <div class="next-scheduled-conference">
-                <div class="text-primary text-xl font-bold">
-                    Next Conference
-                </div>
-                <div class="next-scheduled-conference sm:flex gap-4 py-2 border-t">
+                <x-website::heading-title title="Next Conference" />
+                <div class="next-scheduled-conference sm:flex gap-4">
                     @if ($nextScheduledConference->hasThumbnail())
                         <div class="next-scheduled-conference-cover max-w-40">
                             <img src="{{ $nextScheduledConference->getThumbnailUrl() }}" alt="{{ $nextScheduledConference->title }}">
                         </div>
                     @endif
                     <div class="information flex-1 space-y-1">
-                        <h2 class="next-scheduled-conference-title">
+                        <h3 class="next-scheduled-conference-title">
                             <a href="{{ $nextScheduledConference->getHomeUrl() }}"
                                 class="link link-primary link-hover font-medium">{{ $nextScheduledConference->title }}</a>
-                        </h2>
+                        </h3>
                         <div class="next-scheduled-conference-date text-sm text-gray-700">
                             @if($nextScheduledConference->date_start)
                                 {{ $nextScheduledConference->date_start->format(Setting::get('format_date')) }}
@@ -50,22 +48,20 @@
         @endif
         @if($pastScheduledConferences->isNotEmpty())
             <div class="past-scheduled-conferences">
-                <h2 class="text-primary text-xl font-bold">
-                    Past Conferences
-                </h2>
-                <div class="">
+                <x-website::heading-title title="Past Conferences" />
+                <div class="space-y-4">
                     @foreach ($pastScheduledConferences as $scheduledConference)
-                        <div class="scheduled-conference sm:flex gap-4 py-2 border-t">
+                        <div class="scheduled-conference sm:flex gap-4">
                             @if ($scheduledConference->hasThumbnail())
                                 <div class="scheduled-conference-cover max-w-40">
                                     <img src="{{ $scheduledConference->getThumbnailUrl() }}" alt="{{ $scheduledConference->title }}">
                                 </div>
                             @endif
                             <div class="information flex-1 space-y-1">
-                                <h2 class="">
+                                <h3 class="">
                                     <a href="{{ $scheduledConference->getHomeUrl() }}"
                                         class="conference-name link link-primary link-hover font-medium">{{ $scheduledConference->title }}</a>
-                                </h2>
+                                </h3>
 
                                 @if ($scheduledConference->getMeta('summary'))
                                     <div class="scheduled-conference-summary user-content">

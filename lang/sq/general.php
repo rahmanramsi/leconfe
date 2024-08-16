@@ -392,7 +392,7 @@ return [
     'submission_complete' => 'Dorëzimi i Plotë',
     'submission_payment' => 'Pagesa e Dorëzimit',
     'submitted_abstract' => 'Keni dorëzuar abstraktin tuaj, dhe është dërguar një email për t\'ju njoftuar. Menaxheri do të shqyrtojë dorëzimin tuaj dhe do t\'ju dërgojë një email tjetër kur të përfundojë.',
-    'go_to_submission_page' => 'Shkoni në <a href=":href" class="text-primary-700">Faqen e Dorëzimeve</a> për të kontrolluar statusin e dorëzimit tuaj.',
+    'go_to_submission_page' => 'Shkoni në <a href=":url" class="text-primary-700">Faqen e Dorëzimeve</a> për të kontrolluar statusin e dorëzimit tuaj.',
     'scheduled_conference_identity' => 'Identiteti i Konferencës të Programuar',
     'information_about_the_scheduled_conference' => 'Informacion mbi konferencën e programuar',
     'enter_the_title_of_the_scheduled_conference' => 'Vendosni titullin e konferencës së programuar',

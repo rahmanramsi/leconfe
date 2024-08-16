@@ -5,7 +5,7 @@
           <p class="text-center">{{ __('general.submitted_abstract') }}</p>
           <br/>
           <p class="text-center">
-            {!! __('general.go_to_submission_page', ['href' => App\Panel\ScheduledConference\Resources\SubmissionResource::getUrl("index")]) !!}
+            {!! __('general.go_to_submission_page', ['url' => App\Panel\ScheduledConference\Resources\SubmissionResource::getUrl("index") ]) !!}
           </p>
         </x-filament::card>
     </div>
