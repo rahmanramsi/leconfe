@@ -1,12 +1,12 @@
 <?php
 
-use Akaunting\Money\Currency;
 use Akaunting\Money\Money;
+use Illuminate\Support\Str;
 
-if (! function_exists('fixedMoney')) {
-    function fixedMoney(mixed $amount, string $currency = null, bool $convert = null): Money | string
+if (! function_exists('moneyOrFree')) {
+    function moneyOrFree(mixed $amount, ?string $currency = null, ?bool $convert = null): Money | string
     {
-        if(strcasecmp($currency, 'free') == 0) {
+        if(Str::lower($currency) === 'free') {
             return "Free";
         }
 
@@ -14,19 +14,6 @@ if (! function_exists('fixedMoney')) {
             amount: $amount, 
             currency: $currency, 
             convert: $convert
-        );
-    }
-}
-
-if (! function_exists('fixedCurrency')) {
-    function fixedCurrency(?string $currency = null): ?Currency
-    {
-        if(strcasecmp($currency, 'free') == 0) {
-            return null;
-        }
-
-        return currency(
-            currency: $currency,
         );
     }
 }

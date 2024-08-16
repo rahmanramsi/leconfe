@@ -87,7 +87,7 @@
                                 <td class="font-semibold w-fit">{{ __('general.cost') }}</td>
                                 <td class="pl-3">:</td>
                                 <td class="py-2 text-left">
-                                    {{ fixedMoney($authorRegistration->registrationPayment->cost, $authorRegistration->registrationPayment->currency, true) }}
+                                    {{ moneyOrFree($authorRegistration->registrationPayment->cost, $authorRegistration->registrationPayment->currency, true) }}
                                 </td>
                             </tr>
                             <tr>

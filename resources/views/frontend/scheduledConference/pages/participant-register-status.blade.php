@@ -62,7 +62,7 @@
                         @php
                             $userRegistrationCost = $userRegistration->registrationPayment->cost;
                             $userRegistrationCurrency = Str::upper($userRegistration->registrationPayment->currency);
-                            $userRegistrationCostFormatted = fixedMoney($userRegistrationCost, $userRegistrationCurrency, true);
+                            $userRegistrationCostFormatted = moneyOrFree($userRegistrationCost, $userRegistrationCurrency, true);
                         @endphp
                         {{
                             ($userRegistrationCost === 0 || $userRegistrationCurrency === 'FREE') ?

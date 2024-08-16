@@ -51,7 +51,7 @@
                                                     @php
                                                         $typeCost = $type->cost;
                                                         $typeCurrency = Str::upper($type->currency);
-                                                        $typeCostFormatted = fixedMoney($typeCost, $typeCurrency, true);
+                                                        $typeCostFormatted = moneyOrFree($typeCost, $typeCurrency, true);
                                                         $elementID = Str::slug($type->type)
                                                     @endphp
                                                     <div class="flex items-center gap-2">
@@ -165,7 +165,7 @@
                                 <td class="align-text-top">{{ __('general.cost') }}</td>
                                 <td class="pl-5 align-text-top">:</td>
                                 <td class="pl-2">
-                                    {{ ($registrationType->cost === 0 || $registrationType->currency === 'free') ? 'Free' : fixedMoney($registrationType->cost, $registrationType->currency, true) }}
+                                    {{ ($registrationType->cost === 0 || $registrationType->currency === 'free') ? 'Free' : moneyOrFree($registrationType->cost, $registrationType->currency, true) }}
                                 </td>
                             </tr>
                         </table>
