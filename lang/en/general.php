@@ -20,8 +20,10 @@ return [
 	'review_assgined' => ':name has been assigned as reviewer',
 	'review_complete' => ':name has completed review',
 	'email_sent' => 'Email `:name` has been sent',
-	'previous_laquo' => '&laquo; Previous',
-    'next_raquo' => 'Next &raquo;',
+
+	'pagination_previous' => '&laquo; Previous',
+    'pagination_next' => 'Next &raquo;',
+
     'failed_credentials' => 'These credentials do not match our records.',
     'throttle_to_many_login_attempts' => 'Too many login attempts. Please try again in :seconds seconds.',
     'throttle_please_try_again' => 'Please try again in :seconds seconds.',
