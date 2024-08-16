@@ -10,7 +10,7 @@
                                     <div class="col-span-1 avatar">
                                         <img src="{{ $author->getFilamentAvatarUrl() }}" alt="Profile Picture" class="rounded-full h-min">
                                     </div>
-                                    <div class="inline-block col-span-10 my-auto text-sm">
+                                    <div class="inline-block col-span-10 my-auto text-sm pl-5">
                                         <strong class="font-semibold">
                                             {{ $author->full_name }}
                                         </strong>
@@ -21,27 +21,21 @@
                                 </div>
                                 <div class="mt-5">
                                     <p>
-                                        {{ __('general.you_registered_as_participant_author') }}
-                                    </p>
-                                    <p class="mt-3">
-                                        {{ __('general.please_wait_for_editor_review_your_submission') }}
+                                        Thank you for completing the registration process. Please wait for the editor reviews your submission.
                                     </p>
                                 </div>
                             </x-filament::section>
                         @else
                             <x-filament::section>
                                 <p>
-                                    {{ __('general.you_not_finish_payment_process') }}
-                                </p>
-                                <p class="mt-3">
-                                    {!! __('general.see_your_registration_status', ['route' => route('livewirePageGroup.scheduledConference.pages.participant-registration')]) !!}
+                                    Please complete your payment to finish the registration process. Look at the <a class="text-blue-500 hover:underline" href="{{ route('livewirePageGroup.scheduledConference.pages.participant-registration') }}">registration status</a> to get more info about the payment process or check out the manual payment methods on the side.
                                 </p>
                             </x-filament::section>
                         @endif
                     @else
                         <x-filament::section>
                             <p>
-                                {{ __('general.you_did_not_register_as_an_author') }}
+                                Sorry, your registration is currently at the participant level. You need to be at the author level to continue with the submission process.
                             </p>
                         </x-filament::section>
                     @endif
@@ -51,37 +45,15 @@
                             {{ __('general.author_registration_details') }}
                         </x-slot>
 
+                        <x-slot name="description">
+                            This is <strong>{{ $author->full_name }}'s</strong> registration details.
+                        </x-slot>
+
                         <x-slot name="headerEnd">
                             <a href="{{ route('livewirePageGroup.scheduledConference.pages.participant-registration') }}" class="text-sm text-blue-500 hover:text-blue-700 hover:underline">{{ __('general.registration_page') }} &rsaquo;</a>
                         </x-slot>
 
                         <table class="w-full text-sm">
-                            <tr>
-                                <td class="font-semibold w-fit">{{ __('general.status') }}</td>
-                                <td class="pl-3">:</td>
-                                <td class="py-2 text-left">
-                                    {{ $author->full_name }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="font-semibold w-fit">{{ __('general.status') }}</td>
-                                <td class="pl-3">:</td>
-                                <td class="py-2 text-left">
-                                    @if ($authorRegistration->registrationPayment->state === App\Models\Enums\RegistrationPaymentState::Paid->value && !$authorRegistration->trashed())
-                                        <x-filament::badge color="success" class="!w-fit">
-                                            {{ __('general.paid') }}
-                                        </x-filament::badge>
-                                    @elseif ($authorRegistration->registrationPayment->state === App\Models\Enums\RegistrationPaymentState::Unpaid->value && !$authorRegistration->trashed())
-                                        <x-filament::badge color="warning" class="!w-fit">
-                                            {{ __('general.unpaid') }}
-                                        </x-filament::badge>
-                                    @else
-                                        <x-filament::badge color="error" class="!w-fit">
-                                            {{ __('general.fail') }}
-                                        </x-filament::badge>
-                                    @endif
-                                </td>
-                            </tr>
                             <tr>
                                 <td class="font-semibold w-fit">{{ __('general.type') }}</td>
                                 <td class="pl-3">:</td>
@@ -90,23 +62,25 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td class="font-semibold w-fit">{{ __('general.level') }}</td>
-                                <td class="pl-3">:</td>
-                                <td class="py-2 text-left">
-                                    {{ 
-                                        match ($authorRegistration->registrationPayment->level) {
-                                            App\Models\RegistrationType::LEVEL_PARTICIPANT => 'Participant',
-                                            App\Models\RegistrationType::LEVEL_AUTHOR => 'Author',
-                                            default => 'None',
-                                        }    
-                                    }}
-                                </td>
-                            </tr>
-                            <tr>
                                 <td class="font-semibold w-fit">{{ __('general.description') }}</td>
                                 <td class="pl-3">:</td>
                                 <td class="py-2 text-left">
                                     {{ $authorRegistration->registrationPayment->description }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold w-fit">{{ __('general.level') }}</td>
+                                <td class="pl-3">:</td>
+                                <td class="py-2 text-left">
+                                    <x-filament::badge color="info" class="!w-fit">
+                                        {{ 
+                                            match ($authorRegistration->registrationPayment->level) {
+                                                App\Models\RegistrationType::LEVEL_PARTICIPANT => 'Participant',
+                                                App\Models\RegistrationType::LEVEL_AUTHOR => 'Author',
+                                                default => 'None',
+                                            }
+                                        }}
+                                    </x-filament::badge>
                                 </td>
                             </tr>
                             <tr>
@@ -132,22 +106,38 @@
                                     </td>
                                 </tr>
                             @endif
+                            <tr>
+                                <td class="font-semibold w-fit">{{ __('general.status') }}</td>
+                                <td class="pl-3">:</td>
+                                <td class="py-2 text-left">
+                                    @if ($authorRegistration->registrationPayment->state === App\Models\Enums\RegistrationPaymentState::Paid->value && !$authorRegistration->trashed())
+                                        <x-filament::badge color="success" class="!w-fit">
+                                            {{ __('general.paid') }}
+                                        </x-filament::badge>
+                                    @elseif ($authorRegistration->registrationPayment->state === App\Models\Enums\RegistrationPaymentState::Unpaid->value && !$authorRegistration->trashed())
+                                        <x-filament::badge color="warning" class="!w-fit">
+                                            {{ __('general.unpaid') }}
+                                        </x-filament::badge>
+                                    @else
+                                        <x-filament::badge color="error" class="!w-fit">
+                                            {{ __('general.fail') }}
+                                        </x-filament::badge>
+                                    @endif
+                                </td>
+                            </tr>
                         </table>
                     </x-filament::section>
                 @else
                     <x-filament::section>
                         <p>
-                            {!! __('general.you_are_not_participant_of_this_conference', ['route' => route('livewirePageGroup.scheduledConference.pages.participant-registration')]) !!}
-                        </p>
-                        <p class="mt-3">
-                            {{ __('general.make_sure_to_register_as_an_author_not_participant') }}
+                            Thank you for your submission. Please consider doing the <a class="text-blue-500 hover:underline" href=":route">registration</a> process and finalize payment to continue the submission process. Make sure you register at the author level to proceed with the submission process.
                         </p>
                     </x-filament::section>
                 @endif
             @else
                 <x-filament::section>
                     <p>
-                        {{ __('general.registration_are_closed') }}
+                        We apologize, but registration is currently closed.
                     </p>
                 </x-filament::section>
             @endif
