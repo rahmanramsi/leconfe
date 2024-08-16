@@ -141,6 +141,44 @@
                     </p>
                 </x-filament::section>
             @endif
+
+            @if($currentScheduledConference->getMeta('support_contact_name') ||
+                $currentScheduledConference->getMeta('support_contact_email') ||
+                $currentScheduledConference->getMeta('support_contact_phone'))
+                <x-filament::section>
+                    <x-slot name="heading">
+                        Technical Support Contact
+                    </x-slot>
+
+                    <x-slot name="description">
+                        Have a question? contact our <strong>Technical Support Contact</strong>
+                    </x-slot>
+
+                    <table class="w-full text-sm">
+                        <tr>
+                            <td class="font-semibold w-fit">{{ __('general.name') }}</td>
+                            <td class="pl-3">:</td>
+                            <td class="py-2 text-left">
+                                {{ $currentScheduledConference->getMeta('support_contact_name') ?? '-' }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold w-fit">{{ __('general.email') }}</td>
+                            <td class="pl-3">:</td>
+                            <td class="py-2 text-left">
+                                {{ $currentScheduledConference->getMeta('support_contact_email') ?? '-' }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold w-fit">{{ __('general.phone') }}</td>
+                            <td class="pl-3">:</td>
+                            <td class="py-2 text-left">
+                                {{ $currentScheduledConference->getMeta('support_contact_phone') ?? '-' }}
+                            </td>
+                        </tr>
+                    </table>
+                </x-filament::section>
+            @endif
         </div>
         <div class="col-span-4 gap-2 space-y-4">
 

@@ -39,11 +39,13 @@ class Payment extends Component implements HasActions, HasForms
 
     public function getViewData(): array
     {
+        $currentScheduledConference = app()->getCurrentScheduledConference();
         $author = $this->submission->user;
         $authorRegistration = Registration::where('user_id', $this->submission->user->id)->first();
         $isRegistrationOpen = Timeline::isRegistrationOpen();
 
         return [
+            'currentScheduledConference' => $currentScheduledConference,
             'author' => $author,
             'authorRegistration' => $authorRegistration,
             'isRegistrationOpen' => $isRegistrationOpen,
