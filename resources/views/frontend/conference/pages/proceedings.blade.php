@@ -5,10 +5,7 @@
         <x-website::breadcrumbs :breadcrumbs="$this->getBreadcrumbs()" />
     </div>
     <div class="relative mb-4">
-        <div class="flex mb-5 space-x-4">
-            <div class="text-xl font-semibold min-w-fit">List Proceeding</div>
-            <hr class="w-full h-px my-auto bg-gray-200 border-0 dark:bg-gray-700">
-        </div>
+        <x-website::heading-title title="Proceedings" />
         <div class="grid grid-cols-1 md:grid-cols-2 sm:grid-cols-1 gap-x-4 gap-y-10">
             @forelse ($proceedings as $proceeding)
                 <div class="pb-2 space-y-5 border-b">
@@ -20,7 +17,9 @@
                         @endif
                         <div>
                             <div class="mb-3 text-base space-y-0.5">
-                                <a href="{{ route('livewirePageGroup.conference.pages.proceeding-detail', ['proceeding' => $proceeding]) }}" class="font-semibold text-gray-700 hover:text-primary">{{ $proceeding->title }}</a>
+                                <h2>
+                                    <a href="{{ route('livewirePageGroup.conference.pages.proceeding-detail', ['proceeding' => $proceeding]) }}" class="font-semibold text-gray-700 hover:text-primary">{{ $proceeding->title }}</a>
+                                </h2>
                                 <div class="text-sm text-gray-500">
                                     {{ $proceeding->volume ? 'Vol. '.$proceeding->volume : '' }}
                                     {{ $proceeding->number ? 'No. '.$proceeding->number : '' }}

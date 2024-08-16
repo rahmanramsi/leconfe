@@ -19,10 +19,10 @@
                                     </div>
                                 @endif
                                 <div class="flex-1 space-y-2 information">
-                                    <h2 class="">
+                                    <h3>
                                         <a href="{{ $conference->getHomeUrl() }}"
                                             class="font-bold conference-name link link-primary link-hover">{{ $conference->name }}</a>
-                                    </h2>
+                                    </h3>
 
                                     @if ($conference->getMeta('summary'))
                                         <div class="conference-summary user-content">

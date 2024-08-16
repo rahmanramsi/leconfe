@@ -7,10 +7,10 @@
         </a>
     @endif
     <div class="flex-1">
-        <div class="title mb-3 text-base">
+        <h3 class="title mb-3 text-base">
             <a href="{{ route('livewirePageGroup.conference.pages.paper', ['submission' => $paper->id]) }}" class="font-semibold text-gray-700 hover:text-primary">{{ $paper->getMeta('title') }}</a>
             <div class="text-xs text-gray-500">{{ $paper->getMeta('subtitle') }}</div>
-        </div>
+        </h3>
         <div class="meta space-y-2">
             <div class="flex-1 flex gap-y-2 flex-wrap items-center justify-between">
                 <div class="authors text-sm text-gray-600">
