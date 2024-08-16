@@ -824,5 +824,12 @@ return [
     'registration_page' => "صفحة التسجيل ",
     'make_sure_to_register_as_an_author_not_participant' => "تأكد من التسجيل كمؤلف، وليس كمشارك.",
     'you_are_not_participant_of_this_conference' => 'أنت لست مشاركًا في هذه المؤتمر، يرجى بدء <a class="text-blue-500 hover:underline" href=":route">عملية التسجيل</a> وإكمال الدفع للاستمرار في عملية التقديم.',
+    'thank_you_for_completing_registration_process' => 'شكراً لك على إكمال عملية التسجيل. يرجى الانتظار حتى يقوم المحرر بمراجعة تقديمك.',
+    'please_finish_your_payment_registration_process' => 'يرجى إكمال الدفع لإنهاء عملية التسجيل. تحقق من <a class="text-blue-500 hover:underline" href=":route">حالة التسجيل</a> للحصول على مزيد من المعلومات حول عملية الدفع أو تحقق من طرق الدفع اليدوية على الجانب.',
+    'registration_currenty_participant_level' => 'عذرًا، تسجيلك حاليًا في مستوى المشارك. تحتاج إلى أن تكون في مستوى المؤلف للاستمرار في عملية التقديم.',
+    'this_registration_details' => 'هذه تفاصيل تسجيل <strong>:full_name</strong>.',
+    'consider_registration_process' => 'شكرًا لتقديمك. يرجى النظر في <a class="text-blue-500 hover:underline" href=":route">عملية التسجيل</a> وإكمال الدفع لمواصلة عملية التقديم. تأكد من التسجيل على مستوى المؤلف للاستمرار في عملية التقديم.',
+    'we_apologize_registration_currenty_closed' => 'نعتذر، لكن التسجيل مغلق حاليًا.',
+    'have_questin_contact_our_technical_support' => 'هل لديك سؤال؟ اتصل بـ <strong>دعمنا الفني</strong>.',
 
 ];

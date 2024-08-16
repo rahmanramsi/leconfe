@@ -824,7 +824,13 @@ return [
     'registration_page' => "Faqja e Regjistrimit",
     'make_sure_to_register_as_an_author_not_participant' => "Sigurohuni që të regjistroheni si autor, jo si pjesëmarrës.",
     'you_are_not_participant_of_this_conference' => 'Ju nuk jeni pjesëmarrës në këtë konferencë, ju lutemi filloni procesin e <a class="text-blue-500 hover:underline" href=":route">regjistrimit</a> dhe përfundoni pagesën për të vazhduar procesin tuaj të dorëzimit.',
-
+    'thank_you_for_completing_registration_process' => 'Faleminderit që keni përfunduar procesin e regjistrimit. Ju lutemi prisni derisa redaktori të rishikojë dorëzimin tuaj.',
+    'please_finish_your_payment_registration_process' => 'Ju lutemi përfundoni pagesën tuaj për të përfunduar procesin e regjistrimit. Shikoni <a class="text-blue-500 hover:underline" href=":route">statusin e regjistrimit</a> për informacion të mëtejshëm mbi procesin e pagesës ose kontrolloni metodat e pagesës manuale në anë.',
+    'registration_currenty_participant_level' => 'Na vjen keq, regjistrimi juaj është aktualisht në nivelin e pjesëmarrësit. Duhet të jeni në nivelin e autorit për të vazhduar me procesin e dorëzimit.',
+    'this_registration_details' => 'Këto janë detajet e regjistrimit të <strong>:full_name</strong>.',
+    'consider_registration_process' => 'Faleminderit për dorëzimin tuaj. Ju lutemi shqyrtoni <a class="text-blue-500 hover:underline" href=":route">procesin e regjistrimit</a> dhe përfundoni pagesën për të vazhduar me procesin e dorëzimit. Sigurohuni që të regjistroheni në nivelin e autorit për të vazhduar me procesin e dorëzimit.',
+    'we_apologize_registration_currenty_closed' => 'Na vjen keq, por regjistrimi është aktualisht i mbyllur.',
+    'have_questin_contact_our_technical_support' => 'Keni ndonjë pyetje? Kontaktoni <strong>Mbështetje Teknike</strong> tonë.',
 
 
 

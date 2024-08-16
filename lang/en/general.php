@@ -834,5 +834,13 @@ return [
     'make_sure_to_register_as_an_author_not_participant' => "Make sure to register as an author, not an participant.",
     'you_are_not_participant_of_this_conference' => 'You are not participant of this conference, Please start the <a class="text-blue-500 hover:underline" href=":route">registration</a> process, and complete the payment to continue your submission process.',
 
+    'thank_you_for_completing_registration_process' => 'Thank you for completing the registration process. Please wait for the editor reviews your submission.',
+    'please_finish_your_payment_registration_process' => 'Please complete your payment to finish the registration process. Look at the <a class="text-blue-500 hover:underline" href=":route">registration status</a> to get more info about the payment process or check out the manual payment methods on the side.',
+    'registration_currenty_participant_level' => 'Sorry, your registration is currently at the participant level. You need to be at the author level to continue with the submission process.',
+    'this_registration_details' => "This is <strong>:full_name's</strong> registration details.",
+    'consider_registration_process' => 'Thank you for your submission. Please consider doing the <a class="text-blue-500 hover:underline" href=":route">registration</a> process and finalize payment to continue the submission process. Make sure you register at the author level to proceed with the submission process.',
+    'we_apologize_registration_currenty_closed' => "We apologize, but registration is currently closed.",
+    'have_questin_contact_our_technical_support' => "Have a question? contact our <strong>Technical Support Contact</strong>",
+
 
 ];

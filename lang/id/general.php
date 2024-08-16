@@ -805,6 +805,14 @@ return [
     'registration_page' => "Halaman Pendaftaran",
     'make_sure_to_register_as_an_author_not_participant' => "Pastikan untuk mendaftar sebagai penulis, bukan sebagai peserta.",
     'you_are_not_participant_of_this_conference' => 'Anda bukan peserta konferensi ini, harap mulai proses <a class="text-blue-500 hover:underline" href=":route">pendaftaran</a> dan selesaikan pembayaran untuk melanjutkan proses pengajuan Anda.',
+    'thank_you_for_completing_registration_process' => 'Terima kasih telah menyelesaikan proses pendaftaran. Harap tunggu sampai editor meninjau kiriman Anda.',
+    'please_finish_your_payment_registration_process' => 'Harap selesaikan pembayaran Anda untuk menyelesaikan proses pendaftaran. Lihat <a class="text-blue-500 hover:underline" href=":route">status pendaftaran</a> untuk informasi lebih lanjut tentang proses pembayaran atau periksa metode pembayaran manual di samping.',
+    'registration_currenty_participant_level' => 'Maaf, pendaftaran Anda saat ini berada di tingkat peserta. Anda perlu berada di tingkat penulis untuk melanjutkan proses pengiriman.',
+    'this_registration_details' => 'Ini adalah detail pendaftaran <strong>:full_name</strong>.',
+    'consider_registration_process' => 'Terima kasih atas kiriman Anda. Harap pertimbangkan untuk melakukan <a class="text-blue-500 hover:underline" href=":route">proses pendaftaran</a> dan selesaikan pembayaran untuk melanjutkan proses pengiriman. Pastikan Anda mendaftar di tingkat penulis untuk melanjutkan proses pengiriman.',
+    'we_apologize_registration_currenty_closed' => 'Kami mohon maaf, tetapi pendaftaran saat ini sedang ditutup.',
+    'have_questin_contact_our_technical_support' => 'Punya pertanyaan? Hubungi <strong>Kontak Dukungan Teknis</strong> kami.',
+
 
 
 

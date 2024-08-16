@@ -10,7 +10,7 @@
                                     <div class="col-span-1 avatar">
                                         <img src="{{ $author->getFilamentAvatarUrl() }}" alt="Profile Picture" class="rounded-full h-min">
                                     </div>
-                                    <div class="inline-block col-span-10 my-auto text-sm pl-5">
+                                    <div class="inline-block col-span-10 pl-5 my-auto text-sm">
                                         <strong class="font-semibold">
                                             {{ $author->full_name }}
                                         </strong>
@@ -21,21 +21,21 @@
                                 </div>
                                 <div class="mt-5">
                                     <p>
-                                        Thank you for completing the registration process. Please wait for the editor reviews your submission.
+                                        {{ __('general.thank_you_for_completing_registration_process') }}
                                     </p>
                                 </div>
                             </x-filament::section>
                         @else
                             <x-filament::section>
                                 <p>
-                                    Please complete your payment to finish the registration process. Look at the <a class="text-blue-500 hover:underline" href="{{ route('livewirePageGroup.scheduledConference.pages.participant-registration') }}">registration status</a> to get more info about the payment process or check out the manual payment methods on the side.
+                                    {!! __('general.please_finish_your_payment_registration_process', ['route' => {{ route('livewirePageGroup.scheduledConference.pages.participant-registration') }}]) !!}
                                 </p>
                             </x-filament::section>
                         @endif
                     @else
                         <x-filament::section>
                             <p>
-                                Sorry, your registration is currently at the participant level. You need to be at the author level to continue with the submission process.
+                                {{ __('general.registration_currenty_participant_level') }}
                             </p>
                         </x-filament::section>
                     @endif
@@ -46,7 +46,7 @@
                         </x-slot>
 
                         <x-slot name="description">
-                            This is <strong>{{ $author->full_name }}'s</strong> registration details.
+                            {!!  __('general.this_registration_details', ['full_name' => {{ $author->full_name }}])  !!}
                         </x-slot>
 
                         <x-slot name="headerEnd">
@@ -73,7 +73,7 @@
                                 <td class="pl-3">:</td>
                                 <td class="py-2 text-left">
                                     <x-filament::badge color="info" class="!w-fit">
-                                        {{ 
+                                        {{
                                             match ($authorRegistration->registrationPayment->level) {
                                                 App\Models\RegistrationType::LEVEL_PARTICIPANT => 'Participant',
                                                 App\Models\RegistrationType::LEVEL_AUTHOR => 'Author',
@@ -130,14 +130,14 @@
                 @else
                     <x-filament::section>
                         <p>
-                            Thank you for your submission. Please consider doing the <a class="text-blue-500 hover:underline" href=":route">registration</a> process and finalize payment to continue the submission process. Make sure you register at the author level to proceed with the submission process.
+                            {{ __('general.consider_registration_process') }}
                         </p>
                     </x-filament::section>
                 @endif
             @else
                 <x-filament::section>
                     <p>
-                        We apologize, but registration is currently closed.
+                        {{ __('general.we_apologize_registration_currenty_closed') }}
                     </p>
                 </x-filament::section>
             @endif
@@ -147,11 +147,11 @@
                 $currentScheduledConference->getMeta('support_contact_phone'))
                 <x-filament::section>
                     <x-slot name="heading">
-                        Technical Support Contact
+                        {{ __('general.technical_support_contact') }}
                     </x-slot>
 
                     <x-slot name="description">
-                        Have a question? contact our <strong>Technical Support Contact</strong>
+                        {{ __('general.have_questin_contact_our_technical_support') }}
                     </x-slot>
 
                     <table class="w-full text-sm">
