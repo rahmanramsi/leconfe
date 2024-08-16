@@ -28,7 +28,7 @@
                         @else
                             <x-filament::section>
                                 <p>
-                                    {!! __('general.please_finish_your_payment_registration_process', ['route' => {{ route('livewirePageGroup.scheduledConference.pages.participant-registration') }}]) !!}
+                                    {!! __('general.please_finish_your_payment_registration_process', ['route' => route('livewirePageGroup.scheduledConference.pages.participant-registration')]) !!}
                                 </p>
                             </x-filament::section>
                         @endif
@@ -46,7 +46,7 @@
                         </x-slot>
 
                         <x-slot name="description">
-                            {!!  __('general.this_registration_details', ['full_name' => {{ $author->full_name }}])  !!}
+                            {!!  __('general.this_registration_details', ['full_name' => $author->full_name])  !!}
                         </x-slot>
 
                         <x-slot name="headerEnd">
@@ -130,7 +130,7 @@
                 @else
                     <x-filament::section>
                         <p>
-                            {{ __('general.consider_registration_process') }}
+                            {!! __('general.consider_registration_process', ['route' => route('livewirePageGroup.scheduledConference.pages.participant-registration')]) !!}
                         </p>
                     </x-filament::section>
                 @endif
