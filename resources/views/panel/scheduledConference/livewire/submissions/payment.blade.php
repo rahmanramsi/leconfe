@@ -151,7 +151,7 @@
                     </x-slot>
 
                     <x-slot name="description">
-                        {{ __('general.have_questin_contact_our_technical_support') }}
+                        {!! __('general.have_questin_contact_our_technical_support') !!}
                     </x-slot>
 
                     <table class="w-full text-sm">
