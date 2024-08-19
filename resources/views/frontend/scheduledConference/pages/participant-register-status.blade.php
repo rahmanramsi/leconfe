@@ -60,14 +60,9 @@
                     <td class="pl-5 align-text-top">:</td>
                     <td class="pl-2">
                         @php
-                            $userRegistrationCost = $userRegistration->registrationPayment->cost;
-                            $userRegistrationCurrency = Str::upper($userRegistration->registrationPayment->currency);
-                            $userRegistrationCostFormatted = moneyOrFree($userRegistrationCost, $userRegistrationCurrency, true);
+                            $userRegistrationCostFormatted = moneyOrFree($userRegistration->registrationPayment->cost, $userRegistration->registrationPayment->currency, true);
                         @endphp
-                        {{
-                            ($userRegistrationCost === 0 || $userRegistrationCurrency === 'FREE') ?
-                            'Free' : "$userRegistrationCostFormatted"
-                        }}
+                        {{ $userRegistrationCostFormatted }}
                     </td>
                 </tr>
                 <tr>
