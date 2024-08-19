@@ -192,15 +192,7 @@ class RegistrantResource extends Resource
                     ->sortable(),
                 TextColumn::make('registrationPayment.name')
                     ->label(__('general.type'))
-                    ->description(function (Model $record) {
-                        if ($record->registrationPayment->currency === 'free') {
-                            return 'Free';
-                        }
-
-                        $cost = moneyOrFree($record->registrationPayment->cost, $record->registrationPayment->currency, true);
-
-                        return $cost;
-                    }),
+                    ->description(fn (Model $record) => moneyOrFree($record->registrationPayment->cost, $record->registrationPayment->currency, true)),
                 TextColumn::make('registrationPayment.state')
                     ->label(__('general.state'))
                     ->badge()

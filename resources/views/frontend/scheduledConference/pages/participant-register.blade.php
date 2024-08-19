@@ -49,9 +49,7 @@
                                                 </td>
                                                 <td>
                                                     @php
-                                                        $typeCost = $type->cost;
-                                                        $typeCurrency = Str::upper($type->currency);
-                                                        $typeCostFormatted = moneyOrFree($typeCost, $typeCurrency, true);
+                                                        $typeCostFormatted = moneyOrFree($type->cost, $type->currency, true);
                                                         $elementID = Str::slug($type->type)
                                                     @endphp
                                                     <div class="flex items-center gap-2">
@@ -59,10 +57,7 @@
                                                             <input @class(['radio radio-xs radio-primary']) id="{{ $elementID }}" type="radio" wire:model="type" value="{{ $type->id }}" @disabled(!$type->isOpen())>
                                                         @endif
                                                         <label @class(['cursor-pointer' => $type->isOpen()]) for="{{ $elementID }}">
-                                                            {{
-                                                                ($typeCost <= 0 || $typeCurrency === 'FREE') ?
-                                                                'Free' : "$typeCostFormatted"
-                                                            }}
+                                                            {{ $typeCostFormatted }}
                                                         </label>
                                                     </div>
                                                 </td>
@@ -165,7 +160,7 @@
                                 <td class="align-text-top">{{ __('general.cost') }}</td>
                                 <td class="pl-5 align-text-top">:</td>
                                 <td class="pl-2">
-                                    {{ ($registrationType->cost === 0 || $registrationType->currency === 'free') ? 'Free' : moneyOrFree($registrationType->cost, $registrationType->currency, true) }}
+                                    {{ moneyOrFree($registrationType->cost, $registrationType->currency, true) }}
                                 </td>
                             </tr>
                         </table>
