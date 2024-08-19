@@ -137,7 +137,7 @@
             @else
                 <x-filament::section>
                     <p>
-                        {{ __('general.we_apologize_registration_currenty_closed') }}
+                        {{ __('general.we_apologize_registration_currenty_closed') }} Look into <a class="text-blue-500 hover:underline" href="{{ route('livewirePageGroup.scheduledConference.pages.agenda') }}">agenda</a> may help you to know when registration open.
                     </p>
                 </x-filament::section>
             @endif
