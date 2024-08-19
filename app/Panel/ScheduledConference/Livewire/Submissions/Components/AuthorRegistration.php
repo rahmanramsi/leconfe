@@ -2,12 +2,16 @@
 
 namespace App\Panel\ScheduledConference\Livewire\Submissions\Components;
 
+use App\Models\User;
+use App\Models\Submission;
 use Filament\Tables\Table;
+use App\Models\Registration;
 use App\Models\PaymentManual;
 use App\Models\RegistrationType;
 use Illuminate\Support\HtmlString;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Grouping\Group;
+use App\Notifications\NewRegistration;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
@@ -15,6 +19,7 @@ use Illuminate\Database\Eloquent\Model;
 use Filament\Tables\Columns\Layout\Split;
 use Filament\Infolists\Components\TextEntry;
 use Illuminate\View\Compilers\BladeCompiler;
+use App\Models\Enums\RegistrationPaymentState;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Illuminate\Contracts\Database\Eloquent\Builder;
@@ -23,6 +28,8 @@ class AuthorRegistration extends \Livewire\Component implements HasForms, HasTab
 {
     use InteractsWithForms, InteractsWithTable;
 
+    public Submission $submission;
+    
     public function table(Table $table): Table
     {
         return $table
@@ -47,6 +54,8 @@ class AuthorRegistration extends \Livewire\Component implements HasForms, HasTab
             ->actions([
                 Action::make('author-registration')
                     ->label('Register')
+                    ->successNotificationTitle(__('general.saved'))
+                    ->failureNotificationTitle(__('general.failed'))
                     ->requiresConfirmation()
                     ->modalHeading('Author Registration')
                     ->modalIcon('heroicon-m-user-plus')
@@ -94,8 +103,43 @@ class AuthorRegistration extends \Livewire\Component implements HasForms, HasTab
                             </table>
                         </div>
                     BLADE)))
-                    ->action(function (array $data) {
-                        
+                    ->action(function (Model $record, Action $action) {
+                        if($this->submission->registration) {
+                            return $action->sendFailureNotification();
+                        }
+
+                        try {
+                            $registration = $this->submission->registration()->create([
+                                'user_id' => auth()->user()->id,
+                                'registration_type_id' => $record->id,
+                            ]);
+                    
+                            $registration->registrationPayment()->create([
+                                'name' => $record->type,
+                                'level' => $record->level,
+                                'description' => $record->getMeta('description'),
+                                'cost' => $record->cost,
+                                'currency' => $record->currency,
+                                'state' => RegistrationPaymentState::Unpaid,
+                            ]);
+                    
+                            User::whereHas('roles', function ($query) {
+                                $query->whereHas('permissions', function ($query) {
+                                    $query->where('name', 'Registration:notified');
+                                });
+                            })->get()->each(function ($user) use($registration) {
+                                $user->notify(
+                                    new NewRegistration(
+                                        registration: $registration,
+                                    )
+                                );
+                            });
+
+                            return $action->sendSuccessNotification();
+                        } catch (\Throwable $th) {
+                            $action->sendFailureNotification();
+                            throw $th;
+                        }
                     })
             ])
             ->recordAction('author-registration')

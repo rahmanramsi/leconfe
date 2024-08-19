@@ -56,6 +56,11 @@ class Registration extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function submission(): BelongsTo
+    {
+        return $this->belongsTo(Submission::class);
+    }
+
     public function registrationType(): BelongsTo
     {
         return $this->belongsTo(RegistrationType::class);

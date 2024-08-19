@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Kra8\Snowflake\HasShortflakePrimary;
@@ -196,6 +197,11 @@ class Submission extends Model implements HasMedia, Sortable
     public function authors()
     {
         return $this->hasMany(Author::class);
+    }
+
+    public function registration(): HasOne
+    {
+        return $this->hasOne(Registration::class);
     }
 
     public function scopePublished(Builder $query)
