@@ -134,6 +134,9 @@
                         </p>
                     </x-filament::section>
                 @endif
+
+                {{-- Author Registration --}}
+                @livewire(App\Panel\ScheduledConference\Livewire\Submissions\Components\AuthorRegistration::class, ['submission' => $submission])
             @else
                 <x-filament::section>
                     <p>

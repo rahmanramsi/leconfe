@@ -54,7 +54,14 @@
                                                     @endphp
                                                     <div class="flex items-center gap-2">
                                                         @if($isLogged)
-                                                            <input @class(['radio radio-xs radio-primary']) id="{{ $elementID }}" type="radio" wire:model="type" value="{{ $type->id }}" @disabled(!$type->isOpen())>
+                                                            @if ($type->level !== App\Models\RegistrationType::LEVEL_AUTHOR)
+                                                                <input @class(['radio radio-xs radio-primary']) id="{{ $elementID }}" type="radio" wire:model="type" value="{{ $type->id }}" @disabled(!$type->isOpen())>
+                                                            @else
+                                                                <x-filament::icon
+                                                                    icon="heroicon-o-question-mark-circle"
+                                                                    class="h-5 w-5 text-gray-500 dark:text-gray-400"
+                                                                />
+                                                            @endif
                                                         @endif
                                                         <label @class(['cursor-pointer' => $type->isOpen()]) for="{{ $elementID }}">
                                                             {{ $typeCostFormatted }}
