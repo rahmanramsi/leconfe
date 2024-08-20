@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Route;
 use Rahmanramsi\LivewirePageGroup\PageGroup;
 use Rahmanramsi\LivewirePageGroup\Pages\Page;
 use Illuminate\Support\Str;
+use Seboettg\CiteProc\CiteProc;
+use Seboettg\CiteProc\StyleSheet;
 
 class Paper extends Page
 {
@@ -22,7 +24,7 @@ class Paper extends Page
     {
         $this->paper = Submission::query()
             ->where('id', $submission)
-            ->with(['track', 'media', 'meta', 'galleys.file.media', 'authors' => fn ($query) => $query->with(['role', 'meta'])])
+            ->with(['proceeding', 'track', 'media', 'meta', 'galleys.file.media', 'authors' => fn ($query) => $query->with(['role', 'meta'])])
             ->first();
 
         if (!$this->paper) {
@@ -35,6 +37,7 @@ class Paper extends Page
 
         $this->addMetadata();
     }
+
 
     public function getTitle(): string|Htmlable
     {

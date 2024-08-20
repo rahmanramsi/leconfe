@@ -674,6 +674,7 @@ return [
     'eg_1_10' => 'e.g. 1-10',
     'there_was_error_please_contact_administrator' => 'There was an error pleas contact the administrator.',
     'references' => 'References',
+    'no_references' => 'No References',
     'submission_wizard' => 'Submission Wizard',
     'submission' => 'Submission',
 
@@ -794,7 +795,8 @@ return [
     'participant_registration' => "Participant Registration",
     'registration_status' => "Registration Status",
     'timelines' => "Timelines",
-
-
+    'downloads' => "Downloads",
+    'paper_date_published' => "Date Published : :date",
+    'how_to_cite' => "How to Cite",
 ];
 

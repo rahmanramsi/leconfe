@@ -18,8 +18,9 @@ class AuthorRolePopulateDefaultDataAction
             DB::beginTransaction();
 
             foreach ([
-                UserRole::Author->value,
+                'Author',
                 'Co Author',
+                'Translator',
             ] as $authorRole) {
                 AuthorRole::firstOrCreate([
                     'name' => $authorRole,

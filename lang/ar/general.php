@@ -664,6 +664,7 @@ return [
     'eg_1_10' => 'على سبيل المثال 1-10',
     'there_was_error_please_contact_administrator' => 'حدث خطأ، يرجى الاتصال بالمسؤول.',
     'references' => 'المراجع',
+    'no_references' => 'لا توجد مراجع',
     'submission_wizard' => 'معالج التقديم',
     'submission' => 'التقديم',
     'failed_to_save' => 'فشل في الحفظ.',
@@ -782,6 +783,7 @@ return [
     'participant_registration' => 'تسجيل المشاركين',
     'registration_status' => 'حالة التسجيل',
     'timelines' => 'الخطوط الزمنية',
-
-
+    'download' => 'تحميل',
+    'paper_date_published' => "تاريخ النشر: :date",
+    'how_to_cite' => 'كيفية الاقتباس',
 ];

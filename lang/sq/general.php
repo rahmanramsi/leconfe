@@ -664,6 +664,7 @@ return [
     'eg_1_10' => 'p.sh. 1-10',
     'there_was_error_please_contact_administrator' => 'Ka ndodhur një gabim, ju lutemi kontaktoni administratorin.',
     'references' => 'Referencat',
+    'no_references' => 'Nuk ka Referenca',
     'submission_wizard' => 'Wizard i Dorëzimit',
     'submission' => 'Dorëzimi',
     'failed_to_save' => 'Dështoi të ruante.',
@@ -782,12 +783,7 @@ return [
     'participant_registration' => 'Regjistrimi i Pjesëmarrësve',
     'registration_status' => 'Statusi i Regjistrimit',
     'timelines' => 'Kohëzgjatjet',
-
-
-
-
-
-
-
-
+    'downloads' => 'Shkarkime',
+    'paper_date_published' => "Data e publikimit: :date",
+    'how_to_cite' => 'Si të citoni',
 ];

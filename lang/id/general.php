@@ -652,6 +652,7 @@ return [
     'eg_1_10' => 'mis. 1-10',
     'there_was_error_please_contact_administrator' => 'Terjadi kesalahan, harap hubungi administrator.',
     'references' => 'Referensi',
+    'no_references' => 'Tidak ada referensi',
     'submission_wizard' => 'Wizard Pengajuan',
     'submission' => 'Pengajuan',
     'failed_to_save' => 'Gagal menyimpan.',
@@ -764,14 +765,9 @@ return [
     'referer' => 'Pengarah',
     'participant_registration' => 'Pendaftaran Peserta',
     'registration_status' => 'Status Pendaftaran',
-    'timelines' => 'Garis Waktu',
-
-
-
-
-
-
-
-
+    'timelines' => 'Linimasa',
+    'downloads' => 'Unduhan',
+    'paper_date_published' => "Tanggal Terbit : :date",
+    'how_to_cite' => 'Cara Mengutip',
 ];
 
