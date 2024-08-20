@@ -2,16 +2,18 @@
 
 namespace App\Models\States\Submission;
 
-use App\Actions\Submissions\SubmissionUpdateAction;
 use App\Classes\Log;
 use App\Events\Submissions\Accepted;
 use App\Models\Enums\SubmissionStage;
 use App\Models\Enums\SubmissionStatus;
+use App\Actions\Submissions\SubmissionUpdateAction;
 use App\Models\States\Submission\Concerns\CanWithdraw;
+use App\Models\States\Submission\Concerns\CanDeclinePayment;
 
 class OnPresentationSubmissionState extends BaseSubmissionState
 {
     use CanWithdraw;
+    use CanDeclinePayment;
 
     public function sendToEditing(): void
     {

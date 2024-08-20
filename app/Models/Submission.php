@@ -12,6 +12,7 @@ use App\Models\States\Submission\BaseSubmissionState;
 use App\Models\States\Submission\DeclinedSubmissionState;
 use App\Models\States\Submission\EditingSubmissionState;
 use App\Models\States\Submission\IncompleteSubmissionState;
+use App\Models\States\Submission\OnPaymentSubmissionState;
 use App\Models\States\Submission\OnPresentationSubmissionState;
 use App\Models\States\Submission\OnReviewSubmissionState;
 use App\Models\States\Submission\PublishedSubmissionState;
@@ -281,6 +282,7 @@ class Submission extends Model implements HasMedia, Sortable
         return match ($this->status) {
             SubmissionStatus::Incomplete => new IncompleteSubmissionState($this),
             SubmissionStatus::Queued => new QueuedSubmissionState($this),
+            SubmissionStatus::OnPayment => new OnPaymentSubmissionState($this),
             SubmissionStatus::OnReview => new OnReviewSubmissionState($this),
             SubmissionStatus::OnPresentation => new OnPresentationSubmissionState($this),
             SubmissionStatus::Editing => new EditingSubmissionState($this),

@@ -339,20 +339,17 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
     {
         $badgeHtml = '<div class="flex items-center gap-x-2">';
 
-        if(!$this->record->isPaymentComplete() && $this->record->isStatusRequirePayment()) {
-            $badgeHtml .= '<x-filament::badge color="warning" class="w-fit">' . 'Waiting Payment' . '</x-filament::badge>';
-        } else {
-            $badgeHtml .= match ($this->record->status) {
-                SubmissionStatus::Incomplete => '<x-filament::badge color="gray" class="w-fit">' . __("general.incomplete") . '</x-filament::badge>',
-                SubmissionStatus::Queued => '<x-filament::badge color="primary" class="w-fit">' . __("general.queued") . '</x-filament::badge>',
-                SubmissionStatus::OnReview => '<x-filament::badge color="warning" class="w-fit">' . __("general.on_review") . '</x-filament::badge>',
-                SubmissionStatus::Published => '<x-filament::badge color="success" class="w-fit">' . __("general.published") . '</x-filament::badge>',
-                SubmissionStatus::Editing => '<x-filament::badge color="info" class="w-fit">' . __("general.editing") . '</x-filament::badge>',
-                SubmissionStatus::Declined => '<x-filament::badge color="danger" class="w-fit">' . __("general.declined") . '</x-filament::badge>',
-                SubmissionStatus::Withdrawn => '<x-filament::badge color="danger" class="w-fit">' . __("general.withdrawn") . '</x-filament::badge>',
-                default => null,
-            };
-        }
+        $badgeHtml .= match ($this->record->status) {
+            SubmissionStatus::Incomplete => '<x-filament::badge color="gray" class="w-fit">' . __("general.incomplete") . '</x-filament::badge>',
+            SubmissionStatus::Queued => '<x-filament::badge color="primary" class="w-fit">' . __("general.queued") . '</x-filament::badge>',
+            SubmissionStatus::OnPayment => '<x-filament::badge color="warning" class="w-fit">' . __("general.payment") . '</x-filament::badge>',
+            SubmissionStatus::OnReview => '<x-filament::badge color="warning" class="w-fit">' . __("general.on_review") . '</x-filament::badge>',
+            SubmissionStatus::Published => '<x-filament::badge color="success" class="w-fit">' . __("general.published") . '</x-filament::badge>',
+            SubmissionStatus::Editing => '<x-filament::badge color="info" class="w-fit">' . __("general.editing") . '</x-filament::badge>',
+            SubmissionStatus::Declined => '<x-filament::badge color="danger" class="w-fit">' . __("general.declined") . '</x-filament::badge>',
+            SubmissionStatus::Withdrawn => '<x-filament::badge color="danger" class="w-fit">' . __("general.withdrawn") . '</x-filament::badge>',
+            default => null,
+        };
 
         $badgeHtml .= '</div>';
 
@@ -379,12 +376,9 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                             ->schema([
                                 Tabs::make()
                                     ->activeTab(function () {
-                                        if(!$this->record->isPaymentComplete() && $this->record->isStageRequirePayment()) {
-                                            return 2;
-                                        }
-
                                         return match ($this->record->stage) {
                                             SubmissionStage::CallforAbstract => 1,
+                                            SubmissionStage::Payment => 2,
                                             SubmissionStage::PeerReview => 3,
                                             SubmissionStage::Presentation => 4,
                                             SubmissionStage::Editing, SubmissionStage::Proceeding => 5,

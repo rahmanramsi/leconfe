@@ -8,6 +8,10 @@ interface SubmissionStateInterface
 
     public function acceptAbstract(): void;
 
+    public function approvePayment(): void;
+
+    public function declinePayment(): void;
+
     public function sendToEditing(): void;
     
     public function sendToPresentation(): void;

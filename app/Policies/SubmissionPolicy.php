@@ -59,7 +59,7 @@ class SubmissionPolicy
 
     public function assignReviewer(User $user, Submission $submission)
     {
-        if (in_array($submission->status, [SubmissionStatus::Declined, SubmissionStatus::Withdrawn, SubmissionStatus::Published, SubmissionStatus::Queued])) {
+        if (in_array($submission->status, [SubmissionStatus::Declined, SubmissionStatus::Withdrawn, SubmissionStatus::Published, SubmissionStatus::OnPayment, SubmissionStatus::Queued])) {
             return false;
         }
 
@@ -74,7 +74,7 @@ class SubmissionPolicy
 
     public function editReviewer(User $user, Submission $submission)
     {
-        if (in_array($submission->status, [SubmissionStatus::Declined, SubmissionStatus::Withdrawn, SubmissionStatus::Published, SubmissionStatus::Queued])) {
+        if (in_array($submission->status, [SubmissionStatus::Declined, SubmissionStatus::Withdrawn, SubmissionStatus::Published, SubmissionStatus::OnPayment, SubmissionStatus::Queued])) {
             return false;
         }
 
@@ -85,7 +85,7 @@ class SubmissionPolicy
 
     public function cancelReviewer(User $user, Submission $submission)
     {
-        if (in_array($submission->status, [SubmissionStatus::Declined, SubmissionStatus::Withdrawn, SubmissionStatus::Published, SubmissionStatus::Queued])) {
+        if (in_array($submission->status, [SubmissionStatus::Declined, SubmissionStatus::Withdrawn, SubmissionStatus::Published, SubmissionStatus::OnPayment, SubmissionStatus::Queued])) {
             return false;
         }
 
@@ -96,7 +96,7 @@ class SubmissionPolicy
 
     public function emailReviewer(User $user, Submission $submission)
     {
-        if (in_array($submission->status, [SubmissionStatus::Declined, SubmissionStatus::Withdrawn, SubmissionStatus::Published, SubmissionStatus::Queued])) {
+        if (in_array($submission->status, [SubmissionStatus::Declined, SubmissionStatus::Withdrawn, SubmissionStatus::Published, SubmissionStatus::OnPayment, SubmissionStatus::Queued])) {
             return false;
         }
 
@@ -107,7 +107,7 @@ class SubmissionPolicy
 
     public function reinstateReviewer(User $user, Submission $submission)
     {
-        if (in_array($submission->status, [SubmissionStatus::Declined, SubmissionStatus::Withdrawn, SubmissionStatus::Published, SubmissionStatus::Queued])) {
+        if (in_array($submission->status, [SubmissionStatus::Declined, SubmissionStatus::Withdrawn, SubmissionStatus::Published, SubmissionStatus::OnPayment, SubmissionStatus::Queued])) {
             return false;
         }
 
@@ -118,7 +118,7 @@ class SubmissionPolicy
 
     public function declinePaper(User $user, Submission $submission)
     {
-        if (in_array($submission->status, [SubmissionStatus::Withdrawn, SubmissionStatus::Published, SubmissionStatus::Queued, SubmissionStatus::Declined])) {
+        if (in_array($submission->status, [SubmissionStatus::Withdrawn, SubmissionStatus::Published, SubmissionStatus::OnPayment, SubmissionStatus::Queued, SubmissionStatus::Declined])) {
             return false;
         }
 
@@ -179,7 +179,7 @@ class SubmissionPolicy
     public function uploadPaper(User $user, Submission $submission)
     {
 
-        if (in_array($submission->status, [SubmissionStatus::Declined, SubmissionStatus::Withdrawn, SubmissionStatus::Published, SubmissionStatus::Queued])) {
+        if (in_array($submission->status, [SubmissionStatus::Declined, SubmissionStatus::Withdrawn, SubmissionStatus::Published, SubmissionStatus::OnPayment, SubmissionStatus::Queued])) {
             return false;
         }
 
@@ -209,7 +209,7 @@ class SubmissionPolicy
 
     public function acceptPaper(User $user, Submission $submission)
     {
-        if (in_array($submission->status, [SubmissionStatus::Withdrawn, SubmissionStatus::Published, SubmissionStatus::Queued])) {
+        if (in_array($submission->status, [SubmissionStatus::Withdrawn, SubmissionStatus::Published, SubmissionStatus::OnPayment, SubmissionStatus::Queued])) {
             return false;
         }
 
@@ -218,6 +218,36 @@ class SubmissionPolicy
         }
 
         if ($user->can('Submission:acceptPaper')) {
+            return true;
+        }
+    }
+
+    public function declinePayment(User $user, Submission $submission)
+    {
+        if (in_array($submission->status, [SubmissionStatus::Withdrawn, SubmissionStatus::Published, SubmissionStatus::Queued])) {
+            return false;
+        }
+
+        if (filled($submission->withdrawn_reason)) {
+            return false;
+        }
+
+        if ($user->can('Submission:declinePayment')) {
+            return true;
+        }
+    }
+
+    public function approvePayment(User $user, Submission $submission)
+    {
+        if ($submission->stage != SubmissionStage::Payment || $submission->status != SubmissionStatus::OnPayment) {
+            return false;
+        }
+
+        if (filled($submission->withdrawn_reason)) {
+            return false;
+        }
+
+        if ($user->can('Submission:approvePayment')) {
             return true;
         }
     }
@@ -269,7 +299,7 @@ class SubmissionPolicy
 
     public function requestRevision(User $user, Submission $submission)
     {
-        if (in_array($submission->status, [SubmissionStatus::Withdrawn, SubmissionStatus::Published, SubmissionStatus::Queued])) {
+        if (in_array($submission->status, [SubmissionStatus::Withdrawn, SubmissionStatus::Published, SubmissionStatus::OnPayment, SubmissionStatus::Queued])) {
             return false;
         }
 
@@ -284,7 +314,7 @@ class SubmissionPolicy
 
     public function skipReview(User $user, Submission $submission)
     {
-        if (in_array($submission->status, [SubmissionStatus::Withdrawn, SubmissionStatus::Published, SubmissionStatus::Queued])) {
+        if (in_array($submission->status, [SubmissionStatus::Withdrawn, SubmissionStatus::Published, SubmissionStatus::OnPayment, SubmissionStatus::Queued])) {
             return false;
         }
 

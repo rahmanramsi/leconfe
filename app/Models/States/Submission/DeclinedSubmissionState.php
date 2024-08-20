@@ -13,8 +13,8 @@ class DeclinedSubmissionState extends BaseSubmissionState
     public function acceptAbstract(): void
     {
         SubmissionUpdateAction::run([
-            'stage' => SubmissionStage::PeerReview,
-            'status' => SubmissionStatus::OnReview,
+            'stage' => SubmissionStage::Payment,
+            'status' => SubmissionStatus::OnPayment,
         ], $this->submission);
 
         Log::make(

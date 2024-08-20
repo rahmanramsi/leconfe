@@ -34,6 +34,7 @@
                         'flex flex-col gap-4 col-span-4',
                         'hidden' => in_array($submission->status, [
                             SubmissionStatus::Queued,
+                            SubmissionStatus::OnPayment,
                             SubmissionStatus::Published,
                         ]),
                     ]) x-show="!decision">
