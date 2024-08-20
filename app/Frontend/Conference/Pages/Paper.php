@@ -2,6 +2,7 @@
 
 namespace App\Frontend\Conference\Pages;
 
+use App\Facades\Hook;
 use App\Facades\MetaTag;
 use App\Models\Submission;
 use Illuminate\Contracts\Support\Htmlable;
@@ -114,6 +115,8 @@ class Paper extends Page
         if ($this->paper->getFirstMedia('cover')) {
             MetaTag::add('og:image', $this->paper->getFirstMedia('cover')->getAvailableUrl(['thumb']));
         }
+
+        Hook::call('frontend.paper.addMetadata', $this);
     }
 
     public function canAccess(): bool
