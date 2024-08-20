@@ -29,7 +29,7 @@
 
                     <x-filament::section>
                         <x-slot name="heading">
-                            {{ __('general.author_registration_details') }}
+                            Submission Registration Details
                         </x-slot>
 
                         <x-slot name="description">
