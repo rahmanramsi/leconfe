@@ -43,6 +43,21 @@
                     @endforeach
                 </div>
             </section>
+            @if($paper->doi)
+                <section class="mt-4 keywords">
+                    <h2 class="pb-1 mb-3 text-xl font-medium border-b border-b-slate-200">
+                        DOI
+                    </h2>
+                    <div class="content text-slate-800">
+                        <div class="flex flex-wrap gap-3">
+                            <a href="{{ $paper->doi->getUrl() }}" class="flex space-x-1 text-primary text-sm w-max">
+                                <x-academicon-doi class="w-4 h-4 my-auto text-yellow-400" />
+                                <span>{{ $paper->doi->doi }}</span>
+                            </a>
+                        </div>
+                    </div>
+                </section>
+            @endif
             @if($paper->getMeta('keywords'))
                 <section class="mt-4 keywords">
                     <h2 class="pb-1 mb-3 text-xl font-medium border-b border-b-slate-200">
@@ -60,6 +75,7 @@
                     </div>
                 </section>
             @endif
+          
             <section clas="abstract mt-4">
                 <h2 class="pb-1 mb-3 text-xl font-medium border-b border-b-slate-200">
                     {{ __('Abstract') }}
