@@ -58,7 +58,3 @@ If you discover a security vulnerability within Leconfe, please e-mail Leconfe v
 ## Credits
 
 WIP
-
-## License
-
-WIP
