@@ -383,7 +383,6 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                                             return 2;
                                         }
 
-
                                         return match ($this->record->stage) {
                                             SubmissionStage::CallforAbstract => 1,
                                             SubmissionStage::PeerReview => 3,
@@ -403,7 +402,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                                                         'submission' => $this->record,
                                                     ]),
                                             ]),
-                                        Tab::make('payment')
+                                        Tab::make('Payment')
                                             ->label(__('general.payment'))
                                             ->icon('heroicon-o-credit-card')
                                             ->schema([

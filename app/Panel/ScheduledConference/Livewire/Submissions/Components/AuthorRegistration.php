@@ -5,6 +5,7 @@ namespace App\Panel\ScheduledConference\Livewire\Submissions\Components;
 use App\Models\User;
 use App\Models\Submission;
 use Filament\Tables\Table;
+use Illuminate\Support\Str;
 use App\Models\Registration;
 use App\Models\PaymentManual;
 use App\Models\RegistrationType;
@@ -53,7 +54,7 @@ class AuthorRegistration extends \Livewire\Component implements HasForms, HasTab
             ])
             ->actions([
                 Action::make('author-registration')
-                    ->label('Register')
+                    ->label('')
                     ->successNotificationTitle(__('general.saved'))
                     ->failureNotificationTitle(__('general.failed'))
                     ->requiresConfirmation()
@@ -108,6 +109,8 @@ class AuthorRegistration extends \Livewire\Component implements HasForms, HasTab
                             return $action->sendFailureNotification();
                         }
 
+                        $isFree = Str::lower($record->currency) === 'free';
+
                         try {
                             $registration = $this->submission->registration()->create([
                                 'user_id' => auth()->user()->id,
@@ -120,8 +123,10 @@ class AuthorRegistration extends \Livewire\Component implements HasForms, HasTab
                                 'description' => $record->getMeta('description'),
                                 'cost' => $record->cost,
                                 'currency' => $record->currency,
-                                'state' => RegistrationPaymentState::Unpaid,
+                                'state' => $isFree ? RegistrationPaymentState::Paid : RegistrationPaymentState::Unpaid,
                             ]);
+
+                            //TODO: finish submission payment process if registration type are free
                     
                             User::whereHas('roles', function ($query) {
                                 $query->whereHas('permissions', function ($query) {
@@ -135,7 +140,9 @@ class AuthorRegistration extends \Livewire\Component implements HasForms, HasTab
                                 );
                             });
 
-                            return $action->sendSuccessNotification();
+                            $action->sendSuccessNotification();
+
+                            return redirect(request()->header('Referer'));
                         } catch (\Throwable $th) {
                             $action->sendFailureNotification();
                             throw $th;

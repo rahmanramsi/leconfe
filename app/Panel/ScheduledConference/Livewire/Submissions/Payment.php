@@ -2,34 +2,20 @@
 
 namespace App\Panel\ScheduledConference\Livewire\Submissions;
 
-use App\Mail\Templates\AcceptAbstractMail;
-use App\Mail\Templates\DeclineAbstractMail;
-use App\Models\Enums\SubmissionStatus;
-use App\Models\Enums\UserRole;
-use App\Models\MailTemplate;
-use App\Models\Role;
-use App\Models\Submission;
-use App\Notifications\AbstractAccepted;
-use App\Notifications\AbstractDeclined;
-use App\Panel\ScheduledConference\Resources\SubmissionResource;
-use Filament\Actions\Action;
-use Filament\Actions\Concerns\InteractsWithActions;
-use Filament\Actions\Contracts\HasActions;
-use Filament\Forms\Components\Checkbox;
-use Filament\Forms\Components\Fieldset;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
-use Illuminate\Support\Facades\Log;
 use Livewire\Component;
-use App\Forms\Components\TinyEditor;
-use App\Models\Registration;
 use App\Models\Timeline;
+use App\Models\Submission;
+use App\Models\Enums\UserRole;
+use Filament\Forms\Contracts\HasForms;
+use Illuminate\Database\Eloquent\Builder;
+use Filament\Actions\Contracts\HasActions;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Actions\Concerns\InteractsWithActions;
 
 class Payment extends Component implements HasActions, HasForms
 {
-    use InteractsWithActions, InteractsWithForms;
+    use InteractsWithActions;
+    use InteractsWithForms;
 
     public Submission $submission;
 
@@ -37,23 +23,25 @@ class Payment extends Component implements HasActions, HasForms
         'refreshSubmission' => '$refresh',
     ];
 
-    public function getViewData(): array
+    public function mount(Submission $submission)
     {
-        $currentScheduledConference = app()->getCurrentScheduledConference();
-        $author = $this->submission->user;
-        $authorRegistration = Registration::where('user_id', $this->submission->user->id)->first();
-        $isRegistrationOpen = Timeline::isRegistrationOpen();
-
-        return [
-            'currentScheduledConference' => $currentScheduledConference,
-            'author' => $author,
-            'authorRegistration' => $authorRegistration,
-            'isRegistrationOpen' => $isRegistrationOpen,
-        ];
     }
 
     public function render()
     {
-        return view('panel.scheduledConference.livewire.submissions.payment', $this->getViewData());
+        $submissionParticipant = $this->submission
+            ->participants()
+            ->whereHas('role', fn (Builder $query) => $query->where('name', UserRole::Author->value))
+            ->where('user_id', auth()->user()->id)
+            ->limit(1)
+            ->first();
+
+        return view('panel.scheduledConference.livewire.submissions.payment', [
+            'currentScheduledConference' => app()->getCurrentScheduledConference(),
+            'submissionRegistration' => $this->submission->registration,
+            'submissionRegistrant' => $this->submission->registration->user ?? null,
+            'isSubmissionAuthor' => $submissionParticipant !== null,
+            'isRegistrationOpen' => Timeline::isRegistrationOpen(),
+        ]);
     }
 }

@@ -195,7 +195,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasMedia,
         return !is_null($this->email_verified_at);
     }
 
-    public function asAuthor()
+    public function authors()
     {
         return Author::email($this->email)->first();
     }

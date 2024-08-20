@@ -20,6 +20,9 @@ class PaymentSetting extends Component implements HasForms
 
     public function mount(): void
     {
+        $this->form->fill([
+            'meta' => app()->getCurrentScheduledConference()->getAllMeta(),
+        ]);
     }
 
     public function form(Form $form): Form

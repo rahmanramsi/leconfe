@@ -24,6 +24,22 @@ class PaymentManualList extends \Livewire\Component implements HasForms, HasTabl
     {
         return $table
             ->heading(__('general.payment_methods'))
+            ->headerActions([
+                Action::make('PaymentPolicyAction')
+                    ->label('Policy')
+                    ->modalHeading('Payment Policy')
+                    ->icon('heroicon-o-book-open')
+                    ->size('xs')
+                    ->infolist([
+                        TextEntry::make('payment_policy')
+                            ->getStateUsing(fn () => app()->getCurrentScheduledConference()->getMeta('payment_policy'))
+                            ->label('')
+                            ->html()
+                    ])
+                    ->modalSubmitAction(false)
+                    ->link()
+                    ->visible(fn () => app()->getCurrentScheduledConference()->getMeta('payment_policy') !== null)
+            ])
             ->query(fn (): Builder => PaymentManual::query()
                 ->orderBy('currency', 'ASC')
             )
@@ -50,7 +66,9 @@ class PaymentManualList extends \Livewire\Component implements HasForms, HasTabl
                     ])
                     ->modalSubmitAction(false)
             ])
-            ->emptyStateHeading('')
+            ->emptyStateIcon('heroicon-m-credit-card')
+            ->emptyStateHeading('Empty!')
+            ->emptyStateDescription('Manual payment methods are empty.')
             ->paginated(false);
     }
 
