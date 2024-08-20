@@ -11,7 +11,7 @@ class Register extends WebsiteRegister
 		$data = parent::getViewData();
 
 		$data['scheduledConference'] = app()->getCurrentScheduledConference();
-
+		$data['privacyStatementUrl'] = route(PrivacyStatement::getRouteName());
 		return $data;
 	}
 }
