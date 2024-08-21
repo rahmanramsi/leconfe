@@ -24,7 +24,6 @@
         "genealabs/laravel-model-caching": "^0.13.4",
         "guzzlehttp/guzzle": "^7.2",
         "jackiedo/timezonelist": "^5.1",
-        "kra8/laravel-snowflake": "^2.2",
         "laravel/framework": "^10.0",
         "laravel/horizon": "^5.21",
         "laravel/sanctum": "^3.2",

@@ -7,14 +7,13 @@ use Plank\Metable\Metable;
 use App\Models\Concerns\BelongsToScheduledConference;
 use App\Models\Enums\RegistrationPaymentState;
 use Illuminate\Database\Eloquent\Model;
-use Kra8\Snowflake\HasShortflakePrimary;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class RegistrationType extends Model
 {
-    use BelongsToScheduledConference, HasShortflakePrimary, Cachable, Metable, HasFactory;
+    use BelongsToScheduledConference, Cachable, Metable, HasFactory;
 
     public const LEVEL_PARTICIPANT = 1; 
     public const LEVEL_AUTHOR = 2;
