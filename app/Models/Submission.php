@@ -25,7 +25,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
-use Kra8\Snowflake\HasShortflakePrimary;
 use Plank\Metable\Metable;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\EloquentSortable\Sortable;
@@ -37,7 +36,7 @@ use Spatie\Tags\HasTags;
 
 class Submission extends Model implements HasMedia, Sortable
 {
-    use Cachable, HasFactory, HasShortflakePrimary, HasTags, HasTopics, InteractsWithMedia, Metable, SortableTrait, HasDOI;
+    use Cachable, HasFactory, HasTags, HasTopics, InteractsWithMedia, Metable, SortableTrait, HasDOI;
 
     /**
      * The attributes that are mass assignable.

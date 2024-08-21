@@ -13,7 +13,6 @@ use Database\Factories\CommitteeFactory;
 use Filament\Models\Contracts\HasAvatar;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Notifications\Notifiable;
-use Kra8\Snowflake\HasShortflakePrimary;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\EloquentSortable\SortableTrait;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -25,7 +24,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Committee extends Model implements HasAvatar, HasMedia, Sortable
 {
-    use Cachable, HasFactory, BelongsToScheduledConference, HasShortflakePrimary, Metable, Notifiable, SortableTrait, InteractsWithMedia;
+    use Cachable, HasFactory, BelongsToScheduledConference, Metable, Notifiable, SortableTrait, InteractsWithMedia;
 
     protected $table = 'committees';
 

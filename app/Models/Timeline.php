@@ -8,7 +8,6 @@ use App\Facades\Setting;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
-use Kra8\Snowflake\HasShortflakePrimary;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -18,7 +17,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Timeline extends Model
 {
-    use BelongsToScheduledConference, HasShortflakePrimary, Cachable, HasFactory;
+    use BelongsToScheduledConference, Cachable, HasFactory;
 
     public const TYPE_SUBMISSION_OPEN = 1;
     public const TYPE_SUBMISSION_CLOSE = 2;

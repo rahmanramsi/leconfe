@@ -12,7 +12,6 @@ use Illuminate\Database\Eloquent\Model;
 use Filament\Models\Contracts\HasAvatar;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Notifications\Notifiable;
-use Kra8\Snowflake\HasShortflakePrimary;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\EloquentSortable\SortableTrait;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -24,7 +23,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Speaker extends Model implements HasAvatar, HasMedia, Sortable
 {
-    use BelongsToScheduledConference, Cachable, HasFactory, HasShortflakePrimary, Metable, Notifiable, SortableTrait, InteractsWithMedia;
+    use BelongsToScheduledConference, Cachable, HasFactory, Metable, Notifiable, SortableTrait, InteractsWithMedia;
 
     protected $table = 'speakers';
 

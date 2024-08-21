@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Kra8\Snowflake\HasShortflakePrimary;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Enums\RegistrationPaymentState;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
@@ -15,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Registration extends Model
 {
-    use BelongsToScheduledConference, HasShortflakePrimary, Cachable, HasFactory, SoftDeletes;
+    use BelongsToScheduledConference, Cachable, HasFactory, SoftDeletes;
 
     protected $fillable = [
         'user_id',

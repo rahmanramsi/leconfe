@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Vite;
 use Filament\Models\Contracts\HasName;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Models\Contracts\HasAvatar;
-use Kra8\Snowflake\HasShortflakePrimary;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use App\Models\Concerns\BelongsToConference;
 use App\Models\Enums\ScheduledConferenceType;
@@ -23,7 +22,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ScheduledConference extends Model implements HasMedia, HasAvatar, HasName
 {
-    use Cachable, BelongsToConference, HasFactory, InteractsWithMedia, Metable, SoftDeletes, HasShortflakePrimary;
+    use Cachable, BelongsToConference, HasFactory, InteractsWithMedia, Metable, SoftDeletes;
 
     protected $fillable = [
         'conference_id',
