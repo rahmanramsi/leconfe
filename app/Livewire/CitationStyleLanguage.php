@@ -20,7 +20,10 @@ class CitationStyleLanguage extends Component
     #[Locked]
     public string $citationStyle = 'apa';
 
-    public function mount() {}
+    public function mount()
+    {
+        $this->citationStyle = app()->getCurrentConference()->getMeta('primary_citation_format');
+    }
 
     public function render()
     {
