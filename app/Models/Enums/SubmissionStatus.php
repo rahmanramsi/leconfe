@@ -29,8 +29,8 @@ enum SubmissionStatus: string implements HasColor, HasLabel
     public function getColor(): string|array|null
     {
         return match ($this) {
-            self::Declined, self::Withdrawn => 'danger',
-            self::OnReview => 'warning',
+            self::Declined, self::Withdrawn, self::PaymentDeclined => 'danger',
+            self::OnReview, self::OnPayment => 'warning',
             self::Queued => 'primary',
             self::Editing => 'info',
             self::Published => 'success',

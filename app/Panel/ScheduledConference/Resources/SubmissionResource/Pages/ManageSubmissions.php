@@ -85,12 +85,14 @@ class ManageSubmissions extends ManageRecords
                 ->when($tab === static::TAB_ARCHIVED, fn ($query) => $query->whereIn('status', [
                     SubmissionStatus::Published,
                     SubmissionStatus::Declined,
+                    SubmissionStatus::PaymentDeclined,
                     SubmissionStatus::Withdrawn,
                 ]))
                 ->when($tab === static::TAB_UNASSIGNED, fn ($query) => $query->having('editors_count', 0))
                 ->when($tab === static::TAB_ACTIVE, fn ($query) => $query->having('editors_count', '>', 0)
                     ->whereIn('status', [
                         SubmissionStatus::OnReview,
+                        SubmissionStatus::OnPayment,
                     ]));
         }
 
@@ -101,11 +103,13 @@ class ManageSubmissions extends ManageRecords
                     SubmissionStatus::OnReview,
                     SubmissionStatus::Editing,
                     SubmissionStatus::OnPresentation,
+                    SubmissionStatus::OnPayment,
                 ]))
                 ->when($tab == static::TAB_ARCHIVED, fn ($query) => $query->whereIn('status', [
                     SubmissionStatus::Published,
                     SubmissionStatus::Declined,
                     SubmissionStatus::Withdrawn,
+                    SubmissionStatus::PaymentDeclined,
                 ]));
         }
 
@@ -121,11 +125,13 @@ class ManageSubmissions extends ManageRecords
                     SubmissionStatus::Incomplete,
                     SubmissionStatus::OnReview,
                     SubmissionStatus::Editing,
+                    SubmissionStatus::OnPayment,
                 ]))
                 ->when($tab == static::TAB_ARCHIVED, fn ($query) => $query->whereIn('status', [
                     SubmissionStatus::Published,
                     SubmissionStatus::Declined,
                     SubmissionStatus::Withdrawn,
+                    SubmissionStatus::PaymentDeclined,
                 ])));
         }
 
