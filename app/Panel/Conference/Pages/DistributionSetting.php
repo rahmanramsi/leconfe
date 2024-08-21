@@ -65,7 +65,7 @@ class DistributionSetting extends Page implements HasForms, HasInfolists
                     ->tabs([
                         Tabs\Tab::make('Papers')
                             ->label(__('general.papers'))
-                            ->icon('heroicon-o-magnifying-glass')
+                            ->icon('heroicon-o-document-text')
                             ->schema([
                                 InfolistsVerticalTabs\Tabs::make()
                                     ->schema([
