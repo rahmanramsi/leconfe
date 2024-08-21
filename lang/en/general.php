@@ -798,5 +798,16 @@ return [
     'downloads' => "Downloads",
     'paper_date_published' => "Date Published : :date",
     'how_to_cite' => "How to Cite",
+    'more_citation_formats' => "More Citation Formats",
+    'download_citation' => "Download Citation",
+    'citation' => "Citation",
+    'primary_citation_format' => "Primary Citation Format",
+    'enabled_citation_styles' => "Enabled Citation Styles",
+    'downloadable_citation_formats' => "Downloadable Citation Formats",
+    'downloadable_citation_formats_helper' => "Select which downloadable formats you'd like to offer your readers. Downloadable formats are typically used for importing into third-party bibliography management software, like EndNote or Zotero.",
+    'translators' => "Translators",
+    'citation_contributor_translator_helper' => "Select the roles that should be identified as translators",
+    'citation_contributor_authors_helper' => "Select the roles that should be identified as authors",
+    'citation_contributors_description' => "In some citation styles, contributors must be identified differently depending on their role. Please identify the appropriate roles.",
 ];
 

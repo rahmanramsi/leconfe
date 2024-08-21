@@ -7,7 +7,7 @@
        
         <div class="proceeding-toc space-y-6">
             <div class="proceeding-detail">
-                <x-website::heading-title tag="h1" :title="$proceeding->seriesTitle()" />
+                <x-website::heading-title tag="h1" :title="$proceeding->seriesTitle()" class="mb-5" />
                 <div class="flex flex-col sm:flex-row gap-4">
                     @if($proceeding->getFirstMediaUrl('cover'))
                         <div class="cover max-w-56 grow">
@@ -29,7 +29,7 @@
             
             <div class="tracks">
                 @foreach ($tracks as $track)    
-                    <x-website::heading-title :title="$track->title" class="track-title"/>
+                    <x-website::heading-title :title="$track->title" class="track-title" class="mb-5"/>
                     <div class="space-y-5">
                         @forelse($track->submissions as $paper)
                             <x-conference::paper-summary :paper="$paper"/>  

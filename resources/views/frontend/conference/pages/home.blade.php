@@ -14,7 +14,7 @@
     <div class="scheduled-conferences space-y-6">
         @if($nextScheduledConference)
             <div class="next-scheduled-conference">
-                <x-website::heading-title title="Next Conference" />
+                <x-website::heading-title title="Next Conference" class="mb-5" />
                 <div class="next-scheduled-conference sm:flex gap-4">
                     @if ($nextScheduledConference->hasThumbnail())
                         <div class="next-scheduled-conference-cover max-w-40">
@@ -48,7 +48,7 @@
         @endif
         @if($pastScheduledConferences->isNotEmpty())
             <div class="past-scheduled-conferences">
-                <x-website::heading-title title="Past Conferences" />
+                <x-website::heading-title title="Past Conferences" class="mb-5"/>
                 <div class="space-y-4">
                     @foreach ($pastScheduledConferences as $scheduledConference)
                         <div class="scheduled-conference sm:flex gap-4">

@@ -769,5 +769,11 @@ return [
     'downloads' => 'Unduhan',
     'paper_date_published' => "Tanggal Terbit : :date",
     'how_to_cite' => 'Cara Mengutip',
+    'more_citation_formats' => 'Format Sitasi Lainnya',
+    'download_citation' => 'Unduh Sitasi',
+    'citation' => 'Sitasi',
+    'download_citation_file' => 'Unduh Berkas Sitasi',
+    'enabled_citation_styles' => 'Gaya Sitasi yang Diaktifkan',
+    'downloadable_citation_formats' => 'Format Sitasi yang Dapat Diunduh',
 ];
 

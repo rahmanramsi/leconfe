@@ -26,8 +26,8 @@ class CitationStyleLanguage extends Component
     {
         return view('livewire.citation-style-language', [
             'citation' => Citation::getCitation($this->submission, $this->citationStyle),
-            'citationStyles' => Citation::getCitationStyles(),
-            'citationDownloads' => Citation::getCitationDownloads(),
+            'citationStyles' => Citation::getEnabledCitationStyles(),
+            'citationDownloads' => Citation::getEnabledCitationDownloads(),
         ]);
     }
 

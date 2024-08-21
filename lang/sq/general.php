@@ -786,4 +786,9 @@ return [
     'downloads' => 'Shkarkime',
     'paper_date_published' => "Data e publikimit: :date",
     'how_to_cite' => 'Si të citoni',
+    'more_citation_formats' => 'Më shumë formate citimi',
+    'download_citation' => 'Shkarko Citimin',
+    'citation' => 'Citimi',
+    'enabled_citation_styles' => 'Stilet e Citimit të Aktivizuara',
+    'downloadable_citation_formats' => 'Formatet e Citimit të Shkarkueshme',
 ];

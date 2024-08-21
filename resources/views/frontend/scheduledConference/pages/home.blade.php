@@ -28,7 +28,7 @@
         @endif
         @if ($currentScheduledConference?->speakers->isNotEmpty())
             <section id="speakers" class="flex flex-col gap-y-0">
-                <x-website::heading-title title="Speakers" />
+                <x-website::heading-title title="Speakers" class="mb-5"/>
                 <div class="cf-speakers space-y-6">
                     @foreach ($currentScheduledConference->speakerRoles as $role)
                         @if ($role->speakers->isNotEmpty())
@@ -61,7 +61,7 @@
 
         @if($sponsorLevels->isNotEmpty() || $sponsorsWithoutLevel->isNotEmpty())
             <section class="sponsors">
-                <x-website::heading-title title="Sponsors" />
+                <x-website::heading-title title="Sponsors" class="mb-5"/>
                 <div class="conference-sponsor-levels space-y-6">
                     @if($sponsorsWithoutLevel->isNotEmpty())
                         <div class="conference-sponsor-level">
@@ -101,7 +101,7 @@
         @endif
         @if($partners->isNotEmpty())
             <section class="partners">
-                <x-website::heading-title title="Partners" />
+                <x-website::heading-title title="Partners" class="mb-5"/>
                 <div class="conference-partners flex flex-wrap items-center gap-4">
                     @foreach($partners as $partner)
                         @if(!$partner->getFirstMedia('logo'))

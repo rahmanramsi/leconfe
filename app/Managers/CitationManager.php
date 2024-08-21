@@ -2,6 +2,7 @@
 
 namespace App\Managers;
 
+use App\Facades\Hook;
 use App\Facades\Setting;
 use App\Models\Submission;
 use Illuminate\Support\Facades\App;
@@ -67,9 +68,18 @@ class CitationManager
                 'title' => 'AMA',
 				'isEnabled' => true,
             ],
-        ];
+        ]; 
 
         return $defaults;
+    }
+
+    public function getEnabledCitationStyles(): array
+    {
+        $enabledStyles = app()->getCurrentConference()->getMeta('enabled_citation_styles');
+        $styles = $this->getCitationStyles();
+        return array_filter($styles, function ($style) use ($enabledStyles) {
+            return in_array($style['id'], $enabledStyles);
+        });
     }
 
     public function getCitationDownloads(): array
@@ -93,6 +103,15 @@ class CitationManager
         ];
 
         return $defaults;
+    }
+
+    public  function getEnabledCitationDownloads(): array
+    {
+        $enabledStyles = app()->getCurrentConference()->getMeta('downloadable_citation_formats');
+        $styles = $this->getCitationDownloads();
+        return array_filter($styles, function ($style) use ($enabledStyles) {
+            return in_array($style['id'], $enabledStyles);
+        });
     }
 
     /**

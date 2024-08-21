@@ -5,7 +5,7 @@
         <x-website::breadcrumbs :breadcrumbs="$this->getBreadcrumbs()" />
     </div>
     <div class="relative mb-4">
-        <x-website::heading-title title="Proceedings" />
+        <x-website::heading-title title="Proceedings" class="mb-5" />
         <div class="grid grid-cols-1 md:grid-cols-2 sm:grid-cols-1 gap-x-4 gap-y-10">
             @forelse ($proceedings as $proceeding)
                 <div class="pb-2 space-y-5 border-b">
