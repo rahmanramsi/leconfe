@@ -179,6 +179,7 @@ class Conference extends Model implements HasAvatar, HasMedia, HasName
             'settings_languages' => ['en'],
             'page_footer' => view('frontend.examples.footer')->render(),
             'languages' => ['en'],
+            'primary_citation_format' => 'apa',
         ];
     }
 }
