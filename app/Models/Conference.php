@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Vite;
-use Kra8\Snowflake\HasShortflakePrimary;
 use Plank\Metable\Metable;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -24,7 +23,7 @@ use Spatie\Sluggable\SlugOptions;
 
 class Conference extends Model implements HasAvatar, HasMedia, HasName
 {
-    use Cachable, HasFactory, HasShortflakePrimary, HasSlug, InteractsWithMedia, Metable;
+    use Cachable, HasFactory, HasSlug, InteractsWithMedia, Metable;
 
     /**
      * The attributes that are mass assignable.

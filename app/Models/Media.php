@@ -5,12 +5,11 @@ namespace App\Models;
 use App\Constants\SubmissionFileCategory;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Kra8\Snowflake\HasShortflakePrimary;
 use Spatie\MediaLibrary\MediaCollections\Models\Media as Model;
 
 class Media extends Model
 {
-    use Cachable, HasShortflakePrimary;
+    use Cachable;
 
     public static function booted()
     {

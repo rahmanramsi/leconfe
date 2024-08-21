@@ -4,13 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Kra8\Snowflake\HasShortflakePrimary;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
 class Review extends Model implements HasMedia
 {
-    use HasFactory, HasShortflakePrimary, InteractsWithMedia;
+    use HasFactory, InteractsWithMedia;
 
     public const MODE_DOUBLE_ANONYMOUS = 1;
     public const MODE_ANONYMOUS = 2;
