@@ -664,6 +664,7 @@ return [
     'eg_1_10' => 'p.sh. 1-10',
     'there_was_error_please_contact_administrator' => 'Ka ndodhur një gabim, ju lutemi kontaktoni administratorin.',
     'references' => 'Referencat',
+    'no_references' => 'Nuk ka Referenca',
     'submission_wizard' => 'Wizard i Dorëzimit',
     'submission' => 'Dorëzimi',
     'failed_to_save' => 'Dështoi të ruante.',
@@ -782,12 +783,17 @@ return [
     'participant_registration' => 'Regjistrimi i Pjesëmarrësve',
     'registration_status' => 'Statusi i Regjistrimit',
     'timelines' => 'Kohëzgjatjet',
-
-
-
-
-
-
-
-
+    'downloads' => 'Shkarkime',
+    'paper_date_published' => "Data e publikimit: :date",
+    'how_to_cite' => 'Si të citoni',
+    'more_citation_formats' => 'Më shumë formate citimi',
+    'download_citation' => 'Shkarko Citimin',
+    'citation' => 'Citimi',
+    'enabled_citation_styles' => 'Stilet e Citimit të Aktivizuara',
+    'downloadable_citation_formats' => 'Formatet e Citimit të Shkarkueshme',
+    'downloadable_citation_formats_helper' => "Zgjidhni formatet e shkarkueshme që dëshironi të ofroni lexuesve tuaj. Formatet e shkarkueshme përdoren zakonisht për importim në software të tretë për menaxhimin e bibliografisë, si EndNote ose Zotero.",
+    'translators' => "Përkthyesit",
+    'citation_contributor_translator_helper' => "Zgjidhni rolet që duhet të identifikohen si përkthyes",
+    'citation_contributor_authors_helper' => "Zgjidhni rolet që duhet të identifikohen si autorë",
+    'citation_contributors_description' => "Në disa stile citimi, kontribuesit duhet të identifikohen ndryshe në varësi të rolit të tyre. Ju lutemi identifikoni rolet e përshtatshme.",
 ];

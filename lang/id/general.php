@@ -652,6 +652,7 @@ return [
     'eg_1_10' => 'mis. 1-10',
     'there_was_error_please_contact_administrator' => 'Terjadi kesalahan, harap hubungi administrator.',
     'references' => 'Referensi',
+    'no_references' => 'Tidak ada referensi',
     'submission_wizard' => 'Wizard Pengajuan',
     'submission' => 'Pengajuan',
     'failed_to_save' => 'Gagal menyimpan.',
@@ -764,14 +765,20 @@ return [
     'referer' => 'Pengarah',
     'participant_registration' => 'Pendaftaran Peserta',
     'registration_status' => 'Status Pendaftaran',
-    'timelines' => 'Garis Waktu',
-
-
-
-
-
-
-
-
+    'timelines' => 'Linimasa',
+    'downloads' => 'Unduhan',
+    'paper_date_published' => "Tanggal Terbit : :date",
+    'how_to_cite' => 'Cara Mengutip',
+    'more_citation_formats' => 'Format Sitasi Lainnya',
+    'download_citation' => 'Unduh Sitasi',
+    'citation' => 'Sitasi',
+    'download_citation_file' => 'Unduh Berkas Sitasi',
+    'enabled_citation_styles' => 'Gaya Sitasi yang Diaktifkan',
+    'downloadable_citation_formats' => 'Format Sitasi yang Dapat Diunduh',
+    'downloadable_citation_formats_helper' => "Pilih format yang dapat diunduh yang ingin Anda tawarkan kepada pembaca Anda. Format yang dapat diunduh biasanya digunakan untuk diimpor ke perangkat lunak manajemen bibliografi pihak ketiga, seperti EndNote atau Zotero.",
+    'translators' => "Penerjemah",
+    'citation_contributor_translator_helper' => "Pilih peran yang harus diidentifikasi sebagai penerjemah",
+    'citation_contributor_authors_helper' => "Pilih peran yang harus diidentifikasi sebagai penulis",
+    'citation_contributors_description' => "Dalam beberapa gaya sitasi, kontributor harus diidentifikasi dengan cara yang berbeda tergantung pada peran mereka. Harap identifikasi peran yang sesuai.",
 ];
 

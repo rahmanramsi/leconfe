@@ -17,15 +17,21 @@ class AuthorRolePopulateDefaultDataAction
         try {
             DB::beginTransaction();
 
-            foreach ([
-                UserRole::Author->value,
-                'Co Author',
-            ] as $authorRole) {
-                AuthorRole::firstOrCreate([
-                    'name' => $authorRole,
-                    'conference_id' => $conference->getKey(),
-                ]);
-            }
+            $author = AuthorRole::firstOrCreate([
+                'name' => 'Author',
+                'conference_id' => $conference->getKey(),
+            ]);
+
+            $translator = AuthorRole::firstOrCreate([
+                'name' => 'Translator',
+                'conference_id' => $conference->getKey(),
+            ]);
+
+            $conference->setManyMeta([
+                'citation_contributor_authors' => [$author->getKey()],
+                'citation_contributor_translators' => [$translator->getKey()],
+            ]);
+            
 
             DB::commit();
         } catch (\Throwable $th) {

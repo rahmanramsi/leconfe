@@ -664,6 +664,7 @@ return [
     'eg_1_10' => 'على سبيل المثال 1-10',
     'there_was_error_please_contact_administrator' => 'حدث خطأ، يرجى الاتصال بالمسؤول.',
     'references' => 'المراجع',
+    'no_references' => 'لا توجد مراجع',
     'submission_wizard' => 'معالج التقديم',
     'submission' => 'التقديم',
     'failed_to_save' => 'فشل في الحفظ.',
@@ -782,6 +783,18 @@ return [
     'participant_registration' => 'تسجيل المشاركين',
     'registration_status' => 'حالة التسجيل',
     'timelines' => 'الخطوط الزمنية',
-
-
+    'downloads' => 'تحميل',
+    'paper_date_published' => "تاريخ النشر: :date",
+    'how_to_cite' => 'كيفية الاقتباس',
+    'more_citation_formats' => 'المزيد من تنسيقات الاقتباس',
+    'download_citation' => 'تنزيل الاقتباس',
+    'citation' => 'الاقتباس',
+    'primary_citation_format' => 'تنسيق الاقتباس الأساسي',
+    'enabled_citation_styles' => 'أنماط الاقتباس الممكنة',
+    'downloadable_citation_formats' => 'تنسيقات الاقتباس التي يمكن تنزيلها',
+    'downloadable_citation_formats_helper' => "حدد التنسيقات التي يمكن تنزيلها وتقديمها للقراء. يتم استخدام التنسيقات التنزيلية عادةً للاستيراد في برامج إدارة المراجع الخارجية ، مثل EndNote أو Zotero.",
+    'translators' => "المترجمون",
+    'citation_contributor_translator_helper' => "حدد الأدوار التي يجب تحديدها كمترجمين",
+    'citation_contributor_authors_helper' => "حدد الأدوار التي يجب تحديدها كمؤلفين",
+    'citation_contributors_description' => "في بعض أنماط الاقتباس ، يجب تحديد المساهمين بطريقة مختلفة اعتمادًا على دورهم. يرجى تحديد الأدوار المناسبة.",
 ];

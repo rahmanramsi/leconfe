@@ -2,12 +2,12 @@
 
 namespace App\Utils;
 
-use App\Utils\UpgradeSchemas\UpgradeAlpha3;
+use App\Utils\UpgradeSchemas\UpgradeBeta3;
 
 class UpgradeSchema
 {
     public static $schemas = [
-        '1.0.0-alpha3' => UpgradeAlpha3::class
+        '1.0.0-beta.3' => UpgradeBeta3::class,
     ];
 
     public static function getSchemasByVersion(string $installedVersion, string $applicationVersion)
