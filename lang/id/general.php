@@ -775,5 +775,10 @@ return [
     'download_citation_file' => 'Unduh Berkas Sitasi',
     'enabled_citation_styles' => 'Gaya Sitasi yang Diaktifkan',
     'downloadable_citation_formats' => 'Format Sitasi yang Dapat Diunduh',
+    'downloadable_citation_formats_helper' => "Pilih format yang dapat diunduh yang ingin Anda tawarkan kepada pembaca Anda. Format yang dapat diunduh biasanya digunakan untuk diimpor ke perangkat lunak manajemen bibliografi pihak ketiga, seperti EndNote atau Zotero.",
+    'translators' => "Penerjemah",
+    'citation_contributor_translator_helper' => "Pilih peran yang harus diidentifikasi sebagai penerjemah",
+    'citation_contributor_authors_helper' => "Pilih peran yang harus diidentifikasi sebagai penulis",
+    'citation_contributors_description' => "Dalam beberapa gaya sitasi, kontributor harus diidentifikasi dengan cara yang berbeda tergantung pada peran mereka. Harap identifikasi peran yang sesuai.",
 ];
 

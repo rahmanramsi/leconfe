@@ -791,4 +791,9 @@ return [
     'citation' => 'Citimi',
     'enabled_citation_styles' => 'Stilet e Citimit të Aktivizuara',
     'downloadable_citation_formats' => 'Formatet e Citimit të Shkarkueshme',
+    'downloadable_citation_formats_helper' => "Zgjidhni formatet e shkarkueshme që dëshironi të ofroni lexuesve tuaj. Formatet e shkarkueshme përdoren zakonisht për importim në software të tretë për menaxhimin e bibliografisë, si EndNote ose Zotero.",
+    'translators' => "Përkthyesit",
+    'citation_contributor_translator_helper' => "Zgjidhni rolet që duhet të identifikohen si përkthyes",
+    'citation_contributor_authors_helper' => "Zgjidhni rolet që duhet të identifikohen si autorë",
+    'citation_contributors_description' => "Në disa stile citimi, kontribuesit duhet të identifikohen ndryshe në varësi të rolit të tyre. Ju lutemi identifikoni rolet e përshtatshme.",
 ];

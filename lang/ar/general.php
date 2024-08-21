@@ -792,4 +792,9 @@ return [
     'primary_citation_format' => 'تنسيق الاقتباس الأساسي',
     'enabled_citation_styles' => 'أنماط الاقتباس الممكنة',
     'downloadable_citation_formats' => 'تنسيقات الاقتباس التي يمكن تنزيلها',
+    'downloadable_citation_formats_helper' => "حدد التنسيقات التي يمكن تنزيلها وتقديمها للقراء. يتم استخدام التنسيقات التنزيلية عادةً للاستيراد في برامج إدارة المراجع الخارجية ، مثل EndNote أو Zotero.",
+    'translators' => "المترجمون",
+    'citation_contributor_translator_helper' => "حدد الأدوار التي يجب تحديدها كمترجمين",
+    'citation_contributor_authors_helper' => "حدد الأدوار التي يجب تحديدها كمؤلفين",
+    'citation_contributors_description' => "في بعض أنماط الاقتباس ، يجب تحديد المساهمين بطريقة مختلفة اعتمادًا على دورهم. يرجى تحديد الأدوار المناسبة.",
 ];
