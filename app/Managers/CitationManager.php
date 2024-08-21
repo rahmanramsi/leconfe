@@ -10,65 +10,65 @@ use Seboettg\CiteProc\CiteProc;
 
 class CitationManager
 {
-	public function getCitationStyles(): array
+    public function getCitationStyles(): array
     {
         $defaults = [
             [
                 'id' => 'acm-sig-proceedings',
                 'title' => 'ACM',
-				'isEnabled' => true,
+                'isEnabled' => true,
             ],
             [
                 'id' => 'acs-nano',
                 'title' => 'ACS',
-				'isEnabled' => true,
+                'isEnabled' => true,
             ],
             [
                 'id' => 'apa',
                 'title' => 'APA',
-				'isEnabled' => true,
+                'isEnabled' => true,
             ],
             [
                 'id' => 'associacao-brasileira-de-normas-tecnicas',
                 'title' => 'ABNT',
-				'isEnabled' => true,
+                'isEnabled' => true,
             ],
             [
                 'id' => 'chicago-author-date',
                 'title' => 'Chicago',
-				'isEnabled' => true,
+                'isEnabled' => true,
             ],
             [
                 'id' => 'harvard-cite-them-right',
                 'title' => 'Harvard',
-				'isEnabled' => true,
+                'isEnabled' => true,
             ],
             [
                 'id' => 'ieee',
                 'title' => 'IEEE',
-				'isEnabled' => true,
+                'isEnabled' => true,
             ],
             [
                 'id' => 'modern-language-association',
                 'title' => 'MLA',
-				'isEnabled' => true,
+                'isEnabled' => true,
             ],
             [
                 'id' => 'turabian-fullnote-bibliography',
                 'title' => 'Turabian',
-				'isEnabled' => true,
+                'isEnabled' => true,
             ],
             [
                 'id' => 'vancouver',
                 'title' => 'Vancouver',
-				'isEnabled' => true,
+                'isEnabled' => true,
             ],
             [
                 'id' => 'ama',
                 'title' => 'AMA',
-				'isEnabled' => true,
+                'isEnabled' => true,
             ],
-        ]; 
+        ];
 
         return $defaults;
     }
@@ -88,7 +88,7 @@ class CitationManager
             [
                 'id' => 'ris',
                 'title' => 'Endnote / Zotero / Mendeley (RIS – Research Information Systems)',
-				'isEnabled' => true,
+                'isEnabled' => true,
                 'useView' => 'livewire.citation-styles.ris',
                 'fileExtension' => 'ris',
                 'contentType' => 'application/x-Research-Info-Systems',
@@ -96,7 +96,7 @@ class CitationManager
             [
                 'id' => 'bibtex',
                 'title' => 'BibTeX',
-				'isEnabled' => true,
+                'isEnabled' => true,
                 'fileExtension' => 'bib',
                 'contentType' => 'application/x-bibtex',
             ],
@@ -134,7 +134,7 @@ class CitationManager
         return file_get_contents($path);
     }
 
-	public function getCitation(Submission $paper, $citationStyle = 'apa'): string
+    public function getCitation(Submission $paper, $citationStyle = 'apa'): string
     {
         $citationData = new \stdClass();
         $citationData->type = 'paper-conference';
@@ -178,8 +178,8 @@ class CitationManager
                     break;
             }
         }
-        
-        
+
+
         $citationData->URL = $paper->getUrl();
         if ($paper->doi?->doi) {
             $citationData->DOI = $paper->doi->doi;
@@ -200,7 +200,7 @@ class CitationManager
 
         if (empty($styleConfig)) return '';
 
-        if(!empty($styleConfig['useView'])) {
+        if (!empty($styleConfig['useView'])) {
             return view($styleConfig['useView'], compact('citationData'))->render();
         }
 
