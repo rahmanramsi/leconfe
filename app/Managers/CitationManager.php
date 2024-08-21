@@ -150,13 +150,36 @@ class CitationManager
         $citationData->section = $paper->track->title;
         $citationData->keywords = $paper->getMeta('keywords') ?? [];
         $citationData->abstract = strip_tags($paper->getMeta('abstract'));
-        $citationData->author = $paper->authors->map(function ($author) {
+        foreach ($paper->authors as $author) {
             $currentAuthor = new \stdClass();
             $currentAuthor->family = $author->family_name;
             $currentAuthor->given = $author->given_name;
 
-            return $currentAuthor;
-        })->toArray();
+            $authorsGroups = app()->getCurrentConference()->getMeta('citation_contributor_authors') ?? [];
+            $translatorsGroups = app()->getCurrentConference()->getMeta('citation_contributor_translator') ?? [];
+
+            switch (true) {
+                case in_array($author->author_role_id, $translatorsGroups):
+                    if (!isset($citationData->translator)) {
+                        $citationData->translator = [];
+                    }
+                    $citationData->translator[] = $currentAuthor;
+                    break;
+                case in_array($author->author_role_id, $authorsGroups):
+                    if (!isset($citationData->author)) {
+                        $citationData->author = [];
+                    }
+                    $citationData->author[] = $currentAuthor;
+                    break;
+                default:
+                    if (!isset($citationData->author)) {
+                        $citationData->author = [];
+                    }
+                    break;
+            }
+        }
+        
+        
         $citationData->URL = $paper->getUrl();
         if ($paper->doi?->doi) {
             $citationData->DOI = $paper->doi->doi;
