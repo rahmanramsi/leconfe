@@ -67,7 +67,7 @@ class CitationSetting extends Component implements HasForms
                                     ->label(__('general.authors'))
                                     ->helperText(__('general.citation_contributor_authors_helper'))
                                     ->options(AuthorRole::pluck('name', 'id')->toArray()),
-                                CheckboxList::make('meta.citation_contributor_translator')
+                                CheckboxList::make('meta.citation_contributor_translators')
                                     ->label(__('general.translators'))
                                     ->helperText(__('general.citation_contributor_translator_helper'))
                                     ->options(AuthorRole::pluck('name', 'id')->toArray()),

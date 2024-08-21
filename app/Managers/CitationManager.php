@@ -156,7 +156,7 @@ class CitationManager
             $currentAuthor->given = $author->given_name;
 
             $authorsGroups = app()->getCurrentConference()->getMeta('citation_contributor_authors') ?? [];
-            $translatorsGroups = app()->getCurrentConference()->getMeta('citation_contributor_translator') ?? [];
+            $translatorsGroups = app()->getCurrentConference()->getMeta('citation_contributor_translators') ?? [];
 
             switch (true) {
                 case in_array($author->author_role_id, $translatorsGroups):
