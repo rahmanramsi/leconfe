@@ -105,7 +105,7 @@ class CustomSidebarManagerPage extends Page implements HasForms, HasTable
             Action::make('create')
                 ->label('Create Custom Sidebar')
                 ->action(function (array $data) {
-                    $data['id'] = app(Snowflake::class)->short();
+                    $data['id'] = \Illuminate\Support\Str::uuid()->toString();
 
                     $plugin = Plugin::getPlugin('CustomSidebarManager');
                     $customSidebars = $plugin->getSetting('custom_sidebars', []);

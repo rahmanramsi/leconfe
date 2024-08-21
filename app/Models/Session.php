@@ -7,7 +7,6 @@ use Carbon\Carbon;
 use App\Models\Timeline;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
-use Kra8\Snowflake\HasShortflakePrimary;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use App\Models\Concerns\BelongsToScheduledConference;
@@ -16,7 +15,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Session extends Model
 {
-    use BelongsToScheduledConference, HasShortflakePrimary, Cachable, HasFactory;
+    use BelongsToScheduledConference, Cachable, HasFactory;
 
     protected $fillable = [
         'timeline_id',
