@@ -9,6 +9,7 @@ use App\Models\Enums\SubmissionStage;
 use App\Models\Enums\SubmissionStatus;
 use App\Models\Enums\UserRole;
 use App\Models\States\Submission\BaseSubmissionState;
+use App\Models\States\Submission\DeclinedPaymentSubmissionState;
 use App\Models\States\Submission\DeclinedSubmissionState;
 use App\Models\States\Submission\EditingSubmissionState;
 use App\Models\States\Submission\IncompleteSubmissionState;
@@ -235,11 +236,6 @@ class Submission extends Model implements HasMedia, Sortable
         return $this->status == SubmissionStatus::Incomplete;
     }
 
-    public function isPaymentComplete(): bool
-    {
-        return $this->user->isRegisteredAsAuthor();
-    }
-
     public function isStatusRequirePayment(): bool
     {
         if ($this->status === SubmissionStatus::OnReview ||
@@ -288,6 +284,7 @@ class Submission extends Model implements HasMedia, Sortable
             SubmissionStatus::Editing => new EditingSubmissionState($this),
             SubmissionStatus::Published => new PublishedSubmissionState($this),
             SubmissionStatus::Declined => new DeclinedSubmissionState($this),
+            SubmissionStatus::PaymentDeclined => new DeclinedPaymentSubmissionState($this),
             SubmissionStatus::Withdrawn => new WithdrawnSubmissionState($this),
             default => throw new \Exception('Invalid submission status'),
         };

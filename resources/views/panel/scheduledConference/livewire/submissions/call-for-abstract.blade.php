@@ -36,7 +36,7 @@
                     'space-y-4',
                     'hidden' => in_array($submission->status, [SubmissionStatus::Published])
                 ]) x-show="!decision">
-                    @if ($user->can('acceptAbstract', $submission) && ! in_array($this->submission->status, [SubmissionStatus::OnPayment, SubmissionStatus::OnReview, SubmissionStatus::Editing, SubmissionStatus::OnPresentation]))
+                    @if ($user->can('acceptAbstract', $submission) && ! in_array($this->submission->status, [SubmissionStatus::OnPayment, SubmissionStatus::OnReview, SubmissionStatus::PaymentDeclined, SubmissionStatus::Editing, SubmissionStatus::OnPresentation]))
                         {{ $this->acceptAction() }}
                     @endif
                     @if ($user->can('declineAbstract', $submission) && ! in_array($this->submission->status, [SubmissionStatus::Declined]))

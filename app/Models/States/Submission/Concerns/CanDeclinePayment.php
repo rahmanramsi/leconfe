@@ -13,7 +13,7 @@ trait CanDeclinePayment
     {
         SubmissionUpdateAction::run([
             'stage' => SubmissionStage::Payment,
-            'status' => SubmissionStatus::OnPayment,
+            'status' => SubmissionStatus::PaymentDeclined,
         ], $this->submission);
 
         Log::make(

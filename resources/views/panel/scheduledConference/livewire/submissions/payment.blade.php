@@ -184,7 +184,7 @@
                 @if($submissionDecision)
                     <div class="px-6 py-5 space-y-3 overflow-hidden bg-white shadow-sm rounded-xl ring-1 ring-gray-950/5 dark:ring-white/10">
                         <div class="text-base">
-                            {{ $submission->status == SubmissionStatus::Declined ? __('general.submission_declined') : __('general.submission_payment_approved') }}
+                            {{ $submission->status == SubmissionStatus::PaymentDeclined ? __('general.submission_payment_declined') : __('general.submission_payment_approved') }}
                         </div>
                         <button class="text-sm underline text-primary-500"
                             @@click="decision = !decision" x-text="decision ? 'Change Decision' : 'Cancel'"
@@ -196,13 +196,14 @@
                     'flex flex-col gap-4 col-span-4',
                     'hidden' => in_array($submission->status, [
                             SubmissionStatus::Queued,
+                            SubmissionStatus::Declined,
                             SubmissionStatus::Published,
                     ])
                 ]) x-show="!decision">
                     @if ($user->can('approvePayment', $submission) && ! in_array($this->submission->status, [SubmissionStatus::OnReview, SubmissionStatus::Editing, SubmissionStatus::OnPresentation]))
                         {{ $this->approvePaymentAction() }}
                     @endif
-                    @if ($user->can('declinePayment', $submission) && ! in_array($this->submission->status, [SubmissionStatus::Declined]))
+                    @if ($user->can('declinePayment', $submission) && ! in_array($this->submission->status, [SubmissionStatus::Declined, SubmissionStatus::PaymentDeclined]))
                         {{ $this->declinePaymentAction() }}
                     @endif
                 </div>

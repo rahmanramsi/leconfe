@@ -27,25 +27,25 @@ class DeclinePaymentMail extends TemplateMailable
         $this->log = Log::make(
             name: 'email',
             subject: $submission,
-            description: __('general.email_sent', ['name' => 'Payment Approved']),
+            description: __('general.email_sent', ['name' => 'Payment Declined']),
         );
     }
 
     public static function getDefaultSubject(): string
     {
-        return 'Payment Approved: {{ title }}';
+        return 'Payment Declined: {{ title }}';
     }
 
     public static function getDefaultDescription(): string
     {
-        return 'This email is sent to author when their submission payment is approved';
+        return 'This email is sent to author when their submission payment is declined';
     }
 
     public static function getDefaultHtmlTemplate(): string
     {
         return <<<'HTML'
             <p>Dear {{ authorName }},</p>
-            <p>This is an automated notification from the Leconfe System to inform you that your submission payment has been approved.</p>
+            <p>This is an automated notification from the Leconfe System to inform you that your submission payment has been declined.</p>
             <table>
                 <tr>
                     <td style="width:100px;">Title</td>

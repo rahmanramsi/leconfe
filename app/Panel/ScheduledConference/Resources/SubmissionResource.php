@@ -105,17 +105,6 @@ class SubmissionResource extends Resource
                                     return __('general.no_editor_assigned');
                                 }
                             }),
-                        Tables\Columns\TextColumn::make('waiting-payment')
-                            ->badge()
-                            ->extraAttributes([
-                                'class' => 'mt-2',
-                            ])
-                            ->color('warning')
-                            ->getStateUsing(function (Submission $record) {
-                                if (!$record->isPaymentComplete() && $record->isStageRequirePayment()) {
-                                    return __('general.waiting_for_payment');
-                                }
-                            }),
                         Tables\Columns\TextColumn::make('reviewed')
                             ->badge()
                             ->color('success')

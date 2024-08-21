@@ -114,8 +114,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
 
                     $this->replaceMountedAction('publish');
                     $this->dispatch('refreshSubmissionProceeding');
-                })
-                ->disabled(fn () => !$this->record->isPaymentComplete()),
+                }),
             Action::make('publish')
                 ->color('primary')
                 ->label(__('general.publish_now'))
@@ -174,8 +173,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                         ])
                     );
                     $action->success();
-                })
-                ->disabled(fn () => !$this->record->isPaymentComplete()),
+                }),
             Action::make('unpublish')
                 ->label(__('general.unpublish'))
                 ->icon('lineawesome-calendar-times-solid')
@@ -342,11 +340,13 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
         $badgeHtml .= match ($this->record->status) {
             SubmissionStatus::Incomplete => '<x-filament::badge color="gray" class="w-fit">' . __("general.incomplete") . '</x-filament::badge>',
             SubmissionStatus::Queued => '<x-filament::badge color="primary" class="w-fit">' . __("general.queued") . '</x-filament::badge>',
-            SubmissionStatus::OnPayment => '<x-filament::badge color="warning" class="w-fit">' . __("general.payment") . '</x-filament::badge>',
+            SubmissionStatus::OnPayment => '<x-filament::badge color="warning" class="w-fit">' . __("general.on_payment") . '</x-filament::badge>',
             SubmissionStatus::OnReview => '<x-filament::badge color="warning" class="w-fit">' . __("general.on_review") . '</x-filament::badge>',
+            SubmissionStatus::OnPresentation => '<x-filament::badge color="info" class="w-fit">' . __("general.on_presentation") . '</x-filament::badge>',
             SubmissionStatus::Published => '<x-filament::badge color="success" class="w-fit">' . __("general.published") . '</x-filament::badge>',
             SubmissionStatus::Editing => '<x-filament::badge color="info" class="w-fit">' . __("general.editing") . '</x-filament::badge>',
             SubmissionStatus::Declined => '<x-filament::badge color="danger" class="w-fit">' . __("general.declined") . '</x-filament::badge>',
+            SubmissionStatus::PaymentDeclined => '<x-filament::badge color="danger" class="w-fit">' . __("general.payment_declined") . '</x-filament::badge>',
             SubmissionStatus::Withdrawn => '<x-filament::badge color="danger" class="w-fit">' . __("general.withdrawn") . '</x-filament::badge>',
             default => null,
         };

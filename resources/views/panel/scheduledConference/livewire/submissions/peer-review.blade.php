@@ -60,8 +60,9 @@
                         'flex flex-col gap-4 col-span-4',
                         'hidden' => in_array($submission->status, [
                             SubmissionStatus::Queued, 
-                            SubmissionStatus::OnPayment,
                             SubmissionStatus::Published,
+                            SubmissionStatus::OnPayment,
+                            SubmissionStatus::PaymentDeclined,
                         ]),
                     ]) x-show="!decision">
                         @if ($user->can('skipReview', $submission) && ! $submission->skipped_review)

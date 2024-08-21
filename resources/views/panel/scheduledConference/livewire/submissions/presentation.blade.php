@@ -36,6 +36,7 @@
                             SubmissionStatus::Queued,
                             SubmissionStatus::OnPayment,
                             SubmissionStatus::Published,
+                            SubmissionStatus::PaymentDeclined,
                         ]),
                     ]) x-show="!decision">
                         @if ($user->can('sendToEditing', $submission))

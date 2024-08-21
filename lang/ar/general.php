@@ -293,6 +293,7 @@ return [
 
     'incomplete' => 'غير مكتمل',
     'queued' => 'قيد الانتظار',
+    'on_payment' => 'عند الدفع',
     'on_review' => 'قيد المراجعة',
     'on_presentation' => 'قيد العرض',
     'editing' => 'قيد التحرير',
@@ -457,6 +458,7 @@ return [
 
     'payments' => 'المدفوعات',
     'payment' => 'دفع',
+    'payment_declined' => 'تم رفض الدفع',
     'input_name_payment_method' => 'أدخل اسم طريقة الدفع..',
     'select_payment_currency' => 'حدد عملة الدفع..',
     'manual' => 'يدوي',
@@ -613,6 +615,8 @@ return [
     'failed_to_accept_abstract' => "فشل في قبول الملخص",
     'peer_review' => "مراجعة الأقران",
     'decline_submission' => "رفض التقديم",
+    'approve_submission_payment' => "الموافقة على الدفع المقدم",
+    'decline_submission_payment' => "رفض الدفع",
     'accept' => "قبول",
     'request_revision' => "طلب مراجعة",
     'skip_review' => "تخطي المراجعة",

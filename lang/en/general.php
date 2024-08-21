@@ -300,6 +300,7 @@ return [
 
     'incomplete' => 'Incomplete',
     'queued' => 'Queued',
+    'on_payment' => 'On Payment',
     'on_review' => 'On Review',
     'on_presentation' => 'On Presentation',
     'editing' => 'Editing',
@@ -465,6 +466,7 @@ return [
 
     'payments' => 'Payments',
     'payment' => 'Payment',
+    'payment_declined' => 'Payment Declined',
     'input_name_payment_method' => 'Input a name for the payment method..',
     'select_payment_currency' => 'Select payment currency..',
     'manual' => 'Manual',
@@ -623,6 +625,8 @@ return [
     'failed_to_accept_abstract' => "Failed to accept abstract",
     'peer_review' => "Peer Review",
     'decline_submission' => "Decline Submission",
+    'approve_submission_payment' => "Approve Submission Payment",
+    'decline_submission_payment' => "Decline Submission Payment",
     'accept' => "Accept",
     'request_revision' => "Request Revision",
     'skip_review' => "Skip Review",
