@@ -13,6 +13,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Models\Enums\RegistrationPaymentState;
 use Illuminate\Notifications\Messages\MailMessage;
 use App\Mail\Templates\RegistrationPaymentDecisionMail;
+use App\Mail\Templates\SubmissionPaymentDecisionMail;
 use App\Panel\ScheduledConference\Resources\RegistrantResource;
 use Filament\Notifications\Notification as FilamentNotification;
 
@@ -43,20 +44,34 @@ class RegistrationPaymentDecision extends Notification
      */
     public function toMail(object $notifiable)
     {
-        return (new RegistrationPaymentDecisionMail($this->registration))
+        $submission = $this->registration->submission;
+
+        if($submission) {
+            return (new SubmissionPaymentDecisionMail($submission, $this->registration, $this->state))
+                ->to($notifiable);
+        }
+
+        return (new RegistrationPaymentDecisionMail($this->registration, $this->state))
             ->to($notifiable);
     }
 
     public function toDatabase(object $notifiable)
     {
-        $paymentStatus = Str::lower($this->state);
+        $submission = $this->registration->submission;
+
+        $body = "Dear {$this->registration->user->full_name}, <br>";
+
+        if($submission) {
+            $body .= "Your payment to <strong>{$submission->getMeta('title')}</strong> submission status now are " . ($this->state === RegistrationPaymentState::Paid->value ?
+            "<strong>paid</strong>." : "<strong>unpaid</strong>, please finish the payment to continue your submission process.");
+        } else {
+            $body .= "Your registration ({$this->registration->registrationPayment->name}) payment status now are " . ($this->state === RegistrationPaymentState::Paid->value ?
+            "<strong>paid</strong>." : "<strong>unpaid</strong>, please finish the payment to finish your registration.");
+        }
         
         return FilamentNotification::make()
             ->title('Participant Registration')
-            ->body("
-                Dear {$this->registration->user->full_name}, <br>
-                your payment status are {$paymentStatus}, please finish your registration process.
-            ")
+            ->body($body)
             ->getDatabaseMessage();
     }
 

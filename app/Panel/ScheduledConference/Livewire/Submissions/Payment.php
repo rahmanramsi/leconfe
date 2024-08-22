@@ -45,7 +45,9 @@ class Payment extends Component implements HasActions, HasForms
         'refreshSubmission' => '$refresh',
     ];
 
-    public function mount(Submission $submission) {}
+    public function mount(Submission $submission) 
+    {
+    }
 
     public function registrationPolicyAction()
     {
