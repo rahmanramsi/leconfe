@@ -67,7 +67,7 @@
                                 <td class="font-semibold w-fit">{{ __('general.description') }}</td>
                                 <td class="pl-3">:</td>
                                 <td class="py-1 text-left">
-                                    {{ $submissionRegistration->registrationPayment->description }}
+                                    {{ $submissionRegistration->registrationPayment->description ?? '-' }}
                                 </td>
                             </tr>
                             <tr>
@@ -153,21 +153,21 @@
                         <tr>
                             <td class="font-semibold w-fit">{{ __('general.name') }}</td>
                             <td class="pl-3">:</td>
-                            <td class="py-2 text-left">
+                            <td class="py-1 text-left">
                                 {{ $currentScheduledConference->getMeta('support_contact_name') ?? '-' }}
                             </td>
                         </tr>
                         <tr>
                             <td class="font-semibold w-fit">{{ __('general.email') }}</td>
                             <td class="pl-3">:</td>
-                            <td class="py-2 text-left">
+                            <td class="py-1 text-left">
                                 {{ $currentScheduledConference->getMeta('support_contact_email') ?? '-' }}
                             </td>
                         </tr>
                         <tr>
                             <td class="font-semibold w-fit">{{ __('general.phone') }}</td>
                             <td class="pl-3">:</td>
-                            <td class="py-2 text-left">
+                            <td class="py-1 text-left">
                                 {{ $currentScheduledConference->getMeta('support_contact_phone') ?? '-' }}
                             </td>
                         </tr>

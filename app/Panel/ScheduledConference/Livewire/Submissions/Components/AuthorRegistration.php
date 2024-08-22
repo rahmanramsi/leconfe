@@ -24,6 +24,7 @@ use App\Models\Enums\RegistrationPaymentState;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Illuminate\Contracts\Database\Eloquent\Builder;
+use App\Panel\ScheduledConference\Resources\SubmissionResource;
 
 class AuthorRegistration extends \Livewire\Component implements HasForms, HasTable
 {
@@ -60,52 +61,59 @@ class AuthorRegistration extends \Livewire\Component implements HasForms, HasTab
                     ->requiresConfirmation()
                     ->modalHeading('Author Registration')
                     ->modalIcon('heroicon-m-user-plus')
-                    ->modalDescription(fn (Model $record) => new HtmlString(BladeCompiler::render(<<<BLADE
-                        <div class="text-sm text-left">
-                            <p>Are you sure you want register as <strong>{$record->type}</strong>?</p>
-                            <p>Here's your registration details:</p>
-                            <table class="mt-3 w-full">
-                                <tr>
-                                    <td class="font-semibold">{{ __('general.type') }}</td>
-                                    <td>:</td>
-                                    <td>
-                                        {$record->type}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="font-semibold">{{ __('general.description') }}</td>
-                                    <td>:</td>
-                                    <td>
-                                        {$record->getMeta('description')}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="font-semibold">{{ __('general.level') }}</td>
-                                    <td>:</td>
-                                    <td>
-                                        <x-filament::badge color="info" class="!w-fit">
-                                            {{
-                                                match ($record->level) {
-                                                    App\Models\RegistrationType::LEVEL_PARTICIPANT => 'Participant',
-                                                    App\Models\RegistrationType::LEVEL_AUTHOR => 'Author',
-                                                    default => 'None',
-                                                }
-                                            }}
-                                        </x-filament::badge>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="font-semibold">{{ __('general.cost') }}</td>
-                                    <td>:</td>
-                                    <td>
-                                        {{ moneyOrFree($record->cost, "$record->currency", true) }}
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    BLADE)))
+                    ->modalDescription(function (Model $record) {
+                        $description = $record->getMeta('description') ?? '-';
+                        return new HtmlString(BladeCompiler::render(<<<BLADE
+                            <div class="text-sm text-left">
+                                <p>Are you sure you want register as <strong>{$record->type}</strong>?</p>
+                                <p>Here's your registration details:</p>
+                                <table class="mt-3 w-full">
+                                    <tr>
+                                        <td class="font-semibold">{{ __('general.type') }}</td>
+                                        <td>:</td>
+                                        <td>
+                                            {$record->type}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="font-semibold">{{ __('general.description') }}</td>
+                                        <td>:</td>
+                                        <td>
+                                            {$description}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="font-semibold">{{ __('general.level') }}</td>
+                                        <td>:</td>
+                                        <td>
+                                            <x-filament::badge color="info" class="!w-fit">
+                                                {{
+                                                    match ($record->level) {
+                                                        App\Models\RegistrationType::LEVEL_PARTICIPANT => 'Participant',
+                                                        App\Models\RegistrationType::LEVEL_AUTHOR => 'Author',
+                                                        default => 'None',
+                                                    }
+                                                }}
+                                            </x-filament::badge>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="font-semibold">{{ __('general.cost') }}</td>
+                                        <td>:</td>
+                                        <td>
+                                            {{ moneyOrFree($record->cost, "$record->currency", true) }}
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        BLADE));
+                    })
                     ->action(function (Model $record, Action $action) {
                         if($this->submission->registration) {
+                            return $action->sendFailureNotification();
+                        }
+
+                        if(!$record->isOpen()) {
                             return $action->sendFailureNotification();
                         }
 
@@ -142,7 +150,7 @@ class AuthorRegistration extends \Livewire\Component implements HasForms, HasTab
 
                             $action->sendSuccessNotification();
 
-                            return redirect(request()->header('Referer'));
+                            return redirect(SubmissionResource::getUrl('view', ['record' => $this->submission->getKey()]));
                         } catch (\Throwable $th) {
                             $action->sendFailureNotification();
                             throw $th;
