@@ -60,7 +60,7 @@
                                                             @if ($type->level !== App\Models\RegistrationType::LEVEL_AUTHOR)
                                                                 <input class="radio radio-xs radio-primary mr-1" id="{{ $elementID }}" type="radio" wire:model="type" value="{{ $type->id }}" @disabled(!$type->isOpen())>
                                                             @else
-                                                                <span class="tooltip tooltip-info" data-tip="This registration type is for information only">
+                                                                <span class="tooltip" data-tip="This registration type is for information only">
                                                                     <x-filament::icon
                                                                         icon="heroicon-o-question-mark-circle"
                                                                         class="h-5 w-5 text-gray-500 dark:text-gray-400"
