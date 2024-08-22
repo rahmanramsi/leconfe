@@ -63,7 +63,7 @@ class RegistrationType extends Model
 
     public function isOpen()
     {
-        return (now()->greaterThanOrEqualTo($this->opened_at) && !$this->isExpired()) &&  !$this->isQuotaFull();
+        return (now()->greaterThanOrEqualTo($this->opened_at) && !$this->isExpired()) && !$this->isQuotaFull();
     }
     
     public function isExpired()

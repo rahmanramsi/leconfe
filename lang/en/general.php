@@ -709,7 +709,7 @@ return [
     'can_not_add_message_to_closed_discussion' => 'Can not add message to closed discussion.',
     'topic_updated_successfully' => 'Topic updated successfully',
     'close' => 'Close',
-    'closed' => 'Closef',
+    'closed' => 'Closed',
     'last_update' => 'Last Update',
     'topic_created_successfully' => 'Topic created successfully',
     'topic_createtion_failed' => 'Topic creation failed',

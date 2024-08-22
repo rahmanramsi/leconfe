@@ -25,6 +25,7 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use App\Panel\ScheduledConference\Resources\SubmissionResource;
+use Filament\Support\Colors\Color;
 
 class AuthorRegistration extends \Livewire\Component implements HasForms, HasTable
 {
@@ -49,9 +50,15 @@ class AuthorRegistration extends \Livewire\Component implements HasForms, HasTab
                     ->description(fn (Model $record) => $record->getMeta('description')),
                 TextColumn::make('quota')
                     ->formatStateUsing(fn (Model $record) => $record->getPaidParticipantCount() . "/" . $record->quota)
-                    ->badge(),
+                    ->badge()
+                    ->color(fn (Model $record) => $record->isQuotaFull() ? Color::Red : null),
+                TextColumn::make('status')
+                    ->getStateUsing(fn (Model $record) => $record->isOpen())
+                    ->formatStateUsing(fn (string $state) => (bool) $state ? __('general.open') : __('general.closed'))
+                    ->badge()
+                    ->color(fn (string $state) => (bool) $state ? Color::Green : Color::Red),
                 TextColumn::make('cost')
-                    ->formatStateUsing(fn (Model $record) => moneyOrFree($record->cost, $record->currency, true))
+                    ->formatStateUsing(fn (Model $record) => moneyOrFree($record->cost, $record->currency, true)),
             ])
             ->actions([
                 Action::make('author-registration')
@@ -154,6 +161,7 @@ class AuthorRegistration extends \Livewire\Component implements HasForms, HasTab
                             throw $th;
                         }
                     })
+                    ->disabled(fn (Model $record) => (bool) !$record->isOpen())
             ])
             ->recordAction('author-registration')
             ->paginated(false);
