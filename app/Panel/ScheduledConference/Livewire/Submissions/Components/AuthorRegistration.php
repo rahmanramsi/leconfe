@@ -133,8 +133,6 @@ class AuthorRegistration extends \Livewire\Component implements HasForms, HasTab
                                 'currency' => $record->currency,
                                 'state' => $isFree ? RegistrationPaymentState::Paid : RegistrationPaymentState::Unpaid,
                             ]);
-
-                            //TODO: finish submission payment process if registration type are free
                     
                             User::whereHas('roles', function ($query) {
                                 $query->whereHas('permissions', function ($query) {
