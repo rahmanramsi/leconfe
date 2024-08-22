@@ -2,26 +2,36 @@
 
 namespace App\Panel\ScheduledConference\Livewire\Submissions;
 
+use Filament\Forms\Get;
 use Livewire\Component;
 use App\Models\Timeline;
+use Filament\Forms\Form;
 use App\Models\Submission;
+use Illuminate\Support\Arr;
 use App\Models\MailTemplate;
+use Filament\Actions\Action;
 use App\Models\Enums\UserRole;
+use Filament\Forms\Components\Grid;
 use App\Forms\Components\TinyEditor;
 use Illuminate\Support\Facades\Mail;
+use Filament\Forms\Components\Select;
 use App\Models\Enums\SubmissionStatus;
-use Filament\Actions\Action;
-use Filament\Actions\Concerns\InteractsWithActions;
-use Filament\Actions\Contracts\HasActions;
-use Filament\Forms\Form;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Fieldset;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\DatePicker;
 use Illuminate\Database\Eloquent\Builder;
 use App\Mail\Templates\ApprovePaymentMail;
 use App\Mail\Templates\DeclinePaymentMail;
+use Filament\Actions\Contracts\HasActions;
+use Filament\Infolists\Components\TextEntry;
+use App\Models\Enums\RegistrationPaymentType;
+use App\Models\Enums\RegistrationPaymentState;
+use Filament\Forms\Concerns\InteractsWithForms;
+use App\Notifications\RegistrationPaymentDecision;
+use Filament\Actions\Concerns\InteractsWithActions;
 use App\Panel\ScheduledConference\Resources\SubmissionResource;
 
 class Payment extends Component implements HasActions, HasForms
@@ -35,8 +45,156 @@ class Payment extends Component implements HasActions, HasForms
         'refreshSubmission' => '$refresh',
     ];
 
-    public function mount(Submission $submission)
+    public function mount(Submission $submission) {}
+
+    public function registrationPolicyAction()
     {
+        return Action::make('registrationPolicyAction')
+            ->label('Policy')
+            ->modalHeading(__('general.registration_policy'))
+            ->icon('heroicon-o-book-open')
+            ->size('xs')
+            ->link()
+            ->infolist([
+                TextEntry::make('registration_policy')
+                    ->getStateUsing(fn () => app()->getCurrentScheduledConference()->getMeta('registration_policy'))
+                    ->label('')
+                    ->html()
+            ])
+            ->modalSubmitAction(false);
+    }
+
+    public function decideRegsitrationAction()
+    {
+        return Action::make('decideRegsitrationAction')
+            ->icon('heroicon-o-pencil-square')
+            ->authorize('decideRegistration', $this->submission)
+            ->label(__('general.decision'))
+            ->color('primary')
+            ->size('xs')
+            ->modalHeading(__('general.paid_status_decision'))
+            ->modalWidth('2xl')
+            ->link()
+            ->mountUsing(function (Form $form) {
+                $registrationPayment = $this->submission->registration->registrationPayment;
+                $form->fill([
+                    'registrationPayment' => [
+                        'state' => $registrationPayment->state,
+                        'paid_at' => $registrationPayment->paid_at,
+                    ]
+                ]);
+            })
+            ->form([
+                Grid::make(1)
+                    ->schema([
+                        Select::make('registrationPayment.state')
+                            ->label(__('general.state'))
+                            ->options(RegistrationPaymentState::array())
+                            ->native(false)
+                            ->required()
+                            ->live(),
+                        DatePicker::make('registrationPayment.paid_at')
+                            ->label(__('general.paid_date'))
+                            ->placeholder('Select registration paid date..')
+                            ->prefixIcon('heroicon-m-calendar')
+                            ->formatStateUsing(fn() => now())
+                            ->visible(fn(Get $get): bool => $get('registrationPayment.state') === RegistrationPaymentState::Paid->value)
+                            ->required(),
+                    ])
+            ])
+            ->action(function (Action $action, array $data) {
+                $registration = $this->submission->registration;
+                $formData = $data['registrationPayment'];
+
+                if ($formData['state'] !== RegistrationPaymentState::Paid->value) {
+                    $formData['type'] = null;
+                    $formData['paid_at'] = null;
+                } else {
+                    // manual payment because conference manager set it up
+                    $formData['type'] = RegistrationPaymentType::Manual->value;
+                }
+
+                try {
+                    $registration->registrationPayment()->update(Arr::only($formData, ['state', 'paid_at', 'type']));
+
+                    $registration->user->notify(
+                        new RegistrationPaymentDecision(
+                            registration: $registration,
+                            state: $formData['state'],
+                        )
+                    );
+                } catch (\Throwable $th) {
+                    throw $th;
+                }
+
+                $action->successRedirectUrl(
+                    SubmissionResource::getUrl('view', [
+                        'record' => $this->submission->getKey(),
+                    ])
+                );
+
+                $action->success();
+            });
+    }
+
+    public function deleteRegistrationAction()
+    {
+        return Action::make('deleteRegistrationAction')
+            ->icon('heroicon-o-x-mark')
+            ->authorize('deleteRegistration', $this->submission)
+            ->label(__('general.delete'))
+            ->color('danger')
+            ->size('xs')
+            ->link()
+            ->requiresConfirmation()
+            ->action(function (Action $action) {
+
+                try {
+                    $this->submission->registration->delete();
+                } catch (\Throwable $th) {
+                    $action->failure();
+                    throw $th;
+                }
+
+                $action->successRedirectUrl(
+                    SubmissionResource::getUrl('view', [
+                        'record' => $this->submission->getKey(),
+                    ])
+                );
+
+                $action->success();
+            });
+    }
+
+    public function cancelRegistrationAction()
+    {
+        return Action::make('cancelRegistrationAction')
+            ->icon('heroicon-o-x-mark')
+            ->authorize('cancelRegistration', $this->submission)
+            ->label(__('general.cancel'))
+            ->tooltip(__('general.cancel_registration'))
+            ->color('danger')
+            ->size('xs')
+            ->link()
+            ->requiresConfirmation()
+            ->modalHeading(__('general.cancel_registration'))
+            ->action(function (Action $action) {
+
+                try {
+                    $this->submission->registration->delete();
+                } catch (\Throwable $th) {
+                    $action->failure();
+                    throw $th;
+                }
+
+                $action->successRedirectUrl(
+                    SubmissionResource::getUrl('view', [
+                        'record' => $this->submission->getKey(),
+                    ])
+                );
+
+                $action->success();
+            });
     }
 
     public function declinePaymentAction()
@@ -176,7 +334,7 @@ class Payment extends Component implements HasActions, HasForms
     {
         $submissionParticipant = $this->submission
             ->participants()
-            ->whereHas('role', fn (Builder $query) => $query->where('name', UserRole::Author->value))
+            ->whereHas('role', fn(Builder $query) => $query->where('name', UserRole::Author->value))
             ->where('user_id', auth()->user()->id)
             ->limit(1)
             ->first();
@@ -187,7 +345,7 @@ class Payment extends Component implements HasActions, HasForms
             'submissionRegistrant' => $this->submission->registration->user ?? null,
             'isSubmissionAuthor' => $submissionParticipant !== null,
             'isRegistrationOpen' => Timeline::isRegistrationOpen(),
-            'submissionDecision' => in_array($this->submission->status, [SubmissionStatus::OnReview, SubmissionStatus::PaymentDeclined, SubmissionStatus::OnPresentation, SubmissionStatus::Editing])
+            'submissionDecision' => in_array($this->submission->status, [SubmissionStatus::OnReview, SubmissionStatus::PaymentDeclined, SubmissionStatus::OnPresentation, SubmissionStatus::Editing]),
         ]);
     }
 }

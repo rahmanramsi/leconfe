@@ -92,6 +92,7 @@ class RegistrantResource extends Resource
                     ])
                     ->mutateRelationshipDataBeforeSaveUsing(function (?Model $record, ?array $data) {
                         if ($data['state'] !== RegistrationPaymentState::Paid->value) {
+                            $data['type'] = null;
                             $data['paid_at'] = null;
                         } else {
                             $data['type'] = RegistrationPaymentType::Manual->value;

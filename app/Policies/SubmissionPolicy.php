@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\Enums\RegistrationPaymentState;
 use App\Models\Enums\SubmissionStage;
 use App\Models\Enums\SubmissionStatus;
 use App\Models\Submission;
@@ -21,10 +22,10 @@ class SubmissionPolicy
 
     public function view(User $user, Submission $submission)
     {
-        if($user->is($submission->user)) {
+        if ($user->is($submission->user)) {
             return true;
         }
-        
+
         if ($submission->participants->where('user_id', $user->getKey())->isNotEmpty()) {
             return true;
         }
@@ -154,8 +155,8 @@ class SubmissionPolicy
     public function uploadPresentation(User $user, Submission $submission)
     {
         if (in_array($submission->status, [
-            SubmissionStatus::Declined, 
-            SubmissionStatus::Withdrawn, 
+            SubmissionStatus::Declined,
+            SubmissionStatus::Withdrawn,
             SubmissionStatus::Published,
             SubmissionStatus::OnReview,
         ])) {
@@ -430,6 +431,45 @@ class SubmissionPolicy
         }
 
         if ($user->can('Submission:publish')) {
+            return true;
+        }
+    }
+
+    public function cancelRegistration(User $user, Submission $submission)
+    {
+        if ($submission->registration->user->getKey() !== $user->getKey()) {
+            return false;
+        }
+
+        if ($submission->registration->registrationPayment->state === RegistrationPaymentState::Paid->value) {
+            return false;
+        }
+
+        if (filled($submission->withdrawn_reason)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function decideRegistration(User $user, Submission $submission)
+    {
+        if (filled($submission->withdrawn_reason)) {
+            return false;
+        }
+
+        if ($user->can('Submission:decideRegistration')) {
+            return true;
+        }
+    }
+
+    public function deleteRegistration(User $user, Submission $submission)
+    {
+        if (filled($submission->withdrawn_reason)) {
+            return false;
+        }
+
+        if ($user->can('Submission:deleteRegistration')) {
             return true;
         }
     }

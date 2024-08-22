@@ -50,6 +50,8 @@
   - 'Submission:view'
   - 'Submission:viewAny'
   - 'Submission:withdraw'
+  - 'Submission:decideRegistration'
+  - 'Submission:deleteRegistration'
   - 'SubmissionParticipant:delete'
   - 'SubmissionParticipant:notify'
   - 'Timeline:create'

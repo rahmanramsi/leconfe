@@ -45,7 +45,18 @@
                         </x-slot>
 
                         <x-slot name="headerEnd">
-                            
+                            @if ($currentScheduledConference->getMeta('registration_policy') !== null)
+                                {{ $this->registrationPolicyAction() }}
+                            @endif
+                            @if ($user->can('decideRegistration', $this->submission))
+                                {{ $this->decideRegsitrationAction() }}
+                            @endif
+                            @if ($user->can('cancelRegistration', $this->submission))
+                                {{ $this->cancelRegistrationAction() }}
+                            @endif
+                            @if ($user->can('deleteRegistration', $this->submission) && !$user->can('cancelRegistration', $this->submission))
+                                {{ $this->deleteRegistrationAction() }}
+                            @endif
                         </x-slot>
 
                         <table class="w-full text-sm">
