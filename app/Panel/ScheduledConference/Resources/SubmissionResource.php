@@ -8,6 +8,7 @@ use App\Models\Enums\SubmissionStatus;
 use App\Models\Enums\UserRole;
 use App\Models\Submission;
 use App\Panel\ScheduledConference\Resources\SubmissionResource\Pages;
+use App\Tables\Columns\IndexColumn;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\Layout\Split;
@@ -71,6 +72,7 @@ class SubmissionResource extends Resource
             })
             ->columns([
                 Split::make([
+                    IndexColumn::make('no'),
                     Stack::make([
                         Tables\Columns\TextColumn::make('title')
                             ->getStateUsing(fn (Submission $record) => $record->getMeta('title'))
@@ -147,9 +149,6 @@ class SubmissionResource extends Resource
                     ->authorize(
                         fn (Submission $record) => auth()->user()->can('delete', $record)
                     ),
-            ])
-            ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
             ])
             ->filters([
                 SelectFilter::make('status')

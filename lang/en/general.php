@@ -123,6 +123,7 @@ return [
     'install_success' => 'Install success',
     'plugin_installed_successfully' => 'Plugin installed successfully',
     'submit' => 'Submit',
+    'cancel' => 'Cancel',
 
     'static_page' => 'Static Page',
     'title' => 'Title',
@@ -349,6 +350,7 @@ return [
     'review' => 'Review',
     'submit_abstract' => 'Submit abstract',
     'contributors' => 'Contributors',
+    'no_contributors' => 'No Contributors',
     'edit_files' => 'Edit Files',
     'edit_contributors' => 'Edit Contributors',
     'edit_submission' => 'Edit Submission',
@@ -809,5 +811,8 @@ return [
     'citation_contributor_translator_helper' => "Select the roles that should be identified as translators",
     'citation_contributor_authors_helper' => "Select the roles that should be identified as authors",
     'citation_contributors_description' => "In some citation styles, contributors must be identified differently depending on their role. Please identify the appropriate roles.",
+    'published' => "Published",
+    'unpublished' => "Unpublished",
+    'date_published' => "Date Published",
 ];
 

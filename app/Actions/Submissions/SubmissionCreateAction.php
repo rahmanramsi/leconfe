@@ -15,7 +15,7 @@ class SubmissionCreateAction
         try {
             DB::beginTransaction();
 
-            $submission = Submission::create();
+            $submission = Submission::create($data);
 
             if (array_key_exists('meta', $data) && is_array($data['meta'])) {
                 $submission->setManyMeta($data['meta']);

@@ -356,7 +356,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
 
     public function getHeading(): string
     {
-        return $this->record->getMeta('title');
+        return $this->record->getMeta('title') ?? '';
     }
 
     public function infolist(Infolist $infolist): Infolist
