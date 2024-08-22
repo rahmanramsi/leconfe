@@ -37,6 +37,9 @@
                                                     <strong>
                                                         {{ $type->getPaidParticipantCount() }}/{{ $type->quota }}
                                                     </strong>
+                                                    <p class="text-xs sm:test-sm">
+                                                        {{ $type->isOpen() ? null : __('general.closed') }}
+                                                    </p>
                                                 </td>
                                                 <td>
                                                     {{ 
