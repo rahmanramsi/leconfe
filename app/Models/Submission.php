@@ -44,6 +44,7 @@ class Submission extends Model implements HasMedia, Sortable
      * @var array<int, string>
      */
     protected $fillable = [
+        'proceeding_id',
         'track_id',
         'skipped_review',
         'stage',
@@ -85,27 +86,22 @@ class Submission extends Model implements HasMedia, Sortable
             $submission->scheduled_conference_id ??= app()->getCurrentScheduledConferenceId();
 
             if (!$submission->track_id) {
-                $submission->track_id = Track::withoutGlobalScopes()->where('scheduled_conference_id', $submission->scheduled_conference_id)->first()->getKey();
+                $submission->track_id = Track::withoutGlobalScopes()->where('scheduled_conference_id', $submission->scheduled_conference_id)->first()?->getKey();
             }
         });
 
         static::deleting(function (Submission $submission) {
-            $submission->authors()->delete();
-            $submission->participants()->delete();
-            $submission->reviews()->delete();
-            $submission->media()->delete();
+            $submission->submissionFiles->each->delete();
+            $submission->authors->each->delete();
+            $submission->participants->each->delete();
+            $submission->reviews->each->delete();
+            $submission->media->each->delete();
         });
 
         static::created(function (Submission $submission) {
             $submission->participants()->create([
                 'user_id' => $submission->user_id,
                 'role_id' => Role::withoutGlobalScopes()->where('conference_id', $submission->conference_id)->where('name', UserRole::Author->value)->first()->getKey(),
-            ]);
-
-            // Current user as a author
-            $author = $submission->authors()->create([
-                'author_role_id' => AuthorRole::where('name', UserRole::Author->value)->first()->getKey(),
-                ...$submission->user->only(['email', 'given_name', 'family_name', 'public_name']),
             ]);
         });
     }
@@ -263,7 +259,7 @@ class Submission extends Model implements HasMedia, Sortable
 
     public function getUrl(): string
     {
-        return route(Paper::getRouteName(), [
+        return route(Paper::getRouteName('conference'), [
             'submission' => $this,
             'conference' => $this->conference
         ]);

@@ -87,7 +87,7 @@ class ManageSubmissions extends ManageRecords
                     SubmissionStatus::Declined,
                     SubmissionStatus::Withdrawn,
                 ]))
-                ->when($tab === static::TAB_UNASSIGNED, fn ($query) => $query->having('editors_count', 0))
+                ->when($tab === static::TAB_UNASSIGNED, fn ($query) => $query->where('status', '!=', SubmissionStatus::Published)->where('user_id', '!=', auth()->id())->having('editors_count', 0))
                 ->when($tab === static::TAB_ACTIVE, fn ($query) => $query->having('editors_count', '>', 0)
                     ->whereIn('status', [
                         SubmissionStatus::OnReview,
