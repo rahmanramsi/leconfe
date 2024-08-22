@@ -52,7 +52,7 @@ class Payment extends Component implements HasActions, HasForms
     public function registrationPolicyAction()
     {
         return Action::make('registrationPolicyAction')
-            ->label('Policy')
+            ->label(__('general.policy'))
             ->modalHeading(__('general.registration_policy'))
             ->icon('heroicon-o-book-open')
             ->size('xs')
@@ -69,9 +69,9 @@ class Payment extends Component implements HasActions, HasForms
     public function decideRegsitrationAction()
     {
         return Action::make('decideRegsitrationAction')
-            ->icon('heroicon-o-pencil-square')
-            ->authorize('decideRegistration', $this->submission)
             ->label(__('general.decision'))
+            ->authorize('decideRegistration', $this->submission)
+            ->icon('heroicon-o-pencil-square')
             ->color('primary')
             ->size('xs')
             ->modalHeading(__('general.paid_status_decision'))
@@ -142,9 +142,9 @@ class Payment extends Component implements HasActions, HasForms
     public function deleteRegistrationAction()
     {
         return Action::make('deleteRegistrationAction')
-            ->icon('heroicon-o-x-mark')
-            ->authorize('deleteRegistration', $this->submission)
             ->label(__('general.delete'))
+            ->authorize('deleteRegistration', $this->submission)
+            ->icon('heroicon-o-x-mark')
             ->color('danger')
             ->size('xs')
             ->link()
@@ -171,9 +171,9 @@ class Payment extends Component implements HasActions, HasForms
     public function cancelRegistrationAction()
     {
         return Action::make('cancelRegistrationAction')
-            ->icon('heroicon-o-x-mark')
-            ->authorize('cancelRegistration', $this->submission)
             ->label(__('general.cancel'))
+            ->authorize('cancelRegistration', $this->submission)
+            ->icon('heroicon-o-x-mark')
             ->tooltip(__('general.cancel_registration'))
             ->color('danger')
             ->size('xs')
@@ -202,9 +202,9 @@ class Payment extends Component implements HasActions, HasForms
     public function declinePaymentAction()
     {
         return Action::make('declinePaymentAction')
-            ->icon('lineawesome-times-solid')
-            ->authorize('declinePayment', $this->submission)
             ->label(__('general.decline_submission_payment'))
+            ->authorize('declinePayment', $this->submission)
+            ->icon('lineawesome-times-solid')
             ->color('danger')
             ->outlined()
             ->requiresConfirmation()
@@ -269,10 +269,10 @@ class Payment extends Component implements HasActions, HasForms
     public function approvePaymentAction()
     {
         return Action::make('approvePaymentAction')
+            ->label(__('general.approve_submission_payment'))
             ->authorize('ApprovePayment', $this->submission)
             ->icon('lineawesome-check-circle-solid')
             ->color('primary')
-            ->label(__('general.approve_submission_payment'))
             ->modalWidth('2xl')
             ->modalSubmitActionLabel(__('general.accept'))
             ->mountUsing(function (Form $form) {
@@ -336,7 +336,9 @@ class Payment extends Component implements HasActions, HasForms
     {
         $submissionParticipant = $this->submission
             ->participants()
-            ->whereHas('role', fn(Builder $query) => $query->where('name', UserRole::Author->value))
+            ->whereHas('role', function (Builder $query) {
+                $query->where('name', UserRole::Author->value);
+            })
             ->where('user_id', auth()->user()->id)
             ->limit(1)
             ->first();

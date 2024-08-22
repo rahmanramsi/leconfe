@@ -459,6 +459,7 @@ return [
     'closed_at' => 'Closed at',
     'type_are_empty' => 'Type are empty',
     'save_changes' => 'Save changes',
+    'policy' => 'Policy',
     'registration_policy' => 'Registration Policy',
     'create_a_type_to_get_started' => 'Create a Type to get started.',
     'select_type_opened_date' => 'Select type opened date..',
@@ -842,5 +843,16 @@ return [
     'we_apologize_registration_currenty_closed' => "We apologize, but registration is currently closed.",
     'have_questin_contact_our_technical_support' => "Have a question? contact our <strong>Technical Support Contact</strong>",
 
-
+    'are_you_sure_registration' => "Are you sure you want register as <strong>:type</strong>?",
+    'heres_your_registration_details' => "Here's your registration details",
+    'author_registration' => "Author Registration",
+    'this_submission_has_completed_registration' => "This submission has completed the registration process and finished the payment.",
+    'please_finish_payment_to_complete' => "Please finish the payment to complete registration and continue your submission process.",
+    'submission_has_not_completed_registration' => "This submission has not completed its registration payment yet.",
+    'submission_registration_details' => "Submission Registration Details",
+    'registration_details_of_submission' => "These are the registration details of this submission.",
+    'submission_registration_order' => "Please do the registration process in order to complete the payment and continue the submission process.",
+    'registration_process_guide' => "You can perform the registration process, by clicking on registration type you preferred below.",
+    'submission_not_started_registration' => "This submission has not started the registration process yet.",
+    'we_apologize_registration_currenty_closed_agenda' => "We apologize, but registration is currently closed. Look into <a class='text-blue-500 hover:underline' href=':href'>agenda</a> may help you to know when registration open.",
 ];

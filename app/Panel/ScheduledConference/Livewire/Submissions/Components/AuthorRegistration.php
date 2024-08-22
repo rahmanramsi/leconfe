@@ -46,7 +46,7 @@ class AuthorRegistration extends \Livewire\Component implements HasForms, HasTab
                     ->label('No.')
                     ->rowIndex(),
                 TextColumn::make('type')
-                    ->label('Registration Type')
+                    ->label(__('general.registration_type'))
                     ->description(fn (Model $record) => $record->getMeta('description')),
                 TextColumn::make('quota')
                     ->formatStateUsing(fn (Model $record) => $record->getPaidParticipantCount() . "/" . $record->quota)
@@ -66,14 +66,14 @@ class AuthorRegistration extends \Livewire\Component implements HasForms, HasTab
                     ->successNotificationTitle(__('general.saved'))
                     ->failureNotificationTitle(__('general.failed'))
                     ->requiresConfirmation()
-                    ->modalHeading('Author Registration')
+                    ->modalHeading(__('general.author_registration'))
                     ->modalIcon('heroicon-m-user-plus')
                     ->modalDescription(function (Model $record) {
                         $description = $record->getMeta('description') ?? '-';
                         return new HtmlString(BladeCompiler::render(<<<BLADE
                             <div class="text-sm text-left">
-                                <p>Are you sure you want register as <strong>{$record->type}</strong>?</p>
-                                <p>Here's your registration details:</p>
+                                <p>{!! __('general.are_you_sure_registration', ['type' => "{$record->type}"]) !!}</p>
+                                <p>{{ __('general.heres_your_registration_details') }}:</p>
                                 <table class="mt-3 w-full">
                                     <tr>
                                         <td class="font-semibold">{{ __('general.type') }}</td>
@@ -155,7 +155,13 @@ class AuthorRegistration extends \Livewire\Component implements HasForms, HasTab
 
                             $action->sendSuccessNotification();
 
-                            return redirect(SubmissionResource::getUrl('view', ['record' => $this->submission->getKey()]));
+                            $action->successRedirectUrl(
+                                SubmissionResource::getUrl('view', [
+                                    'record' => $this->submission->getKey()
+                                ])
+                            );
+
+                            return $action->success();
                         } catch (\Throwable $th) {
                             $action->sendFailureNotification();
                             throw $th;

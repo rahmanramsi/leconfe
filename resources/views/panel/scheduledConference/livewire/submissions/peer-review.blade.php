@@ -23,7 +23,7 @@
             @livewire(Components\Discussions\DiscussionTopic::class, ['submission' => $submission, 'stage' => SubmissionStage::PeerReview, 'lazy' => true])
         </div>
 
-        <div class="sticky z-1 flex flex-col self-start col-span-4 gap-4 top-24" x-data="{ decision: @js($submissionDecision) }">
+        <div class="sticky flex flex-col self-start col-span-4 gap-4 top-24 z-10" x-data="{ decision: @js($submissionDecision) }">
             @if($submission->stage != SubmissionStage::CallforAbstract)
                 @if ($submission->revision_required)
                     <div class="flex items-center p-4 text-sm border rounded-lg border-warning-400 bg-warning-200 text-warning-600" x-show="!decision" role="alert">

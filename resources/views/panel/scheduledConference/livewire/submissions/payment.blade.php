@@ -19,17 +19,17 @@
                                 </x-filament::section>
                             @else
                                 <x-filament::section>
-                                    <p>This submission has completed the registration process and finished the payment.</p>
+                                    <p>{{ __('general.this_submission_has_completed_registration') }}</p>
                                 </x-filament::section>
                             @endif
                         @else
                             @if($isSubmissionAuthor)
                                 <x-filament::section>
-                                    <p>Please finish the payment to complete registration and continue your submission process.</p>
+                                    <p>{{ __('general.please_finish_payment_to_complete') }}</p>
                                 </x-filament::section>
                             @else
                                 <x-filament::section>
-                                    <p>This submission has not completed its registration payment yet.</p>
+                                    <p>{{ __('general.submission_has_not_completed_registration') }}</p>
                                 </x-filament::section>
                             @endif
                         @endif
@@ -37,11 +37,11 @@
 
                     <x-filament::section>
                         <x-slot name="heading">
-                            Submission Registration Details
+                            {{ __('general.submission_registration_details') }}
                         </x-slot>
 
                         <x-slot name="description">
-                            These are the registration details of this submission.
+                            {{ __('general.registration_details_of_submission') }}
                         </x-slot>
 
                         <x-slot name="headerEnd">
@@ -128,22 +128,22 @@
                 @else
                     @if($isSubmissionAuthor)
                         <x-filament::section>
-                            <p>Please do the registration process in order to complete the payment and continue the submission process.</p>
-                            <p class="mt-3">You can perform the registration process, by clicking on registration type you preferred below.</p>
+                            <p>{{ __('general.submission_registration_order') }}</p>
+                            <p class="mt-3">{{ __('general.registration_process_guide') }}</p>
                         </x-filament::section>
 
                         {{-- Author Registration --}}
                         @livewire(App\Panel\ScheduledConference\Livewire\Submissions\Components\AuthorRegistration::class, ['submission' => $submission])
                     @else
                         <x-filament::section>
-                            <p>This submission has not started the registration process yet.</p>
+                            <p>{{ __('general.submission_not_started_registration') }}</p>
                         </x-filament::section>
                     @endif
                 @endif
             @else
                 <x-filament::section>
                     <p>
-                        {{ __('general.we_apologize_registration_currenty_closed') }} Look into <a class="text-blue-500 hover:underline" href="{{ route('livewirePageGroup.scheduledConference.pages.agenda') }}">agenda</a> may help you to know when registration open.
+                        {!! __('general.we_apologize_registration_currenty_closed_agenda', ['href' => route('livewirePageGroup.scheduledConference.pages.agenda')]) !!} 
                     </p>
                 </x-filament::section>
             @endif
@@ -186,7 +186,7 @@
                 </x-filament::section>
             @endif
         </div>
-        <div class="sticky z-1 flex flex-col self-start col-span-4 gap-3 top-24" x-data="{ decision:@js($submissionDecision) }">
+        <div class="sticky flex flex-col self-start col-span-4 gap-3 top-24 z-10" x-data="{ decision:@js($submissionDecision) }">
             @if($submission->getEditors()->isEmpty() && ! $user->hasRole(\App\Models\Enums\UserRole::ConferenceEditor->value))
                 <div class="px-4 py-3.5 text-base text-white rounded-lg border-2 border-primary-700 bg-primary-500">
                     {{ $user->can('assignParticipant', $submission) ? __('general.assign_an_editor_to_enable_the_editorial') : __('general.no_editor_assigned_submission') }}

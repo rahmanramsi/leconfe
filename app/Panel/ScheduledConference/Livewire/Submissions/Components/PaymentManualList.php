@@ -26,7 +26,7 @@ class PaymentManualList extends \Livewire\Component implements HasForms, HasTabl
             ->heading(__('general.payment_methods'))
             ->headerActions([
                 Action::make('PaymentPolicyAction')
-                    ->label('Policy')
+                    ->label(__('general.policy'))
                     ->modalHeading('Payment Policy')
                     ->icon('heroicon-o-book-open')
                     ->size('xs')
@@ -64,6 +64,7 @@ class PaymentManualList extends \Livewire\Component implements HasForms, HasTabl
                             ->label('')
                             ->html(),
                     ])
+                    ->extraModalWindowAttributes(['class' => '!text-red-500'])
                     ->modalSubmitAction(false)
             ])
             ->emptyStateIcon('heroicon-m-credit-card')

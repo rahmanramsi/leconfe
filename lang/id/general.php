@@ -449,6 +449,7 @@ return [
     'closed_at' => 'Ditutup pada',
     'type_are_empty' => 'Tipe kosong',
     'save_changes' => 'Simpan perubahan',
+    'policy' => 'Kebijakan',
     'registration_policy' => 'Kebijakan Pendaftaran',
     'create_a_type_to_get_started' => 'Buat Tipe untuk memulai.',
     'select_type_opened_date' => 'Pilih tanggal pembukaan tipe..',
@@ -811,11 +812,16 @@ return [
     'we_apologize_registration_currenty_closed' => 'Kami mohon maaf, tetapi pendaftaran saat ini sedang ditutup.',
     'have_questin_contact_our_technical_support' => 'Punya pertanyaan? Hubungi <strong>Kontak Dukungan Teknis</strong> kami.',
 
-
-
-
-
-
-
-
+    'are_you_sure_registration' => "Apakah Anda yakin ingin mendaftar sebagai <strong>:type</strong>?",
+    'heres_your_registration_details' => "Berikut rincian pendaftaran Anda",
+    'author_registration' => "Registrasi Penulis",
+    'this_submission_has_completed_registration' => "Pengiriman ini telah menyelesaikan proses registrasi dan menyelesaikan pembayaran.",
+    'please_finish_payment_to_complete' => "Harap selesaikan pembayaran untuk menyelesaikan pendaftaran dan melanjutkan proses pengiriman Anda.",
+    'submission_has_not_completed_registration' => "Pengajuan ini belum menyelesaikan pembayaran pendaftarannya.",
+    'submission_registration_details' => "Detail Pendaftaran Pengajuan",
+    'registration_details_of_submission' => "Berikut rincian pendaftaran untuk penyerahan ini.",
+    'submission_registration_order' => "Silakan lakukan proses registrasi untuk menyelesaikan pembayaran dan melanjutkan proses pengiriman.",
+    'registration_process_guide' => "Anda dapat melakukan proses pendaftaran dengan mengklik jenis pendaftaran yang Anda inginkan di bawah ini.",
+    'submission_not_started_registration' => "Pengajuan ini belum memulai proses pendaftaran.",
+    'we_apologize_registration_currenty_closed_agenda' => "Kami mohon maaf, tetapi pendaftaran saat ini sudah ditutup. Lihatlah <a class='text-blue-500 hover:underline' href=':href'>agenda</a> untuk membantu Anda mengetahui kapan pendaftaran dibuka.",
 ];

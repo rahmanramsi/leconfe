@@ -453,6 +453,7 @@ return [
     'closed_at' => 'Mbyllur në',
     'type_are_empty' => 'Llojet janë bosh',
     'save_changes' => 'Ruaj Ndryshimet',
+    'policy' => 'Politika',
     'registration_policy' => 'Politika e Regjistrimit',
     'create_a_type_to_get_started' => 'Krijo një Lloj për të filluar.',
     'select_type_opened_date' => 'Zgjidhni datën e hapjes së llojit..',
@@ -828,9 +829,16 @@ return [
     'we_apologize_registration_currenty_closed' => 'Na vjen keq, por regjistrimi është aktualisht i mbyllur.',
     'have_questin_contact_our_technical_support' => 'Keni ndonjë pyetje? Kontaktoni <strong>Mbështetje Teknike</strong> tonë.',
 
-
-
-
-
-
+    'are_you_sure_registration' => "Jeni i sigurt që dëshironi të regjistroheni si <strong>:type</strong>?",
+    'heres_your_registration_details' => "Këtu janë detajet e regjistrimit tuaj",
+    'author_registration' => "Regjistrimi i autorit",
+    'this_submission_has_completed_registration' => "Kjo dorëzim ka përfunduar procesin e regjistrimit dhe ka përfunduar pagesën.",
+    'please_finish_payment_to_complete' => "Ju lutemi përfundoni pagesën për të përfunduar regjistrimin dhe vazhdoni procesin e dorëzimit.",
+    'submission_has_not_completed_registration' => "Kjo dorëzim nuk e ka përfunduar ende pagesën e regjistrimit.",
+    'submission_registration_details' => "Detajet e regjistrimit të dorëzimit",
+    'registration_details_of_submission' => "Këto janë detajet e regjistrimit të kësaj paraqitjeje.",
+    'submission_registration_order' => "Ju lutemi bëni procesin e regjistrimit për të përfunduar pagesën dhe për të vazhduar procesin e dorëzimit.",
+    'registration_process_guide' => "Ju mund të kryeni procesin e regjistrimit duke klikuar në llojin e regjistrimit që ju preferoni më poshtë.",
+    'submission_not_started_registration' => "Kjo dorëzim nuk ka filluar ende procesin e regjistrimit.",
+    'we_apologize_registration_currenty_closed_agenda' => "Kërkojmë ndjesë, por regjistrimi është aktualisht i mbyllur. Shikoni <a class='text-blue-500 hover:underline' href=':href'>agjendën</a> mund t'ju ndihmojë të dini kur hapet regjistrimi.",
 ];
