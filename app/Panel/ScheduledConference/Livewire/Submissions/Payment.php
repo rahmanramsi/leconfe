@@ -152,7 +152,7 @@ class Payment extends Component implements HasActions, HasForms
             ->action(function (Action $action) {
 
                 try {
-                    $this->submission->registration->delete();
+                    $this->submission->registration->forceDelete();
                 } catch (\Throwable $th) {
                     $action->failure();
                     throw $th;
@@ -183,7 +183,7 @@ class Payment extends Component implements HasActions, HasForms
             ->action(function (Action $action) {
 
                 try {
-                    $this->submission->registration->delete();
+                    $this->submission->registration->forceDelete();
                 } catch (\Throwable $th) {
                     $action->failure();
                     throw $th;
