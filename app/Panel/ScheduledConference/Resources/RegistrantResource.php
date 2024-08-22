@@ -39,6 +39,7 @@ use Filament\Infolists\Components\TextEntry;
 use App\Models\Enums\RegistrationPaymentType;
 use Filament\Tables\Actions\DeleteBulkAction;
 use App\Models\Enums\RegistrationPaymentState;
+use App\Models\RegistrationType;
 use Filament\Tables\Actions\ForceDeleteAction;
 use App\Notifications\RegistrationPaymentDecision;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -268,6 +269,9 @@ class RegistrantResource extends Resource
         return parent::getEloquentQuery()
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
-            ]);
+            ])
+            ->whereHas('registrationPayment', function (Builder $query) {
+                $query->where('level', '!=', RegistrationType::LEVEL_AUTHOR);
+            });
     }
 }
