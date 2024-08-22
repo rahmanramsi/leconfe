@@ -14,7 +14,7 @@
 
             @livewire(Components\Discussions\DiscussionTopic::class, ['submission' => $submission, 'stage' => SubmissionStage::CallforAbstract, 'lazy' => true])
         </div>
-        <div class="sticky z-30 flex flex-col self-start col-span-4 gap-3 top-24" x-data="{ decision:@js($submissionDecision) }">
+        <div class="sticky z-1 flex flex-col self-start col-span-4 gap-3 top-24" x-data="{ decision:@js($submissionDecision) }">
             @if($submission->getEditors()->isEmpty() && ! $user->hasRole(\App\Models\Enums\UserRole::ConferenceEditor->value))
                 <div class="px-4 py-3.5 text-base text-white rounded-lg border-2 border-primary-700 bg-primary-500">
                     {{ $user->can('assignParticipant', $submission) ? __('general.assign_an_editor_to_enable_the_editorial') : __('general.no_editor_assigned_submission') }}
