@@ -162,7 +162,7 @@ class QuickSubmitPage extends Page implements HasForms
                                     ->placeholder(__('general.eg_1_10')),
                                 DatePicker::make('published_at')
                                     ->maxWidth('xs')
-                                    ->label(__('general.published_at'))
+                                    ->label(__('general.date_published'))
                                     ->required(),
                             ])
                     ])

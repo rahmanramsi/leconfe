@@ -813,5 +813,6 @@ return [
     'citation_contributors_description' => "In some citation styles, contributors must be identified differently depending on their role. Please identify the appropriate roles.",
     'published' => "Published",
     'unpublished' => "Unpublished",
+    'date_published' => "Date Published",
 ];
 
