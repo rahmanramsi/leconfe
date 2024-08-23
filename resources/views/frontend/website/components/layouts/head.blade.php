@@ -12,9 +12,9 @@
     {{ MetaTag::render() }}
 
     @if (isset($favicon) && !empty($favicon))
-        <link rel="icon" type="image/x-icon" href="{{ $favicon }}" />
+    <link rel="icon" type="image/x-icon" href="{{ $favicon }}" />
     @else
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     @endif
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
