@@ -53,10 +53,9 @@ class RegistrantResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-user-plus';
 
-
     public static function getNavigationLabel(): string
     {
-        return __('general.registration');
+        return __('general.registrants');
     }
 
     public static function getNavigationGroup(): string
