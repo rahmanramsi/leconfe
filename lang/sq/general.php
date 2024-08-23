@@ -863,4 +863,6 @@ return [
     'total_pending_registration' => "Numri total i regjistrimeve në pritje",
     'finished_registrations' => "Regjistrimet e përfunduara",
     'finished_registration_30_days' => "Regjistrimet e përfunduara në 30 ditët e fundit",    
+
+    'you_have_to_register_to_complete_submission_payment' => "Duhet të regjistroheni në një nga këto lloje regjistrimi më poshtë për të përfunduar pagesën e dorëzimit.",
 ];

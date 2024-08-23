@@ -882,4 +882,6 @@ return [
     'total_pending_registration' => "Total number of pending registrations",
     'finished_registrations' => "Finished Registrations",
     'finished_registration_30_days' => "Finished registrations in the last 30 days",
+
+    'you_have_to_register_to_complete_submission_payment' => "You have to register to one of these registration type below to finish your submission payment.",
 ];

@@ -863,4 +863,6 @@ return [
     'total_pending_registration' => "إجمالي عدد التسجيلات المعلقة",
     'finished_registrations' => "التسجيلات المكتملة",
     'finished_registration_30_days' => "التسجيلات المكتملة في آخر 30 يومًا",
+
+    'you_have_to_register_to_complete_submission_payment' => "يتعين عليك التسجيل في أحد أنواع التسجيل أدناه لإكمال دفعتك.",
 ];

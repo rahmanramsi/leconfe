@@ -3,12 +3,14 @@
 namespace App\Panel\ScheduledConference\Livewire\Submissions\Components;
 
 use App\Models\User;
+use App\Facades\Setting;
 use App\Models\Submission;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
 use App\Models\Registration;
 use App\Models\PaymentManual;
 use App\Models\RegistrationType;
+use Filament\Support\Colors\Color;
 use Illuminate\Support\HtmlString;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Grouping\Group;
@@ -25,7 +27,6 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use App\Panel\ScheduledConference\Resources\SubmissionResource;
-use Filament\Support\Colors\Color;
 
 class AuthorRegistration extends \Livewire\Component implements HasForms, HasTable
 {
@@ -41,6 +42,10 @@ class AuthorRegistration extends \Livewire\Component implements HasForms, HasTab
                     ->where('level', RegistrationType::LEVEL_AUTHOR)
                     ->where('active', true)
             )
+            ->heading(new HtmlString(BladeCompiler::render(<<<BLADE
+                <strong class="font-semibold">{{ __('general.author_registration') }}</strong>
+                <p class="text-sm font-normal mt-1 text-gray-500">You have to register to one of these registration type below to finish your submission payment.</p>
+            BLADE)))
             ->columns([
                 TextColumn::make('index')
                     ->label('No.')
@@ -70,6 +75,8 @@ class AuthorRegistration extends \Livewire\Component implements HasForms, HasTab
                     ->modalIcon('heroicon-m-user-plus')
                     ->modalDescription(function (Model $record) {
                         $description = $record->getMeta('description') ?? '-';
+                        $date = "{$record->opened_at->format(Setting::get('format_date'))} - {$record->closed_at->format(Setting::get('format_date'))}";
+
                         return new HtmlString(BladeCompiler::render(<<<BLADE
                             <div class="text-sm text-left">
                                 <p>{!! __('general.are_you_sure_registration', ['type' => "{$record->type}"]) !!}</p>
@@ -109,6 +116,13 @@ class AuthorRegistration extends \Livewire\Component implements HasForms, HasTab
                                         <td>:</td>
                                         <td>
                                             {{ moneyOrFree($record->cost, "$record->currency", true) }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="font-semibold">{{ __('general.date') }}</td>
+                                        <td>:</td>
+                                        <td>
+                                            {$date}
                                         </td>
                                     </tr>
                                 </table>
@@ -166,10 +180,62 @@ class AuthorRegistration extends \Livewire\Component implements HasForms, HasTab
                             $action->sendFailureNotification();
                             throw $th;
                         }
-                    })
-                    ->disabled(fn (Model $record) => (bool) !$record->isOpen())
+                    }),
+                Action::make('author-registration-disabled')
+                    ->label('')
+                    ->requiresConfirmation()
+                    ->color(Color::Red)
+                    ->modalHeading(__('general.author_registration'))
+                    ->modalSubmitAction(false)
+                    ->modalCancelActionLabel('Okay')->modalDescription(function (Model $record) {
+                        $date = "{$record->opened_at->format(Setting::get('format_date'))} - {$record->closed_at->format(Setting::get('format_date'))}";
+
+                        return new HtmlString(BladeCompiler::render(<<<BLADE
+                            <div class="text-sm text-left">
+                                <p>{{ __('general.registration_are_closed') }}</p>
+                                <table class="mt-3 w-full">
+                                    <tr>
+                                        <td class="font-semibold">{{ __('general.type') }}</td>
+                                        <td>:</td>
+                                        <td>
+                                            {$record->type}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="font-semibold">{{ __('general.level') }}</td>
+                                        <td>:</td>
+                                        <td>
+                                            <x-filament::badge color="info" class="!w-fit">
+                                                {{
+                                                    match ($record->level) {
+                                                        App\Models\RegistrationType::LEVEL_PARTICIPANT => 'Participant',
+                                                        App\Models\RegistrationType::LEVEL_AUTHOR => 'Author',
+                                                        default => 'None',
+                                                    }
+                                                }}
+                                            </x-filament::badge>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="font-semibold">{{ __('general.cost') }}</td>
+                                        <td>:</td>
+                                        <td>
+                                            {{ moneyOrFree($record->cost, "$record->currency", true) }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="font-semibold">{{ __('general.date') }}</td>
+                                        <td>:</td>
+                                        <td>
+                                            {$date}
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        BLADE));
+                    }),
             ])
-            ->recordAction('author-registration')
+            ->recordAction(fn (Model $record) => $record->isOpen() ? 'author-registration' : 'author-registration-disabled')
             ->paginated(false);
     }
     

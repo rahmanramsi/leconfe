@@ -846,6 +846,8 @@ return [
     'pending_registrations' => "Pendaftaran Tertunda",
     'total_pending_registration' => "Jumlah total pendaftaran tertunda",
     'finished_registrations' => "Pendaftaran Selesai",
-    'finished_registration_30_days' => "Pendaftaran selesai dalam 30 hari terakhir",    
+    'finished_registration_30_days' => "Pendaftaran selesai dalam 30 hari terakhir",   
+    
+    'you_have_to_register_to_complete_submission_payment' => "Anda harus mendaftar ke salah satu jenis pendaftaran di bawah ini untuk menyelesaikan pembayaran pengajuan Anda.",
 ];
 
