@@ -840,5 +840,12 @@ return [
     'registration_process_guide' => "Anda dapat melakukan proses pendaftaran dengan mengklik jenis pendaftaran yang Anda inginkan di bawah ini.",
     'submission_not_started_registration' => "Pengajuan ini belum memulai proses pendaftaran.",
     'we_apologize_registration_currenty_closed_agenda' => "Kami mohon maaf, tetapi pendaftaran saat ini sudah ditutup. Lihatlah <a class='text-blue-500 hover:underline' href=':href'>agenda</a> untuk membantu Anda mengetahui kapan pendaftaran dibuka.",
+
+    'pending_submission_payment' => "Pembayaran Pengajuan Tertunda",
+    'total_pending_submission_payment' => "Jumlah total pembayaran pengajuan tertunda",
+    'pending_registrations' => "Pendaftaran Tertunda",
+    'total_pending_registration' => "Jumlah total pendaftaran tertunda",
+    'finished_registrations' => "Pendaftaran Selesai",
+    'finished_registration_30_days' => "Pendaftaran selesai dalam 30 hari terakhir",    
 ];
 

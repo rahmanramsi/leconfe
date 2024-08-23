@@ -856,4 +856,11 @@ return [
     'registration_process_guide' => "Ju mund të kryeni procesin e regjistrimit duke klikuar në llojin e regjistrimit që ju preferoni më poshtë.",
     'submission_not_started_registration' => "Kjo dorëzim nuk ka filluar ende procesin e regjistrimit.",
     'we_apologize_registration_currenty_closed_agenda' => "Kërkojmë ndjesë, por regjistrimi është aktualisht i mbyllur. Shikoni <a class='text-blue-500 hover:underline' href=':href'>agjendën</a> mund t'ju ndihmojë të dini kur hapet regjistrimi.",
+
+    'pending_submission_payment' => "Pagesa e dorëzimit në pritje",
+    'total_pending_submission_payment' => "Numri total i pagesave të dorëzimit në pritje",
+    'pending_registrations' => "Regjistrimet në pritje",
+    'total_pending_registration' => "Numri total i regjistrimeve në pritje",
+    'finished_registrations' => "Regjistrimet e përfunduara",
+    'finished_registration_30_days' => "Regjistrimet e përfunduara në 30 ditët e fundit",    
 ];

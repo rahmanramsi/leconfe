@@ -856,4 +856,11 @@ return [
     'registration_process_guide' => "يمكنك إجراء عملية التسجيل، بالضغط على نوع التسجيل المفضل لديك أدناه.",
     'submission_not_started_registration' => "لم تبدأ عملية التسجيل لهذا الطلب بعد.",
     'we_apologize_registration_currenty_closed_agenda' => "نعتذر، لكن التسجيل مغلق حاليًا. يمكنك الاطلاع على <a class='text-blue-500 hover:underline' href=':href'>الأجندة</a> لمعرفة موعد فتح التسجيل.",
+
+    'pending_submission_payment' => "دفع تقديم معلق",
+    'total_pending_submission_payment' => "إجمالي عدد دفع التقديم المعلق",
+    'pending_registrations' => "التسجيلات المعلقة",
+    'total_pending_registration' => "إجمالي عدد التسجيلات المعلقة",
+    'finished_registrations' => "التسجيلات المكتملة",
+    'finished_registration_30_days' => "التسجيلات المكتملة في آخر 30 يومًا",
 ];

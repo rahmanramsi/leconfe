@@ -875,4 +875,11 @@ return [
     'registration_process_guide' => "You can perform the registration process, by clicking on registration type you preferred below.",
     'submission_not_started_registration' => "This submission has not started the registration process yet.",
     'we_apologize_registration_currenty_closed_agenda' => "We apologize, but registration is currently closed. Look into <a class='text-blue-500 hover:underline' href=':href'>agenda</a> may help you to know when registration open.",
+
+    'pending_submission_payment' => "Pending Submission Payment",
+    'total_pending_submission_payment' => "Total number of pending submission payment",
+    'pending_registrations' => "Pending Registrations",
+    'total_pending_registration' => "Total number of pending registrations",
+    'finished_registrations' => "Finished Registrations",
+    'finished_registration_30_days' => "Finished registrations in the last 30 days",
 ];
