@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Plank\Metable\Metable;
 use Illuminate\Database\Eloquent\Model;
-use Kra8\Snowflake\HasShortflakePrimary;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use App\Models\Concerns\BelongsToScheduledConference;
 use App\Models\Enums\RegistrationPaymentState;
@@ -13,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class RegistrationPayment extends Model
 {
-    use BelongsToScheduledConference, HasShortflakePrimary, Cachable, Metable, HasFactory;
+    use BelongsToScheduledConference, Cachable, Metable, HasFactory;
 
     protected $fillable = [
         'type',

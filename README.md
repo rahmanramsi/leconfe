@@ -53,12 +53,4 @@ Thank you for considering contributing to Leconfe! Here are some guidelines to h
 
 ## Security Vulnerabilities
 
-If you discover a security vulnerability within Leconfe, please e-mail Leconfe via [support@openjournaltheme.com](mailto:support@openjournaltheme.com). All security vulnerabilities will be promptly addressed.
-
-## Credits
-
-WIP
-
-## License
-
-WIP
+If you discover a security vulnerability within Leconfe, please e-mail Leconfe via [support@leconfe.com](mailto:support@leconfe.com). All security vulnerabilities will be promptly addressed.

@@ -5,7 +5,7 @@
             <div class="card-body">
                 <div class="inline-flex w-full flex-wrap gap-2">
                     @foreach ($topics as $topic)
-                        <div class="badge badge-ghost badge-sm">
+                        <div class="badge badge-ghost badge-sm h-auto">
                             {{ $topic->name }}
                         </div>
                     @endforeach

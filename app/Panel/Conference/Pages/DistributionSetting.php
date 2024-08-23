@@ -6,6 +6,7 @@ use App\Infolists\Components\LivewireEntry;
 use App\Panel\Conference\Livewire\Forms\Conferences\DOISetup;
 use App\Panel\Conference\Livewire\Forms\Conferences\SearchEngineSetting;
 use App\Infolists\Components\VerticalTabs as InfolistsVerticalTabs;
+use App\Panel\Conference\Livewire\CitationSetting;
 use App\Panel\Conference\Livewire\Forms\Conferences\DOIRegistration;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -62,6 +63,21 @@ class DistributionSetting extends Page implements HasForms, HasInfolists
             ->schema([
                 Tabs::make('distribution_settings')
                     ->tabs([
+                        Tabs\Tab::make('Papers')
+                            ->label(__('general.papers'))
+                            ->icon('heroicon-o-document-text')
+                            ->schema([
+                                InfolistsVerticalTabs\Tabs::make()
+                                    ->schema([
+                                        InfolistsVerticalTabs\Tab::make('Citation')
+                                            ->label(__('general.citation'))
+                                            ->schema([
+                                                LivewireEntry::make('citation')
+                                                    ->livewire(CitationSetting::class),
+                                            ]),
+                                     
+                                    ]),
+                            ]),
                         Tabs\Tab::make('DOI')
                             ->icon('academicon-doi')
                             ->schema([

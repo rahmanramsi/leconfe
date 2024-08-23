@@ -19,7 +19,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
-use Kra8\Snowflake\HasShortflakePrimary;
 use Laravel\Sanctum\HasApiTokens;
 use Mchev\Banhammer\Traits\Bannable;
 use Plank\Metable\Metable;
@@ -37,7 +36,6 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasMedia,
         HasApiTokens,
         HasFactory,
         HasRoles,
-        HasShortflakePrimary,
         InteractsWithMedia,
         Metable,
         Notifiable;

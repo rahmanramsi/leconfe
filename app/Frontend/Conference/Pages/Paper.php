@@ -2,6 +2,7 @@
 
 namespace App\Frontend\Conference\Pages;
 
+use App\Facades\Hook;
 use App\Facades\MetaTag;
 use App\Models\Submission;
 use Illuminate\Contracts\Support\Htmlable;
@@ -10,6 +11,8 @@ use Illuminate\Support\Facades\Route;
 use Rahmanramsi\LivewirePageGroup\PageGroup;
 use Rahmanramsi\LivewirePageGroup\Pages\Page;
 use Illuminate\Support\Str;
+use Seboettg\CiteProc\CiteProc;
+use Seboettg\CiteProc\StyleSheet;
 
 class Paper extends Page
 {
@@ -21,7 +24,7 @@ class Paper extends Page
     {
         $this->paper = Submission::query()
             ->where('id', $submission)
-            ->with(['track', 'media', 'meta', 'galleys.file.media', 'authors' => fn ($query) => $query->with(['role', 'meta'])])
+            ->with(['proceeding', 'track', 'media', 'meta', 'galleys.file.media', 'authors' => fn ($query) => $query->with(['role', 'meta'])])
             ->first();
 
         if (!$this->paper) {
@@ -34,6 +37,7 @@ class Paper extends Page
 
         $this->addMetadata();
     }
+
 
     public function getTitle(): string|Htmlable
     {
@@ -114,6 +118,8 @@ class Paper extends Page
         if ($this->paper->getFirstMedia('cover')) {
             MetaTag::add('og:image', $this->paper->getFirstMedia('cover')->getAvailableUrl(['thumb']));
         }
+
+        Hook::call('frontend.paper.addMetadata', $this);
     }
 
     public function canAccess(): bool

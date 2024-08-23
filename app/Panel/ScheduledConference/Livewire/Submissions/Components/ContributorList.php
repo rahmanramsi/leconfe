@@ -133,6 +133,7 @@ class ContributorList extends \Livewire\Component implements HasForms, HasTable
     {
         return $table
             ->heading(__('general.contributors'))
+            ->emptyStateDescription(__('general.no_contributors'))
             ->query(
                 fn (): Builder => $this->getQuery()
             )

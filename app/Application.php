@@ -3,7 +3,6 @@
 namespace App;
 
 use App\Models\Site;
-use App\Models\Block;
 use App\Models\Topic;
 use App\Models\Track;
 use App\Models\Session;
@@ -37,7 +36,7 @@ use Illuminate\Foundation\Application as LaravelApplication;
 
 class Application extends LaravelApplication
 {
-    public const APP_VERSION = '1.0.0-alpha.3';
+    public const APP_VERSION = '1.0.0-beta.3';
 
     public const PHP_MIN_VERSION = '8.1';
 

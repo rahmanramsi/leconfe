@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Vite;
-use Kra8\Snowflake\HasShortflakePrimary;
 use Plank\Metable\Metable;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -24,7 +23,7 @@ use Spatie\Sluggable\SlugOptions;
 
 class Conference extends Model implements HasAvatar, HasMedia, HasName
 {
-    use Cachable, HasFactory, HasShortflakePrimary, HasSlug, InteractsWithMedia, Metable;
+    use Cachable, HasFactory, HasSlug, InteractsWithMedia, Metable;
 
     /**
      * The attributes that are mass assignable.
@@ -42,9 +41,7 @@ class Conference extends Model implements HasAvatar, HasMedia, HasName
      *
      * @var array
      */
-    protected $casts = [
-
-    ];
+    protected $casts = [];
 
     public function submission(): HasMany
     {
@@ -91,7 +88,7 @@ class Conference extends Model implements HasAvatar, HasMedia, HasName
         return $this->hasMany(ScheduledConference::class);
     }
 
-    public function currentScheduledConference() : HasOne
+    public function currentScheduledConference(): HasOne
     {
         return $this->hasOne(ScheduledConference::class)->where('state', ScheduledConferenceState::Current);
     }
@@ -144,7 +141,7 @@ class Conference extends Model implements HasAvatar, HasMedia, HasName
         return SlugOptions::create()
             ->generateSlugsFrom('name')
             ->saveSlugsTo('path')
-            ->skipGenerateWhen(fn () => $this->path !== null);
+            ->skipGenerateWhen(fn() => $this->path !== null);
     }
 
     public function getPanelUrl(): string
@@ -179,6 +176,24 @@ class Conference extends Model implements HasAvatar, HasMedia, HasName
             'settings_languages' => ['en'],
             'page_footer' => view('frontend.examples.footer')->render(),
             'languages' => ['en'],
+            'primary_citation_format' => 'apa',
+            'enabled_citation_styles' => [
+                "harvard-cite-them-right",
+                "ieee",
+                "modern-language-association",
+                "turabian-fullnote-bibliography",
+                "vancouver",
+                "ama",
+                "chicago-author-date",
+                "associacao-brasileira-de-normas-tecnicas",
+                "apa",
+                "acs-nano",
+                "acm-sig-proceedings"
+            ],
+            'downloadable_citation_formats' => [
+                'ris',
+                'bibtex',
+            ]
         ];
     }
 }

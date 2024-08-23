@@ -101,6 +101,7 @@ class ViewProceeding extends Page implements HasForms, HasTable
             ->query(
                 Submission::query()
                     ->where('proceeding_id', $this->record->id)
+                    ->with('scheduledConference')
                     ->ordered()
             )
             ->reorderable('proceeding_order_column')
