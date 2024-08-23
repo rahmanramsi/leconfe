@@ -31,8 +31,8 @@ return [
         ],
 
         'advanced' => [
-            'plugins' => 'autoresize link wordcount image code lists',
-            'toolbar' => 'bold italic superscript subscript | link | blockquote bullist numlist | image | code',
+            'plugins' => 'advlist autoresize codesample directionality emoticons fullscreen hr image imagetools link lists media table toc wordcount',
+            'toolbar' => 'undo redo removeformat | formatselect fontsizeselect | bold italic | rtl ltr | alignjustify alignright aligncenter alignleft | numlist bullist | blockquote table hr | image link media | wordcount fullscreen',
             'upload_directory' => 'tinyeditor',
         ],
 

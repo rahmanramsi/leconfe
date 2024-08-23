@@ -94,7 +94,7 @@ class TrackTable extends Component implements HasForms, HasTable
                     ]),
                 TinyEditor::make('meta.policy')
                     ->label(__('general.track_policy'))
-                    ->profile('advanced'),
+                    ->profile('basic'),
             ]);
     }
 }
