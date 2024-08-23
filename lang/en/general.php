@@ -588,7 +588,7 @@ return [
     'paid_status_decision' => 'Paid Status Decision',
     'enroll_users' => 'Enroll Users',
     'enroll' => 'Enroll',
-    'user_details' => 'User details',
+    'user_details' => 'User Details',
     'select_registration_paid_date' => 'Select registration paid date..',
     'paid' => 'Paid',
     'unpaid' => 'Unpaid',
