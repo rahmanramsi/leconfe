@@ -1,0 +1,14 @@
+{
+    "name": "leconfe/custom-header",
+    "autoload": {
+        "psr-4": {
+            "CustomHeader\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Leconfe"
+        }
+    ],
+    "require": {}
+}
