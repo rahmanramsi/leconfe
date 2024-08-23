@@ -9,6 +9,8 @@ use App\Infolists\Components\LivewireEntry;
 use App\Infolists\Components\VerticalTabs as InfolistsVerticalTabs;
 use App\Panel\ScheduledConference\Livewire\Registration\RegistrationSetting;
 use App\Panel\ScheduledConference\Livewire\Registration\RegistrationTypeTable;
+use App\Panel\ScheduledConference\Resources\RegistrantResource;
+use Filament\Actions\Action;
 use Illuminate\Contracts\Support\Htmlable;
 
 class Registrations extends Page
@@ -30,6 +32,18 @@ class Registrations extends Page
     public function getHeading(): string|Htmlable
     {
         return __('general.registrations_settings');
+    }
+
+    public function getHeaderActions(): array
+    {
+        return [
+            Action::make('registrant')
+                ->label(__('general.registrant_list'))
+                ->color('gray')
+                ->icon('heroicon-o-user-plus')
+                ->outlined()
+                ->url(RegistrantResource::getUrl('index'))
+        ];
     }
 
     protected static ?string $title = 'Registration Settings';
