@@ -90,8 +90,7 @@ class AppServiceProvider extends ServiceProvider
     protected function extendBlade(): void
     {
         Blade::directive('hook', function (string $name) {
-
-            return '<?php $output = null; \App\Facades\Hook::call(' . "$name" . ', [&$output]); echo $output; ?>';
+            return '<?php $output = null; \App\Facades\Hook::call(' . "$name" . ',[&$output]); echo $output; ?>';
         });
     }
 
