@@ -41,5 +41,5 @@
         </style>
     @endif
 
-    @hook('frontend:head')
+    @hook('Frontend::Views::Head')
 </head>

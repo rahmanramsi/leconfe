@@ -31,7 +31,7 @@ class PaperGalley extends Page
 
         abort_if(! $media, 404);
 
-        if(!Hook::call('frontend.paper.galley', $galley)){
+        if(!Hook::call('Frontend::PaperGalley', $galley)){
             return response()
                 ->download($media->getPath(), $media->file_name);
         }
