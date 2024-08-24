@@ -383,6 +383,7 @@ return [
 
     'submission_complete' => 'Dorëzimi i Plotë',
     'submission_payment' => 'Pagesa e Dorëzimit',
+    'enable_submission_payment' => 'Aktivizo pagesën e dorëzimit',
     'turn_off_to_disable_submission_payment' => "Çaktivizo për të çaktivizuar procesin e pagesës së dorëzimit.",
     'submission_payment_toggle_warning' => "Kujdes: duke e çaktivizuar këtë, do të bëni që të gjitha parashtresat që janë në proces pagese të kalojnë në fazën tjetër, nuk do të mund t'i ktheni.",
     'submitted_abstract' => 'Keni dorëzuar abstraktin tuaj, dhe është dërguar një email për t\'ju njoftuar. Menaxheri do të shqyrtojë dorëzimin tuaj dhe do t\'ju dërgojë një email tjetër kur të përfundojë.',

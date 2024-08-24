@@ -16,6 +16,8 @@ use App\Models\Submission;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Toggle;
 use Filament\Infolists\Components\TextEntry;
+use Illuminate\Support\HtmlString;
+use Illuminate\View\Compilers\BladeCompiler;
 
 class PaymentSetting extends Component implements HasForms
 {
@@ -37,8 +39,8 @@ class PaymentSetting extends Component implements HasForms
                 Section::make()
                     ->schema([
                         Toggle::make('meta.submission_payment')
-                            ->label(__('general.submission_payment'))
-                            ->helperText(__('general.submission_payment_toggle_warning')),
+                            ->label(__('general.enable_submission_payment'))
+                            ->helperText(fn () => !app()->getCurrentScheduledConference()->isSubmissionRequirePayment() ? null : __('general.submission_payment_toggle_warning')),
                         TinyEditor::make('meta.payment_policy')
                             ->label(__('general.payment_policy'))
                             ->plugins('advlist autoresize codesample directionality emoticons fullscreen hr image imagetools link lists media table toc wordcount code')
