@@ -835,5 +835,13 @@ return [
     'copyright_year_helper' => 'Choose how a default copyright date is selected for a paper. This default can be overridden on a case-by-case basis. If you "publish as you go", don\'t use the proceeding\'s publication date.',
     'copyright_year_use_proceeding_date' => "Use the proceeding's publication date",
     'copyright_year_use_paper_date' => "Use the paper's publication date",
+    'submission_copyright_holder' => 'Copyright Holder',
+    'submission_copyright_holder_helper' => 'Copyright will be assigned automatically to admin admin when this is published.',
+    'permissions_and_disclosure' => 'Permissions and Disclosure',
+    'submission_copyright_year' => 'Copyright Year',
+    'submission_copyright_year_helper' => 'The copyright year will be set automatically based on the publication date.',
+    'submission_license_url' => 'License URL',
+    'submission_license_url_helper' => 'The license will be set automatically to <a class="text-primary-700 underline" href=\':licenseUrl\' target=\'_blank\'>:licenseName</a> when this is published.' ,
+    'override' => 'Override',
 ];
 

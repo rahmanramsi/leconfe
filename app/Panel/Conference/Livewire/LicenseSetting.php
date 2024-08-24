@@ -71,8 +71,9 @@ class LicenseSetting extends Component implements HasForms
                             ])
                             ->live(),
                         TextInput::make('meta.license_url_custom')
-                            ->visible(fn(Get $get) => $get('meta.license') === 'custom') 
+                            ->visible(fn(Get $get) => $get('meta.license_url') === 'custom') 
                             ->label(__('general.submission_license_custom_url'))
+                            ->url()
                             ->required(),
                         Radio::make('meta.copyright_year')
                             ->label(__('general.copyright_year'))

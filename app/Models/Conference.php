@@ -164,6 +164,15 @@ class Conference extends Model implements HasAvatar, HasMedia, HasName
         return $this->getFirstMedia('thumbnail')?->getAvailableUrl(['thumb', 'thumb-xl']) ?? Vite::asset('resources/assets/images/placeholder-vertical.jpg');
     }
 
+    public function getLicenseUrl(): string
+    {
+        $licenseUrl = $this->getMeta('license_url');
+        if($licenseUrl == 'custom'){
+            return $this->getMeta('license_url_custom');
+        }
+        return $licenseUrl;
+    }
+
     protected function getAllDefaultMeta(): array
     {
         return [
