@@ -147,6 +147,15 @@ class ScheduledConference extends Model implements HasMedia, HasAvatar, HasName
         return route('livewirePageGroup.scheduledConference.pages.home', ['conference' => $this->conference, 'serie' => $this->path]);
     }
 
+    public function isSubmissionRequirePayment(): bool
+    {
+        if(!$this->getMeta('submission_payment')) {
+            return false;
+        }
+        
+        return $this->getMeta('submission_payment');
+    }
+
     public function isCurrent(): bool
     {
         return $this->state == ScheduledConferenceState::Current;

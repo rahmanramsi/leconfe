@@ -10,7 +10,12 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Concerns\InteractsWithForms;
 use App\Actions\ScheduledConferences\ScheduledConferenceUpdateAction;
+use App\Models\Enums\SubmissionStage;
+use App\Models\Enums\SubmissionStatus;
+use App\Models\Submission;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Toggle;
+use Filament\Infolists\Components\TextEntry;
 
 class PaymentSetting extends Component implements HasForms
 {
@@ -31,28 +36,50 @@ class PaymentSetting extends Component implements HasForms
             ->schema([
                 Section::make()
                     ->schema([
+                        Toggle::make('meta.submission_payment')
+                            ->label(__('general.submission_payment'))
+                            ->helperText(__('general.submission_payment_toggle_warning')),
                         TinyEditor::make('meta.payment_policy')
                             ->label(__('general.payment_policy'))
-                            ->minHeight(450)
-                            ->disabled(fn () =>  auth()->user()->cannot('RegistrationSetting:edit')),
-                        Actions::make([
-                            Action::make('save')
-                                ->label(__('general.save'))
-                                ->successNotificationTitle(__('general.saved'))
-                                ->failureNotificationTitle(__('general.data_could_not_saved'))
-                                ->action(function (Action $action) {
-                                    $formData = $this->form->getState();
-                                    try {
-                                        ScheduledConferenceUpdateAction::run(app()->getCurrentScheduledConference(), $formData);
-                                        $action->sendSuccessNotification();
-                                    } catch (\Throwable $th) {
-                                        $action->sendFailureNotification();
-                                        throw $th;
-                                    }
-                                })
-                                ->authorize('RegistrationSetting:edit'),
-                        ])->alignRight(),
+                            ->plugins('advlist autoresize codesample directionality emoticons fullscreen hr image imagetools link lists media table toc wordcount code')
+                            ->toolbar('undo redo removeformat | formatselect fontsizeselect | bold italic | rtl ltr | alignjustify alignright aligncenter alignleft | numlist bullist | forecolor backcolor | blockquote table hr | image link code')
+                            ->minHeight(450),
                     ])
+                    ->disabled(fn () =>  auth()->user()->cannot('RegistrationSetting:edit')),
+                Actions::make([
+                    Action::make('save_changes')
+                        ->label(__('general.save_changes'))
+                        ->successNotificationTitle(__('general.saved'))
+                        ->failureNotificationTitle(__('general.data_could_not_saved'))
+                        ->action(function (Action $action) {
+                            $formData = $this->form->getState();
+
+                            try {
+
+                                ScheduledConferenceUpdateAction::run(app()->getCurrentScheduledConference(), $formData);
+
+                                Submission::where('stage', SubmissionStage::Payment)
+                                    ->orWhere('status', SubmissionStatus::OnPayment)
+                                    ->orWhere('status', SubmissionStatus::PaymentDeclined)
+                                    ->get()
+                                    ->each(function (Submission $submission) {
+                                        $submission->update([
+                                            'stage' => SubmissionStage::PeerReview,
+                                            'status' => SubmissionStatus::OnReview,
+                                        ]);
+                                    });
+
+                            } catch (\Throwable $th) {
+
+                                $action->failure();
+                                throw $th;
+
+                            }
+
+                            $action->success();
+                        })
+                        ->authorize('RegistrationSetting:edit'),
+                ])->alignRight(),
             ])
             ->statePath('formData');
     }

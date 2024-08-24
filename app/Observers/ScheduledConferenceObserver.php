@@ -150,6 +150,7 @@ class ScheduledConferenceObserver
             'review_invitation_response_deadline' => 30,
             'review_completion_deadline' => 30,
             'timezone' => 'UTC',
+            'submission_payment' => true,
         ]);
 
     }

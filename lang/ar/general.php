@@ -381,6 +381,8 @@ return [
     'abstract_files' => 'ملفات الملخص',
     'submission_complete' => 'الاستلام مكتمل',
     'submission_payment' => 'دفع الاستلام',
+    'turn_off_to_disable_submission_payment' => "قم بإيقاف تشغيله لتعطيل عملية دفع الإرسال.",
+    'submission_payment_toggle_warning' => "تحذير: من خلال تعطيل هذا، فإن جميع الإرساليات الموجودة في عملية الدفع ستنتقل إلى المرحلة التالية، ولن تتمكن من إرجاعها.",
     'submitted_abstract' => 'لقد قمت بتقديم ملخصك، وتم إرسال بريد إلكتروني لإعلامك. سيتحقق المدير من استلامك ويرسل لك بريدًا إلكترونيًا آخر بمجرد الانتهاء.',
     'go_to_submission_page' => 'انتقل إلى <a href=":url" class="text-primary-500">صفحة الاستلامات</a> للتحقق من حالة تقديمك.',
     'scheduled_conference_identity' => 'هوية المؤتمر المجدول',

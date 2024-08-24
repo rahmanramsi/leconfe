@@ -365,6 +365,8 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
 
     public function infolist(Infolist $infolist): Infolist
     {
+        $isPaymentRequired = app()->getCurrentScheduledConference()->isSubmissionRequirePayment();
+
         return $infolist
             ->schema([
                 HorizontalTabs::make()
@@ -375,13 +377,13 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                             ->label(__('general.workflow'))
                             ->schema([
                                 Tabs::make()
-                                    ->activeTab(function () {
+                                    ->activeTab(function () use($isPaymentRequired) {
                                         return match ($this->record->stage) {
                                             SubmissionStage::CallforAbstract => 1,
                                             SubmissionStage::Payment => 2,
-                                            SubmissionStage::PeerReview => 3,
-                                            SubmissionStage::Presentation => 4,
-                                            SubmissionStage::Editing, SubmissionStage::Proceeding => 5,
+                                            SubmissionStage::PeerReview => $isPaymentRequired ? 3 : 2,
+                                            SubmissionStage::Presentation => $isPaymentRequired ? 4 : 3,
+                                            SubmissionStage::Editing, SubmissionStage::Proceeding => $isPaymentRequired ? 5 : 4,
                                             default => null,
                                         };
                                     })
@@ -404,7 +406,8 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                                                     ->livewire(Payment::class, [
                                                         'submission' => $this->record,
                                                     ]),
-                                            ]),
+                                            ])
+                                            ->hidden(fn () => !$isPaymentRequired),
                                         Tab::make('Peer Review')
                                             ->label(__('general.peer_review'))
                                             ->icon('iconpark-checklist-o')

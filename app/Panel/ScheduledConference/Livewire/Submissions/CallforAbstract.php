@@ -111,9 +111,11 @@ class CallforAbstract extends Component implements HasActions, HasForms
 
     public function acceptAction()
     {
+        $isPaymentRequired = app()->getCurrentScheduledConference()->isSubmissionRequirePayment();
+        
         return Action::make('accept')
             ->modalHeading(__('general.confirmation'))
-            ->modalSubmitActionLabel(__('general.send_for_payment'))
+            ->modalSubmitActionLabel(fn () => $isPaymentRequired ? __('general.send_for_payment') : __('general.send_for_review'))
             ->authorize('acceptAbstract', $this->submission)
             ->modalWidth('2xl')
             ->record($this->submission)
