@@ -24,7 +24,7 @@ class HookManager
      * Register Hook
      *
      */
-    public function add(string $name, callable $callback, int $sequence = 1): void
+    public function add(string $name, callable $callback, int $sequence = self::SEQUENCE_NORMAL): void
     {
         $this->hooks[$name][$sequence][] = &$callback;
     }
