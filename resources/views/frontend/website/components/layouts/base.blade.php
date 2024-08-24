@@ -9,10 +9,12 @@
     <x-website::layouts.head :title="$title" />
 
     <body class="page antialiased" x-data>
+        
         {{ $slot }}
-
+        
         @livewireScriptConfig
+
+        @hook('Frontend::Views::Body::End')
     </body>
 
-    @hook('frontend:footer')
 </html>

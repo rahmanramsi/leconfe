@@ -1,0 +1,5 @@
+name: 'Custom Header Plugin'
+folder: CustomHeader
+author: 'Leconfe'
+description: 'Add a custom header & footer to your website'
+version: 1.0.0
