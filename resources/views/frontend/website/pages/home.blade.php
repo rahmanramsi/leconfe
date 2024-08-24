@@ -7,7 +7,19 @@
         @endif
 
         <div class="space-y-4 conferences">
-            <x-website::heading-title title="Conference List" />
+            <div x-data="{filter: false}">
+                <div class="flex">
+                    <x-website::heading-title title="Conference List" class="grow"/>
+                    <label class="px-1 flex-none swap swap-rotate">
+                        <input type="checkbox" @click="filter = !filter" />
+                        <x-heroicon-m-funnel class="swap-off h-5 w-5 fill-current" />
+                        <x-heroicon-m-x-mark class="swap-on h-5 w-5 fill-current" />
+                    </label>
+                </div>
+                <div class="mt-2 px-5 py-3 bg-gray-100 rounded" x-show="filter" x-transition>
+                    Filter
+                </div>
+            </div>
             <div class="space-y-4 conference-current">
                 @if ($conferences->isNotEmpty())
                     <div class="grid gap-6 xl:grid-cols-2">
