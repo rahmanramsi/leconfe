@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 use Rahmanramsi\LivewirePageGroup\PageGroup;
 use Rahmanramsi\LivewirePageGroup\Pages\Page;
 
-class PaperGalley extends Page
+class PaperGalleyDownload extends Page
 {
     function __invoke()
     {
@@ -24,22 +24,25 @@ class PaperGalley extends Page
         abort_if(! $submission, 404);
 
         $galley = $submission->galleys()->where('id', $currentRoute->parameter('galley'))->first();
-        
+
+        abort_if(! $galley, 404);
+
+        $media = Media::findByUuid($galley->file->media->uuid);
+
+        abort_if(! $media, 404);
+
         $returner = null;
 
-        Hook::call('Frontend::PaperGalley', [$galley, &$returner]);
-
-        if (!$returner) {
-            return redirect()->route(PaperGalleyDownload::getRouteName());
-        }
-
-        return $returner;
+        Hook::call('Frontend::PaperGalley', [$galley, $media, &$returner]);
+        
+        return response()
+            ->download($media->getPath(), $media->file_name);
     }
 
     public static function routes(PageGroup $pageGroup): void
     {
         $slug = static::getSlug();
-        Route::get("/paper/view/{submission}/{galley}", static::class)
+        Route::get("/paper/download/{submission}/{galley}", static::class)
             ->middleware(static::getRouteMiddleware($pageGroup))
             ->withoutMiddleware(static::getWithoutRouteMiddleware($pageGroup))
             ->name((string) str($slug)->replace('/', '.'));

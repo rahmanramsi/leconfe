@@ -126,9 +126,9 @@
 
             @livewire(App\Livewire\CitationStyleLanguage::class, ['submission' => $paper])
 
-            @hook('frontend.paper.detail', $paper)
+            @hook('Frontend::Paper::Detail', $paper)
         </div>
         
-        @hook('frontend.paper.footer', $paper)
+        @hook('Frontend::Paper::Footer', $paper)
     </div>
 </x-website::layouts.main>
