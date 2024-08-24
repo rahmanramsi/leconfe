@@ -55,6 +55,8 @@ class ParticipantList extends Component implements HasForms, HasTable
 
     public Submission $submission;
 
+    public bool $enrollment = false;
+
     public array $selectedParticipant = [];
 
     public static function renderSelectParticipant(User $participant): string
@@ -317,10 +319,9 @@ class ParticipantList extends Component implements HasForms, HasTable
                         ->label(__('general.enroll_user'))
                         ->visible(
                             fn (SubmissionParticipant $record): bool =>
-                                $this->submission->isParticipantAuthor($record->user) &&
-                                (in_array($this->submission->status, [SubmissionStatus::OnPayment, SubmissionStatus::PaymentDeclined]) ||
-                                $this->submission->stage === SubmissionStage::Payment) &&
-                                !$this->submission->registration
+                                $this->enrollment &&
+                                !$this->submission->registration &&
+                                $this->submission->isParticipantAuthor($record->user)
                         )
                         ->successNotificationTitle(__('general.saved'))
                         ->form(fn (SubmissionParticipant $record) => EnrollUser::enrollForm($record->user, RegistrationType::LEVEL_AUTHOR))

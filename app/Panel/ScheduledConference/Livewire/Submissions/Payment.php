@@ -263,7 +263,8 @@ class Payment extends Component implements HasActions, HasForms
                 );
 
                 $action->success();
-            });
+            })
+            ->disabled(fn () => !$this->submission->registration);
     }
 
     public function approvePaymentAction()
@@ -329,7 +330,8 @@ class Payment extends Component implements HasActions, HasForms
                 );
 
                 $action->success();
-            });
+            })
+            ->disabled(fn () => !$this->submission->registration);
     }
 
     public function render()

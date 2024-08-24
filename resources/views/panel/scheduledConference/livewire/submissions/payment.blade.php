@@ -211,7 +211,7 @@
                             SubmissionStatus::Published,
                     ])
                 ]) x-show="!decision">
-                    @if ($user->can('approvePayment', $submission) && ! in_array($this->submission->status, [SubmissionStatus::OnReview, SubmissionStatus::Editing, SubmissionStatus::OnPresentation]))
+                    @if ($submission->registration && $user->can('approvePayment', $submission) && ! in_array($this->submission->status, [SubmissionStatus::OnReview, SubmissionStatus::Editing, SubmissionStatus::OnPresentation]))
                         {{ $this->approvePaymentAction() }}
                     @endif
                     @if ($user->can('declinePayment', $submission) && ! in_array($this->submission->status, [SubmissionStatus::Declined, SubmissionStatus::PaymentDeclined]))
@@ -221,7 +221,7 @@
             @endif
 
             {{-- Participants --}}
-            @livewire(App\Panel\ScheduledConference\Livewire\Submissions\Components\ParticipantList::class, ['submission' => $submission])
+            @livewire(App\Panel\ScheduledConference\Livewire\Submissions\Components\ParticipantList::class, ['submission' => $submission, 'enrollment' => true])
 
             @if ($isRegistrationOpen)
 
