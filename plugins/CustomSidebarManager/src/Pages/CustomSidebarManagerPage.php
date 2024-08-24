@@ -18,8 +18,6 @@ use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\App;
-use Kra8\Snowflake\Snowflake;
 
 class CustomSidebarManagerPage extends Page implements HasForms, HasTable
 {
@@ -104,8 +102,8 @@ class CustomSidebarManagerPage extends Page implements HasForms, HasTable
         return [
             Action::make('create')
                 ->label('Create Custom Sidebar')
-                ->action(function (array $data) {
-                    $data['id'] = \Illuminate\Support\Str::uuid()->toString();
+                ->action(function (array $data) {   
+                    $data['id'] = rand(100000, 999999);
 
                     $plugin = Plugin::getPlugin('CustomSidebarManager');
                     $customSidebars = $plugin->getSetting('custom_sidebars', []);
