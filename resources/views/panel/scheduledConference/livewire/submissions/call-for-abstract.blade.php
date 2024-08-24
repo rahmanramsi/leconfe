@@ -2,6 +2,7 @@
 @use('App\Models\Enums\SubmissionStage')
 @use('App\Constants\SubmissionFileCategory')
 @use('App\Models\Enums\SubmissionStatus')
+@use('App\Models\Enums\UserRole')
 
 @php
     $user = auth()->user();
@@ -34,7 +35,7 @@
 
                 <div @class([
                     'space-y-4',
-                    'hidden' => in_array($submission->status, [SubmissionStatus::Published])
+                    'hidden' => !($user->hasAnyRole([UserRole::ConferenceManager, UserRole::Admin]) || $this->submission->isParticipantEditor($user)) || in_array($submission->status, [SubmissionStatus::Published])
                 ]) x-show="!decision">
                     @if ($user->can('acceptAbstract', $submission) && ! in_array($this->submission->status, [SubmissionStatus::OnPayment, SubmissionStatus::OnReview, SubmissionStatus::PaymentDeclined, SubmissionStatus::Editing, SubmissionStatus::OnPresentation]))
                         {{ $this->acceptAction() }}

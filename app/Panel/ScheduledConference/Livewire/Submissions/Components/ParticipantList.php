@@ -376,7 +376,8 @@ class ParticipantList extends Component implements HasForms, HasTable
                         ->visible(
                             fn (SubmissionParticipant $record): bool =>
                                 $record->user->email !== $this->submission->user->email &&
-                                ! in_array($this->submission->status, [SubmissionStatus::Published, SubmissionStatus::Declined, SubmissionStatus::Withdrawn])
+                                ! in_array($this->submission->status, [SubmissionStatus::Published, SubmissionStatus::Declined, SubmissionStatus::Withdrawn]) &&
+                                $record->user->getKey() !== auth()->user()->getKey()
                         )
                         ->label(__('general.remove'))
                         ->successNotificationTitle(__('general.participant_removed'))

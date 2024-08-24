@@ -58,7 +58,7 @@
 
                     <div @class([
                         'flex flex-col gap-4 col-span-4',
-                        'hidden' => in_array($submission->status, [
+                        'hidden' => !($user->hasAnyRole([UserRole::ConferenceManager, UserRole::Admin]) || $this->submission->isParticipantEditor($user)) || in_array($submission->status, [
                             SubmissionStatus::Queued, 
                             SubmissionStatus::Published,
                             SubmissionStatus::OnPayment,

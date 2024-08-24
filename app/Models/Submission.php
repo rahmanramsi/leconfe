@@ -201,6 +201,37 @@ class Submission extends Model implements HasMedia, Sortable
         return $this->hasOne(Registration::class);
     }
 
+    public function isParticipantEditor(User $user): bool
+    {
+        $isParticipantEditor = $this->editors()
+            ->where('user_id', $user->getKey())
+            ->limit(1)
+            ->first();
+
+        if(!$isParticipantEditor) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function isParticipantAuthor(User $user): bool
+    {
+        $isParticipantAuthor = $this->participants()
+            ->whereHas('role', function (Builder $query) {
+                $query->where('name', UserRole::Author->value);
+            })
+            ->where('user_id', $user->getKey())
+            ->limit(1)
+            ->first();
+
+        if(!$isParticipantAuthor) {
+            return false;
+        }
+
+        return true;
+    }
+
     public function scopePublished(Builder $query)
     {
         return $query->status(SubmissionStatus::Published);
@@ -229,23 +260,6 @@ class Submission extends Model implements HasMedia, Sortable
     public function isIncomplete(): bool
     {
         return $this->status == SubmissionStatus::Incomplete;
-    }
-
-    public function isParticipantAuthor(User $user): bool
-    {
-        $isParticipantAuthor = $this->participants()
-            ->whereHas('role', function (Builder $query) {
-                $query->where('name', UserRole::Author->value);
-            })
-            ->where('user_id', $user->id)
-            ->limit(1)
-            ->first();
-
-        if(!$isParticipantAuthor) {
-            return false;
-        }
-
-        return true;
     }
 
     public function isStatusRequirePayment(): bool

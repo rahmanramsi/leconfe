@@ -248,6 +248,10 @@ class SubmissionPolicy
             return false;
         }
 
+        if(!$submission->registration) {
+            return false;
+        }
+
         if ($user->can('Submission:approvePayment')) {
             return true;
         }

@@ -1,6 +1,7 @@
 @use('App\Panel\ScheduledConference\Livewire\Submissions\Components')
 @use('App\Models\Enums\SubmissionStage')
 @use('App\Models\Enums\SubmissionStatus')
+@use('App\Models\Enums\UserRole')
 
 @php
     $user = auth()->user();
@@ -205,13 +206,13 @@
 
                 <div @class([
                     'flex flex-col gap-4 col-span-4',
-                    'hidden' => in_array($submission->status, [
+                    'hidden' => !($user->hasAnyRole([UserRole::ConferenceManager, UserRole::Admin]) || $this->submission->isParticipantEditor($user)) || in_array($submission->status, [
                             SubmissionStatus::Queued,
                             SubmissionStatus::Declined,
                             SubmissionStatus::Published,
                     ])
                 ]) x-show="!decision">
-                    @if ($submission->registration && $user->can('approvePayment', $submission) && ! in_array($this->submission->status, [SubmissionStatus::OnReview, SubmissionStatus::Editing, SubmissionStatus::OnPresentation]))
+                    @if ($user->can('approvePayment', $submission) && ! in_array($this->submission->status, [SubmissionStatus::OnReview, SubmissionStatus::Editing, SubmissionStatus::OnPresentation]))
                         {{ $this->approvePaymentAction() }}
                     @endif
                     @if ($user->can('declinePayment', $submission) && ! in_array($this->submission->status, [SubmissionStatus::Declined, SubmissionStatus::PaymentDeclined]))

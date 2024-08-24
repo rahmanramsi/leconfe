@@ -335,13 +335,21 @@ class Payment extends Component implements HasActions, HasForms
 
     public function render()
     {
+        $user = auth()->user();
+
         return view('panel.scheduledConference.livewire.submissions.payment', [
             'currentScheduledConference' => app()->getCurrentScheduledConference(),
             'submissionRegistration' => $this->submission->registration,
             'submissionRegistrant' => $this->submission->registration->user ?? null,
-            'isSubmissionAuthor' => $this->submission->isParticipantAuthor(auth()->user()),
+            'isSubmissionAuthor' => $this->submission->isParticipantAuthor($user),
             'isRegistrationOpen' => Timeline::isRegistrationOpen(),
-            'submissionDecision' => in_array($this->submission->status, [SubmissionStatus::OnReview, SubmissionStatus::PaymentDeclined, SubmissionStatus::OnPresentation, SubmissionStatus::Editing]),
+            'submissionDecision' => ($user->hasAnyRole([UserRole::ConferenceManager, UserRole::Admin]) || $this->submission->isParticipantEditor($user)) && 
+                in_array($this->submission->status, [
+                    SubmissionStatus::OnReview, 
+                    SubmissionStatus::PaymentDeclined, 
+                    SubmissionStatus::OnPresentation, 
+                    SubmissionStatus::Editing
+                ]),
         ]);
     }
 }

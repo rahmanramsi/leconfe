@@ -161,13 +161,6 @@ class CallforAbstract extends Component implements HasActions, HasForms
                     try {
                         $this->submission->state()->acceptAbstract();
 
-                        if (auth()->user()->hasRole(UserRole::ConferenceEditor->value)) {
-                            $this->submission->participants()->create([
-                                'user_id' => auth()->id(),
-                                'role_id' => Role::where('name', UserRole::ConferenceEditor->value)->first()->getKey(),
-                            ]);
-                        }
-
                         if (! $data['no-notification']) {
                             try {
                                 $this->submission->user
@@ -213,8 +206,18 @@ class CallforAbstract extends Component implements HasActions, HasForms
 
     public function render()
     {
+        $user = auth()->user();
+
         return view('panel.scheduledConference.livewire.submissions.call-for-abstract', [
-            'submissionDecision' => in_array($this->submission->status, [SubmissionStatus::OnPayment, SubmissionStatus::OnReview, SubmissionStatus::Editing, SubmissionStatus::Declined, SubmissionStatus::PaymentDeclined, SubmissionStatus::OnPresentation]),
+            'submissionDecision' => ($user->hasAnyRole([UserRole::ConferenceManager, UserRole::Admin]) || $this->submission->isParticipantEditor($user)) && 
+            in_array($this->submission->status, [
+                SubmissionStatus::OnPayment, 
+                SubmissionStatus::OnReview, 
+                SubmissionStatus::Editing, 
+                SubmissionStatus::Declined, 
+                SubmissionStatus::PaymentDeclined, 
+                SubmissionStatus::OnPresentation
+            ]),
         ]);
     }
 }
