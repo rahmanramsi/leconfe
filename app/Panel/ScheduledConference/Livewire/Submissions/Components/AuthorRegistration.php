@@ -166,20 +166,18 @@ class AuthorRegistration extends \Livewire\Component implements HasForms, HasTab
                                     )
                                 );
                             });
-
-                            $action->sendSuccessNotification();
-
-                            $action->successRedirectUrl(
-                                SubmissionResource::getUrl('view', [
-                                    'record' => $this->submission->getKey()
-                                ])
-                            );
-
-                            return $action->success();
                         } catch (\Throwable $th) {
-                            $action->sendFailureNotification();
+                            $action->failure();
                             throw $th;
                         }
+
+                        $action->successRedirectUrl(
+                            SubmissionResource::getUrl('view', [
+                                'record' => $this->submission->getKey()
+                            ])
+                        );
+
+                        return $action->success();
                     }),
                 Action::make('author-registration-disabled')
                     ->label('')

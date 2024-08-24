@@ -231,6 +231,23 @@ class Submission extends Model implements HasMedia, Sortable
         return $this->status == SubmissionStatus::Incomplete;
     }
 
+    public function isParticipantAuthor(User $user): bool
+    {
+        $isParticipantAuthor = $this->participants()
+            ->whereHas('role', function (Builder $query) {
+                $query->where('name', UserRole::Author->value);
+            })
+            ->where('user_id', $user->id)
+            ->limit(1)
+            ->first();
+
+        if(!$isParticipantAuthor) {
+            return false;
+        }
+
+        return true;
+    }
+
     public function isStatusRequirePayment(): bool
     {
         if ($this->status === SubmissionStatus::OnReview ||

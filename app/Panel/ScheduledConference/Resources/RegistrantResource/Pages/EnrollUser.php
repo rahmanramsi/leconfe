@@ -59,7 +59,7 @@ class EnrollUser extends ListRecords
         ];
     }
 
-    public static function enrollForm(Model $record)
+    public static function enrollForm(Model $record, int $level)
     {
         $fullName = $record->full_name;
         $email = $record->email;
@@ -78,21 +78,21 @@ class EnrollUser extends ListRecords
                                     <td>
                                         <strong>{{ __('general.name') }}</strong>
                                     </td>
-                                    <td class=''>:</td>
+                                    <td>:</td>
                                     <td><strong class="font-semibold">{$fullName}</strong></td>
                                 </tr>
                                 <tr>
                                     <td>
                                         <strong>{{ __('general.email') }}</strong>
                                     </td>
-                                    <td class=''>:</td>
+                                    <td>:</td>
                                     <td>{$email}</td>
                                 </tr>
                                 <tr>
                                     <td>
                                         <strong>{{ __('general.affiliation') }}</strong>
                                     </td>
-                                    <td class=''>:</td>
+                                    <td>:</td>
                                     <td>{$affiliation}</td>
                                 </tr>
                             </table>
@@ -121,35 +121,35 @@ class EnrollUser extends ListRecords
                                         <td>
                                             <strong>{{ __('general.registration_type') }}</strong>
                                         </td>
-                                        <td class=''>:</td>
+                                        <td>:</td>
                                         <td><strong class="font-semibold">{$registrationType->type}</strong></td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <strong>{{ __('general.description') }}</strong>
                                         </td>
-                                        <td class=''>:</td>
+                                        <td>:</td>
                                         <td>{$description}</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <strong>{{ __('general.cost') }}</strong>
                                         </td>
-                                        <td class=''>:</td>
+                                        <td>:</td>
                                         <td>{$cost}</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <strong>{{ __('general.quota') }}</strong>
                                         </td>
-                                        <td class=''>:</td>
+                                        <td>:</td>
                                         <td>{$registrationType->getPaidParticipantCount()}/{$registrationType->quota}</td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <strong>{{ __('general.status') }}</strong>
                                         </td>
-                                        <td class=''>:</td>
+                                        <td>:</td>
                                         <td>{$status}</td>
                                     </tr>
                                 </table>
@@ -159,7 +159,7 @@ class EnrollUser extends ListRecords
             Select::make('registration_type_id')
                 ->label(__('general.registration_type'))
                 ->options(
-                    RegistrationType::where('level', '!=', RegistrationType::LEVEL_AUTHOR)
+                    RegistrationType::where('level', $level)
                         ->get()
                         ->pluck('type', 'id')
                         ->toArray()
@@ -270,7 +270,7 @@ class EnrollUser extends ListRecords
                     ->color('gray')
                     ->button()
                     ->model(Registration::class)
-                    ->form(fn(?Model $record) => static::enrollForm($record))
+                    ->form(fn(?Model $record) => static::enrollForm($record, RegistrationType::LEVEL_PARTICIPANT))
                     ->createAnother(false)
                     ->modalSubmitActionLabel(__('general.enroll'))
                     ->mutateFormDataUsing(function (Model $record, $data) { // record are user model
