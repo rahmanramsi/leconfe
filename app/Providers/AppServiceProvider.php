@@ -9,6 +9,7 @@ use App\Models\ScheduledConference;
 use Livewire\Livewire;
 use App\Classes\Settings;
 use App\Console\Kernel as ConsoleKernel;
+use App\Facades\Hook;
 use App\Http\Kernel as HttpKernel;
 use App\Listeners\SubmissionEventSubscriber;
 use App\Models\Conference;
@@ -89,7 +90,7 @@ class AppServiceProvider extends ServiceProvider
     protected function extendBlade(): void
     {
         Blade::directive('hook', function (string $name) {
-            return "<?php echo \App\Facades\Hook::call($name) ?>";
+            return '<?php $output = null; \App\Facades\Hook::call(' . "$name" . ',[&$output]); echo $output; ?>';
         });
     }
 

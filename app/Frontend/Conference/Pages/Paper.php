@@ -119,7 +119,7 @@ class Paper extends Page
             MetaTag::add('og:image', $this->paper->getFirstMedia('cover')->getAvailableUrl(['thumb']));
         }
 
-        Hook::call('frontend.paper.addMetadata', $this);
+        Hook::call('Frontend::Paper::addMetadata', [$this, $this->paper]);
     }
 
     public function canAccess(): bool
