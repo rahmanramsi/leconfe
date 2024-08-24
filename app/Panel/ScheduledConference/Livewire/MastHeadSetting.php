@@ -113,7 +113,7 @@ class MastHeadSetting extends Component implements HasForms
                             ->schema([
                                 TinyEditor::make('meta.about')
                                     ->label(__('general.about_the_scheduled_conference'))
-                                    ->profile('basic'),
+                                    ->profile('advanced'),
                             ])
                     ]),
                 Actions::make([

@@ -141,3 +141,7 @@
 #citationOutput .csl-left-margin {
     display: none;
 }
+
+.table :where(th, td) {
+    @apply p-0
+}
