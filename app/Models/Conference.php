@@ -193,7 +193,10 @@ class Conference extends Model implements HasAvatar, HasMedia, HasName
             'downloadable_citation_formats' => [
                 'ris',
                 'bibtex',
-            ]
+            ],
+            'copyright_holder' => 'author',
+            'license_url' => "https://creativecommons.org/licenses/by-nc-nd/4.0",
+            'copyright_year' => 'paper',
         ];
     }
 }

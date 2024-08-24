@@ -8,6 +8,7 @@ use App\Panel\Conference\Livewire\Forms\Conferences\SearchEngineSetting;
 use App\Infolists\Components\VerticalTabs as InfolistsVerticalTabs;
 use App\Panel\Conference\Livewire\CitationSetting;
 use App\Panel\Conference\Livewire\Forms\Conferences\DOIRegistration;
+use App\Panel\Conference\Livewire\LicenseSetting;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Infolists\Components\Tabs;
@@ -69,13 +70,19 @@ class DistributionSetting extends Page implements HasForms, HasInfolists
                             ->schema([
                                 InfolistsVerticalTabs\Tabs::make()
                                     ->schema([
+                                        InfolistsVerticalTabs\Tab::make('License')
+                                            ->label('License')
+                                            ->schema([
+                                                LivewireEntry::make('license')
+                                                    ->livewire(LicenseSetting::class),
+                                            ]),
                                         InfolistsVerticalTabs\Tab::make('Citation')
                                             ->label(__('general.citation'))
                                             ->schema([
                                                 LivewireEntry::make('citation')
                                                     ->livewire(CitationSetting::class),
                                             ]),
-                                     
+                                        
                                     ]),
                             ]),
                         Tabs\Tab::make('DOI')
