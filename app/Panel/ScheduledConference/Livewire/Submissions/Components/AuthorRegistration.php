@@ -67,7 +67,8 @@ class AuthorRegistration extends \Livewire\Component implements HasForms, HasTab
             ])
             ->actions([
                 Action::make('author-registration')
-                    ->label('')
+                    ->label(__('general.register'))
+                    ->size('xs')
                     ->successNotificationTitle(__('general.saved'))
                     ->failureNotificationTitle(__('general.failed'))
                     ->requiresConfirmation()
@@ -178,17 +179,10 @@ class AuthorRegistration extends \Livewire\Component implements HasForms, HasTab
                         );
 
                         return $action->success();
-                    }),
-                Action::make('author-registration-disabled')
-                    ->label('')
-                    ->requiresConfirmation()
-                    ->color(Color::Red)
-                    ->modalHeading(__('general.author_registration'))
-                    ->modalSubmitAction(false)
-                    ->modalCancelActionLabel('Okay')
-                    ->modalDescription(__('general.registration_are_closed')),
+                    })
+                    ->visible(fn (Model $record) => $record->isOpen()),
             ])
-            ->recordAction(fn (Model $record) => $record->isOpen() ? 'author-registration' : 'author-registration-disabled')
+            ->recordAction('author-registration')
             ->paginated(false);
     }
     

@@ -57,7 +57,8 @@ class PaymentManualList extends \Livewire\Component implements HasForms, HasTabl
             ->recordAction('details')
             ->actions([
                 Action::make('details')
-                    ->label('')
+                    ->label(__('general.details'))
+                    ->size('xs')
                     ->modalHeading(fn (Model $record) => $record->name . ' ' . __('general.details'))
                     ->infolist([
                         TextEntry::make('detail')
