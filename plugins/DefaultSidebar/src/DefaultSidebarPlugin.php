@@ -21,6 +21,7 @@ class DefaultSidebarPlugin extends Plugin
         if($scheduledConference){
             return [
                 new Sidebar\SubmitNowSidebar,
+                new Sidebar\RegisterNowSidebar,
                 new Sidebar\CommitteeSidebar,
                 new Sidebar\TopicsSidebar,
                 new Sidebar\TimelineSidebar,
