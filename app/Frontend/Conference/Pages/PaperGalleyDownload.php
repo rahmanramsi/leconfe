@@ -30,10 +30,6 @@ class PaperGalleyDownload extends Page
         $media = Media::findByUuid($galley->file->media->uuid);
 
         abort_if(! $media, 404);
-
-        $returner = null;
-
-        Hook::call('Frontend::PaperGalley', [$galley, $media, &$returner]);
         
         return response()
             ->download($media->getPath(), $media->file_name);
