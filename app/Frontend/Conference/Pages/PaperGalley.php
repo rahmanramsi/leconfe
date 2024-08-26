@@ -25,12 +25,21 @@ class PaperGalley extends Page
 
         $galley = $submission->galleys()->where('id', $currentRoute->parameter('galley'))->first();
         
+        abort_if(! $galley, 404);
+
+        $media = Media::findByUuid($galley->file->media->uuid);
+
+        abort_if(! $media, 404);
+
         $returner = null;
 
         Hook::call('Frontend::PaperGalley', [$galley, &$returner]);
 
         if (!$returner) {
-            return redirect()->route(PaperGalleyDownload::getRouteName());
+            return redirect()->route(PaperGalleyDownload::getRouteName(), [
+                'submission' => $submission->id,
+                'galley' => $galley->id,
+            ]);
         }
 
         return $returner;
