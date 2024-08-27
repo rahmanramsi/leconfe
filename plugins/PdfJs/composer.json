@@ -1,0 +1,14 @@
+{
+    "name": "leconfe/pdf-js",
+    "autoload": {
+        "psr-4": {
+            "PdfJs\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Leconfe"
+        }
+    ],
+    "require": {}
+}
