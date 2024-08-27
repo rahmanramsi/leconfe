@@ -85,6 +85,40 @@
                     </div>
                 </section>
             @endif
+            @if($paper->track)
+                <section class="track">
+                    <h2 class="pb-1 mb-3 text-base font-medium border-b border-b-slate-200">
+                        {{ __('general.track') }}
+                    </h2>
+                    <div class="content text-slate-800">
+                        <p class="text-sm">{{ $paper->track->title }}</p>
+                    </div>
+                </section>
+            @endif
+            @if($paper->getMeta('license_url') || app()->getCurrentConference()->getMeta('license_terms'))
+                <section class="license">
+                    <h2 class="pb-1 mb-3 text-base font-medium border-b border-b-slate-200">
+                        {{ __('general.license') }}
+                    </h2>
+                    <div class="user-content text-slate-800 text-sm">
+                        @if($paper->getMeta('license_url'))
+                            @if($ccLicenseBadge)
+                                @if($paper->getMeta('copyright_holder'))
+                                    <p>{{ __('general.copyright_statement', ['copyrightHolder' => $paper->getMeta('copyright_holder'), 'copyrightYear' => $paper->getMeta('copyright_year')]) }}</p>
+                                @endif
+                                {!! $ccLicenseBadge !!}
+                            @else
+                                <a href="{{ $paper->getMeta('license_url') }}" class="copyright">
+                                    {{ !$paper->getMeta('copyright_holder') ? __('general.license') :  __('general.copyright_statement', ['copyrightHolder' => $paper->getMeta('copyright_holder'), 'copyrightYear' => $paper->getMeta('copyright_year')]) }}
+                                </a>
+                            @endif
+                        @endif
+                        @if(app()->getCurrentConference()->getMeta('license_terms'))
+                            {!! app()->getCurrentConference()->getMeta('license_terms') !!}
+                        @endif
+                    </div>
+                </section>
+            @endif
             <section class="abstract">
                 <h2 class="pb-1 mb-3 text-base font-medium border-b border-b-slate-200">
                     {{ __('general.abstract') }}
