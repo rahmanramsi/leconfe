@@ -37,7 +37,7 @@ class PreviousEventSidebar extends Sidebar
             'name' => $this->getName(),
             'previousEvents' => ScheduledConference::query()
                 ->withoutGlobalScopes()
-                ->addGlobalScope(new SoftDeletingScope)
+                ->withoutTrashed()
                 ->with('conference')
                 ->where('id', '!=', app()->getCurrentScheduledConferenceId())
                 ->where('state', ScheduledConferenceState::Archived)
