@@ -59,7 +59,9 @@ class PermissionsAndDisclosure extends \Livewire\Component implements HasForms
             ->schema([
                 TextInput::make('meta.copyright_holder')
                     ->label(__('general.submission_copyright_holder'))
-                    ->helperText(__('general.submission_copyright_holder_helper'))
+                    ->helperText(__('general.submission_copyright_holder_helper', [
+                        'copyrightHolder' => app()->getCurrentConference()->getCopyrightHolderForSubmission($this->submission),
+                    ]))
                     ->maxWidth(MaxWidth::Large)
                     ->disabled(fn() => !$this->submission->getMeta('copyright_holder') && !$this->overrideCopyrightHolder)
                     ->suffixActions([

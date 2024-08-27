@@ -173,6 +173,25 @@ class Conference extends Model implements HasAvatar, HasMedia, HasName
         return $licenseUrl;
     }
 
+    public function getCopyrightHolderForSubmission(Submission $submission){
+        return match($this->getMeta('copyright_holder')){
+            'author' => $submission->authors->reduce(function ($carry, $author){
+                $carry .= $author->fullName . '; ';
+                return $carry;
+            }),
+            'conference' => $this->name,
+            'custom' => $this->getMeta('custom_copyright_holder'),
+        };
+    }
+
+    public function getCopyrightYearForSubmission(Submission $submission)
+    {
+        return match($this->getMeta('copyright_year')){
+            'proceeding' => $submission->proceeding?->published_at?->format('Y') ?? now()->format('Y'),
+            'paper' => $submission->published_at?->format('Y') ?? now()->format('Y'),
+        };
+    }
+
     protected function getAllDefaultMeta(): array
     {
         return [
@@ -203,7 +222,7 @@ class Conference extends Model implements HasAvatar, HasMedia, HasName
                 'ris',
                 'bibtex',
             ],
-            'copyright_holder' => 'author',
+            'copyright_holder' => 'conference',
             'license_url' => "https://creativecommons.org/licenses/by-nc-nd/4.0",
             'copyright_year' => 'paper',
         ];
