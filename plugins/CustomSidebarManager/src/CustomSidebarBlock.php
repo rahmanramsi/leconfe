@@ -13,7 +13,7 @@ class CustomSidebarBlock extends Sidebar
     public function __construct(
         public string $id,
         public string $name,
-        public string $content,
+        public ?string $content = null,
         public bool $showName = false, 
     ) {
     }
