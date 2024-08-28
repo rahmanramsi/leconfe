@@ -680,6 +680,8 @@ return [
     'new_discussion_topic_created' => 'Topik Diskusi Baru Dibuat',
     'cannot_delete_role_commites' => 'Tidak dapat menghapus :name, ada :roleType yang masih terkait dengan peran ini',
     'topic_name' => 'Nama Topik',
+
+    'participant' => 'Peserta',
     'participants' => 'Peserta',
     'discussion' => 'Diskusi',
     'discussion_for_topic' => 'Diskusi untuk topik :variable',

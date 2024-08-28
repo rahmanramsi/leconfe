@@ -693,6 +693,7 @@ return [
     'cannot_delete_role_commites' => 'Nuk mund të fshini :name, ka :roleType që janë ende të lidhur me këtë rol',
 
     'topic_name' => 'Emri i Temës',
+    'participant' => 'pjesëmarrës',
     'participants' => 'Pjesëmarrësit',
     'discussion' => 'Diskutimi',
     'discussion_for_topic' => 'Diskutim për temën :variable',

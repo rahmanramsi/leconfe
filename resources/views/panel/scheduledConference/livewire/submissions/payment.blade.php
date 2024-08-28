@@ -118,7 +118,7 @@
                                             {{ __('general.unpaid') }}
                                         </x-filament::badge>
                                     @else
-                                        <x-filament::badge color="error" class="!w-fit">
+                                        <x-filament::badge color="danger" class="!w-fit">
                                             {{ __('general.fail') }}
                                         </x-filament::badge>
                                     @endif

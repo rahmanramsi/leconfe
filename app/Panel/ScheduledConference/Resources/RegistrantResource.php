@@ -40,6 +40,7 @@ use App\Models\Enums\RegistrationPaymentType;
 use Filament\Tables\Actions\DeleteBulkAction;
 use App\Models\Enums\RegistrationPaymentState;
 use App\Models\RegistrationType;
+use App\Models\Submission;
 use Filament\Tables\Actions\ForceDeleteAction;
 use App\Notifications\RegistrationPaymentDecision;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -189,11 +190,25 @@ class RegistrantResource extends Resource
                     ->circular(),
                 TextColumn::make('user.full_name')
                     ->label(__('general.user'))
+                    ->description(fn (Model $record) => (bool) $record->submission ? __('general.submission').': '.$record->submission->getMeta('title') : null)
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('registrationPayment.name')
                     ->label(__('general.type'))
                     ->description(fn (Model $record) => moneyOrFree($record->registrationPayment->cost, $record->registrationPayment->currency, true)),
+                TextColumn::make('registrationPayment.level')
+                    ->label(__('general.level'))
+                    ->formatStateUsing(fn (Model $record) => match ($record->registrationPayment->level) {
+                        RegistrationType::LEVEL_AUTHOR => __('general.author'),
+                        RegistrationType::LEVEL_PARTICIPANT => __('general.participant'),
+                        default => __('general.none'),
+                    })
+                    ->badge()
+                    ->color(fn (Model $record) => match ($record->registrationPayment->level) {
+                        RegistrationType::LEVEL_AUTHOR => Color::Blue,
+                        RegistrationType::LEVEL_PARTICIPANT => Color::Yellow,
+                        default => Color::Red,
+                    }),
                 TextColumn::make('registrationPayment.state')
                     ->label(__('general.state'))
                     ->badge()
@@ -218,12 +233,18 @@ class RegistrantResource extends Resource
                     ->hidden(fn(Model $record) => $record->trashed())
                     ->authorize(fn(Model $record) => auth()->user()->can('update', $record)),
                 ActionGroup::make([
+                    Action::make('submission')
+                        ->label(__('general.submission'))
+                        ->icon('heroicon-m-document-text')
+                        ->color('primary')
+                        ->url(fn(Model $record) => SubmissionResource::getUrl('view', ['record' => $record->submission]))
+                        ->visible(fn(Model $record) => ($record->submission !== null)),
                     Action::make('attendance')
                         ->label(__('general.attendance'))
                         ->icon('heroicon-m-calendar-days')
-                        ->color(Color::Blue)
+                        ->color('primary')
                         ->url(fn(Model $record) => static::getUrl('attendance', ['record' => $record]))
-                        ->visible(fn(Model $record) => ($record->registrationPayment->state === RegistrationPaymentState::Paid->value))
+                        ->visible(fn(Model $record) => ($record->registrationPayment->state === RegistrationPaymentState::Paid->value) && !$record->trashed())
                         ->authorize(fn() => auth()->user()->can('viewAny', RegistrationAttendance::class)),
                     DeleteAction::make()
                         ->label(__('general.trash'))
@@ -242,8 +263,7 @@ class RegistrantResource extends Resource
             ])
             ->groups([
                 Group::make('registrationPayment.name')
-                    ->label(__('general.type'))
-                    ->collapsible(),
+                    ->label('')
             ])
             ->defaultGroup('registrationPayment.name');
     }
@@ -270,8 +290,6 @@ class RegistrantResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ])
-            ->whereHas('registrationPayment', function (Builder $query) {
-                $query->where('level', '!=', RegistrationType::LEVEL_AUTHOR);
-            });
+            ->with('submission');
     }
 }

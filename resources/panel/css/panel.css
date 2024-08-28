@@ -3,6 +3,14 @@
 
 @config './tailwind.config.js';
 
+@layer base {
+    .fi-modal ul, .fi-modal ol {
+        list-style: revert;
+        margin: revert;
+        padding: revert;
+    }
+}
+
 /* @import "tippy.js/dist/tippy.css"; */
 .fi-tabs {
     /* TODO Apply alignment tabs to left, currently break contained tab when this css applied */

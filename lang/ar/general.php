@@ -693,6 +693,7 @@ return [
     'cannot_delete_role_commites' => 'لا يمكن حذف :name، هناك :roleType لا يزالون مرتبطين بهذا الدور',
 
     'topic_name' => 'اسم الموضوع',
+    'participant' => 'المشارك',
     'participants' => 'المشاركون',
     'discussion' => 'نقاش',
     'discussion_for_topic' => 'نقاش حول الموضوع :variable',

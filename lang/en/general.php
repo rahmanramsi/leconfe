@@ -706,6 +706,7 @@ return [
     'cannot_delete_role_commites' => 'Cannot delete :name, there are :roleType who are still associated with this role',
 
     'topic_name' => 'Topic Name',
+    'participant' => 'Participant',
     'participants' => 'Participants',
     'discussion' => 'Discussion',
     'discussion_for_topic' => 'Discussion for topic :variable',
