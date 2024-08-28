@@ -49,7 +49,7 @@ return new class extends Migration
             $table->foreignIdFor(Registration::class)->constrained()->cascadeOnDelete();
             $table->string('type')->nullable();
             $table->string('name');
-            $table->unsignedInteger('level')->default(1);
+            $table->unsignedInteger('level')->default(RegistrationType::LEVEL_PARTICIPANT);
             $table->text('description')->nullable();
             $table->integer('cost');
             $table->string('currency');
