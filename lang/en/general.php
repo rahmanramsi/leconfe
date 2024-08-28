@@ -856,7 +856,7 @@ return [
     'submission_license_url' => 'License URL',
     'submission_license_url_helper' => 'The license will be set automatically to <a class="text-primary-700 underline" href=\':licenseUrl\' target=\'_blank\'>:licenseName</a> when this is published.' ,
     'override' => 'Override',
-    'copyright_statement' => 'Copyright (c) :copyrightYear :copyrightHolder'
+    'copyright_statement' => 'Copyright (c) :copyrightYear :copyrightHolder',
 
     'waiting_for_payment' => "Waiting for payment",
     'this_your_pacticipant_retistration_details' => "This is your participant registration details.",

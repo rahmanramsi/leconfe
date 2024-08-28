@@ -821,7 +821,7 @@ return [
     'submission_license_url' => 'URL Lisensi',
     'submission_license_url_helper' => 'Lisensi akan diatur secara otomatis ke <a class="text-primary-700 underline" href=\':licenseUrl\' target=\'_blank\'>:licenseName</a> saat ini diterbitkan.',
     'override' => 'Timpa',
-    'copyright_statement' => 'Hak Cipta (c) :copyrightYear :copyrightHolder'
+    'copyright_statement' => 'Hak Cipta (c) :copyrightYear :copyrightHolder',
 
     'waiting_for_payment' => "Menunggu pembayaran",
     'this_your_pacticipant_retistration_details' => "Ini adalah detail pendaftaran Anda sebagai peserta.",
