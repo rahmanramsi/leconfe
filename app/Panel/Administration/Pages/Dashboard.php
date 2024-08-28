@@ -22,19 +22,17 @@ class Dashboard extends Page implements HasInfolists
 
     protected static ?string $navigationIcon = 'heroicon-m-home';
 
+    protected static string $view = 'panel.administration.pages.dashboard';
+
     public static function getNavigationLabel(): string
     {
-        // This returns the label for the dashboard navigation.
         return __('general.dashboard');
     }
 
     public function getHeading(): string|Htmlable
     {
-        // This returns the heading for the dashboard.
         return __('general.administration');
     }
-
-    protected static string $view = 'panel.administration.pages.dashboard';
 
     public static function canAccess(): bool
     {
@@ -104,6 +102,8 @@ class Dashboard extends Page implements HasInfolists
 
     protected function expireUserSession(Action $action)
     {
+        throw new \Exception('Not implemented yet');
+
         try {
             $userAuth = Filament::auth()->user();
 

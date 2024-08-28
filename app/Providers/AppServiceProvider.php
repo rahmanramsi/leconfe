@@ -44,8 +44,6 @@ class AppServiceProvider extends ServiceProvider
             return new MetaTagManager;
         });
 
-
-
         $this->app->bind(Setting::class, function ($app) {
             return new Setting();
         });
@@ -203,10 +201,14 @@ class AppServiceProvider extends ServiceProvider
 
             $conference ? $this->app->setCurrentConferenceId($conference->getKey()) : $this->app->setCurrentConferenceId(Application::CONTEXT_WEBSITE);
 
+            
+            if (!$conference && $isOnScheduledPath){
+                abort(404);
+            }
+            
             // Detect scheduledConference from URL path when conference is set
-            if ($conference) {
-
-                if ($isOnScheduledPath && $scheduledConference = ScheduledConference::where('path', $scheduledConferencePath)->first()) {
+            if ($conference && $isOnScheduledPath) {
+                if ($scheduledConference = ScheduledConference::where('path', $scheduledConferencePath)->first()) {
                     $this->app->setCurrentScheduledConferenceId($scheduledConference->getKey());
                     $this->app->scopeCurrentScheduledConference();
                 }

@@ -42,4 +42,8 @@
     @endif
 
     @hook('Frontend::Views::Head')
+
+    @production
+        <x-livewire-handle-error />   
+    @endproduction
 </head>
