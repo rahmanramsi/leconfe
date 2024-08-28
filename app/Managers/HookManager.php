@@ -8,13 +8,23 @@ use Throwable;
 
 class HookManager
 {
+    public const SEQUENCE_CORE = 0;
+    public const SEQUENCE_NORMAL = 256;
+    public const SEQUENCE_LATE = 512;
+    public const SEQUENCE_LAST = 768;
+
+
+    public const CONTINUE = false;
+    public const ABORT = true;
+
+
     protected array $hooks = [];
 
     /**
      * Register Hook
      *
      */
-    public function add(string $name, Closure|string|array $callback, int $sequence = 1): void
+    public function add(string $name, callable $callback, int $sequence = self::SEQUENCE_NORMAL): void
     {
         $this->hooks[$name][$sequence][] = &$callback;
     }
@@ -23,46 +33,38 @@ class HookManager
     /**
      * Call Hook
      */
-    public function call(string $name, mixed $params = null): mixed
+    public function call(string $name, mixed $params): bool
     {
         $hooks = $this->getHooks();
         if (!isset($hooks[$name])) {
-            return false;
+            return self::CONTINUE;
         }
 
         ksort($hooks[$name], SORT_NUMERIC);
-		
         foreach ($hooks[$name] as $priority => $hookList) {
-			$params = Pipeline::send($params)
-				->through($hookList)
-				->thenReturn();
+            foreach ($hookList as $callback) {
+                if (call_user_func_array($callback, array_merge([$name], $params)) === self::ABORT) {
+                    return self::ABORT;
+                }
+            }
         }
 
-        return $params;
+        return self::CONTINUE;
     }
 
-    /**
-     * Get All Available Hooks
-     *
-     * @return array
-     * 
-     */
-    public function getHooks(): array
+    public function getHooks(?string $hookName = null): ?array
     {
-        return $this->hooks;
-    }
+        $hooks = $this->hooks;
+        if ($hookName === null) {
+            return $hooks;
+        }
 
-    /**
-     * Get Available Hooks by Name
-     *
-     * @param string $name
-     * 
-     * @return array
-     * 
-     */
-    public function getHookByName(string $name): array
-    {
-        return $this->hooks[$name] ?? [];
+        if (isset($hooks[$hookName])) {
+            return $hooks[$hookName];
+        }
+
+        $returner = null;
+        return $returner;
     }
 
     /**

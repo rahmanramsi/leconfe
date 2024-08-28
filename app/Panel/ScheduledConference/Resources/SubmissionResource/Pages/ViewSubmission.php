@@ -46,6 +46,7 @@ use App\Forms\Components\TinyEditor;
 use App\Panel\ScheduledConference\Livewire\Submissions\Components\GalleyList;
 use App\Panel\ScheduledConference\Livewire\Submissions\Components\ActivityLogList;
 use App\Panel\ScheduledConference\Livewire\Submissions\Components\ContributorList;
+use App\Panel\ScheduledConference\Livewire\Submissions\Components\PermissionsAndDisclosure;
 use App\Panel\ScheduledConference\Livewire\Submissions\Components\SubmissionProceeding;
 use App\Panel\ScheduledConference\Livewire\Submissions\Payment;
 use App\Panel\ScheduledConference\Livewire\Submissions\Presentation;
@@ -175,7 +176,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                     $action->success();
                 }),
             Action::make('unpublish')
-                ->label(__('general.unpublish'))
+                ->label(fn() => $this->record->proceeding?->isPublished() ? __('general.unpublish') : __('general.unschedule'))
                 ->icon('lineawesome-calendar-times-solid')
                 ->color('danger')
                 ->authorize('unpublish', $this->record)
@@ -337,13 +338,13 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
     {
         $badgeHtml = '<div class="flex items-center gap-x-2">';
 
+
         $badgeHtml .= match ($this->record->status) {
             SubmissionStatus::Incomplete => '<x-filament::badge color="gray" class="w-fit">' . __("general.incomplete") . '</x-filament::badge>',
             SubmissionStatus::Queued => '<x-filament::badge color="primary" class="w-fit">' . __("general.queued") . '</x-filament::badge>',
             SubmissionStatus::OnPayment => '<x-filament::badge color="warning" class="w-fit">' . __("general.on_payment") . '</x-filament::badge>',
             SubmissionStatus::OnReview => '<x-filament::badge color="warning" class="w-fit">' . __("general.on_review") . '</x-filament::badge>',
-            SubmissionStatus::OnPresentation => '<x-filament::badge color="info" class="w-fit">' . __("general.on_presentation") . '</x-filament::badge>',
-            SubmissionStatus::Published => '<x-filament::badge color="success" class="w-fit">' . __("general.published") . '</x-filament::badge>',
+            SubmissionStatus::Published => $this->record->proceeding->isPublished() ? '<x-filament::badge color="success" class="w-fit">' . __("general.published") . '</x-filament::badge>' : '<x-filament::badge color="primary" class="w-fit">' . __("general.scheduled") . '</x-filament::badge>',
             SubmissionStatus::Editing => '<x-filament::badge color="info" class="w-fit">' . __("general.editing") . '</x-filament::badge>',
             SubmissionStatus::Declined => '<x-filament::badge color="danger" class="w-fit">' . __("general.declined") . '</x-filament::badge>',
             SubmissionStatus::PaymentDeclined => '<x-filament::badge color="danger" class="w-fit">' . __("general.payment_declined") . '</x-filament::badge>',
@@ -452,7 +453,6 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                                     )
                                     ->content(__('general.cant_edit_submission_because_already_published')),
                                 Tabs::make()
-                                    ->verticalSpace('space-y-2')
                                     // ->persistTabInQueryString('ptab') // ptab shorten of publication-tab
                                     ->tabs([
                                         Tab::make('Detail')
@@ -490,6 +490,15 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                                             ->schema([
                                                 LivewireEntry::make('proceeding')
                                                     ->livewire(SubmissionProceeding::class, [
+                                                        'submission' => $this->record,
+                                                    ]),
+                                            ]),
+                                        Tab::make('Permissions and Disclosure')
+                                            ->label(__('general.permissions_and_disclosure'))
+                                            ->icon('heroicon-o-shield-exclamation')
+                                            ->schema([
+                                                LivewireEntry::make('permissions-and-disclosure')
+                                                    ->livewire(PermissionsAndDisclosure::class, [
                                                         'submission' => $this->record,
                                                     ]),
                                             ]),

@@ -7,7 +7,7 @@
         </a>
     @endif
     <div class="flex-1">
-        <h3 class="title mb-3 text-base">
+        <h3 class="title text-base">
             <a href="{{ route('livewirePageGroup.conference.pages.paper', ['submission' => $paper->id]) }}" class="font-semibold text-gray-700 hover:text-primary">{{ $paper->getMeta('title') }}</a>
             <div class="text-xs text-gray-500">{{ $paper->getMeta('subtitle') }}</div>
         </h3>

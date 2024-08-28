@@ -101,6 +101,7 @@ class UserResource extends Resource
                                 Forms\Components\TextInput::make('family_name')
                                     ->label(__('general.family_name')),
                                 Forms\Components\TextInput::make('email')
+                                    ->required()
                                     ->label(__('general.email'))
                                     ->columnSpan(['lg' => 2])
                                     ->disabled(fn (?User $record) => $record)

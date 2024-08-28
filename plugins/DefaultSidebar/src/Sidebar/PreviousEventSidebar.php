@@ -8,6 +8,7 @@ use App\Models\Enums\ScheduledConferenceState;
 use App\Models\ScheduledConference;
 use App\Models\Topic;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\HtmlString;
 
 class PreviousEventSidebar extends Sidebar
@@ -36,6 +37,7 @@ class PreviousEventSidebar extends Sidebar
             'name' => $this->getName(),
             'previousEvents' => ScheduledConference::query()
                 ->withoutGlobalScopes()
+                ->withoutTrashed()
                 ->with('conference')
                 ->where('id', '!=', app()->getCurrentScheduledConferenceId())
                 ->where('state', ScheduledConferenceState::Archived)

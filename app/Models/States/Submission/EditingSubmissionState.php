@@ -19,12 +19,27 @@ class EditingSubmissionState extends BaseSubmissionState
     public function publish(): void
     {
         $publishedAt = $this->submission->published_at ?? now();
-
-        SubmissionUpdateAction::run([
+        $data = [
             'stage' => SubmissionStage::Proceeding,
             'status' => SubmissionStatus::Published,
             'published_at' => $publishedAt,
-        ], $this->submission);
+        ];
+
+        $conference = app()->getCurrentConference();
+        //get authors name split by semicolon
+        if(!$this->submission->getMeta('copyright_holder')){
+            $data['meta']['copyright_holder'] = $conference->getCopyrightHolderForSubmission($this->submission);
+        }
+
+        if(!$this->submission->getMeta('copyright_year')){
+            $data['meta']['copyright_year'] = $conference->getCopyrightYearForSubmission($this->submission);
+        }
+
+        if(!$this->submission->getMeta('license_url')){
+            $data['meta']['license_url'] = $conference->getLicenseUrl();
+        }
+
+        SubmissionUpdateAction::run($data, $this->submission);
 
         Published::dispatch($this->submission);
 
