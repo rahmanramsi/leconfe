@@ -265,6 +265,7 @@ class RegistrantResource extends Resource
                 Group::make('registrationPayment.name')
                     ->label('')
             ])
+            ->groupingSettingsHidden()
             ->defaultGroup('registrationPayment.name');
     }
 
