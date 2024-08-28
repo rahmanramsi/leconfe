@@ -13,13 +13,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('registrations', function (Blueprint $table) {
-            $table->foreignIdFor(Submission::class)->nullable()->constrained()->cascadeOnDelete();
-        });
-
-        Schema::table('registration_payments', function (Blueprint $table) {
-            $table->unsignedInteger('level')->default(RegistrationType::LEVEL_PARTICIPANT);
-        });
+        if(!Schema::hasColumn('registrations', (new Submission())->getForeignKey())) {
+            Schema::table('registrations', function (Blueprint $table) {
+                $table->foreignIdFor(Submission::class)->nullable()->constrained()->cascadeOnDelete();
+            });
+        }
+        
+        if(!Schema::hasColumn('registration_payments', 'level')) {
+            Schema::table('registration_payments', function (Blueprint $table) {
+                $table->unsignedInteger('level')->default(RegistrationType::LEVEL_PARTICIPANT);
+            });
+        }
     }
 
     /**
@@ -27,12 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('registrations', function (Blueprint $table) {
-            $table->dropForeignIdFor(Submission::class);
-        });
-
-        Schema::table('registration_payments', function (Blueprint $table) {
-            $table->dropColumn('level');
-        });
+        // when database rollback called, all column above gonna dropped in '2024_07_15_153736_create_registration.php'
     }
 };
