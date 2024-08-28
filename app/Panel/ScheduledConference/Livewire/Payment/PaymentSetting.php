@@ -41,10 +41,10 @@ class PaymentSetting extends Component implements HasForms
                         Toggle::make('meta.submission_payment')
                             ->label(__('general.enable_submission_payment'))
                             ->helperText(fn () => !app()->getCurrentScheduledConference()->isSubmissionRequirePayment() ? null : new HtmlString("
-                                <p style='color: rgb(234 179 8)!important;'>
+                                <p class='!text-warning-500'>
                                     ".__('general.submission_payment_toggle_warning')."
                                 </p>
-                            ")), // TODO: change this to text-warning (tailwind wont load)
+                            ")),
                         TinyEditor::make('meta.payment_policy')
                             ->label(__('general.payment_policy'))
                             ->plugins('advlist autoresize codesample directionality emoticons fullscreen hr image imagetools link lists media table toc wordcount code')

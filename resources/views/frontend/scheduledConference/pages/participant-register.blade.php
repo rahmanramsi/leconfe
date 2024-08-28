@@ -94,7 +94,7 @@
                         @empty(!$currentScheduledConference->getMeta('registration_policy'))
                             <hr class="my-8">
                             <div class="w-full">
-                                {{ new Illuminate\Support\HtmlString($currentScheduledConference->getMeta('registration_policy')) }}
+                                {!! new Illuminate\Support\HtmlString($currentScheduledConference->getMeta('registration_policy')) !!}
                             </div>
                         @endempty
                         <hr class="my-8">
