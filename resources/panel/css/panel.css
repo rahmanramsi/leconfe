@@ -3,14 +3,6 @@
 
 @config './tailwind.config.js';
 
-@layer base {
-    .fi-modal ul, .fi-modal ol {
-        list-style: revert;
-        margin: revert;
-        padding: revert;
-    }
-}
-
 /* @import "tippy.js/dist/tippy.css"; */
 .fi-tabs {
     /* TODO Apply alignment tabs to left, currently break contained tab when this css applied */
@@ -94,4 +86,17 @@ body {
 
 .fi-ta-group-header .grid h4 {
     @apply !py-2;
+}
+
+.user-content {
+    @apply 
+        prose prose-sm 
+        /* prose-a:text-primary prose-a:underline hover:prose-a:text-primary  */
+        /* prose-h2:mt-0  */
+        prose-h3:mt-0
+        prose-p:my-2
+        max-w-none
+        prose-img:my-0
+        first:*:mt-0 last:*:mb-0;
+    --tw-prose-body: unset;
 }

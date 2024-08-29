@@ -139,7 +139,7 @@
 
                 @if(!empty($currentScheduledConference->getMeta('payment_policy')))
                     <hr class="my-8">
-                    <div class="w-full text-wrap ">
+                    <div class="w-full text-wrap user-content">
                         <p>
                             {!! new Illuminate\Support\HtmlString($currentScheduledConference->getMeta('payment_policy')) !!}
                         </p>
@@ -148,7 +148,7 @@
 
                 @if(!empty($currentScheduledConference->getMeta('registration_policy')))
                     <hr class="my-8">
-                    <div class="w-full text-wrap ">
+                    <div class="w-full text-wrap user-content">
                         <p>
                             {!! new Illuminate\Support\HtmlString($currentScheduledConference->getMeta('registration_policy')) !!}
                         </p>

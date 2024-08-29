@@ -11,6 +11,7 @@ use Illuminate\Support\Arr;
 use App\Models\MailTemplate;
 use Filament\Actions\Action;
 use App\Models\Enums\UserRole;
+use Illuminate\Support\HtmlString;
 use Filament\Forms\Components\Grid;
 use App\Forms\Components\TinyEditor;
 use Illuminate\Support\Facades\Mail;
@@ -60,6 +61,11 @@ class Payment extends Component implements HasActions, HasForms
             ->infolist([
                 TextEntry::make('registration_policy')
                     ->getStateUsing(fn () => app()->getCurrentScheduledConference()->getMeta('registration_policy'))
+                    ->formatStateUsing(fn (string $state) => new HtmlString(<<<HTML
+                        <div class='user-content'>
+                            {$state}
+                        </div>
+                    HTML))
                     ->label('')
                     ->html()
             ])

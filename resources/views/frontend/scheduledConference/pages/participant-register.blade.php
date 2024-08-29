@@ -93,7 +93,7 @@
                         @enderror
                         @empty(!$currentScheduledConference->getMeta('registration_policy'))
                             <hr class="my-8">
-                            <div class="w-full">
+                            <div class="w-full user-content">
                                 {!! new Illuminate\Support\HtmlString($currentScheduledConference->getMeta('registration_policy')) !!}
                             </div>
                         @endempty
@@ -214,7 +214,7 @@
                     </table>
                     @empty(!$currentScheduledConference->getMeta('payment_policy'))
                         <hr class="my-8">
-                        <div class="w-full">
+                        <div class="w-full user-content">
                             <p>
                                 {!! $currentScheduledConference->getMeta('payment_policy') !!}
                             </p>

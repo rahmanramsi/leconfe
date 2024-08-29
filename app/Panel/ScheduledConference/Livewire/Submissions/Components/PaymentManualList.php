@@ -15,6 +15,7 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Support\HtmlString;
 
 class PaymentManualList extends \Livewire\Component implements HasForms, HasTable
 {
@@ -33,6 +34,11 @@ class PaymentManualList extends \Livewire\Component implements HasForms, HasTabl
                     ->infolist([
                         TextEntry::make('payment_policy')
                             ->getStateUsing(fn () => app()->getCurrentScheduledConference()->getMeta('payment_policy'))
+                            ->formatStateUsing(fn (string $state) => new HtmlString(<<<HTML
+                                <div class='user-content'>
+                                    {$state}
+                                </div>
+                            HTML))
                             ->label('')
                             ->html()
                     ])
