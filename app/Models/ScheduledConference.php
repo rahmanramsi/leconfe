@@ -60,6 +60,14 @@ class ScheduledConference extends Model implements HasMedia, HasAvatar, HasName
         });
     }
 
+    protected function getAllDefaultMeta(): array
+    {
+        return [
+            'timezone' => 'UTC',
+			'submission_payment' => true,
+        ];
+    }
+
     public function conference(): BelongsTo
     {
         return $this->belongsTo(Conference::class);

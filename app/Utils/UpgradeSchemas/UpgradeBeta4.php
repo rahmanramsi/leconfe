@@ -17,14 +17,10 @@ class UpgradeBeta4 extends UpgradeBase
 {
 	public function run(): void
 	{
-		$this->insertColumns();
+		$this->addColumns();
 
 		Conference::lazy()->each(function (Conference $conference) {
 			MailTemplatePopulateDefaultData::run($conference);
-		});
-
-		ScheduledConference::lazy()->each(function (ScheduledConference $scheduledConference) {
-			$scheduledConference->setManyMeta($this->getMetadata());
 		});
 
 		PermissionPopulateAction::run();
@@ -34,15 +30,7 @@ class UpgradeBeta4 extends UpgradeBase
 		});
 	}
 
-	public function getMetadata(): array
-	{
-		return [
-			'timezone' => 'UTC',
-			'submission_payment' => true,
-		];
-	}
-
-	public function insertColumns(): void
+	public function addColumns(): void
 	{
 		if(!Schema::hasColumn('registrations', (new Submission())->getForeignKey())) {
             Schema::table('registrations', function (Blueprint $table) {
