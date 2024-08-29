@@ -2,6 +2,7 @@
 @use('App\Models\Enums\SubmissionStage')
 @use('App\Constants\SubmissionFileCategory')
 @use('App\Models\Enums\SubmissionStatus')
+@use('App\Models\Enums\UserRole')
 
 @php
     $user = auth()->user();
@@ -14,7 +15,7 @@
 
             @livewire(Components\Discussions\DiscussionTopic::class, ['submission' => $submission, 'stage' => SubmissionStage::Presentation, 'lazy' => true])
         </div>
-        <div class="sticky z-30 flex flex-col self-start col-span-4 gap-3 top-24" x-data="{ decision: @js($submissionDecision) }">
+        <div class="flex flex-col self-start col-span-4 gap-3" x-data="{ decision: @js($submissionDecision) }">
             @if ($submission->stage != SubmissionStage::CallforAbstract)
                 @if ($submission->getEditors()->isEmpty())
                     <div class="px-4 py-3.5 text-base text-white rounded-lg border-2 border-primary-700 bg-primary-500">
@@ -32,9 +33,11 @@
 
                     <div @class([
                         'flex flex-col gap-4 col-span-4',
-                        'hidden' => in_array($submission->status, [
+                        'hidden' => !($user->hasAnyRole([UserRole::ConferenceManager, UserRole::Admin]) || $this->submission->isParticipantEditor($user)) || in_array($submission->status, [
                             SubmissionStatus::Queued,
+                            SubmissionStatus::OnPayment,
                             SubmissionStatus::Published,
+                            SubmissionStatus::PaymentDeclined,
                         ]),
                     ]) x-show="!decision">
                         @if ($user->can('sendToEditing', $submission))

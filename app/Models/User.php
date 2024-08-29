@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Mail\Templates\VerifyUserEmail;
+use App\Models\Enums\RegistrationPaymentState;
 use App\Models\Enums\UserRole;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
@@ -132,6 +133,30 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasMedia,
         return $this->hasMany(Registration::class);
     }
 
+    public function isRegisteredAsAuthor(): bool
+    {
+        $userRegistration = Registration::select('*')
+            ->where('user_id', $this->id)
+            ->first();
+
+        if(!$userRegistration) {
+            return false;
+        }
+        
+        if(!($userRegistration->registrationPayment)) {
+            return false;
+        }
+
+        if($userRegistration->registrationPayment->state !== RegistrationPaymentState::Paid->value) {
+            return false;
+        }
+
+        if($userRegistration->registrationPayment->level !== RegistrationType::LEVEL_AUTHOR) {
+            return false;
+        }
+
+        return true;
+    }
    
     public function getFilamentAvatarUrl(): ?string
     {
@@ -168,7 +193,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasMedia,
         return !is_null($this->email_verified_at);
     }
 
-    public function asAuthor()
+    public function authors()
     {
         return Author::email($this->email)->first();
     }

@@ -2,30 +2,30 @@
 
 namespace App\Models\States\Submission;
 
-use App\Actions\Submissions\SubmissionUpdateAction;
 use App\Classes\Log;
 use App\Models\Enums\SubmissionStage;
 use App\Models\Enums\SubmissionStatus;
+use App\Actions\Submissions\SubmissionUpdateAction;
+use App\Models\States\Submission\Concerns\CanDeclinePayment;
 use App\Models\States\Submission\Concerns\CanWithdraw;
 
-class QueuedSubmissionState extends BaseSubmissionState
+class OnPaymentSubmissionState extends BaseSubmissionState
 {
     use CanWithdraw;
-
-    public function acceptAbstract(): void
+    use CanDeclinePayment;
+    
+    public function approvePayment(): void
     {
-        $isPaymentRequired = app()->getCurrentScheduledConference()->isSubmissionRequirePayment();
-
         SubmissionUpdateAction::run([
-            'stage' => $isPaymentRequired ? SubmissionStage::Payment : SubmissionStage::PeerReview,
-            'status' => $isPaymentRequired ? SubmissionStatus::OnPayment : SubmissionStatus::OnReview,    
+            'stage' => SubmissionStage::PeerReview,
+            'status' => SubmissionStatus::OnReview,
         ], $this->submission);
 
         Log::make(
             name: 'submission',
             subject: $this->submission,
-            description: __('general.submission_abstract_accepted'),
-            event : 'submission-abstract-accepted',
+            description: __('general.submission_payment_approved'),
+            event : 'submission-payment-approved',
         )
             ->by(auth()->user())
             ->save();
@@ -34,6 +34,7 @@ class QueuedSubmissionState extends BaseSubmissionState
     public function decline(): void
     {
         SubmissionUpdateAction::run([
+            'stage' => SubmissionStage::CallforAbstract,
             'status' => SubmissionStatus::Declined,
         ], $this->submission);
 

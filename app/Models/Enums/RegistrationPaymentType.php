@@ -12,6 +12,7 @@ enum RegistrationPaymentType: string implements HasLabel
 {
     use UsefulEnums;
 
+    // Extendable
     case Manual = 'Manual';
 
     public function getLabel(): ?string

@@ -2,28 +2,29 @@
 
 namespace App\Panel\ScheduledConference\Livewire\Submissions;
 
-use App\Actions\Submissions\SubmissionUpdateAction;
-use App\Mail\Templates\AcceptPaperMail;
-use App\Mail\Templates\DeclinePaperMail;
-use App\Mail\Templates\RevisionRequestMail;
+use Livewire\Component;
+use Filament\Forms\Form;
+use App\Models\Submission;
+use App\Models\MailTemplate;
+use Filament\Actions\Action;
+use App\Models\Enums\UserRole;
+use Filament\Support\Colors\Color;
+use App\Forms\Components\TinyEditor;
+use Illuminate\Support\Facades\Mail;
 use App\Models\Enums\SubmissionStage;
 use App\Models\Enums\SubmissionStatus;
-use App\Models\MailTemplate;
-use App\Models\Submission;
-use App\Panel\ScheduledConference\Resources\SubmissionResource;
-use Filament\Actions\Action;
-use Filament\Actions\Concerns\InteractsWithActions;
-use Filament\Actions\Contracts\HasActions;
+use Filament\Forms\Contracts\HasForms;
+use App\Mail\Templates\AcceptPaperMail;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Fieldset;
+use App\Mail\Templates\DeclinePaperMail;
 use Filament\Forms\Components\TextInput;
+use Filament\Actions\Contracts\HasActions;
+use App\Mail\Templates\RevisionRequestMail;
 use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
-use Filament\Support\Colors\Color;
-use Illuminate\Support\Facades\Mail;
-use Livewire\Component;
-use App\Forms\Components\TinyEditor;
+use App\Actions\Submissions\SubmissionUpdateAction;
+use Filament\Actions\Concerns\InteractsWithActions;
+use App\Panel\ScheduledConference\Resources\SubmissionResource;
 
 class PeerReview extends Component implements HasActions, HasForms
 {
@@ -258,14 +259,20 @@ class PeerReview extends Component implements HasActions, HasForms
                 );
 
                 $action->success();
-            })
-            ->requiresConfirmation();
+            });
     }
 
     public function render()
     {
+        $user = auth()->user();
+
         return view('panel.scheduledConference.livewire.submissions.peer-review', [
-            'submissionDecision' => in_array($this->submission->status, [SubmissionStatus::Editing, SubmissionStatus::Declined, SubmissionStatus::OnPresentation])
+            'submissionDecision' => ($user->hasAnyRole([UserRole::ConferenceManager, UserRole::Admin]) || $this->submission->isParticipantEditor($user)) && 
+                in_array($this->submission->status, [
+                    SubmissionStatus::Editing, 
+                    SubmissionStatus::Declined, 
+                    SubmissionStatus::OnPresentation
+                ])
         ]);
     }
 }

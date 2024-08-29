@@ -27,6 +27,7 @@ use App\Models\Enums\RegistrationPaymentState;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use App\Panel\ScheduledConference\Resources\RegistrantResource;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\View\Compilers\BladeCompiler;
 
 class EnrollUser extends ListRecords
 {
@@ -58,62 +59,111 @@ class EnrollUser extends ListRecords
         ];
     }
 
-    public static function getRegistrationTypeOptions(): array
-    {
-        $registrationTypeOptions = [];
-        $registrationTypes = RegistrationType::get();
-        foreach ($registrationTypes as $registrationType) {
-            if (!$registrationType->active) continue;
-
-            $name = $registrationType->type;
-            $quotaCurrent = $registrationType->quota;
-            $quotaLeft = $registrationType->getPaidParticipantCount();
-            $expired = $registrationType->isExpired() ? 'Expired' : 'Valid';
-
-            $registrationTypeOptions[$registrationType->id] = "$name [Quota: $quotaLeft/$quotaCurrent] [$expired]";
-        }
-        return $registrationTypeOptions;
-    }
-
-    public static function enrollForm(Model $record)
+    public static function enrollForm(Model $record, int $level)
     {
         $fullName = $record->full_name;
         $email = $record->email;
         $affiliation = $record->getMeta('affiliation');
+
         return [
-            Fieldset::make(__('general.user_details'))
+            Fieldset::make('user-details')
+                ->columns(1)
+                ->label(__('general.user_details'))
                 ->schema([
                     Placeholder::make('user')
                         ->label('')
-                        ->content(new HtmlString(
-                            "<table class='w-full'>
+                        ->content(new HtmlString(BladeCompiler::render(<<<BLADE
+                            <table class='w-full'>
                                 <tr>
                                     <td>
-                                        <strong>" . __('general.name') . "</strong>
+                                        <strong>{{ __('general.name') }}</strong>
                                     </td>
-                                    <td class='pl-5'>:</td>
-                                    <td>{$fullName}</td>
+                                    <td>:</td>
+                                    <td><strong class="font-semibold">{$fullName}</strong></td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <strong>" . __('general.email') . "</strong>
+                                        <strong>{{ __('general.email') }}</strong>
                                     </td>
-                                    <td class='pl-5'>:</td>
+                                    <td>:</td>
                                     <td>{$email}</td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <strong>" . __('general.affiliation') . "</strong>
+                                        <strong>{{ __('general.affiliation') }}</strong>
                                     </td>
-                                    <td class='pl-5'>:</td>
+                                    <td>:</td>
                                     <td>{$affiliation}</td>
                                 </tr>
-                            </table>"
-                        ))
+                            </table>
+                        BLADE)))
+                ]),
+            Fieldset::make('registration-details')
+                ->columns(1)
+                ->label(new HtmlString(__('general.this_registration_details', ['full_name' => $fullName])))
+                ->schema([
+                    Placeholder::make('registration')
+                        ->label('')
+                        ->content(function (Get $get) {
+                            $registrationType = RegistrationType::find($get('registration_type_id'));
+
+                            if(!$registrationType) {
+                                return __('general.registration_type_have_to_selected');
+                            }
+
+                            $description = $registrationType->getMeta('description') ?? '-';
+                            $cost = moneyOrFree($registrationType->cost, $registrationType->currency, true);
+                            $status = $registrationType->isOpen() ? 'Open' : 'Closed';
+
+                            return new HtmlString(BladeCompiler::render(<<<BLADE
+                                <table class='w-full'>
+                                    <tr>
+                                        <td>
+                                            <strong>{{ __('general.registration_type') }}</strong>
+                                        </td>
+                                        <td>:</td>
+                                        <td><strong class="font-semibold">{$registrationType->type}</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>{{ __('general.description') }}</strong>
+                                        </td>
+                                        <td>:</td>
+                                        <td>{$description}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>{{ __('general.cost') }}</strong>
+                                        </td>
+                                        <td>:</td>
+                                        <td>{$cost}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>{{ __('general.quota') }}</strong>
+                                        </td>
+                                        <td>:</td>
+                                        <td>{$registrationType->getPaidParticipantCount()}/{$registrationType->quota}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>{{ __('general.status') }}</strong>
+                                        </td>
+                                        <td>:</td>
+                                        <td>{$status}</td>
+                                    </tr>
+                                </table>
+                            BLADE));
+                        })
                 ]),
             Select::make('registration_type_id')
-                ->label(__('general.type'))
-                ->options(static::getRegistrationTypeOptions())
+                ->label(__('general.registration_type'))
+                ->options(
+                    RegistrationType::where('level', $level)
+                        ->get()
+                        ->pluck('type', 'id')
+                        ->toArray()
+                )
                 ->searchable()
                 ->required()
                 ->rules([
@@ -126,7 +176,8 @@ class EnrollUser extends ListRecords
                             $fail($registrationType->type . ' not active!');
                         }
                     },
-                ]),
+                ])
+                ->live(),
             Fieldset::make(__('general.payment'))
                 ->schema([
                     Select::make('registrationPayment.state')
@@ -139,7 +190,7 @@ class EnrollUser extends ListRecords
                         ->required()
                         ->live(),
                     DatePicker::make('registrationPayment.paid_at')
-                        ->label(__('general.paid_Date'))
+                        ->label(__('general.paid_date'))
                         ->placeholder(__('general.select_registration_paid_date'))
                         ->prefixIcon('heroicon-m-calendar')
                         ->formatStateUsing(fn() => now())
@@ -219,7 +270,7 @@ class EnrollUser extends ListRecords
                     ->color('gray')
                     ->button()
                     ->model(Registration::class)
-                    ->form(fn(?Model $record) => static::enrollForm($record))
+                    ->form(fn(?Model $record) => static::enrollForm($record, RegistrationType::LEVEL_PARTICIPANT))
                     ->createAnother(false)
                     ->modalSubmitActionLabel(__('general.enroll'))
                     ->mutateFormDataUsing(function (Model $record, $data) { // record are user model
@@ -235,6 +286,7 @@ class EnrollUser extends ListRecords
                         try {
                             $record->registrationPayment()->create([
                                 'name' => $registrationType->type,
+                                'level' => $registrationType->level,
                                 'description' => $registrationType->getMeta('description'),
                                 'cost' => $registrationType->cost,
                                 'currency' => $registrationType->currency,

@@ -60,6 +60,14 @@ class ScheduledConference extends Model implements HasMedia, HasAvatar, HasName
         });
     }
 
+    protected function getAllDefaultMeta(): array
+    {
+        return [
+            'timezone' => 'UTC',
+			'submission_payment' => true,
+        ];
+    }
+
     public function conference(): BelongsTo
     {
         return $this->belongsTo(Conference::class);
@@ -145,6 +153,15 @@ class ScheduledConference extends Model implements HasMedia, HasAvatar, HasName
     public function getHomeUrl(): string
     {
         return route('livewirePageGroup.scheduledConference.pages.home', ['conference' => $this->conference, 'serie' => $this->path]);
+    }
+
+    public function isSubmissionRequirePayment(): bool
+    {
+        if(!$this->getMeta('submission_payment')) {
+            return false;
+        }
+        
+        return $this->getMeta('submission_payment');
     }
 
     public function isCurrent(): bool

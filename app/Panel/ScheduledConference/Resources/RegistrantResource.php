@@ -39,6 +39,8 @@ use Filament\Infolists\Components\TextEntry;
 use App\Models\Enums\RegistrationPaymentType;
 use Filament\Tables\Actions\DeleteBulkAction;
 use App\Models\Enums\RegistrationPaymentState;
+use App\Models\RegistrationType;
+use App\Models\Submission;
 use Filament\Tables\Actions\ForceDeleteAction;
 use App\Notifications\RegistrationPaymentDecision;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -52,10 +54,9 @@ class RegistrantResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-user-plus';
 
-
     public static function getNavigationLabel(): string
     {
-        return __('general.registration');
+        return __('general.registrants');
     }
 
     public static function getNavigationGroup(): string
@@ -89,12 +90,27 @@ class RegistrantResource extends Resource
                             ->visible(fn(Get $get): bool => $get('state') === RegistrationPaymentState::Paid->value)
                             ->required(),
                     ])
-                    ->mutateRelationshipDataBeforeSaveUsing(function (?array $data) {
+                    ->mutateRelationshipDataBeforeSaveUsing(function (?Model $record, ?array $data) {
                         if ($data['state'] !== RegistrationPaymentState::Paid->value) {
+                            $data['type'] = null;
                             $data['paid_at'] = null;
                         } else {
                             $data['type'] = RegistrationPaymentType::Manual->value;
                         }
+
+                        if ($record) {
+                            try {
+                                $record->user->notify(
+                                    new RegistrationPaymentDecision(
+                                        registration: $record,
+                                        state: $data['state'],
+                                    )
+                                );
+                            } catch (\Throwable $th) {
+                                throw $th;
+                            }
+                        }
+
                         return $data;
                     })
             ])
@@ -128,7 +144,7 @@ class RegistrantResource extends Resource
                                     Fieldset::make('')
                                         ->schema([
                                             TextEntry::make('title')
-                                            ->label(__('general.title')),
+                                                ->label(__('general.title')),
                                             TextEntry::make('description')
                                                 ->getStateUsing(fn(Model $record) => $record->getMeta('description'))
                                                 ->placeholder(__('general.description_empty'))
@@ -174,23 +190,29 @@ class RegistrantResource extends Resource
                     ->circular(),
                 TextColumn::make('user.full_name')
                     ->label(__('general.user'))
+                    ->description(fn (Model $record) => (bool) $record->submission ? __('general.submission').': '.$record->submission->getMeta('title') : null)
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('registrationPayment.name')
                     ->label(__('general.type'))
-                    ->description(function (Model $record) {
-                        if ($record->registrationPayment->currency === 'free') {
-                            return 'Free';
-                        }
-
-                        $cost = money($record->registrationPayment->cost, $record->registrationPayment->currency, true);
-
-                        return $cost;
+                    ->description(fn (Model $record) => moneyOrFree($record->registrationPayment->cost, $record->registrationPayment->currency, true)),
+                TextColumn::make('registrationPayment.level')
+                    ->label(__('general.level'))
+                    ->formatStateUsing(fn (Model $record) => match ($record->registrationPayment->level) {
+                        RegistrationType::LEVEL_AUTHOR => __('general.author'),
+                        RegistrationType::LEVEL_PARTICIPANT => __('general.participant'),
+                        default => __('general.none'),
+                    })
+                    ->badge()
+                    ->color(fn (Model $record) => match ($record->registrationPayment->level) {
+                        RegistrationType::LEVEL_AUTHOR => Color::Blue,
+                        RegistrationType::LEVEL_PARTICIPANT => Color::Yellow,
+                        default => Color::Red,
                     }),
                 TextColumn::make('registrationPayment.state')
                     ->label(__('general.state'))
                     ->badge()
-                    ->color(fn (Model $record) => RegistrationPaymentState::from($record->getState())->getColor()),
+                    ->color(fn(Model $record) => RegistrationPaymentState::from($record->getState())->getColor()),
                 TextColumn::make('created_at')
                     ->label(__('general.registration_date'))
                     ->date(Setting::get('format_date'))
@@ -208,36 +230,31 @@ class RegistrantResource extends Resource
                     ->label(__('general.decision'))
                     ->modalHeading(__('general.paid_status_decision'))
                     ->modalWidth('lg')
-                    ->after(function (Model $record) {
-                        try {
-                            $record->user->notify(
-                                new RegistrationPaymentDecision(
-                                    registration: $record
-                                )
-                            );
-                        } catch (\Throwable $th) {
-                            throw $th;
-                        }
-                    })
                     ->hidden(fn(Model $record) => $record->trashed())
-                    ->authorize(fn (Model $record) => auth()->user()->can('update', $record)),
+                    ->authorize(fn(Model $record) => auth()->user()->can('update', $record)),
                 ActionGroup::make([
+                    Action::make('submission')
+                        ->label(__('general.submission'))
+                        ->icon('heroicon-m-document-text')
+                        ->color('primary')
+                        ->url(fn(Model $record) => SubmissionResource::getUrl('view', ['record' => $record->submission]))
+                        ->visible(fn(Model $record) => ($record->submission !== null)),
                     Action::make('attendance')
                         ->label(__('general.attendance'))
                         ->icon('heroicon-m-calendar-days')
-                        ->color(Color::Blue)
+                        ->color('primary')
                         ->url(fn(Model $record) => static::getUrl('attendance', ['record' => $record]))
-                        ->visible(fn(Model $record) => ($record->registrationPayment->state === RegistrationPaymentState::Paid->value))
-                        ->authorize(fn () => auth()->user()->can('viewAny', RegistrationAttendance::class)),
+                        ->visible(fn(Model $record) => ($record->registrationPayment->state === RegistrationPaymentState::Paid->value) && !$record->trashed())
+                        ->authorize(fn() => auth()->user()->can('viewAny', RegistrationAttendance::class)),
                     DeleteAction::make()
                         ->label(__('general.trash'))
-                        ->authorize(fn (Model $record) => auth()->user()->can('delete', $record)),
+                        ->authorize(fn(Model $record) => auth()->user()->can('delete', $record)),
                     RestoreAction::make()
                         ->color(Color::Green)
-                        ->authorize(fn (Model $record) => auth()->user()->can('delete', $record)),
+                        ->authorize(fn(Model $record) => auth()->user()->can('delete', $record)),
                     ForceDeleteAction::make()
                         ->label(__('general.delete'))
-                        ->authorize(fn (Model $record) => auth()->user()->can('delete', $record)),
+                        ->authorize(fn(Model $record) => auth()->user()->can('delete', $record)),
                 ]),
             ])
             ->bulkActions([
@@ -246,9 +263,9 @@ class RegistrantResource extends Resource
             ])
             ->groups([
                 Group::make('registrationPayment.name')
-                    ->label(__('general.type'))
-                    ->collapsible(),
+                    ->label('')
             ])
+            ->groupingSettingsHidden()
             ->defaultGroup('registrationPayment.name');
     }
 
@@ -273,6 +290,7 @@ class RegistrantResource extends Resource
         return parent::getEloquentQuery()
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
-            ]);
+            ])
+            ->with('submission');
     }
 }

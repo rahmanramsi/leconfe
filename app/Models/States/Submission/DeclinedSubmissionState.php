@@ -13,14 +13,35 @@ class DeclinedSubmissionState extends BaseSubmissionState
     public function acceptAbstract(): void
     {
         SubmissionUpdateAction::run([
-            'stage' => SubmissionStage::PeerReview,
-            'status' => SubmissionStatus::OnReview,
+            'stage' => SubmissionStage::Payment,
+            'status' => SubmissionStatus::OnPayment,
         ], $this->submission);
 
         Log::make(
             name: 'submission',
             subject: $this->submission,
             description: __('general.submission_abstract_accepted')
+        )
+            ->by(auth()->user())
+            ->save();
+    }
+
+    public function sendToPresentation(): void
+    {
+        SubmissionUpdateAction::run([
+            'revision_required' => false,
+            'skipped_review' => false,
+            'stage' => SubmissionStage::Presentation,
+            'status' => SubmissionStatus::OnPresentation,
+        ], $this->submission);
+
+        Accepted::dispatch($this->submission);
+
+        Log::make(
+            name: 'submission',
+            subject: $this->submission,
+            description: __('general.submission_send_to_presentation'),
+            event: 'submission-send-to-presentation',
         )
             ->by(auth()->user())
             ->save();

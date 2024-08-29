@@ -12,10 +12,12 @@ enum SubmissionStatus: string implements HasColor, HasLabel
 
     case Incomplete = 'Incomplete';
     case Queued = 'Queued';
+    case OnPayment = 'On Payment';
     case OnReview = 'On Review';
     case OnPresentation = 'On Presentation';
     case Editing = 'Editing';
     case Published = 'Published';
+    case PaymentDeclined = 'Payment Declined';
     case Declined = 'Declined';
     case Withdrawn = 'Withdrawn';
 
@@ -27,8 +29,8 @@ enum SubmissionStatus: string implements HasColor, HasLabel
     public function getColor(): string|array|null
     {
         return match ($this) {
-            self::Declined, self::Withdrawn => 'danger',
-            self::OnReview => 'warning',
+            self::Declined, self::Withdrawn, self::PaymentDeclined => 'danger',
+            self::OnReview, self::OnPayment => 'warning',
             self::Queued => 'primary',
             self::Editing => 'info',
             self::Published => 'success',

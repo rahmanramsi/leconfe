@@ -23,7 +23,7 @@
             @livewire(Components\Discussions\DiscussionTopic::class, ['submission' => $submission, 'stage' => SubmissionStage::PeerReview, 'lazy' => true])
         </div>
 
-        <div class="sticky z-30 flex flex-col self-start col-span-4 gap-4 top-24" x-data="{ decision: @js($submissionDecision) }">
+        <div class="flex flex-col self-start col-span-4 gap-3" x-data="{ decision: @js($submissionDecision) }">
             @if($submission->stage != SubmissionStage::CallforAbstract)
                 @if ($submission->revision_required)
                     <div class="flex items-center p-4 text-sm border rounded-lg border-warning-400 bg-warning-200 text-warning-600" x-show="!decision" role="alert">
@@ -58,7 +58,12 @@
 
                     <div @class([
                         'flex flex-col gap-4 col-span-4',
-                        'hidden' => in_array($submission->status, [SubmissionStatus::Queued, SubmissionStatus::Published]),
+                        'hidden' => !($user->hasAnyRole([UserRole::ConferenceManager, UserRole::Admin]) || $this->submission->isParticipantEditor($user)) || in_array($submission->status, [
+                            SubmissionStatus::Queued, 
+                            SubmissionStatus::Published,
+                            SubmissionStatus::OnPayment,
+                            SubmissionStatus::PaymentDeclined,
+                        ]),
                     ]) x-show="!decision">
                         @if ($user->can('skipReview', $submission) && ! $submission->skipped_review)
                             {{ $this->skipReviewAction() }}
