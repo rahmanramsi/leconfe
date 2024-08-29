@@ -5,6 +5,7 @@ namespace App\Frontend\Website\Pages;
 use App\Models\Conference;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
 use Livewire\WithoutUrlPagination;
 use Livewire\WithPagination;
@@ -47,10 +48,21 @@ class Home extends Page
                 ->orWhere('path', 'LIKE', "%{$this->search}%");
         }
 
-        $conferences = $conferences->get();
+        $filteredConference = $conferences->get()->filter(function (Conference $conference) {
+            // nested brace are required
+            if(count($this->scope) > 0) {
+                if(!in_array($conference->getMeta('scope'), $this->scope)) {
+                    return false;
+                }
+
+                return true;
+            }
+
+            return true;
+        });
 
         return [
-            'conferences' => $conferences,
+            'conferences' => $filteredConference,
         ];
     }
 

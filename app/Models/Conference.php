@@ -25,7 +25,6 @@ class Conference extends Model implements HasAvatar, HasMedia, HasName
 {
     use Cachable, HasFactory, HasSlug, InteractsWithMedia, Metable;
 
-    public const SCOPE_UNSIGNED = 'unsigned';
     public const SCOPE_INTERNATIONAL = 'international';
     public const SCOPE_NATIONAL = 'national';
 

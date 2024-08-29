@@ -67,12 +67,10 @@ class MastHeadSetting extends Component implements HasForms
                                     ->helperText(__('general.short_description_of_the_website')),
                                 Select::make('meta.scope')
                                     ->options([
-                                        Conference::SCOPE_UNSIGNED => __('general.unsigned'),
                                         Conference::SCOPE_INTERNATIONAL => __('general.international'),
                                         Conference::SCOPE_NATIONAL => __('general.national'),
                                     ])
-                                    ->helperText(__('general.conference_scope_description'))
-                                    ->selectablePlaceholder(false),
+                                    ->helperText(__('general.conference_scope_description')),
                             ]),
                         Section::make(__('general.key_information'))
                             ->description(__('general.provide_short_description_your_conference'))
