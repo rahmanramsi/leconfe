@@ -25,6 +25,9 @@ class Conference extends Model implements HasAvatar, HasMedia, HasName
 {
     use Cachable, HasFactory, HasSlug, InteractsWithMedia, Metable;
 
+    public const SCOPE_INTERNATIONAL = 1;
+    public const SCOPE_NATIONAL = 2;
+
     /**
      * The attributes that are mass assignable.
      *

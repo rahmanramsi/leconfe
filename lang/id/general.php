@@ -780,5 +780,10 @@ return [
     'citation_contributor_translator_helper' => "Pilih peran yang harus diidentifikasi sebagai penerjemah",
     'citation_contributor_authors_helper' => "Pilih peran yang harus diidentifikasi sebagai penulis",
     'citation_contributors_description' => "Dalam beberapa gaya sitasi, kontributor harus diidentifikasi dengan cara yang berbeda tergantung pada peran mereka. Harap identifikasi peran yang sesuai.",
+
+    'apply' => "Terapkan",
+    'search' => "Cari",
+    'filter' => "Filter",
+
 ];
 

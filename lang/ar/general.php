@@ -797,4 +797,9 @@ return [
     'citation_contributor_translator_helper' => "حدد الأدوار التي يجب تحديدها كمترجمين",
     'citation_contributor_authors_helper' => "حدد الأدوار التي يجب تحديدها كمؤلفين",
     'citation_contributors_description' => "في بعض أنماط الاقتباس ، يجب تحديد المساهمين بطريقة مختلفة اعتمادًا على دورهم. يرجى تحديد الأدوار المناسبة.",
+
+    'apply' => "تطبيق",
+    'search' => "بحث",
+    'filter' => "تصفية",
+
 ];

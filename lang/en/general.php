@@ -814,5 +814,10 @@ return [
     'published' => "Published",
     'unpublished' => "Unpublished",
     'date_published' => "Date Published",
+
+    'apply' => "Apply",
+    'search' => "Search",
+    'filter' => "Filter",
+    
 ];
 

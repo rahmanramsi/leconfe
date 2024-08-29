@@ -796,4 +796,9 @@ return [
     'citation_contributor_translator_helper' => "Zgjidhni rolet që duhet të identifikohen si përkthyes",
     'citation_contributor_authors_helper' => "Zgjidhni rolet që duhet të identifikohen si autorë",
     'citation_contributors_description' => "Në disa stile citimi, kontribuesit duhet të identifikohen ndryshe në varësi të rolit të tyre. Ju lutemi identifikoni rolet e përshtatshme.",
+
+    'apply' => "Apliko",
+    'search' => "Kërko",
+    'filter' => "Filtro",
+
 ];
