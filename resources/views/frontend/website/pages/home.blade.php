@@ -52,7 +52,7 @@
                                     </label>
                                     <label class="label cursor-pointer w-fit">
                                         <input type="radio" class="radio radio-sm" value="false" name="state" wire:model="state" />
-                                        <span class="label-text px-3">Inactive</span>
+                                        <span class="label-text px-3">Over</span>
                                     </label>
                                 </div>
                             </div>
@@ -95,6 +95,7 @@
                     </form>
                 </div>
             </div>
+            
             <div class="space-y-4 conference-current">
                 @if ($conferences->isNotEmpty())
                     <div class="grid gap-6 xl:grid-cols-2">
