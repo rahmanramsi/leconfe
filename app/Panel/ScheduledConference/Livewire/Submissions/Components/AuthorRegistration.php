@@ -23,6 +23,8 @@ use Filament\Tables\Columns\Layout\Split;
 use Filament\Infolists\Components\TextEntry;
 use Illuminate\View\Compilers\BladeCompiler;
 use App\Models\Enums\RegistrationPaymentState;
+use App\Models\Enums\SubmissionStage;
+use App\Models\Enums\SubmissionStatus;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Illuminate\Contracts\Database\Eloquent\Builder;
@@ -180,9 +182,9 @@ class AuthorRegistration extends \Livewire\Component implements HasForms, HasTab
 
                         return $action->success();
                     })
-                    ->visible(fn (Model $record) => $record->isOpen()),
+                    ->visible(fn (Model $record) => $record->isOpen() && ($this->submission->status === SubmissionStatus::OnPayment || $this->submission->stage === SubmissionStage::Payment)),
             ])
-            ->recordAction('author-registration')
+            ->recordAction(fn (Model $record) => ($record->isOpen() && ($this->submission->status === SubmissionStatus::OnPayment || $this->submission->stage === SubmissionStage::Payment)) ? 'author-registration' : null)
             ->paginated(false);
     }
     
