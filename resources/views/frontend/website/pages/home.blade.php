@@ -34,15 +34,15 @@
                                 <h1 class="font-semibold text-base">{{ __('general.scope') }}</h1>
                                 <div class="form-control">
                                     <label class="label cursor-pointer w-fit">
-                                        <input type="checkbox" class="checkbox checkbox-xs" value="{{ App\Models\Conference::SCOPE_UNSIGNED }}" name="scope" wire:model="scope" />
+                                        <input type="checkbox" class="checkbox checkbox-xs" value="{{ App\Models\Conference::SCOPE_UNSIGNED }}" wire:model="scope" />
                                         <span class="label-text px-2">{{ __('general.unsigned') }}</span>
                                     </label>
                                     <label class="label cursor-pointer w-fit">
-                                        <input type="checkbox" class="checkbox checkbox-xs" value="{{ App\Models\Conference::SCOPE_INTERNATIONAL }}" name="scope" wire:model="scope" />
+                                        <input type="checkbox" class="checkbox checkbox-xs" value="{{ App\Models\Conference::SCOPE_INTERNATIONAL }}" wire:model="scope" />
                                         <span class="label-text px-2">{{ __('general.international') }}</span>
                                     </label>
                                     <label class="label cursor-pointer w-fit">
-                                        <input type="checkbox" class="checkbox checkbox-xs" value="{{ App\Models\Conference::SCOPE_NATIONAL }}" name="scope" wire:model="scope" />
+                                        <input type="checkbox" class="checkbox checkbox-xs" value="{{ App\Models\Conference::SCOPE_NATIONAL }}" wire:model="scope" />
                                         <span class="label-text px-2">{{ __('general.national') }}</span>
                                     </label>
                                 </div>
@@ -51,11 +51,11 @@
                                 <h1 class="font-semibold text-base">{{ __('general.state') }}</h1>
                                 <div class="form-control">
                                     <label class="label cursor-pointer w-fit">
-                                        <input type="checkbox" class="checkbox checkbox-xs" value="true" name="state" wire:model="state" />
+                                        <input type="checkbox" class="checkbox checkbox-xs" value="active" wire:model="state" />
                                         <span class="label-text px-2">{{ __('general.active') }}</span>
                                     </label>
                                     <label class="label cursor-pointer w-fit">
-                                        <input type="checkbox" class="checkbox checkbox-xs" value="false" name="state" wire:model="state" />
+                                        <input type="checkbox" class="checkbox checkbox-xs" value="over" wire:model="state" />
                                         <span class="label-text px-2">{{ __('general.over') }}</span>
                                     </label>
                                 </div>
@@ -64,11 +64,11 @@
                                 <h1 class="font-semibold text-base">{{ __('general.topic') }}</h1>
                                 <div class="form-control">
                                     <label class="label cursor-pointer w-fit">
-                                        <input type="checkbox" class="checkbox checkbox-xs" value="1" name="topic" wire:model="topic" />
+                                        <input type="checkbox" class="checkbox checkbox-xs" value="1" wire:model="topic" />
                                         <span class="label-text px-2">topic1</span>
                                     </label>
                                     <label class="label cursor-pointer w-fit">
-                                        <input type="checkbox" class="checkbox checkbox-xs" value="2" name="topic" wire:model="topic" />
+                                        <input type="checkbox" class="checkbox checkbox-xs" value="2" wire:model="topic" />
                                         <span class="label-text px-2">topic2</span>
                                     </label>
                                 </div>
@@ -77,11 +77,11 @@
                                 <h1 class="font-semibold text-base">{{ __('general.coordinator') }}</h1>
                                 <div class="form-control">
                                     <label class="label cursor-pointer w-fit">
-                                        <input type="checkbox" class="checkbox checkbox-xs" value="1" name="coordinator" wire:model="coordinator" />
+                                        <input type="checkbox" class="checkbox checkbox-xs" value="1" wire:model="coordinator" />
                                         <span class="label-text px-2">coordinator1</span>
                                     </label>
                                     <label class="label cursor-pointer w-fit">
-                                        <input type="checkbox" class="checkbox checkbox-xs" value="2" name="coordinator" wire:model="coordinator" />
+                                        <input type="checkbox" class="checkbox checkbox-xs" value="2" wire:model="coordinator" />
                                         <span class="label-text px-2">coordinator2</span>
                                     </label>
                                 </div>

@@ -17,10 +17,28 @@ class Home extends Page
 
     protected static string $view = 'frontend.website.pages.home';
 
+    public array $scope;
+
+    public array $state;
+
+    public array $topic;
+
+    public array $coordinator; 
+
     public function getTitle(): string|Htmlable
     {
         return __('general.home');
     }
+
+    public function rules(): array
+    {
+        return [];
+    }
+
+    public function search(): void
+    {
+        dd($this->scope, $this->state, $this->topic, $this->coordinator);
+    } 
 
     protected function getViewData(): array
     {
