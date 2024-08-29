@@ -198,7 +198,6 @@ class Conference extends Model implements HasAvatar, HasMedia, HasName
                 'ris',
                 'bibtex',
             ],
-            'scope' => self::SCOPE_UNSIGNED,
         ];
     }
 }

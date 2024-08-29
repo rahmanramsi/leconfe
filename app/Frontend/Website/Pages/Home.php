@@ -17,28 +17,20 @@ class Home extends Page
 
     protected static string $view = 'frontend.website.pages.home';
 
-    public array $scope;
+    public string $search = '';
 
-    public array $state;
+    public array $scope = [];
 
-    public array $topic;
+    public array $state = [];
 
-    public array $coordinator; 
+    public array $topic = [];
+
+    public array $coordinator = [];
 
     public function getTitle(): string|Htmlable
     {
         return __('general.home');
     }
-
-    public function rules(): array
-    {
-        return [];
-    }
-
-    public function search(): void
-    {
-        dd($this->scope, $this->state, $this->topic, $this->coordinator);
-    } 
 
     protected function getViewData(): array
     {
@@ -47,8 +39,15 @@ class Home extends Page
                 'media',
                 'meta',
                 'currentScheduledConference' => fn (Builder $query) => $query->with('conference')->withoutGlobalScopes(),
-            ])
-            ->get();
+            ]);
+
+        if(strlen($this->search) > 0) {
+            $conferences
+                ->where('name', 'LIKE', "%{$this->search}%")
+                ->orWhere('path', 'LIKE', "%{$this->search}%");
+        }
+
+        $conferences = $conferences->get();
 
         return [
             'conferences' => $conferences,

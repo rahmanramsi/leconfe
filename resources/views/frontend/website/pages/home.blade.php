@@ -19,84 +19,69 @@
                     </div>
                 </div>
                 <div class="mt-2 px-5 py-4 bg-gray-100 rounded" x-show="filter" x-transition>
-                    <form wire:submit='search' class="space-y-4">
-                        <div class="grid grid-cols-12 gap-4">
-                            <div class="col-span-12 gap-2">
-                                <label class="input input-sm input-bordered bg-white flex items-center gap-2">
-                                    <input type="text" class="grow" placeholder="{{ __('general.search') }}" wire:model="search" />
-                                    <x-heroicon-m-magnifying-glass class="h-4 w-4 opacity-70" />
+                    <div class="grid grid-cols-12 gap-4">
+                        <div class="col-span-12 gap-2">
+                            <label class="input input-sm input-bordered bg-white flex items-center gap-2">
+                                <input type="text" class="grow" placeholder="{{ __('general.search') }}" wire:model.live="search" />
+                                <x-heroicon-m-magnifying-glass class="h-4 w-4 opacity-70" />
+                            </label>
+                        </div>
+
+                        <hr class="col-span-12 gap-2">
+
+                        <div class="col-span-3 gap-2">
+                            <h1 class="font-semibold text-base">{{ __('general.scope') }}</h1>
+                            <div class="form-control">
+                                <label class="label cursor-pointer w-fit">
+                                    <input type="checkbox" class="checkbox checkbox-xs" value="{{ App\Models\Conference::SCOPE_INTERNATIONAL }}" wire:model.live="scope" />
+                                    <span class="label-text px-2">{{ __('general.international') }}</span>
+                                </label>
+                                <label class="label cursor-pointer w-fit">
+                                    <input type="checkbox" class="checkbox checkbox-xs" value="{{ App\Models\Conference::SCOPE_NATIONAL }}" wire:model.live="scope" />
+                                    <span class="label-text px-2">{{ __('general.national') }}</span>
                                 </label>
                             </div>
-
-                            <hr class="col-span-12 gap-2">
-
-                            <div class="col-span-3 gap-2">
-                                <h1 class="font-semibold text-base">{{ __('general.scope') }}</h1>
-                                <div class="form-control">
-                                    <label class="label cursor-pointer w-fit">
-                                        <input type="checkbox" class="checkbox checkbox-xs" value="{{ App\Models\Conference::SCOPE_UNSIGNED }}" wire:model="scope" />
-                                        <span class="label-text px-2">{{ __('general.unsigned') }}</span>
-                                    </label>
-                                    <label class="label cursor-pointer w-fit">
-                                        <input type="checkbox" class="checkbox checkbox-xs" value="{{ App\Models\Conference::SCOPE_INTERNATIONAL }}" wire:model="scope" />
-                                        <span class="label-text px-2">{{ __('general.international') }}</span>
-                                    </label>
-                                    <label class="label cursor-pointer w-fit">
-                                        <input type="checkbox" class="checkbox checkbox-xs" value="{{ App\Models\Conference::SCOPE_NATIONAL }}" wire:model="scope" />
-                                        <span class="label-text px-2">{{ __('general.national') }}</span>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="col-span-3 gap-2">
-                                <h1 class="font-semibold text-base">{{ __('general.state') }}</h1>
-                                <div class="form-control">
-                                    <label class="label cursor-pointer w-fit">
-                                        <input type="checkbox" class="checkbox checkbox-xs" value="active" wire:model="state" />
-                                        <span class="label-text px-2">{{ __('general.active') }}</span>
-                                    </label>
-                                    <label class="label cursor-pointer w-fit">
-                                        <input type="checkbox" class="checkbox checkbox-xs" value="over" wire:model="state" />
-                                        <span class="label-text px-2">{{ __('general.over') }}</span>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="col-span-3 gap-2">
-                                <h1 class="font-semibold text-base">{{ __('general.topic') }}</h1>
-                                <div class="form-control">
-                                    <label class="label cursor-pointer w-fit">
-                                        <input type="checkbox" class="checkbox checkbox-xs" value="1" wire:model="topic" />
-                                        <span class="label-text px-2">topic1</span>
-                                    </label>
-                                    <label class="label cursor-pointer w-fit">
-                                        <input type="checkbox" class="checkbox checkbox-xs" value="2" wire:model="topic" />
-                                        <span class="label-text px-2">topic2</span>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="col-span-3 gap-2">
-                                <h1 class="font-semibold text-base">{{ __('general.coordinator') }}</h1>
-                                <div class="form-control">
-                                    <label class="label cursor-pointer w-fit">
-                                        <input type="checkbox" class="checkbox checkbox-xs" value="1" wire:model="coordinator" />
-                                        <span class="label-text px-2">coordinator1</span>
-                                    </label>
-                                    <label class="label cursor-pointer w-fit">
-                                        <input type="checkbox" class="checkbox checkbox-xs" value="2" wire:model="coordinator" />
-                                        <span class="label-text px-2">coordinator2</span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <hr class="col-span-12 gap-2">
                         </div>
-
-                        <div class="mt-5 flex justify-end gap-2">
-                            <button type="submit" class="btn btn-primary btn-sm" wire:loading.attr="disabled">
-                                <span class="loading loading-spinner loading-xs" wire:loading></span>
-                                {{ __('general.apply') }}
-                            </button>
+                        <div class="col-span-3 gap-2">
+                            <h1 class="font-semibold text-base">{{ __('general.state') }}</h1>
+                            <div class="form-control">
+                                <label class="label cursor-pointer w-fit">
+                                    <input type="checkbox" class="checkbox checkbox-xs" value="active" wire:model.live="state" />
+                                    <span class="label-text px-2">{{ __('general.active') }}</span>
+                                </label>
+                                <label class="label cursor-pointer w-fit">
+                                    <input type="checkbox" class="checkbox checkbox-xs" value="over" wire:model.live="state" />
+                                    <span class="label-text px-2">{{ __('general.over') }}</span>
+                                </label>
+                            </div>
                         </div>
-                    </form>
+                        <div class="col-span-3 gap-2">
+                            <h1 class="font-semibold text-base">{{ __('general.topic') }}</h1>
+                            <div class="form-control">
+                                <label class="label cursor-pointer w-fit">
+                                    <input type="checkbox" class="checkbox checkbox-xs" value="1" wire:model.live="topic" />
+                                    <span class="label-text px-2">topic1</span>
+                                </label>
+                                <label class="label cursor-pointer w-fit">
+                                    <input type="checkbox" class="checkbox checkbox-xs" value="2" wire:model.live="topic" />
+                                    <span class="label-text px-2">topic2</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-span-3 gap-2">
+                            <h1 class="font-semibold text-base">{{ __('general.coordinator') }}</h1>
+                            <div class="form-control">
+                                <label class="label cursor-pointer w-fit">
+                                    <input type="checkbox" class="checkbox checkbox-xs" value="1" wire:model.live="coordinator" />
+                                    <span class="label-text px-2">coordinator1</span>
+                                </label>
+                                <label class="label cursor-pointer w-fit">
+                                    <input type="checkbox" class="checkbox checkbox-xs" value="2" wire:model.live="coordinator" />
+                                    <span class="label-text px-2">coordinator2</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             
