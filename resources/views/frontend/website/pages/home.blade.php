@@ -31,33 +31,37 @@
                             <hr class="col-span-12 gap-2">
 
                             <div class="col-span-3 gap-2">
-                                <h1 class="font-semibold text-base">Scope</h1>
+                                <h1 class="font-semibold text-base">{{ __('general.scope') }}</h1>
                                 <div class="form-control">
                                     <label class="label cursor-pointer w-fit">
+                                        <input type="checkbox" class="checkbox checkbox-xs" value="{{ App\Models\Conference::SCOPE_UNSIGNED }}" name="scope" wire:model="scope" />
+                                        <span class="label-text px-2">{{ __('general.unsigned') }}</span>
+                                    </label>
+                                    <label class="label cursor-pointer w-fit">
                                         <input type="checkbox" class="checkbox checkbox-xs" value="{{ App\Models\Conference::SCOPE_INTERNATIONAL }}" name="scope" wire:model="scope" />
-                                        <span class="label-text px-2">International</span>
+                                        <span class="label-text px-2">{{ __('general.international') }}</span>
                                     </label>
                                     <label class="label cursor-pointer w-fit">
                                         <input type="checkbox" class="checkbox checkbox-xs" value="{{ App\Models\Conference::SCOPE_NATIONAL }}" name="scope" wire:model="scope" />
-                                        <span class="label-text px-2">National</span>
+                                        <span class="label-text px-2">{{ __('general.national') }}</span>
                                     </label>
                                 </div>
                             </div>
                             <div class="col-span-3 gap-2">
-                                <h1 class="font-semibold text-base">State</h1>
+                                <h1 class="font-semibold text-base">{{ __('general.state') }}</h1>
                                 <div class="form-control">
                                     <label class="label cursor-pointer w-fit">
                                         <input type="checkbox" class="checkbox checkbox-xs" value="true" name="state" wire:model="state" />
-                                        <span class="label-text px-2">Active</span>
+                                        <span class="label-text px-2">{{ __('general.active') }}</span>
                                     </label>
                                     <label class="label cursor-pointer w-fit">
                                         <input type="checkbox" class="checkbox checkbox-xs" value="false" name="state" wire:model="state" />
-                                        <span class="label-text px-2">Over</span>
+                                        <span class="label-text px-2">{{ __('general.over') }}</span>
                                     </label>
                                 </div>
                             </div>
                             <div class="col-span-3 gap-2">
-                                <h1 class="font-semibold text-base">Topic</h1>
+                                <h1 class="font-semibold text-base">{{ __('general.topic') }}</h1>
                                 <div class="form-control">
                                     <label class="label cursor-pointer w-fit">
                                         <input type="checkbox" class="checkbox checkbox-xs" value="1" name="topic" wire:model="topic" />
@@ -70,7 +74,7 @@
                                 </div>
                             </div>
                             <div class="col-span-3 gap-2">
-                                <h1 class="font-semibold text-base">Coordinator</h1>
+                                <h1 class="font-semibold text-base">{{ __('general.coordinator') }}</h1>
                                 <div class="form-control">
                                     <label class="label cursor-pointer w-fit">
                                         <input type="checkbox" class="checkbox checkbox-xs" value="1" name="coordinator" wire:model="coordinator" />

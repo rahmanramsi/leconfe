@@ -802,4 +802,12 @@ return [
     'search' => "بحث",
     'filter' => "تصفية",
 
+    'scope' => "نطاق",
+    'coordinator' => "المنسق",
+    'over' => 'أكثر',
+    'international' => "دولي",
+    'national' => "وطني",
+    'unsigned' => "غير موقعة",
+    'conference_scope_description' => "نطاق المؤتمر",
+
 ];

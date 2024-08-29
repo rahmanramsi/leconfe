@@ -801,4 +801,12 @@ return [
     'search' => "Kërko",
     'filter' => "Filtro",
 
+    'scope' => "Fusha e Veprimit",
+    'coordinator' => "Koordinatori",
+    'over' => 'Mbi',
+    'international' => "Ndërkombëtare",
+    'national' => "Kombëtare",
+    'unsigned' => "E Panënshkruar",
+    'conference_scope_description' => "Fusha e veprimit të konferencës",
+
 ];

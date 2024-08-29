@@ -785,5 +785,13 @@ return [
     'search' => "Cari",
     'filter' => "Filter",
 
+    'scope' => "Ruang Lingkup",
+    'coordinator' => "Koordinator",
+    'over' => 'Lebih',
+    'international' => "Internasional",
+    'national' => "Nasional",
+    'unsigned' => "Belum Ditandatangani",
+    'conference_scope_description' => "Ruang lingkup konferensi",
+
 ];
 

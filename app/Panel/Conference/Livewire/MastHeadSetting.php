@@ -13,6 +13,7 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Livewire\Component;
 use App\Forms\Components\TinyEditor;
+use App\Models\Conference;
 use Filament\Forms\Components\Textarea;
 use PhpParser\Node\Stmt\Label;
 use Squire\Models\Country;
@@ -64,6 +65,14 @@ class MastHeadSetting extends Component implements HasForms
                                     ->columnSpanFull()
                                     ->hint(__('general.recommended_description_length'))
                                     ->helperText(__('general.short_description_of_the_website')),
+                                Select::make('meta.scope')
+                                    ->options([
+                                        Conference::SCOPE_UNSIGNED => __('general.unsigned'),
+                                        Conference::SCOPE_INTERNATIONAL => __('general.international'),
+                                        Conference::SCOPE_NATIONAL => __('general.national'),
+                                    ])
+                                    ->helperText(__('general.conference_scope_description'))
+                                    ->selectablePlaceholder(false),
                             ]),
                         Section::make(__('general.key_information'))
                             ->description(__('general.provide_short_description_your_conference'))

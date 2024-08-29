@@ -819,5 +819,12 @@ return [
     'search' => "Search",
     'filter' => "Filter",
     
+    'scope' => "Scope",
+    'coordinator' => "Coordinator",
+    'over' => 'Over',
+    'international' => "International",
+    'national' => "National",
+    'unsigned' => "Unsigned",
+    'conference_scope_description' => "Scope of the conference",
 ];
 
