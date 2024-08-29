@@ -11,7 +11,7 @@
                 <div class="flex">
                     <x-website::heading-title title="Conference List" class="grow"/>
                     <div class="tooltip tooltip-bottom" data-tip="{{ __('general.filter') }}">
-                        <label class="px-1 flex-none swap swap-rotate">
+                        <label class="px-1 py-0.5 flex-none swap swap-rotate">
                             <input type="checkbox" @click="filter = !filter" />
                             <x-heroicon-m-funnel class="swap-off h-5 w-5 fill-current" />
                             <x-heroicon-m-x-mark class="swap-on h-5 w-5 fill-current" />
@@ -34,12 +34,12 @@
                                 <h1 class="font-semibold text-base">Scope</h1>
                                 <div class="form-control">
                                     <label class="label cursor-pointer w-fit">
-                                        <input type="radio" class="radio radio-sm" value="{{ App\Models\Conference::SCOPE_INTERNATIONAL }}" name="scope" wire:model="scope" />
-                                        <span class="label-text px-3">International</span>
+                                        <input type="checkbox" class="checkbox checkbox-xs" value="{{ App\Models\Conference::SCOPE_INTERNATIONAL }}" name="scope" wire:model="scope" />
+                                        <span class="label-text px-2">International</span>
                                     </label>
                                     <label class="label cursor-pointer w-fit">
-                                        <input type="radio" class="radio radio-sm" value="{{ App\Models\Conference::SCOPE_NATIONAL }}" name="scope" wire:model="scope" />
-                                        <span class="label-text px-3">National</span>
+                                        <input type="checkbox" class="checkbox checkbox-xs" value="{{ App\Models\Conference::SCOPE_NATIONAL }}" name="scope" wire:model="scope" />
+                                        <span class="label-text px-2">National</span>
                                     </label>
                                 </div>
                             </div>
@@ -47,12 +47,12 @@
                                 <h1 class="font-semibold text-base">State</h1>
                                 <div class="form-control">
                                     <label class="label cursor-pointer w-fit">
-                                        <input type="radio" class="radio radio-sm" value="true" name="state" wire:model="state" />
-                                        <span class="label-text px-3">Active</span>
+                                        <input type="checkbox" class="checkbox checkbox-xs" value="true" name="state" wire:model="state" />
+                                        <span class="label-text px-2">Active</span>
                                     </label>
                                     <label class="label cursor-pointer w-fit">
-                                        <input type="radio" class="radio radio-sm" value="false" name="state" wire:model="state" />
-                                        <span class="label-text px-3">Over</span>
+                                        <input type="checkbox" class="checkbox checkbox-xs" value="false" name="state" wire:model="state" />
+                                        <span class="label-text px-2">Over</span>
                                     </label>
                                 </div>
                             </div>
@@ -60,12 +60,12 @@
                                 <h1 class="font-semibold text-base">Topic</h1>
                                 <div class="form-control">
                                     <label class="label cursor-pointer w-fit">
-                                        <input type="radio" class="radio radio-sm" value="1" name="topic" wire:model="topic" />
-                                        <span class="label-text px-3">topic1</span>
+                                        <input type="checkbox" class="checkbox checkbox-xs" value="1" name="topic" wire:model="topic" />
+                                        <span class="label-text px-2">topic1</span>
                                     </label>
                                     <label class="label cursor-pointer w-fit">
-                                        <input type="radio" class="radio radio-sm" value="2" name="topic" wire:model="topic" />
-                                        <span class="label-text px-3">topic2</span>
+                                        <input type="checkbox" class="checkbox checkbox-xs" value="2" name="topic" wire:model="topic" />
+                                        <span class="label-text px-2">topic2</span>
                                     </label>
                                 </div>
                             </div>
@@ -73,12 +73,12 @@
                                 <h1 class="font-semibold text-base">Coordinator</h1>
                                 <div class="form-control">
                                     <label class="label cursor-pointer w-fit">
-                                        <input type="radio" class="radio radio-sm" value="1" name="coordinator" wire:model="coordinator" />
-                                        <span class="label-text px-3">coordinator1</span>
+                                        <input type="checkbox" class="checkbox checkbox-xs" value="1" name="coordinator" wire:model="coordinator" />
+                                        <span class="label-text px-2">coordinator1</span>
                                     </label>
                                     <label class="label cursor-pointer w-fit">
-                                        <input type="radio" class="radio radio-sm" value="2" name="coordinator" wire:model="coordinator" />
-                                        <span class="label-text px-3">coordinator2</span>
+                                        <input type="checkbox" class="checkbox checkbox-xs" value="2" name="coordinator" wire:model="coordinator" />
+                                        <span class="label-text px-2">coordinator2</span>
                                     </label>
                                 </div>
                             </div>
