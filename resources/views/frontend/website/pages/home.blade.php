@@ -58,14 +58,12 @@
                         <div class="col-span-4 gap-2">
                             <h1 class="font-semibold text-base">{{ __('general.coordinator') }}</h1>
                             <div class="form-control">
-                                <label class="py-1 label cursor-pointer w-fit">
-                                    <input type="checkbox" class="checkbox checkbox-xs" value="1" wire:model.live="coordinator" />
-                                    <span class="label-text px-2">coordinator1</span>
-                                </label>
-                                <label class="py-1 label cursor-pointer w-fit">
-                                    <input type="checkbox" class="checkbox checkbox-xs" value="2" wire:model.live="coordinator" />
-                                    <span class="label-text px-2">coordinator2</span>
-                                </label>
+                                @foreach ($scheduledConferencesWithCoordinators as $scheduledConference)
+                                    <label class="py-1 label cursor-pointer w-fit">
+                                        <input type="checkbox" class="checkbox checkbox-xs" value="{{ $scheduledConference->id }}" wire:model.live="coordinator" />
+                                        <span class="label-text px-2">{{ $scheduledConference->getMeta('coordinator') }}</span>
+                                    </label>
+                                @endforeach
                             </div>
                         </div>
                         <div class="col-span-12 gap-2 justify-between content-between">

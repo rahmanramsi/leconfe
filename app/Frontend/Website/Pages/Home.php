@@ -3,6 +3,7 @@
 namespace App\Frontend\Website\Pages;
 
 use App\Models\Conference;
+use App\Models\ScheduledConference;
 use App\Models\Topic;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Contracts\Support\Htmlable;
@@ -36,8 +37,6 @@ class Home extends Page
 
     protected function getViewData(): array
     {
-        $topics = Topic::withoutGlobalScopes()->with(['conference'])->get();
-
         // conferences
         $conferences = Conference::query()
             ->with([
@@ -46,6 +45,7 @@ class Home extends Page
                 'topics' => fn (Builder $query) => $query->with('conference')->withoutGlobalScopes(),
                 'currentScheduledConference' => fn (Builder $query) => $query->with('conference')->withoutGlobalScopes(),
                 'activeScheduledConference' => fn (Builder $query) => $query->with('conference')->withoutGlobalScopes(),
+                'scheduledConferences' => fn (Builder $query) => $query->with('conference')->withoutGlobalScopes(),
             ]);
 
         if(strlen($this->search) > 0) {
@@ -88,10 +88,31 @@ class Home extends Page
                     }
                 }
 
+                // coordinator
+                if (count($this->coordinator) > 0) {
+                    foreach($conference->scheduledConferences->pluck('id') as $id) {
+                        if(in_array($id, $this->coordinator)) {
+                            return true;
+                        }
+                    }
+                }
+
                 return false;
             });
 
+        $topics = Topic::withoutGlobalScopes()->with(['conference'])->orderBy('name', 'ASC')->get();
+
+        $scheduledConferencesWithCoordinators = ScheduledConference::withoutGlobalScopes()->get()
+            ->filter(function (ScheduledConference $scheduledConference) {
+                if(!$scheduledConference->getMeta('coordinator')) {
+                    return false;
+                }
+
+                return true;
+            });
+
         return [
+            'scheduledConferencesWithCoordinators' => $scheduledConferencesWithCoordinators,
             'conferences' => $filteredConference,
             'topics' => $topics,
         ];
