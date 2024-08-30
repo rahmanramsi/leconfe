@@ -3,6 +3,7 @@
 namespace App\Frontend\Website\Pages;
 
 use App\Models\Conference;
+use App\Models\Topic;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Arr;
@@ -35,10 +36,14 @@ class Home extends Page
 
     protected function getViewData(): array
     {
+        $topics = Topic::withoutGlobalScopes()->with(['conference'])->get();
+
+        // conferences
         $conferences = Conference::query()
             ->with([
                 'media',
                 'meta',
+                'topics' => fn (Builder $query) => $query->with('conference')->withoutGlobalScopes(),
                 'currentScheduledConference' => fn (Builder $query) => $query->with('conference')->withoutGlobalScopes(),
             ]);
 
@@ -49,20 +54,33 @@ class Home extends Page
         }
 
         $filteredConference = $conferences->get()->filter(function (Conference $conference) {
-            // nested brace are required
-            if(count($this->scope) > 0) {
-                if(!in_array($conference->getMeta('scope'), $this->scope)) {
-                    return false;
-                }
-
+            if (count($this->scope) <= 0 &&
+                count($this->state) <= 0 &&
+                count($this->topic) <= 0 &&
+                count($this->coordinator) <= 0) {
                 return true;
             }
 
-            return true;
+            if(count($this->scope) > 0) {
+                if(in_array($conference->getMeta('scope'), $this->scope)) {
+                    return true;
+                }
+            }
+            
+            if(count($this->topic) > 0) {
+                foreach($conference->topics->pluck('id') as $id) {
+                    if(in_array($id, $this->topic)) {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         });
 
         return [
             'conferences' => $filteredConference,
+            'topics' => $topics,
         ];
     }
 
