@@ -914,5 +914,7 @@ return [
     'national' => "وطني",
     'unsigned' => "غير موقعة",
     'conference_scope_description' => "نطاق المؤتمر",
-
+    'clear' => "مسح",
+    'coordinator_setting_description' => "الفرد أو الفريق المسؤول عن تنظيم وإدارة المؤتمر.",
+    
 ];

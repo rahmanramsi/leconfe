@@ -932,4 +932,7 @@ return [
     'national' => "National",
     'unsigned' => "Unsigned",
     'conference_scope_description' => "Scope of the conference",
+    'clear' => "Clear",
+    'coordinator_setting_description' => "Individual or team that responsible for organizing and managing the conference.",
+    
 ];

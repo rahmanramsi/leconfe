@@ -20,18 +20,18 @@
 
                 <div class="dropdown h-fit">
                     <button tabindex="0" role="button" class="btn btn-sm btn-outline border-gray-300 w-full">
-                        Scope {{ count($this->scope) > 0 ? "(" . count($this->scope) . ")" : null }}
+                        {{ __('general.scope') }} {{ count($this->scope) > 0 ? "(" . count($this->scope) . ")" : null }}
                         <x-heroicon-o-chevron-down class="h-4 w-4" />
                     </button>
                     <ul tabindex="0" class="mt-2 p-2 w-full dropdown-content form-control menu bg-white border rounded z-[1] shadow-xl">
                         <li>
-                            <label class="py-2 label cursor-pointer">
+                            <label class="py-1.5 label cursor-pointer">
                                 <span class="label-text px-2 !text-center">{{ __('general.international') }}</span>
                                 <input type="checkbox" class="checkbox checkbox-xs" value="{{ App\Models\Conference::SCOPE_INTERNATIONAL }}" wire:model.live="scope" />
                             </label>
                         </li>
                         <li>
-                            <label class="py-2 label cursor-pointer">
+                            <label class="py-1.5 label cursor-pointer">
                                 <span class="label-text px-2 !text-center">{{ __('general.national') }}</span>
                                 <input type="checkbox" class="checkbox checkbox-xs" value="{{ App\Models\Conference::SCOPE_NATIONAL }}" wire:model.live="scope" />
                             </label>
@@ -41,18 +41,18 @@
 
                 <div class="dropdown h-fit">
                     <button tabindex="0" role="button" class="btn btn-sm btn-outline border-gray-300 w-full">
-                        State {{ count($this->state) > 0 ? "(" . count($this->state) . ")" : null }}
+                        {{ __('general.state') }} {{ count($this->state) > 0 ? "(" . count($this->state) . ")" : null }}
                         <x-heroicon-o-chevron-down class="h-4 w-4" />
                     </button>
                     <ul tabindex="0" class="mt-2 p-2 w-full dropdown-content form-control menu bg-white border rounded z-[1] shadow-xl">
                         <li>
-                            <label class="py-2 label cursor-pointer">
+                            <label class="py-1.5 label cursor-pointer">
                                 <span class="label-text px-2">{{ __('general.active') }}</span>
                                 <input type="checkbox" class="checkbox checkbox-xs" value="active" wire:model.live="state" />
                             </label>
                         </li>
                         <li>
-                            <label class="py-2 label cursor-pointer">
+                            <label class="py-1.5 label cursor-pointer">
                                 <span class="label-text px-2">{{ __('general.over') }}</span>
                                 <input type="checkbox" class="checkbox checkbox-xs" value="over" wire:model.live="state" />
                             </label>
@@ -62,13 +62,13 @@
                 
                 <div class="dropdown h-fit">
                     <button tabindex="0" role="button" class="btn btn-sm btn-outline border-gray-300 w-full">
-                        Topics {{ count($this->topic) > 0 ? "(" . count($this->topic) . ")" : null }}
+                        {{ __('general.topic') }} {{ count($this->topic) > 0 ? "(" . count($this->topic) . ")" : null }}
                         <x-heroicon-o-chevron-down class="h-4 w-4" />
                     </button>
                     <ul tabindex="0" class="mt-2 p-2 w-full grid dropdown-content form-control menu bg-white border rounded z-[1] shadow-xl overflow-y-auto max-h-[50vh]">
                         @foreach ($topics as $topic)
                             <li>
-                                <label class="py-2 label cursor-pointer">
+                                <label class="py-1.5 label cursor-pointer">
                                     <span class="label-text px-2">{{ $topic->name }}</span>
                                     <input type="checkbox" class="checkbox checkbox-xs" value="{{ $topic->id }}" wire:model.live="topic" />
                                 </label>
@@ -79,13 +79,13 @@
 
                 <div class="dropdown h-fit">
                     <button tabindex="0" role="button" class="btn btn-sm btn-outline border-gray-300 w-full">
-                        Coordinator {{ count($this->coordinator) > 0 ? "(" . count($this->coordinator) . ")" : null }}
+                        {{ __('general.coordinator') }} {{ count($this->coordinator) > 0 ? "(" . count($this->coordinator) . ")" : null }}
                         <x-heroicon-o-chevron-down class="h-4 w-4" />
                     </button>
                     <ul tabindex="0" class="mt-2 p-2 w-full grid dropdown-content form-control menu bg-white border rounded z-[1] shadow-xl overflow-y-auto max-h-[50vh]">
                         @foreach ($scheduledConferencesWithCoordinators as $scheduledConference)
                             <li>
-                                <label class="py-2 label cursor-pointer">
+                                <label class="py-1.5 label cursor-pointer">
                                     <span class="label-text px-2">{{ $scheduledConference->getMeta('coordinator') }}</span>
                                     <input type="checkbox" class="checkbox checkbox-xs" value="{{ $scheduledConference->id }}" wire:model.live="coordinator" />
                                 </label>
@@ -95,7 +95,7 @@
                 </div>
 
                 <button class="btn btn-sm btn-primary w-full" wire:click="clearFilter" wire:loading.attr="disabled">
-                    Clear
+                    {{ __('general.clear') }}
                 </button>
             </div>
 
