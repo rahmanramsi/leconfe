@@ -7,85 +7,99 @@
         @endif
 
         <div class="space-y-4 conferences">
-            <div x-data="{filter: false}">
-                <div class="flex">
-                    <x-website::heading-title title="Conference List" class="grow"/>
-                    <div class="tooltip tooltip-bottom" data-tip="{{ __('general.filter') }}">
-                        <label class="px-1 py-1.5 flex-none swap swap-rotate">
-                            <input type="checkbox" @click="filter = !filter" />
-                            <x-heroicon-m-funnel class="swap-off h-5 w-5 fill-current" />
-                            <x-heroicon-m-x-mark class="swap-on h-5 w-5 fill-current" />
-                        </label>
-                    </div>
+
+            <x-website::heading-title title="Conference List" class="grow"/>
+
+            <div class="mt-2 mb-6 grid grid-cols-5 gap-2">
+                <div class="col-span-full gap-2">
+                    <label class="input input-sm input-bordered !outline-none bg-white flex items-center gap-2">
+                        <input type="text" class="grow" placeholder="{{ __('general.search') }}" wire:model.live="search" />
+                        <x-heroicon-m-magnifying-glass class="h-4 w-4 opacity-70" />
+                    </label>
                 </div>
-                <div class="mt-2 px-5 py-4 bg-gray-100 rounded" x-show="filter" x-transition>
-                    <div class="grid grid-cols-12 gap-4">
-                        <div class="col-span-12 gap-2">
-                            <label class="input input-sm input-bordered bg-white flex items-center gap-2">
-                                <input type="text" class="grow" placeholder="{{ __('general.search') }}" wire:model.live="search" />
-                                <x-heroicon-m-magnifying-glass class="h-4 w-4 opacity-70" />
+
+                <div class="dropdown h-fit">
+                    <button tabindex="0" role="button" class="btn btn-sm btn-outline border-gray-300 w-full">
+                        Scope {{ count($this->scope) > 0 ? "(" . count($this->scope) . ")" : null }}
+                        <x-heroicon-o-chevron-down class="h-4 w-4" />
+                    </button>
+                    <ul tabindex="0" class="mt-2 p-2 w-full dropdown-content form-control menu bg-white border rounded z-[1] shadow-xl">
+                        <li>
+                            <label class="py-2 label cursor-pointer">
+                                <span class="label-text px-2 !text-center">{{ __('general.international') }}</span>
+                                <input type="checkbox" class="checkbox checkbox-xs" value="{{ App\Models\Conference::SCOPE_INTERNATIONAL }}" wire:model.live="scope" />
                             </label>
-                        </div>
-
-                        <hr class="col-span-12 gap-2">
-
-                        <div class="col-span-4 gap-2">
-                            <h1 class="font-semibold text-base">{{ __('general.scope') }}</h1>
-                            <div class="form-control">
-                                <label class="py-1 label cursor-pointer w-fit">
-                                    <input type="checkbox" class="checkbox checkbox-xs" value="{{ App\Models\Conference::SCOPE_INTERNATIONAL }}" wire:model.live="scope" />
-                                    <span class="label-text px-2">{{ __('general.international') }}</span>
-                                </label>
-                                <label class="py-1 label cursor-pointer w-fit">
-                                    <input type="checkbox" class="checkbox checkbox-xs" value="{{ App\Models\Conference::SCOPE_NATIONAL }}" wire:model.live="scope" />
-                                    <span class="label-text px-2">{{ __('general.national') }}</span>
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-span-4 gap-2">
-                            <h1 class="font-semibold text-base">{{ __('general.state') }}</h1>
-                            <div class="form-control">
-                                <label class="py-1 label cursor-pointer w-fit">
-                                    <input type="checkbox" class="checkbox checkbox-xs" value="active" wire:model.live="state" />
-                                    <span class="label-text px-2">{{ __('general.active') }}</span>
-                                </label>
-                                <label class="py-1 label cursor-pointer w-fit">
-                                    <input type="checkbox" class="checkbox checkbox-xs" value="over" wire:model.live="state" />
-                                    <span class="label-text px-2">{{ __('general.over') }}</span>
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-span-4 gap-2">
-                            <h1 class="font-semibold text-base">{{ __('general.coordinator') }}</h1>
-                            <div class="form-control">
-                                @foreach ($scheduledConferencesWithCoordinators as $scheduledConference)
-                                    <label class="py-1 label cursor-pointer w-fit">
-                                        <input type="checkbox" class="checkbox checkbox-xs" value="{{ $scheduledConference->id }}" wire:model.live="coordinator" />
-                                        <span class="label-text px-2">{{ $scheduledConference->getMeta('coordinator') }}</span>
-                                    </label>
-                                @endforeach
-                            </div>
-                        </div>
-                        <div class="col-span-full gap-2 justify-between content-between">
-                            <h1 class="font-semibold text-base">{{ __('general.topic') }}</h1>
-                            <div class="flex flex-row flex-wrap justify-between gap-2 gap-y-0">
-                                @foreach ($topics as $topic)
-                                    <label class="py-1 label cursor-pointer w-fit flex-none">
-                                        <input type="checkbox" class="checkbox checkbox-xs" value="{{ $topic->id }}" wire:model.live="topic" />
-                                        <span class="label-text px-2">{{ $topic->name }}</span>
-                                    </label>
-                                @endforeach
-                            </div>
-                        </div>
-
-                        <div class="pt-2 col-span-full text-right text-sm">
-                            <button class="link text-primary" wire:click="clearFilter" wire:loading.attr="disabled">
-                                Clear filter...
-                            </button>
-                        </div>
-                    </div>
+                        </li>
+                        <li>
+                            <label class="py-2 label cursor-pointer">
+                                <span class="label-text px-2 !text-center">{{ __('general.national') }}</span>
+                                <input type="checkbox" class="checkbox checkbox-xs" value="{{ App\Models\Conference::SCOPE_NATIONAL }}" wire:model.live="scope" />
+                            </label>
+                        </li>
+                    </ul>
                 </div>
+
+                <div class="dropdown h-fit">
+                    <button tabindex="0" role="button" class="btn btn-sm btn-outline border-gray-300 w-full">
+                        State {{ count($this->state) > 0 ? "(" . count($this->state) . ")" : null }}
+                        <x-heroicon-o-chevron-down class="h-4 w-4" />
+                    </button>
+                    <ul tabindex="0" class="mt-2 p-2 w-full dropdown-content form-control menu bg-white border rounded z-[1] shadow-xl">
+                        <li>
+                            <label class="py-2 label cursor-pointer">
+                                <span class="label-text px-2">{{ __('general.active') }}</span>
+                                <input type="checkbox" class="checkbox checkbox-xs" value="active" wire:model.live="state" />
+                            </label>
+                        </li>
+                        <li>
+                            <label class="py-2 label cursor-pointer">
+                                <span class="label-text px-2">{{ __('general.over') }}</span>
+                                <input type="checkbox" class="checkbox checkbox-xs" value="over" wire:model.live="state" />
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="dropdown h-fit">
+                    <button tabindex="0" role="button" class="btn btn-sm btn-outline border-gray-300 w-full">
+                        Topics {{ count($this->topic) > 0 ? "(" . count($this->topic) . ")" : null }}
+                        <x-heroicon-o-chevron-down class="h-4 w-4" />
+                    </button>
+                    <ul tabindex="0" class="mt-2 p-2 w-full grid dropdown-content form-control menu bg-white border rounded z-[1] shadow-xl overflow-y-auto max-h-[50vh]">
+                        @foreach ($topics as $topic)
+                            <li>
+                                <label class="py-2 label cursor-pointer">
+                                    <span class="label-text px-2">{{ $topic->name }}</span>
+                                    <input type="checkbox" class="checkbox checkbox-xs" value="{{ $topic->id }}" wire:model.live="topic" />
+                                </label>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+
+                <div class="dropdown h-fit">
+                    <button tabindex="0" role="button" class="btn btn-sm btn-outline border-gray-300 w-full">
+                        Coordinator {{ count($this->coordinator) > 0 ? "(" . count($this->coordinator) . ")" : null }}
+                        <x-heroicon-o-chevron-down class="h-4 w-4" />
+                    </button>
+                    <ul tabindex="0" class="mt-2 p-2 w-full grid dropdown-content form-control menu bg-white border rounded z-[1] shadow-xl overflow-y-auto max-h-[50vh]">
+                        @foreach ($scheduledConferencesWithCoordinators as $scheduledConference)
+                            <li>
+                                <label class="py-2 label cursor-pointer">
+                                    <span class="label-text px-2">{{ $scheduledConference->getMeta('coordinator') }}</span>
+                                    <input type="checkbox" class="checkbox checkbox-xs" value="{{ $scheduledConference->id }}" wire:model.live="coordinator" />
+                                </label>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+
+                <button class="btn btn-sm btn-primary w-full" wire:click="clearFilter" wire:loading.attr="disabled">
+                    Clear
+                </button>
             </div>
+
+            <hr class="!my-6">
             
             <div class="space-y-4 conference-current">
                 @if ($conferences->isNotEmpty())
