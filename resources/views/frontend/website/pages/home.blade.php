@@ -10,15 +10,19 @@
 
             <x-website::heading-title title="Conference List" class="grow"/>
 
-            <div class="mt-2 mb-6 grid grid-cols-5 gap-2">
-                <div class="col-span-full gap-2">
+            <div class="mt-6 mb-6 grid grid-cols-8 gap-2">
+                <div class="col-span-6 gap-2">
                     <label class="input input-sm input-bordered !outline-none bg-white flex items-center gap-2">
                         <input type="text" class="grow" placeholder="{{ __('general.search') }}" wire:model.live="search" />
                         <x-heroicon-m-magnifying-glass class="h-4 w-4 opacity-70" />
                     </label>
                 </div>
 
-                <div class="dropdown h-fit">
+                <button class="col-span-2 btn btn-sm btn-primary w-full" wire:click="clearFilter" wire:loading.attr="disabled">
+                    {{ __('general.clear') }}
+                </button>
+
+                <div class="col-span-4 sm:col-span-2 dropdown h-fit">
                     <button tabindex="0" role="button" class="btn btn-sm btn-outline border-gray-300 w-full">
                         {{ __('general.scope') }} {{ count($this->scope) > 0 ? "(" . count($this->scope) . ")" : null }}
                         <x-heroicon-o-chevron-down class="h-4 w-4" />
@@ -39,7 +43,7 @@
                     </ul>
                 </div>
 
-                <div class="dropdown h-fit">
+                <div class="col-span-4 sm:col-span-2 dropdown h-fit">
                     <button tabindex="0" role="button" class="btn btn-sm btn-outline border-gray-300 w-full">
                         {{ __('general.state') }} {{ count($this->state) > 0 ? "(" . count($this->state) . ")" : null }}
                         <x-heroicon-o-chevron-down class="h-4 w-4" />
@@ -60,7 +64,7 @@
                     </ul>
                 </div>
                 
-                <div class="dropdown h-fit">
+                <div class="col-span-4 sm:col-span-2 dropdown h-fit">
                     <button tabindex="0" role="button" class="btn btn-sm btn-outline border-gray-300 w-full">
                         {{ __('general.topic') }} {{ count($this->topic) > 0 ? "(" . count($this->topic) . ")" : null }}
                         <x-heroicon-o-chevron-down class="h-4 w-4" />
@@ -77,7 +81,7 @@
                     </ul>
                 </div>
 
-                <div class="dropdown h-fit">
+                <div class="col-span-4 sm:col-span-2 dropdown h-fit">
                     <button tabindex="0" role="button" class="btn btn-sm btn-outline border-gray-300 w-full">
                         {{ __('general.coordinator') }} {{ count($this->coordinator) > 0 ? "(" . count($this->coordinator) . ")" : null }}
                         <x-heroicon-o-chevron-down class="h-4 w-4" />
@@ -93,10 +97,6 @@
                         @endforeach
                     </ul>
                 </div>
-
-                <button class="btn btn-sm btn-primary w-full" wire:click="clearFilter" wire:loading.attr="disabled">
-                    {{ __('general.clear') }}
-                </button>
             </div>
 
             <hr class="!my-6">
