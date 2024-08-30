@@ -66,7 +66,7 @@
                                 @endforeach
                             </div>
                         </div>
-                        <div class="col-span-12 gap-2 justify-between content-between">
+                        <div class="col-span-full gap-2 justify-between content-between">
                             <h1 class="font-semibold text-base">{{ __('general.topic') }}</h1>
                             <div class="flex flex-row flex-wrap justify-between gap-2 gap-y-0">
                                 @foreach ($topics as $topic)
@@ -76,6 +76,12 @@
                                     </label>
                                 @endforeach
                             </div>
+                        </div>
+
+                        <div class="pt-2 col-span-full text-right text-sm">
+                            <button class="link text-primary" wire:click="clearFilter" wire:loading.attr="disabled">
+                                Clear filter...
+                            </button>
                         </div>
                     </div>
                 </div>

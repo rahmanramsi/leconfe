@@ -35,6 +35,15 @@ class Home extends Page
         return __('general.home');
     }
 
+    public function clearFilter(): void
+    {
+        $this->search = '';
+        $this->scope = [];
+        $this->state = [];
+        $this->topic = [];
+        $this->coordinator = [];
+    }
+
     protected function getViewData(): array
     {
         // conferences
