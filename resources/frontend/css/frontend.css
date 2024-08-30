@@ -7,8 +7,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
 @layer components {
     .accordion-header {
         @apply py-1 px-1 cursor-pointer gap-1 flex items-center;

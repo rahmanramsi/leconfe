@@ -2,13 +2,20 @@
 
 namespace App\Panel\ScheduledConference\Widgets;
 
-use App\Models\AuthorRole;
-use App\Models\Enums\SubmissionStatus;
-use App\Models\Enums\UserRole;
-use App\Models\Submission;
 use App\Models\User;
-use Filament\Widgets\StatsOverviewWidget as BaseWidget;
+use App\Models\AuthorRole;
+use App\Models\Enums\RegistrationPaymentState;
+use App\Models\Enums\SubmissionStage;
+use App\Models\Submission;
+use App\Models\Registration;
+use App\Models\Enums\UserRole;
+use App\Models\RegistrationType;
+use Illuminate\Support\HtmlString;
+use App\Models\Enums\SubmissionStatus;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\View\Compilers\BladeCompiler;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 
 class Overview extends BaseWidget
 {
@@ -38,6 +45,38 @@ class Overview extends BaseWidget
                 ->count())
                 ->icon('heroicon-o-user-group')
                 ->description(__('general.new_authors_in_the_last_30_days')),
+            Stat::make(__('general.pending_submission_payment'), Submission::query()
+                ->where('stage', SubmissionStage::Payment)
+                ->orWhere('status', SubmissionStatus::OnPayment)
+                ->count())
+                ->description(new HtmlString(BladeCompiler::render(<<<BLADE
+                    <p>
+                        {{ __('general.total_pending_submission_payment') }}
+                        <a href="{{ App\Panel\ScheduledConference\Resources\SubmissionResource::getUrl('index') }}" style="color: rgb(59 130 246);"><x-filament::icon icon="heroicon-m-arrow-top-right-on-square" class="h-4 w-4 mx-1 inline-block"/></a>
+                    </p>
+                BLADE))),
+            Stat::make(__('general.pending_registrations'), Registration::query()
+                ->whereHas('registrationPayment', function (Builder $query) {
+                    $query
+                        ->where('level', '!=', RegistrationType::LEVEL_AUTHOR)
+                        ->where('state', RegistrationPaymentState::Unpaid->value);
+                })
+                ->count())
+                ->description(new HtmlString(BladeCompiler::render(<<<BLADE
+                    <p>
+                        {{ __('general.total_pending_registration') }}
+                        <a href="{{ App\Panel\ScheduledConference\Resources\RegistrantResource::getUrl('index') }}" style="color: rgb(59 130 246);"><x-filament::icon icon="heroicon-m-arrow-top-right-on-square" class="h-4 w-4 mx-1 inline-block"/></a>
+                    </p>
+                BLADE))),
+            Stat::make(__('general.finished_registrations'), Registration::query()
+                ->where('created_at', '>=', now()->subMonth())
+                ->whereHas('registrationPayment', function (Builder $query) {
+                    $query
+                        ->where('level', '!=', RegistrationType::LEVEL_AUTHOR)
+                        ->where('state', RegistrationPaymentState::Paid->value);
+                })
+                ->count())
+                ->description(__('general.finished_registration_30_days')),
         ];
     }
 }

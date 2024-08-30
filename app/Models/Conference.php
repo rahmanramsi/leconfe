@@ -167,6 +167,34 @@ class Conference extends Model implements HasAvatar, HasMedia, HasName
         return $this->getFirstMedia('thumbnail')?->getAvailableUrl(['thumb', 'thumb-xl']) ?? Vite::asset('resources/assets/images/placeholder-vertical.jpg');
     }
 
+    public function getLicenseUrl(): string
+    {
+        $licenseUrl = $this->getMeta('license_url');
+        if($licenseUrl == 'custom'){
+            return $this->getMeta('license_url_custom');
+        }
+        return $licenseUrl;
+    }
+
+    public function getCopyrightHolderForSubmission(Submission $submission){
+        return match($this->getMeta('copyright_holder')){
+            'author' => $submission->authors->reduce(function ($carry, $author){
+                $carry .= $author->fullName . '; ';
+                return $carry;
+            }),
+            'conference' => $this->name,
+            'custom' => $this->getMeta('custom_copyright_holder'),
+        };
+    }
+
+    public function getCopyrightYearForSubmission(Submission $submission)
+    {
+        return match($this->getMeta('copyright_year')){
+            'proceeding' => $submission->proceeding?->published_at?->format('Y') ?? now()->format('Y'),
+            'paper' => $submission->published_at?->format('Y') ?? now()->format('Y'),
+        };
+    }
+
     protected function getAllDefaultMeta(): array
     {
         return [
@@ -197,6 +225,9 @@ class Conference extends Model implements HasAvatar, HasMedia, HasName
                 'ris',
                 'bibtex',
             ],
+            'copyright_holder' => 'conference',
+            'license_url' => "https://creativecommons.org/licenses/by-nc-nd/4.0",
+            'copyright_year' => 'paper',
         ];
     }
 }

@@ -6,6 +6,7 @@ use App\Models\ScheduledConference;
 use Illuminate\Support\Facades\Schema;
 use App\Models\Enums\RegistrationPaymentState;
 use App\Models\Registration;
+use App\Models\Submission;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Arr;
@@ -37,6 +38,7 @@ return new class extends Migration
             $table->foreignIdFor(ScheduledConference::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(User::class);
             $table->foreignIdFor(RegistrationType::class);
+            $table->foreignIdFor(Submission::class)->nullable()->constrained()->cascadeOnDelete();
             $table->softDeletes();
             $table->timestamps();
         });
@@ -47,6 +49,7 @@ return new class extends Migration
             $table->foreignIdFor(Registration::class)->constrained()->cascadeOnDelete();
             $table->string('type')->nullable();
             $table->string('name');
+            $table->unsignedInteger('level')->default(RegistrationType::LEVEL_PARTICIPANT);
             $table->text('description')->nullable();
             $table->integer('cost');
             $table->string('currency');

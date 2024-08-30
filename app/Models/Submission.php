@@ -2,37 +2,41 @@
 
 namespace App\Models;
 
-use App\Frontend\Conference\Pages\Paper;
-use App\Models\Concerns\HasDOI;
-use App\Models\Concerns\HasTopics;
-use App\Models\Enums\SubmissionStage;
-use App\Models\Enums\SubmissionStatus;
+use Spatie\Tags\HasTags;
+use Plank\Metable\Metable;
 use App\Models\Enums\UserRole;
-use App\Models\States\Submission\BaseSubmissionState;
-use App\Models\States\Submission\DeclinedSubmissionState;
-use App\Models\States\Submission\EditingSubmissionState;
-use App\Models\States\Submission\IncompleteSubmissionState;
-use App\Models\States\Submission\OnPresentationSubmissionState;
-use App\Models\States\Submission\OnReviewSubmissionState;
-use App\Models\States\Submission\PublishedSubmissionState;
-use App\Models\States\Submission\QueuedSubmissionState;
-use App\Models\States\Submission\WithdrawnSubmissionState;
-use GeneaLabs\LaravelModelCaching\Traits\Cachable;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\Concerns\HasDOI;
+use Spatie\MediaLibrary\HasMedia;
+use App\Models\Concerns\HasTopics;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
-use Plank\Metable\Metable;
-use Spatie\Activitylog\Models\Activity;
+use App\Models\Enums\SubmissionStage;
 use Spatie\EloquentSortable\Sortable;
+use App\Models\Enums\SubmissionStatus;
+use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Models\Activity;
+use App\Frontend\Conference\Pages\Paper;
+use Illuminate\Database\Eloquent\Builder;
 use Spatie\EloquentSortable\SortableTrait;
-use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Models\States\Submission\BaseSubmissionState;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
-use Spatie\Tags\HasTags;
+use App\Models\States\Submission\QueuedSubmissionState;
+use App\Models\States\Submission\EditingSubmissionState;
+use App\Models\States\Submission\DeclinedSubmissionState;
+use App\Models\States\Submission\OnReviewSubmissionState;
+use App\Models\States\Submission\OnPaymentSubmissionState;
+use App\Models\States\Submission\PublishedSubmissionState;
+use App\Models\States\Submission\WithdrawnSubmissionState;
+use App\Models\States\Submission\IncompleteSubmissionState;
+use App\Models\States\Submission\OnPresentationSubmissionState;
+use App\Models\States\Submission\DeclinedPaymentSubmissionState;
 
 class Submission extends Model implements HasMedia, Sortable
 {
@@ -193,6 +197,44 @@ class Submission extends Model implements HasMedia, Sortable
         return $this->hasMany(Author::class);
     }
 
+    public function registration(): HasOne
+    {
+        return $this->hasOne(Registration::class)->withoutGlobalScopes([
+            SoftDeletingScope::class,
+        ]);
+    }
+
+    public function isParticipantEditor(User $user): bool
+    {
+        $isParticipantEditor = $this->editors()
+            ->where('user_id', $user->getKey())
+            ->limit(1)
+            ->first();
+
+        if(!$isParticipantEditor) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function isParticipantAuthor(User $user): bool
+    {
+        $isParticipantAuthor = $this->participants()
+            ->whereHas('role', function (Builder $query) {
+                $query->where('name', UserRole::Author->value);
+            })
+            ->where('user_id', $user->getKey())
+            ->limit(1)
+            ->first();
+
+        if(!$isParticipantAuthor) {
+            return false;
+        }
+
+        return true;
+    }
+
     public function scopePublished(Builder $query)
     {
         return $query->status(SubmissionStatus::Published);
@@ -242,11 +284,13 @@ class Submission extends Model implements HasMedia, Sortable
         return match ($this->status) {
             SubmissionStatus::Incomplete => new IncompleteSubmissionState($this),
             SubmissionStatus::Queued => new QueuedSubmissionState($this),
+            SubmissionStatus::OnPayment => new OnPaymentSubmissionState($this),
             SubmissionStatus::OnReview => new OnReviewSubmissionState($this),
             SubmissionStatus::OnPresentation => new OnPresentationSubmissionState($this),
             SubmissionStatus::Editing => new EditingSubmissionState($this),
             SubmissionStatus::Published => new PublishedSubmissionState($this),
             SubmissionStatus::Declined => new DeclinedSubmissionState($this),
+            SubmissionStatus::PaymentDeclined => new DeclinedPaymentSubmissionState($this),
             SubmissionStatus::Withdrawn => new WithdrawnSubmissionState($this),
             default => throw new \Exception('Invalid submission status'),
         };

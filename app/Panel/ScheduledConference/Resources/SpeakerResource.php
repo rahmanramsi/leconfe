@@ -161,7 +161,6 @@ class SpeakerResource extends Resource
 
     public static function renderSelectSpeaker(Speaker $speaker): string
     {
-        $speaker->load(['serie' => fn ($query) => $query->withoutGlobalScopes([ConferenceScope::class])]);
         return view('forms.select-contributor-serie', ['contributor' => $speaker])->render();
     }
 

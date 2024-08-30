@@ -31,11 +31,18 @@ class PaperGalley extends Page
 
         abort_if(! $media, 404);
 
-        if(!Hook::call('frontend.paper.galley', $galley)){
-            return response()
-                ->download($media->getPath(), $media->file_name);
+        $returner = null;
+
+        Hook::call('Frontend::PaperGalley', [$galley, &$returner]);
+
+        if (!$returner) {
+            return redirect()->route(PaperGalleyDownload::getRouteName(), [
+                'submission' => $submission->id,
+                'galley' => $galley->id,
+            ]);
         }
-        
+
+        return $returner;
     }
 
     public static function routes(PageGroup $pageGroup): void

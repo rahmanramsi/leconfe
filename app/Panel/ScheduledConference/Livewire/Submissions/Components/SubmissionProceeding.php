@@ -29,8 +29,9 @@ class SubmissionProceeding extends \Livewire\Component implements HasForms, HasI
     use InteractsWithForms, InteractsWithInfolists;
 
     public Submission $submission;
-    public array $meta = [];
-    public array $media = [];
+
+    public array $formData = [];
+
     protected $listeners = [
         'refreshSubmissionProceeding' => '$refresh',
     ];
@@ -114,10 +115,15 @@ class SubmissionProceeding extends \Livewire\Component implements HasForms, HasI
     public function form(Form $form): Form
     {
         return $form
+            ->model($this->submission)
             ->disabled(function (): bool {
                 return ! auth()->user()->can('editing', $this->submission);
             })
             ->schema([
+                Select::make('track_id')
+                    ->required()
+                    ->relationship('track', 'title')
+                    ->label(__('general.track')),
                 SpatieMediaLibraryFileUpload::make('media.cover')
                     ->label(__('general.cover_image'))
                     ->collection('cover')
@@ -128,14 +134,16 @@ class SubmissionProceeding extends \Livewire\Component implements HasForms, HasI
                     ->label(__('general.pages'))
                     ->maxWidth('xs')
                     ->placeholder(__('general.eg_1_10')),
-            ]);
+            ])
+            ->statePath('formData');
     }
 
     public function submit()
     {
+        $data = $this->form->getState();
         try {
             $submission = SubmissionUpdateAction::run(
-                $this->form->getState(),
+                $data,
                 $this->submission
             );
 

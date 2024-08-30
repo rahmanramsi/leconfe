@@ -37,10 +37,11 @@ class RegistrationSetting extends Component implements HasForms
                     ->schema([
                         TinyEditor::make('meta.registration_policy')
                             ->label(__('general.registration_policy'))
-                            ->profile('basic')
-                            ->minHeight(300)
-                            ->disabled(fn () => auth()->user()->cannot('RegistrationSetting:update')),
-                    ]),
+                            ->plugins('advlist autoresize codesample directionality emoticons fullscreen hr image imagetools link lists media table toc wordcount code')
+                            ->toolbar('undo redo removeformat | formatselect fontsizeselect | bold italic | rtl ltr | alignjustify alignright aligncenter alignleft | numlist bullist | forecolor backcolor | blockquote table hr | image link code')
+                            ->minHeight(300),
+                    ])
+                    ->disabled(fn () => auth()->user()->cannot('RegistrationSetting:update')),
                 Actions::make([
                     Action::make('Save changes')
                         ->label(__('general.save_changes'))

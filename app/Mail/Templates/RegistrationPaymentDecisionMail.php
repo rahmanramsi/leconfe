@@ -15,10 +15,10 @@ class RegistrationPaymentDecisionMail extends TemplateMailable
     
     public Log $log;
 
-    public function __construct(Registration $registration)
+    public function __construct(Registration $registration, string $state)
     {
         $this->userName = $registration->user->full_name;
-        $this->paymentStatus = Str::lower($registration->registrationPayment->state);
+        $this->paymentStatus = Str::lower($state);
 
         $this->log = Log::make(
             name: 'email',
@@ -41,7 +41,7 @@ class RegistrationPaymentDecisionMail extends TemplateMailable
     {
         return <<<'HTML'
             <p>Dear {{ userName }},</p>
-            <p>your registration payment status are {{ paymentStatus }}, please finish your registration process.</p>
+            <p>your registration payment status now are {{ paymentStatus }}.</p>
         HTML;
     }
 }

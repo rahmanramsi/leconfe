@@ -89,6 +89,7 @@ class ParticipantRegister extends Page
     
             $registration->registrationPayment()->create([
                 'name' => $registrationType->type,
+                'level' => $registrationType->level,
                 'description' => $registrationType->getMeta('description'),
                 'cost' => $registrationType->cost,
                 'currency' => $registrationType->currency,

@@ -3,6 +3,7 @@
 namespace App\Frontend\Conference\Pages;
 
 use App\Facades\Hook;
+use App\Facades\License;
 use App\Facades\MetaTag;
 use App\Models\Submission;
 use Illuminate\Contracts\Support\Htmlable;
@@ -38,7 +39,14 @@ class Paper extends Page
         $this->addMetadata();
     }
 
+    public function getViewData() : array 
+    {
+        return [
+            'ccLicenseBadge' => License::getCCLicenseBadge($this->paper->getMeta('license_url'), app()->getLocale()),
+        ];
+    }
 
+ 
     public function getTitle(): string|Htmlable
     {
         return $this->paper->getMeta('title');
@@ -119,7 +127,7 @@ class Paper extends Page
             MetaTag::add('og:image', $this->paper->getFirstMedia('cover')->getAvailableUrl(['thumb']));
         }
 
-        Hook::call('frontend.paper.addMetadata', $this);
+        Hook::call('Frontend::Paper::addMetadata', [$this, $this->paper]);
     }
 
     public function canAccess(): bool

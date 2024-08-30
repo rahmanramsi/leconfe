@@ -2,24 +2,37 @@
 
 namespace App\Panel\ScheduledConference\Resources\RegistrantResource\Pages;
 
-use App\Models\Enums\RegistrationPaymentState;
-use App\Models\Registration;
-use App\Models\RegistrationPayment;
-use App\Models\RegistrationType;
 use Filament\Actions;
+use App\Models\Registration;
+use Filament\Actions\Action;
+use App\Models\RegistrationType;
 use Filament\Support\Colors\Color;
+use App\Models\RegistrationPayment;
 use Filament\Resources\Components\Tab;
+use Filament\Navigation\NavigationItem;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Database\Eloquent\Builder;
+use App\Models\Enums\RegistrationPaymentState;
+use App\Panel\ScheduledConference\Pages\Registrations;
 use App\Panel\ScheduledConference\Resources\RegistrantResource;
 use App\Panel\ScheduledConference\Resources\RegistrantResource\Widgets\RegistrationTypeSummary;
-use Filament\Navigation\NavigationItem;
 
 class ListRegistrants extends ListRecords
 {
     protected static string $resource = RegistrantResource::class;
 
     protected ?string $heading = 'Registrants';
+
+    public function getHeaderActions(): array
+    {
+        return [
+            Action::make('settings')
+                ->color('gray')
+                ->icon('heroicon-o-cog-6-tooth')
+                ->outlined()
+                ->url(Registrations::getUrl())
+        ];
+    }
 
     public function getTabs(): array
     {

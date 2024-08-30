@@ -2,48 +2,60 @@
 
 namespace App\Panel\ScheduledConference\Livewire\Submissions\Components;
 
+use Closure;
 use App\Classes\Log;
-use App\Mail\Templates\ParticipantAssignedMail;
-use App\Models\Enums\SubmissionStatus;
-use App\Models\Enums\UserRole;
-use App\Models\MailTemplate;
 use App\Models\Role;
-use App\Models\Submission;
-use App\Models\SubmissionParticipant;
 use App\Models\User;
-use App\Notifications\ParticipantAssigned;
-use App\Panel\ScheduledConference\Resources\SubmissionResource;
+use Filament\Forms\Get;
+use Livewire\Component;
+use Filament\Forms\Form;
+use App\Models\Submission;
+use Filament\Tables\Table;
+use App\Models\MailTemplate;
+use Illuminate\Mail\Message;
+use App\Models\Enums\UserRole;
+use App\Models\RegistrationType;
+use Illuminate\Support\HtmlString;
+use Filament\Forms\Components\Grid;
+use Filament\Tables\Actions\Action;
+use App\Forms\Components\TinyEditor;
+use Illuminate\Support\Facades\Mail;
+use App\Models\SubmissionParticipant;
+use Filament\Forms\Components\Select;
+use App\Models\Enums\SubmissionStatus;
+use App\Notifications\NewRegistration;
+use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Fieldset;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Select;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Contracts\HasTable;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
-use Filament\Forms\Get;
-use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Columns\Layout\Split;
-use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Concerns\InteractsWithTable;
-use Filament\Tables\Contracts\HasTable;
-use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Mail\Message;
-use Illuminate\Support\Facades\Mail;
-use Livewire\Component;
-use App\Forms\Components\TinyEditor;
+use App\Notifications\ParticipantAssigned;
+use Filament\Forms\Components\Placeholder;
+use Illuminate\View\Compilers\BladeCompiler;
+use App\Models\Enums\RegistrationPaymentState;
+use App\Mail\Templates\ParticipantAssignedMail;
+use App\Models\Enums\SubmissionStage;
+use App\Panel\ScheduledConference\Resources\RegistrantResource\Pages\EnrollUser;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Tables\Concerns\InteractsWithTable;
 use STS\FilamentImpersonate\Tables\Actions\Impersonate;
+use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
+use App\Panel\ScheduledConference\Resources\SubmissionResource;
 
 class ParticipantList extends Component implements HasForms, HasTable
 {
     use InteractsWithForms, InteractsWithTable;
 
     public Submission $submission;
+
+    public bool $enrollment = false;
 
     public array $selectedParticipant = [];
 
@@ -300,6 +312,63 @@ class ParticipantList extends Component implements HasForms, HasTable
                                 $action->failure();
                             }
                         }),
+                    Action::make('enroll_user')
+                        ->authorize('Registration:enroll')
+                        ->color('primary')
+                        ->icon('heroicon-o-user-plus')
+                        ->label(__('general.enroll_user'))
+                        ->visible(
+                            fn (SubmissionParticipant $record): bool =>
+                                $this->enrollment &&
+                                !$this->submission->registration &&
+                                $this->submission->isParticipantAuthor($record->user)
+                        )
+                        ->successNotificationTitle(__('general.saved'))
+                        ->form(fn (SubmissionParticipant $record) => EnrollUser::enrollForm($record->user, RegistrationType::LEVEL_AUTHOR))
+                        ->action(function (Action $action, SubmissionParticipant $record, array $data) {
+                            
+                            try {
+                                $registrationType = RegistrationType::find($data['registration_type_id'])->first();
+
+                                $registration = $this->submission->registration()->create([
+                                    'user_id' => $record->user->getKey(),
+                                    'registration_type_id' => $registrationType->getKey(),
+                                ]);
+                        
+                                $registration->registrationPayment()->create([
+                                    'name' => $registrationType->type,
+                                    'level' => $registrationType->level,
+                                    'description' => $registrationType->getMeta('description'),
+                                    'cost' => $registrationType->cost,
+                                    'currency' => $registrationType->currency,
+                                    'state' => $data['registrationPayment']['state'],
+                                    'paid_at' => $data['registrationPayment']['paid_at'] ?? null,
+                                ]);
+                        
+                                User::whereHas('roles', function ($query) {
+                                    $query->whereHas('permissions', function ($query) {
+                                        $query->where('name', 'Registration:notified');
+                                    });
+                                })->get()->each(function ($user) use($registration) {
+                                    $user->notify(
+                                        new NewRegistration(
+                                            registration: $registration,
+                                        )
+                                    );
+                                });
+                            } catch (\Throwable $th) {
+                                $action->failure();
+                                throw $th;
+                            }
+
+                            $action->successRedirectUrl(
+                                SubmissionResource::getUrl('view', [
+                                    'record' => $this->submission->getKey()
+                                ])
+                            );
+
+                            return $action->success();
+                        }),
                     Action::make('remove-participant')
                         ->authorize('SubmissionParticipant:delete')
                         ->color('danger')
@@ -307,7 +376,8 @@ class ParticipantList extends Component implements HasForms, HasTable
                         ->visible(
                             fn (SubmissionParticipant $record): bool =>
                                 $record->user->email !== $this->submission->user->email &&
-                                ! in_array($this->submission->status, [SubmissionStatus::Published, SubmissionStatus::Declined, SubmissionStatus::Withdrawn])
+                                ! in_array($this->submission->status, [SubmissionStatus::Published, SubmissionStatus::Declined, SubmissionStatus::Withdrawn]) &&
+                                $record->user->getKey() !== auth()->user()->getKey()
                         )
                         ->label(__('general.remove'))
                         ->successNotificationTitle(__('general.participant_removed'))

@@ -38,7 +38,7 @@ body {
     @apply duration-500 animate-in slide-in-from-right-5 fade-in;
 }
 
-.fi-header-heading {
+.fi-header-heading, .fi-header-subheading {
     @apply duration-500 animate-in slide-in-from-right-5 fade-in;
 }
 
@@ -86,4 +86,17 @@ body {
 
 .fi-ta-group-header .grid h4 {
     @apply !py-2;
+}
+
+.user-content {
+    @apply 
+        prose prose-sm 
+        /* prose-a:text-primary prose-a:underline hover:prose-a:text-primary  */
+        /* prose-h2:mt-0  */
+        prose-h3:mt-0
+        prose-p:my-2
+        max-w-none
+        prose-img:my-0
+        first:*:mt-0 last:*:mb-0;
+    --tw-prose-body: unset;
 }

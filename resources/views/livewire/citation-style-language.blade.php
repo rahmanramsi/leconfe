@@ -3,7 +3,7 @@
         {{ __('general.how_to_cite') }}
     </h2>
     <div class="mt-4 content text-slate-800 space-y-2">
-        <div id="citationOutput" class="user-content" wire:loading.class="opacity-50" wire:target="updateCitationStyle">
+        <div id="citationOutput" class="user-content break-words" wire:loading.class="opacity-50" wire:target="updateCitationStyle">
             {!! $citation !!}
         </div>
         <div

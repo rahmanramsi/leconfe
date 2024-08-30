@@ -14,9 +14,11 @@ class QueuedSubmissionState extends BaseSubmissionState
 
     public function acceptAbstract(): void
     {
+        $isPaymentRequired = app()->getCurrentScheduledConference()->isSubmissionRequirePayment();
+
         SubmissionUpdateAction::run([
-            'stage' => SubmissionStage::PeerReview,
-            'status' => SubmissionStatus::OnReview,
+            'stage' => $isPaymentRequired ? SubmissionStage::Payment : SubmissionStage::PeerReview,
+            'status' => $isPaymentRequired ? SubmissionStatus::OnPayment : SubmissionStatus::OnReview,    
         ], $this->submission);
 
         Log::make(

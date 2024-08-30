@@ -2,27 +2,44 @@
 
 namespace App\Models\States\Submission;
 
-use App\Actions\Submissions\SubmissionUpdateAction;
 use App\Classes\Log;
 use App\Events\Submissions\Accepted;
 use App\Events\Submissions\Published;
 use App\Models\Enums\SubmissionStage;
 use App\Models\Enums\SubmissionStatus;
+use App\Actions\Submissions\SubmissionUpdateAction;
 use App\Models\States\Submission\Concerns\CanWithdraw;
+use App\Models\States\Submission\Concerns\CanDeclinePayment;
 
 class EditingSubmissionState extends BaseSubmissionState
 {
     use CanWithdraw;
+    use CanDeclinePayment;
 
     public function publish(): void
     {
         $publishedAt = $this->submission->published_at ?? now();
-
-        SubmissionUpdateAction::run([
+        $data = [
             'stage' => SubmissionStage::Proceeding,
             'status' => SubmissionStatus::Published,
             'published_at' => $publishedAt,
-        ], $this->submission);
+        ];
+
+        $conference = app()->getCurrentConference();
+        //get authors name split by semicolon
+        if(!$this->submission->getMeta('copyright_holder')){
+            $data['meta']['copyright_holder'] = $conference->getCopyrightHolderForSubmission($this->submission);
+        }
+
+        if(!$this->submission->getMeta('copyright_year')){
+            $data['meta']['copyright_year'] = $conference->getCopyrightYearForSubmission($this->submission);
+        }
+
+        if(!$this->submission->getMeta('license_url')){
+            $data['meta']['license_url'] = $conference->getLicenseUrl();
+        }
+
+        SubmissionUpdateAction::run($data, $this->submission);
 
         Published::dispatch($this->submission);
 

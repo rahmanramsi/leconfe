@@ -9,6 +9,7 @@ use App\Models\ScheduledConference;
 use Livewire\Livewire;
 use App\Classes\Settings;
 use App\Console\Kernel as ConsoleKernel;
+use App\Facades\Hook;
 use App\Http\Kernel as HttpKernel;
 use App\Listeners\SubmissionEventSubscriber;
 use App\Models\Conference;
@@ -42,8 +43,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->scoped('metatag', function () {
             return new MetaTagManager;
         });
-
-
 
         $this->app->bind(Setting::class, function ($app) {
             return new Setting();
@@ -89,7 +88,7 @@ class AppServiceProvider extends ServiceProvider
     protected function extendBlade(): void
     {
         Blade::directive('hook', function (string $name) {
-            return "<?php echo \App\Facades\Hook::call($name) ?>";
+            return '<?php $output = null; \App\Facades\Hook::call(' . "$name" . ',[&$output]); echo $output; ?>';
         });
     }
 
@@ -202,10 +201,14 @@ class AppServiceProvider extends ServiceProvider
 
             $conference ? $this->app->setCurrentConferenceId($conference->getKey()) : $this->app->setCurrentConferenceId(Application::CONTEXT_WEBSITE);
 
+            
+            if (!$conference && $isOnScheduledPath){
+                abort(404);
+            }
+            
             // Detect scheduledConference from URL path when conference is set
-            if ($conference) {
-
-                if ($isOnScheduledPath && $scheduledConference = ScheduledConference::where('path', $scheduledConferencePath)->first()) {
+            if ($conference && $isOnScheduledPath) {
+                if ($scheduledConference = ScheduledConference::where('path', $scheduledConferencePath)->first()) {
                     $this->app->setCurrentScheduledConferenceId($scheduledConference->getKey());
                     $this->app->scopeCurrentScheduledConference();
                 }
