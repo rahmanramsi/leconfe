@@ -901,7 +901,7 @@ return [
     'submission_license_url' => 'رابط الترخيص',
     'submission_license_url_helper' => 'سيتم تعيين الترخيص تلقائيًا إلى <a class="text-primary-700 underline" href=\':licenseUrl\' target=\'_blank\'>:licenseName</a> عند النشر.' ,
     'override' => 'تجاوز',
-    'copyright_statement' => 'حقوق النشر (c) :copyrightYear :copyrightHolder'
+    'copyright_statement' => 'حقوق النشر (c) :copyrightYear :copyrightHolder',
 
     'apply' => "تطبيق",
     'search' => "بحث",
