@@ -96,6 +96,13 @@ class Conference extends Model implements HasAvatar, HasMedia, HasName
         return $this->hasOne(ScheduledConference::class)->where('state', ScheduledConferenceState::Current);
     }
 
+    public function activeScheduledConference(): HasMany
+    {
+        return $this->hasMany(ScheduledConference::class)
+            ->where('state', ScheduledConferenceState::Current)
+            ->orWhere('state', ScheduledConferenceState::Published);
+    }
+
     public function roles(): HasMany
     {
         return $this->hasMany(Role::class);

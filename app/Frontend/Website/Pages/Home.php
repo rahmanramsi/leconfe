@@ -45,6 +45,7 @@ class Home extends Page
                 'meta',
                 'topics' => fn (Builder $query) => $query->with('conference')->withoutGlobalScopes(),
                 'currentScheduledConference' => fn (Builder $query) => $query->with('conference')->withoutGlobalScopes(),
+                'activeScheduledConference' => fn (Builder $query) => $query->with('conference')->withoutGlobalScopes(),
             ]);
 
         if(strlen($this->search) > 0) {
@@ -53,30 +54,42 @@ class Home extends Page
                 ->orWhere('path', 'LIKE', "%{$this->search}%");
         }
 
-        $filteredConference = $conferences->get()->filter(function (Conference $conference) {
-            if (count($this->scope) <= 0 &&
-                count($this->state) <= 0 &&
-                count($this->topic) <= 0 &&
-                count($this->coordinator) <= 0) {
-                return true;
-            }
-
-            if(count($this->scope) > 0) {
-                if(in_array($conference->getMeta('scope'), $this->scope)) {
+        $filteredConference = $conferences->get()
+            ->filter(function (Conference $conference) {
+                if (count($this->scope) <= 0 &&
+                    count($this->state) <= 0 &&
+                    count($this->topic) <= 0 &&
+                    count($this->coordinator) <= 0) {
                     return true;
                 }
-            }
-            
-            if(count($this->topic) > 0) {
-                foreach($conference->topics->pluck('id') as $id) {
-                    if(in_array($id, $this->topic)) {
+
+                // scope
+                if (count($this->scope) > 0) {
+                    if(in_array($conference->getMeta('scope'), $this->scope)) {
                         return true;
                     }
                 }
-            }
 
-            return false;
-        });
+                // state
+                if (in_array('active', $this->state) && !$conference->activeScheduledConference->isEmpty()) {
+                    return true;
+                }
+
+                if (in_array('over', $this->state) && $conference->activeScheduledConference->isEmpty()) {
+                    return true;
+                }
+                
+                // topics
+                if (count($this->topic) > 0) {
+                    foreach($conference->topics->pluck('id') as $id) {
+                        if(in_array($id, $this->topic)) {
+                            return true;
+                        }
+                    }
+                }
+
+                return false;
+            });
 
         return [
             'conferences' => $filteredConference,
