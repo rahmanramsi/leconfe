@@ -24,20 +24,25 @@
 
                 <div class="col-span-4 sm:col-span-2 dropdown h-fit">
                     <button tabindex="0" role="button" class="btn btn-sm btn-outline border-gray-300 w-full">
-                        {{ __('general.scope') }} {{ count($this->scope) > 0 ? "(" . count($this->scope) . ")" : null }}
+                        {{ __('general.scope') }} {{ $this->scope ? "(Selected)" : null }}
                         <x-heroicon-o-chevron-down class="h-4 w-4" />
                     </button>
                     <ul tabindex="0" class="mt-2 p-2 w-full dropdown-content form-control menu bg-white border rounded z-[1] shadow-xl">
                         <li>
+                            <button class="mb-2 btn btn-xs btn-outline w-full" wire:click="clearScope" wire:loading.attr="disabled">
+                                Clear
+                            </button>
+                        </li>
+                        <li>
                             <label class="py-1.5 label cursor-pointer">
                                 <span class="label-text px-2 !text-center">{{ __('general.international') }}</span>
-                                <input type="checkbox" class="checkbox checkbox-xs" value="{{ App\Models\Conference::SCOPE_INTERNATIONAL }}" wire:model.live="scope" />
+                                <input type="radio" class="radio radio-xs" value="{{ App\Models\Conference::SCOPE_INTERNATIONAL }}" wire:model.live="scope" />
                             </label>
                         </li>
                         <li>
                             <label class="py-1.5 label cursor-pointer">
                                 <span class="label-text px-2 !text-center">{{ __('general.national') }}</span>
-                                <input type="checkbox" class="checkbox checkbox-xs" value="{{ App\Models\Conference::SCOPE_NATIONAL }}" wire:model.live="scope" />
+                                <input type="radio" class="radio radio-xs" value="{{ App\Models\Conference::SCOPE_NATIONAL }}" wire:model.live="scope" />
                             </label>
                         </li>
                     </ul>
@@ -45,20 +50,25 @@
 
                 <div class="col-span-4 sm:col-span-2 dropdown h-fit">
                     <button tabindex="0" role="button" class="btn btn-sm btn-outline border-gray-300 w-full">
-                        {{ __('general.state') }} {{ count($this->state) > 0 ? "(" . count($this->state) . ")" : null }}
+                        {{ __('general.state') }} {{ $this->state ? "(Selected)" : null }}
                         <x-heroicon-o-chevron-down class="h-4 w-4" />
                     </button>
                     <ul tabindex="0" class="mt-2 p-2 w-full dropdown-content form-control menu bg-white border rounded z-[1] shadow-xl">
                         <li>
+                            <button class="mb-2 btn btn-xs btn-outline w-full" wire:click="clearState" wire:loading.attr="disabled">
+                                Clear
+                            </button>
+                        </li>
+                        <li>
                             <label class="py-1.5 label cursor-pointer">
                                 <span class="label-text px-2">{{ __('general.active') }}</span>
-                                <input type="checkbox" class="checkbox checkbox-xs" value="active" wire:model.live="state" />
+                                <input type="radio" class="radio radio-xs" value="active" wire:model.live="state" />
                             </label>
                         </li>
                         <li>
                             <label class="py-1.5 label cursor-pointer">
                                 <span class="label-text px-2">{{ __('general.over') }}</span>
-                                <input type="checkbox" class="checkbox checkbox-xs" value="over" wire:model.live="state" />
+                                <input type="radio" class="radio radio-xs" value="over" wire:model.live="state" />
                             </label>
                         </li>
                     </ul>

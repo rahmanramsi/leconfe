@@ -22,9 +22,9 @@ class Home extends Page
 
     public string $search = '';
 
-    public array $scope = [];
+    public ?string $scope = null;
 
-    public array $state = [];
+    public ?string $state = null;
 
     public array $topic = [];
 
@@ -38,10 +38,20 @@ class Home extends Page
     public function clearFilter(): void
     {
         $this->search = '';
-        $this->scope = [];
-        $this->state = [];
+        $this->scope = null;
+        $this->state = null;
         $this->topic = [];
         $this->coordinator = [];
+    }
+
+    public function clearScope(): void
+    {
+        $this->scope = null;
+    }
+
+    public function clearState(): void
+    {
+        $this->state = null;
     }
 
     protected function getViewData(): array
@@ -65,51 +75,49 @@ class Home extends Page
 
         // TODO: change to select
         // TODO: fix filtering logic, instead of showing all from selected checkbox, use select to filter, because data are unique per conference
-        $filteredConference = $conferences->get()
-            ->filter(function (Conference $conference) {
-                if (count($this->scope) <= 0 &&
-                    count($this->state) <= 0 &&
-                    count($this->topic) <= 0 &&
-                    count($this->coordinator) <= 0) {
+        $filteredConference = $conferences->get();
+
+        if($this->scope) {
+            $filteredConference = $filteredConference->filter(function (Conference $conference) {
+                if($conference->getMeta('scope') === $this->scope) {
                     return true;
                 }
-
-                // scope
-                if (count($this->scope) > 0) {
-                    if(in_array($conference->getMeta('scope'), $this->scope)) {
-                        return true;
-                    }
-                }
-
-                // state
-                if (in_array('active', $this->state) && !$conference->activeScheduledConference->isEmpty()) {
-                    return true;
-                }
-
-                if (in_array('over', $this->state) && $conference->activeScheduledConference->isEmpty()) {
-                    return true;
-                }
-                
-                // topics
-                if (count($this->topic) > 0) {
-                    foreach($conference->topics->pluck('id') as $id) {
-                        if(in_array($id, $this->topic)) {
-                            return true;
-                        }
-                    }
-                }
-
-                // coordinator
-                if (count($this->coordinator) > 0) {
-                    foreach($conference->scheduledConferences->pluck('id') as $id) {
-                        if(in_array($id, $this->coordinator)) {
-                            return true;
-                        }
-                    }
-                }
-
-                return false;
             });
+        }
+
+        if($this->state) {
+            $filteredConference = $filteredConference->filter(function (Conference $conference) {
+                if($this->state === 'active' && !$conference->activeScheduledConference->isEmpty()) {
+                    return true;
+                } else if($this->state === 'over' && $conference->activeScheduledConference->isEmpty()) {
+                    return true;
+                }
+            });
+        }
+
+        if(count($this->topic) > 0) {
+            $filteredConference = $filteredConference->filter(function (Conference $conference) {
+                foreach($this->topic as $topic) {
+                    if(!in_array((int) $topic, $conference->topics->pluck('id')->toArray())) {
+                        return false;
+                    }
+                }
+
+                return true;
+            });
+        }
+
+        if(count($this->coordinator) > 0) {
+            $filteredConference = $filteredConference->filter(function (Conference $conference) {
+                foreach($this->coordinator as $coordinator) {
+                    if(!in_array($coordinator, $conference->scheduledConferences->pluck('id')->toArray())) {
+                        return false;
+                    }
+                }
+
+                return true;
+            });
+        }
 
         $topics = Topic::withoutGlobalScopes()->with(['conference'])->orderBy('name', 'ASC')->get();
 
