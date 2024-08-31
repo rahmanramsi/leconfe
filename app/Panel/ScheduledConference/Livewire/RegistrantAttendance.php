@@ -28,6 +28,8 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Actions\Concerns\InteractsWithActions;
 use App\Panel\ScheduledConference\Resources\TimelineResource;
+use Illuminate\Support\HtmlString;
+use Illuminate\View\Compilers\BladeCompiler;
 
 class RegistrantAttendance extends Component implements HasForms, HasTable, HasActions
 {
@@ -54,7 +56,22 @@ class RegistrantAttendance extends Component implements HasForms, HasTable, HasA
                 ->with(['timeline'])
                 ->getQuery()
             )
-            ->heading($this->timeline->name)
+            ->heading(function () {
+                $baseHeading = "{$this->timeline->name}";
+                if(($attendance = $this->registration->getAttendance($this->timeline)) && $this->timeline->isRequireAttendance()) {
+                    $attendanceTime = $attendance->created_at->format(Setting::get('format_time'));
+                    return new HtmlString(BladeCompiler::render(<<<BLADE
+                        {$baseHeading}
+                        <span class="mx-2 inline-block">
+                            <x-filament::badge color="info" class="!w-fit">
+                                Attended {$attendanceTime}
+                            </x-filament::badge>
+                        </span>
+                    BLADE));
+                }
+
+                return $baseHeading;
+            })
             ->description(function () {
                 $date = $this->timeline->date->format(Setting::get('format_date'));
                 $timeSpan = $this->timeline->time_span;
