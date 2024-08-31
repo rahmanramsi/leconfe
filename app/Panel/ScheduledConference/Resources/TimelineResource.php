@@ -99,12 +99,7 @@ class TimelineResource extends Resource
                     ->badge()
                     ->color(Color::Blue)
                     ->alignCenter(),
-                IconColumn::make('require_attendance')
-                    ->trueIcon('heroicon-o-check-circle')
-                    ->trueColor(Color::Green)
-                    ->falseIcon('heroicon-o-x-circle')
-                    ->falseColor(Color::Red)
-                    ->boolean()
+                ToggleColumn::make('require_attendance')
                     ->alignCenter(),
                 ToggleColumn::make('hide')
                     ->label(__('general.hidden')),

@@ -150,9 +150,6 @@ class ListSession extends Page implements HasTable, HasForms
                             ->required()
                             ->after('start_at'),
                     ]),
-                Checkbox::make('require_attendance')
-                    ->disabled(fn(?Model $record) => (bool) $record ? $record->timeline->isRequireAttendance() : false)
-                    ->helperText(fn(?Model $record) => $record ? ($record->timeline->isRequireAttendance() ? __('general.timeline_are_requiring_attendance_this_is_disabled') : null) : null),
             ])
             ->columns(1);
     }
@@ -180,17 +177,8 @@ class ListSession extends Page implements HasTable, HasForms
                             ->where('sessions.name', 'like', "%{$search}%");
                     })
                     ->sortable(),
-                IconColumn::make('require_attendance')
-                    ->icon(fn(Model $record) => match ($record->getRequiresAttendanceStatus()) {
-                        'timeline' => 'heroicon-o-stop-circle',
-                        'not-required' => 'heroicon-o-x-circle',
-                        'required' => 'heroicon-o-check-circle',
-                    })
-                    ->color(fn(Model $record) => match ($record->getRequiresAttendanceStatus()) {
-                        'timeline' => Color::Blue,
-                        'not-required' => Color::Red,
-                        'required' => Color::Green,
-                    })
+                ToggleColumn::make('require_attendance')
+                    ->disabled(fn (Model $record) => $record->timeline->isRequireAttendance())
                     ->tooltip(
                         fn(Model $record) => $record->getRequiresAttendanceStatus() === 'timeline' ?
                             __('general.attendance_arent_required') : null
