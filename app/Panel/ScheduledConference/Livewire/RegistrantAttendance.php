@@ -2,6 +2,7 @@
 
 namespace App\Panel\ScheduledConference\Livewire;
 
+use Filament\Forms\Get;
 use Livewire\Component;
 use App\Facades\Setting;
 use App\Models\Timeline;
@@ -10,6 +11,7 @@ use Filament\Tables\Table;
 use App\Models\Registration;
 use Filament\Support\Colors\Color;
 use Filament\Tables\Actions\Action;
+use Filament\Forms\Components\Select;
 use App\Models\RegistrationAttendance;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Components\Fieldset;
@@ -20,12 +22,12 @@ use Illuminate\Database\Eloquent\Model;
 use Filament\Support\Enums\IconPosition;
 use Filament\Forms\Components\TimePicker;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Actions\Contracts\HasActions;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
-use App\Panel\ScheduledConference\Resources\TimelineResource;
 use Filament\Actions\Concerns\InteractsWithActions;
-use Filament\Actions\Contracts\HasActions;
+use App\Panel\ScheduledConference\Resources\TimelineResource;
 
 class RegistrantAttendance extends Component implements HasForms, HasTable, HasActions
 {
@@ -34,6 +36,9 @@ class RegistrantAttendance extends Component implements HasForms, HasTable, HasA
     public Registration $registration;
 
     public Timeline $timeline;
+
+    public const DAY_ATTENDANCE_MARK_TYPE_IN = 0;
+    public const DAY_ATTENDANCE_MARK_TYPE_OUT = 1;
     
     public function mount(Registration $registration, Timeline $timeline): void
     {
@@ -56,6 +61,86 @@ class RegistrantAttendance extends Component implements HasForms, HasTable, HasA
 
                 return "{$date} ({$timeSpan})";
             })
+            ->headerActions([
+                Action::make('mark_in_day')
+                    ->label('Mark in')
+                    ->icon('heroicon-m-finger-print')
+                    ->color(Color::Green)
+                    ->link()
+                    ->modalWidth('2xl')
+                    ->successNotificationTitle(__('general.saved'))
+                    ->failureNotificationTitle(__('general.data_could_not_saved'))
+                    ->form(function (Form $form) {
+                        return $form
+                            ->schema([
+                                Fieldset::make('Attendance date')
+                                    ->label(__('general.attendance_date'))
+                                    ->schema([
+                                        Placeholder::make('attendance_date')
+                                            ->label('')
+                                            ->content(fn () => $this->timeline->date->format(Setting::get('format_date'))),
+                                    ]),
+                                TimePicker::make('attendance_time')
+                                    ->helperText(__('general.input_participant_attendance_time'))
+                                    ->seconds(false)
+                                    ->native(false)
+                                    ->hint(fn () => $this->timeline->time_span)
+                                    ->required(),
+                            ])
+                            ->columns(1);
+                    })
+                    ->action(function (array $data, Action $action) {
+                        try {
+                            $timeline = $this->timeline;
+                            $time = (string) $timeline->date->setTimeFromTimeString($data['attendance_time']);
+
+                            $registrationAttendance = RegistrationAttendance::create([
+                                'timeline_id' => $timeline->id,
+                                'registration_id' => $this->registration->id,
+                                'created_at' => $time,
+                                'updated_at' => $time,
+                            ]);
+
+                            $registrationAttendance->created_at = $time;
+                            $registrationAttendance->updated_at = $time;
+                            $registrationAttendance->save();
+                        } catch (\Throwable $th) {
+                            $action->failure();
+                            throw $th;
+                        }
+
+                        $action->success();
+                    })
+                    ->visible(fn () => !$this->registration->isAttended($this->timeline) && $this->timeline->isRequireAttendance())
+                    ->authorize('markIn', RegistrationAttendance::class),
+                Action::make('mark_out_day')
+                    ->label('Mark out')
+                    ->icon('heroicon-m-finger-print')
+                    ->color(Color::Red)
+                    ->link()
+                    ->requiresConfirmation()
+                    ->modalWidth('2xl')
+                    ->successNotificationTitle(__('general.saved'))
+                    ->failureNotificationTitle(__('general.data_could_not_saved'))
+                    ->action(function (?array $data, Action $action) {
+                        try {
+                            $attendance = $this->registration->getAttendance($this->timeline);
+
+                            if (!$attendance) {
+                                return $action->failure();
+                            }
+
+                            $attendance->delete();
+                        } catch (\Throwable $th) {
+                            $action->failure();
+                            throw $th;
+                        }
+
+                        $action->success();
+                    })
+                    ->visible(fn () => $this->registration->isAttended($this->timeline) && $this->timeline->isRequireAttendance())
+                    ->authorize('markOut', RegistrationAttendance::class),
+            ])
             ->columns([
                 TextColumn::make('time_span')
                     ->label(__('general.time'))
@@ -101,11 +186,6 @@ class RegistrantAttendance extends Component implements HasForms, HasTable, HasA
                     ->trueColor(Color::Green)
                     ->falseIcon('heroicon-o-x-mark')
                     ->falseColor(Color::Red)
-                    ->tooltip(function (Model $record) {
-                        if ($record->timeline->isRequireAttendance()) {
-                            return __('general.attendance_per_day_required');
-                        }
-                    })
                     ->boolean()
                     ->alignCenter(),
                 TextColumn::make('attend_at')
@@ -162,13 +242,12 @@ class RegistrantAttendance extends Component implements HasForms, HasTable, HasA
                             $registrationAttendance->created_at = $time;
                             $registrationAttendance->updated_at = $time;
                             $registrationAttendance->save();
-
-                            $action->sendSuccessNotification();
                         } catch (\Throwable $th) {
+                            $action->failure();
                             throw $th;
-
-                            $action->sendFailureNotification();
                         }
+
+                        $action->success();
                     })
                     ->visible(fn (Model $record) => !$this->registration->isAttended($record) && $record->isRequireAttendance())
                     ->authorize('markIn', RegistrationAttendance::class),
@@ -181,11 +260,13 @@ class RegistrantAttendance extends Component implements HasForms, HasTable, HasA
                     ->action(function (Model $record, Action $action) {
                         $attendance = $this->registration->getAttendance($record);
 
-                        if (!$attendance) return;
+                        if (!$attendance) {
+                            return $action->failure();
+                        }
 
                         $attendance->delete();
 
-                        $action->sendSuccessNotification();
+                        $action->success();
                     })
                     ->visible(fn(Model $record) => $this->registration->isAttended($record) && $record->isRequireAttendance())
                     ->authorize('markOut', RegistrationAttendance::class),
