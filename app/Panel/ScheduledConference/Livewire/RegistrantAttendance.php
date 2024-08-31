@@ -2,7 +2,6 @@
 
 namespace App\Panel\ScheduledConference\Livewire;
 
-use App\Models\Topic;
 use Livewire\Component;
 use App\Facades\Setting;
 use App\Models\Timeline;
@@ -10,29 +9,27 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\Registration;
 use Filament\Support\Colors\Color;
-use Filament\Support\Enums\MaxWidth;
+use Filament\Tables\Actions\Action;
+use App\Models\RegistrationAttendance;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Tables\Actions\EditAction;
+use Filament\Forms\Components\Fieldset;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
 use Illuminate\Database\Eloquent\Model;
-use Filament\Forms\Components\TextInput;
-use App\Actions\Topics\TopicCreateAction;
-use App\Actions\Topics\TopicUpdateAction;
-use App\Panel\ScheduledConference\Resources\TimelineResource;
-use Filament\Tables\Actions\CreateAction;
-use Filament\Tables\Actions\DeleteAction;
-use Illuminate\Database\Eloquent\Builder;
-use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Support\Enums\IconPosition;
-use Filament\Tables\Actions\Action;
+use Filament\Forms\Components\TimePicker;
+use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
+use App\Panel\ScheduledConference\Resources\TimelineResource;
+use Filament\Actions\Concerns\InteractsWithActions;
+use Filament\Actions\Contracts\HasActions;
 
-class RegistrantAttendance extends Component implements HasForms, HasTable
+class RegistrantAttendance extends Component implements HasForms, HasTable, HasActions
 {
-    use InteractsWithForms, InteractsWithTable;
+    use InteractsWithForms, InteractsWithTable, InteractsWithActions;
 
     public Registration $registration;
 
@@ -127,6 +124,72 @@ class RegistrantAttendance extends Component implements HasForms, HasTable
                     ->placeholder('-')
                     ->dateTime(Setting::get('format_time')),
             ])
+            ->actions([
+                Action::make('mark_in')
+                    ->icon('heroicon-m-finger-print')
+                    ->color(Color::Green)
+                    ->modalWidth('xl')
+                    ->successNotificationTitle(__('general.saved'))
+                    ->failureNotificationTitle(__('general.data_could_not_saved'))
+                    ->form(function (Form $form, Model $record) {
+                        return $form
+                            ->schema([
+                                Fieldset::make('Attendance date')
+                                    ->label(__('general.attendance_date'))
+                                    ->schema([
+                                        Placeholder::make('attendance_date')
+                                            ->label('')
+                                            ->content(fn() => $record->timeline->date->format(Setting::get('format_date'))),
+                                    ]),
+                                TimePicker::make('attendance_time')
+                                    ->helperText(__('general.input_participant_attendance_time'))
+                                    ->seconds(false)
+                                    ->native(false)
+                                    ->hint(fn() => $record->time_span)
+                                    ->required(),
+                            ])
+                            ->columns(1);
+                    })
+                    ->action(function (Model $record, array $data, Action $action) {
+                        try {
+                            $time = (string) $record->timeline->date->setTimeFromTimeString($data['attendance_time']);
+
+                            $registrationAttendance = RegistrationAttendance::create([
+                                'session_id' => $record->id,
+                                'registration_id' => $this->registration->id,
+                            ]);
+
+                            $registrationAttendance->created_at = $time;
+                            $registrationAttendance->updated_at = $time;
+                            $registrationAttendance->save();
+
+                            $action->sendSuccessNotification();
+                        } catch (\Throwable $th) {
+                            throw $th;
+
+                            $action->sendFailureNotification();
+                        }
+                    })
+                    ->visible(fn (Model $record) => !$this->registration->isAttended($record) && $record->isRequireAttendance())
+                    ->authorize('markIn', RegistrationAttendance::class),
+                Action::make('mark_out')
+                    ->icon('heroicon-m-finger-print')
+                    ->color(Color::Red)
+                    ->requiresConfirmation()
+                    ->successNotificationTitle(__('general.saved'))
+                    ->failureNotificationTitle(__('general.data_could_not_saved'))
+                    ->action(function (Model $record, Action $action) {
+                        $attendance = $this->registration->getAttendance($record);
+
+                        if (!$attendance) return;
+
+                        $attendance->delete();
+
+                        $action->sendSuccessNotification();
+                    })
+                    ->visible(fn(Model $record) => $this->registration->isAttended($record) && $record->isRequireAttendance())
+                    ->authorize('markOut', RegistrationAttendance::class),
+            ])
             ->emptyStateIcon('heroicon-m-calendar-days')
             ->emptyStateHeading('Empty!')
             ->emptyStateDescription('Create new session to get started.')
@@ -142,16 +205,6 @@ class RegistrantAttendance extends Component implements HasForms, HasTable
             ->defaultSort('time_span')
             ->paginated(false);
     }
-
-    // public function form(Form $form): Form
-    // {
-    //     return $form
-    //         ->schema([
-    //             TextInput::make('name')
-    //                 ->label(__('general.name'))
-    //                 ->required(),
-    //         ]);
-    // }
 
     public function render()
     {
