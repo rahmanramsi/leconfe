@@ -13,7 +13,7 @@
             <div class="mt-6 mb-6 grid grid-cols-8 gap-2">
                 <div class="col-span-6 gap-2">
                     <label class="input input-sm input-bordered !outline-none bg-white flex items-center gap-2">
-                        <input type="text" class="grow" placeholder="{{ __('general.search') }}" wire:model.live="search" />
+                        <input type="text" class="grow" placeholder="{{ __('general.search') }}" wire:model.live.debounce="search" />
                         <x-heroicon-m-magnifying-glass class="h-4 w-4 opacity-70" />
                     </label>
                 </div>
@@ -29,7 +29,7 @@
                     </button>
                     <ul tabindex="0" class="mt-2 p-2 w-full dropdown-content form-control menu bg-white border rounded z-[1] shadow-xl">
                         <li>
-                            <button class="mb-2 btn btn-xs btn-outline w-full" wire:click="clearScope" wire:loading.attr="disabled">
+                            <button class="mb-2 btn btn-xs btn-outline border-gray-300 w-full" wire:click="clearScope" wire:loading.attr="disabled">
                                 Clear
                             </button>
                         </li>
@@ -55,7 +55,7 @@
                     </button>
                     <ul tabindex="0" class="mt-2 p-2 w-full dropdown-content form-control menu bg-white border rounded z-[1] shadow-xl">
                         <li>
-                            <button class="mb-2 btn btn-xs btn-outline w-full" wire:click="clearState" wire:loading.attr="disabled">
+                            <button class="mb-2 btn btn-xs btn-outline border-gray-300 w-full" wire:click="clearState" wire:loading.attr="disabled">
                                 Clear
                             </button>
                         </li>
@@ -79,7 +79,13 @@
                         {{ __('general.topic') }} {{ count($this->topic) > 0 ? "(" . count($this->topic) . ")" : null }}
                         <x-heroicon-o-chevron-down class="h-4 w-4" />
                     </button>
-                    <ul tabindex="0" class="mt-2 p-2 w-full grid dropdown-content form-control menu bg-white border rounded z-[1] shadow-xl overflow-y-auto max-h-[50vh]">
+                    <ul tabindex="0" class="mt-2 p-2 w-full grid dropdown-content menu bg-white border rounded z-[1] shadow-xl overflow-y-auto max-h-[50vh]">
+                        <li>
+                            <label class="mb-2 input input-xs input-bordered !outline-none bg-white flex items-center">
+                                <input type="text" class="grow" placeholder="{{ __('general.search') }}" wire:model.live.debounce="topicSearch" />
+                                <x-heroicon-m-magnifying-glass class="h-3 w-3 opacity-70" />
+                            </label>
+                        </li>
                         @foreach ($topics as $topic)
                             <li>
                                 <label class="py-1.5 label cursor-pointer">
@@ -96,7 +102,13 @@
                         {{ __('general.coordinator') }} {{ count($this->coordinator) > 0 ? "(" . count($this->coordinator) . ")" : null }}
                         <x-heroicon-o-chevron-down class="h-4 w-4" />
                     </button>
-                    <ul tabindex="0" class="mt-2 p-2 w-full grid dropdown-content form-control menu bg-white border rounded z-[1] shadow-xl overflow-y-auto max-h-[50vh]">
+                    <ul tabindex="0" class="mt-2 p-2 w-full grid dropdown-content menu bg-white border rounded z-[1] shadow-xl overflow-y-auto max-h-[50vh]">
+                        <li>
+                            <label class="mb-2 input input-xs input-bordered !outline-none bg-white flex items-center">
+                                <input type="text" class="grow" placeholder="{{ __('general.search') }}" wire:model.live.debounce="coordinatorSearch" />
+                                <x-heroicon-m-magnifying-glass class="h-3 w-3 opacity-70" />
+                            </label>
+                        </li>
                         @foreach ($scheduledConferencesWithCoordinators as $scheduledConference)
                             <li>
                                 <label class="py-1.5 label cursor-pointer">
@@ -108,9 +120,7 @@
                     </ul>
                 </div>
             </div>
-
             <hr class="!my-6">
-            
             <div class="space-y-4 conference-current">
                 @if ($conferences->isNotEmpty())
                     <div class="grid gap-6 xl:grid-cols-2">

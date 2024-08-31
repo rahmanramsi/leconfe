@@ -2,17 +2,18 @@
 
 namespace App\Frontend\Website\Pages;
 
-use App\Models\Conference;
-use App\Models\ScheduledConference;
 use App\Models\Topic;
-use Illuminate\Contracts\Database\Eloquent\Builder;
-use Illuminate\Contracts\Support\Htmlable;
+use App\Models\Conference;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Route;
-use Livewire\WithoutUrlPagination;
+use Illuminate\Support\Str;
 use Livewire\WithPagination;
+use Livewire\WithoutUrlPagination;
+use App\Models\ScheduledConference;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Contracts\Support\Htmlable;
 use Rahmanramsi\LivewirePageGroup\PageGroup;
 use Rahmanramsi\LivewirePageGroup\Pages\Page;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 
 class Home extends Page
 {
@@ -28,7 +29,11 @@ class Home extends Page
 
     public array $topic = [];
 
+    public string $topicSearch = '';
+
     public array $coordinator = [];
+
+    public string $coordinatorSearch = '';
 
     public function getTitle(): string|Htmlable
     {
@@ -41,7 +46,9 @@ class Home extends Page
         $this->scope = null;
         $this->state = null;
         $this->topic = [];
+        $this->topicSearch = '';
         $this->coordinator = [];
+        $this->coordinatorSearch = '';
     }
 
     public function clearScope(): void
@@ -118,11 +125,19 @@ class Home extends Page
             });
         }
 
-        $topics = Topic::withoutGlobalScopes()->with(['conference'])->orderBy('name', 'ASC')->get();
+        $topics = Topic::withoutGlobalScopes()
+            ->where('name', 'LIKE', "%{$this->topicSearch}%")
+            ->with(['conference'])
+            ->orderBy('name', 'ASC')
+            ->get();
 
         $scheduledConferencesWithCoordinators = ScheduledConference::withoutGlobalScopes()->get()
             ->filter(function (ScheduledConference $scheduledConference) {
                 if(!$scheduledConference->getMeta('coordinator')) {
+                    return false;
+                }
+
+                if(!Str::contains(Str::lower($scheduledConference->getMeta('coordinator')), Str::lower($this->coordinatorSearch)) && ($this->coordinatorSearch !== '')) {
                     return false;
                 }
 
