@@ -149,8 +149,8 @@ class TimelineResource extends Resource
     {
         return [
             'index' => Pages\ManageTimeline::route('/'),
-            'all-session' => Pages\ListAllSession::route('/session'),
-            'session' => Pages\ListSession::route('/{record}/session'),
+            'all-session' => Pages\ListAllSession::route('/sessions'),
+            'session' => Pages\ListSession::route('/{record}/sessions'),
         ];
     }
 }

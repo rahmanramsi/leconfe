@@ -20,11 +20,13 @@ use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
 use App\Actions\Topics\TopicCreateAction;
 use App\Actions\Topics\TopicUpdateAction;
+use App\Panel\ScheduledConference\Resources\TimelineResource;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Concerns\InteractsWithTable;
 
 class RegistrantAttendance extends Component implements HasForms, HasTable
@@ -54,7 +56,7 @@ class RegistrantAttendance extends Component implements HasForms, HasTable
                 $date = $this->timeline->date->format(Setting::get('format_date'));
                 $timeSpan = $this->timeline->time_span;
 
-                return "{$timeSpan} ({$date})";
+                return "{$date} ({$timeSpan})";
             })
             ->columns([
                 TextColumn::make('time_span')
@@ -124,7 +126,16 @@ class RegistrantAttendance extends Component implements HasForms, HasTable
                     ->placeholder('-')
                     ->dateTime(Setting::get('format_time')),
             ])
-            ->defaultSort('time_span');
+            ->emptyStateIcon('heroicon-m-calendar-days')
+            ->emptyStateHeading('Empty!')
+            ->emptyStateDescription('Create new session to get started.')
+            ->emptyStateActions([
+                Action::make('timelines')
+                    ->label(__('general.timelines'))
+                    ->url(fn () => TimelineResource::getUrl('session', ['record' => $this->timeline]))
+            ])
+            ->defaultSort('time_span')
+            ->paginated(false);
     }
 
     // public function form(Form $form): Form
