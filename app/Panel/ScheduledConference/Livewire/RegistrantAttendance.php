@@ -170,8 +170,8 @@ class RegistrantAttendance extends Component implements HasForms, HasTable, HasA
                     ->label(__('general.session_name')),
                 IconColumn::make('require_attendance')
                     ->icon(fn(Model $record) => match ($record->getRequiresAttendanceStatus()) {
-                        'required' => 'heroicon-o-check',
-                        default => 'heroicon-o-x-mark',
+                        'required' => 'heroicon-o-check-circle',
+                        default => 'heroicon-o-x-circle',
                     })
                     ->color(fn(Model $record) => match ($record->getRequiresAttendanceStatus()) {
                         'required' => Color::Green,
@@ -199,9 +199,9 @@ class RegistrantAttendance extends Component implements HasForms, HasTable, HasA
 
                         return false;
                     })
-                    ->trueIcon('heroicon-o-check')
+                    ->trueIcon('heroicon-o-check-circle')
                     ->trueColor(Color::Green)
-                    ->falseIcon('heroicon-o-x-mark')
+                    ->falseIcon('heroicon-o-x-circle')
                     ->falseColor(Color::Red)
                     ->boolean()
                     ->alignCenter(),
