@@ -198,6 +198,9 @@ class ListSession extends Page implements HasTable, HasForms
                     ->alignCenter(),
             ])
             ->defaultSort('time_span')
+            ->emptyStateIcon('heroicon-m-calendar-days')
+            ->emptyStateHeading('Empty!')
+            ->emptyStateDescription('Create new session to get started.')
             ->actions([
                 EditAction::make()
                     ->modalHeading(__('general.edit_session'))

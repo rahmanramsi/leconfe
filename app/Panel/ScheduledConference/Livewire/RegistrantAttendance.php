@@ -26,6 +26,7 @@ use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Support\Enums\IconPosition;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Concerns\InteractsWithTable;
 
@@ -132,7 +133,11 @@ class RegistrantAttendance extends Component implements HasForms, HasTable
             ->emptyStateActions([
                 Action::make('timelines')
                     ->label(__('general.timelines'))
+                    ->color('gray')
+                    ->icon('heroicon-o-arrow-top-right-on-square')
+                    ->iconPosition(IconPosition::After)
                     ->url(fn () => TimelineResource::getUrl('session', ['record' => $this->timeline]))
+                    ->openUrlInNewTab()
             ])
             ->defaultSort('time_span')
             ->paginated(false);
