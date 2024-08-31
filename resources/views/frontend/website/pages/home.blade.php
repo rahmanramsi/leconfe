@@ -27,7 +27,7 @@
                         {{ __('general.scope') }} {{ $this->scope ? "(Selected)" : null }}
                         <x-heroicon-o-chevron-down class="h-4 w-4" />
                     </button>
-                    <ul tabindex="0" class="mt-2 p-2 w-full dropdown-content form-control menu bg-white border rounded z-[1] shadow-xl">
+                    <ul tabindex="0" class="mt-2 p-2 w-full dropdown-content form-control bg-white border rounded z-[1] shadow-xl">
                         <li>
                             <button class="mb-2 btn btn-xs btn-outline border-gray-300 w-full" wire:click="clearScope" wire:loading.attr="disabled">
                                 Clear
@@ -53,7 +53,7 @@
                         {{ __('general.state') }} {{ $this->state ? "(Selected)" : null }}
                         <x-heroicon-o-chevron-down class="h-4 w-4" />
                     </button>
-                    <ul tabindex="0" class="mt-2 p-2 w-full dropdown-content form-control menu bg-white border rounded z-[1] shadow-xl">
+                    <ul tabindex="0" class="mt-2 p-2 w-full dropdown-content form-control bg-white border rounded z-[1] shadow-xl">
                         <li>
                             <button class="mb-2 btn btn-xs btn-outline border-gray-300 w-full" wire:click="clearState" wire:loading.attr="disabled">
                                 Clear
@@ -79,7 +79,7 @@
                         {{ __('general.topic') }} {{ count($this->topic) > 0 ? "(" . count($this->topic) . ")" : null }}
                         <x-heroicon-o-chevron-down class="h-4 w-4" />
                     </button>
-                    <ul tabindex="0" class="mt-2 p-2 w-full grid dropdown-content menu bg-white border rounded z-[1] shadow-xl overflow-y-auto max-h-[50vh]">
+                    <ul tabindex="0" class="mt-2 p-2 w-full grid dropdown-content bg-white border rounded z-[1] shadow-xl overflow-y-auto max-h-[50vh]">
                         <li>
                             <label class="mb-2 input input-xs input-bordered !outline-none bg-white flex items-center">
                                 <input type="text" class="grow" placeholder="{{ __('general.search') }}" wire:model.live.debounce="topicSearch" />
@@ -94,6 +94,11 @@
                                 </label>
                             </li>
                         @endforeach
+                        @if ($topics->isEmpty())
+                            <li>
+                                <p class="text-center text-xs">Option are empty</p>
+                            </li>
+                        @endif
                     </ul>
                 </div>
 
@@ -102,7 +107,7 @@
                         {{ __('general.coordinator') }} {{ count($this->coordinator) > 0 ? "(" . count($this->coordinator) . ")" : null }}
                         <x-heroicon-o-chevron-down class="h-4 w-4" />
                     </button>
-                    <ul tabindex="0" class="mt-2 p-2 w-full grid dropdown-content menu bg-white border rounded z-[1] shadow-xl overflow-y-auto max-h-[50vh]">
+                    <ul tabindex="0" class="mt-2 p-2 w-full grid dropdown-content bg-white border rounded z-[1] shadow-xl overflow-y-auto max-h-[50vh]">
                         <li>
                             <label class="mb-2 input input-xs input-bordered !outline-none bg-white flex items-center">
                                 <input type="text" class="grow" placeholder="{{ __('general.search') }}" wire:model.live.debounce="coordinatorSearch" />
@@ -117,6 +122,11 @@
                                 </label>
                             </li>
                         @endforeach
+                        @if ($scheduledConferencesWithCoordinators->isEmpty())
+                            <li>
+                                <p class="text-center text-xs">Option are empty</p>
+                            </li>
+                        @endif
                     </ul>
                 </div>
             </div>
