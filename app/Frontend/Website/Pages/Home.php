@@ -73,8 +73,7 @@ class Home extends Page
                 ->orWhere('path', 'LIKE', "%{$this->search}%");
         }
 
-        // TODO: change to select
-        // TODO: fix filtering logic, instead of showing all from selected checkbox, use select to filter, because data are unique per conference
+        // TODO: try using select
         $filteredConference = $conferences->get();
 
         if($this->scope) {
