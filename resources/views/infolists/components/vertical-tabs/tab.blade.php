@@ -3,7 +3,7 @@
     $isContained = $getContainer()->getParentComponent()->isContained();
 
     $visibleTabClasses = \Illuminate\Support\Arr::toCssClasses([
-        'px-6' => $isContained,
+        'ps-6' => $isContained,
         'mt-6' => ! $isContained,
     ]);
 
