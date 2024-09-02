@@ -99,12 +99,7 @@ class TimelineResource extends Resource
                     ->badge()
                     ->color(Color::Blue)
                     ->alignCenter(),
-                IconColumn::make('require_attendance')
-                    ->trueIcon('heroicon-o-check-circle')
-                    ->trueColor(Color::Green)
-                    ->falseIcon('heroicon-o-x-circle')
-                    ->falseColor(Color::Red)
-                    ->boolean()
+                ToggleColumn::make('require_attendance')
                     ->alignCenter(),
                 ToggleColumn::make('hide')
                     ->label(__('general.hidden')),
@@ -149,8 +144,8 @@ class TimelineResource extends Resource
     {
         return [
             'index' => Pages\ManageTimeline::route('/'),
-            'all-session' => Pages\ListAllSession::route('/session'),
-            'session' => Pages\ListSession::route('/{record}/session'),
+            'all-session' => Pages\ListAllSession::route('/sessions'),
+            'session' => Pages\ListSession::route('/{record}/sessions'),
         ];
     }
 }

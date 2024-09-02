@@ -70,15 +70,6 @@ class ListAllSession extends Page implements HasTable, HasForms
                 ->modalHeading(__('general.add_session'))
                 ->model(static::$model)
                 ->form(fn(Form $form) => $this->form($form))
-                // ->mutateFormDataUsing(function (array $data) {
-                //     $timezone = app()->getCurrentScheduledConference()->getMeta('timezone');
-                //     $timeline = Timeline::where('id', $data['timeline_id'])->first();
-                //     if ($timeline) {
-                //         $data['start_at'] = (string) Carbon::parse($data['start_at'], $timezone)->setDateFrom($timeline->date);
-                //         $data['end_at'] = (string) Carbon::parse($data['end_at'], $timezone)->setDateFrom($timeline->date);
-                //         return $data;
-                //     }
-                // })
                 ->authorize('create', Session::class),
         ];
     }
@@ -135,9 +126,6 @@ class ListAllSession extends Page implements HasTable, HasForms
                             ->required()
                             ->after('start_at'),
                     ]),
-                Checkbox::make('require_attendance')
-                    ->disabled(fn(?Model $record) => (bool) $record ? $record->timeline->isRequireAttendance() : false)
-                    ->helperText(fn(?Model $record) => $record ? ($record->timeline->isRequireAttendance() ? __('general.timeline_are_requiring_attendance_this_is_disabled') : null) : null),
                 Select::make('timeline_id')
                     ->label(__('general.belong_to_timeline'))
                     ->options(Timeline::get()->pluck('name', 'id')->toArray())
@@ -169,19 +157,9 @@ class ListAllSession extends Page implements HasTable, HasForms
                     ->searchable(query: function (Builder $query, string $search): Builder {
                         return $query
                             ->where('sessions.name', 'like', "%{$search}%");
-                    })
-                    ->sortable(),
-                IconColumn::make('require_attendance')
-                    ->icon(fn(Model $record) => match ($record->getRequiresAttendanceStatus()) {
-                        'timeline' => 'heroicon-o-stop-circle',
-                        'not-required' => 'heroicon-o-x-circle',
-                        'required' => 'heroicon-o-check-circle',
-                    })
-                    ->color(fn(Model $record) => match ($record->getRequiresAttendanceStatus()) {
-                        'timeline' => Color::Blue,
-                        'not-required' => Color::Red,
-                        'required' => Color::Green,
-                    })
+                    }),
+                ToggleColumn::make('require_attendance')
+                    ->disabled(fn (Model $record) => $record->timeline->isRequireAttendance())
                     ->tooltip(
                         fn(Model $record) => $record->getRequiresAttendanceStatus() === 'timeline' ?
                             __('general.attendance_arent_required') : null
