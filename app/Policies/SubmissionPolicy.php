@@ -289,11 +289,11 @@ class SubmissionPolicy
 
     public function review(User $user, Submission $submission)
     {
-        if ($submission->stage != SubmissionStage::PeerReview || $submission->status != SubmissionStatus::OnReview) {
+        if (!in_array($submission->stage, [SubmissionStage::PeerReview, SubmissionStage::Presentation, SubmissionStage::Editing, SubmissionStage::Proceeding])) {
             return false;
         }
 
-        if (filled($submission->withdrawn_reason)) {
+        if(!$submission->reviews->where('user_id', $user->getKey())->first()){
             return false;
         }
 
