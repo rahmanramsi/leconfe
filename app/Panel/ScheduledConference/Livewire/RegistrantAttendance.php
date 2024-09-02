@@ -98,6 +98,7 @@ class RegistrantAttendance extends Component implements HasForms, HasTable, HasA
                                             ->content(fn () => $this->timeline->date->format(Setting::get('format_date'))),
                                     ]),
                                 TimePicker::make('attendance_time')
+                                    ->default(now())
                                     ->helperText(__('general.input_participant_attendance_time'))
                                     ->seconds(false)
                                     ->native(false)
@@ -239,6 +240,7 @@ class RegistrantAttendance extends Component implements HasForms, HasTable, HasA
                                             ->content(fn() => $record->timeline->date->format(Setting::get('format_date'))),
                                     ]),
                                 TimePicker::make('attendance_time')
+                                    ->default(now())
                                     ->helperText(__('general.input_participant_attendance_time'))
                                     ->seconds(false)
                                     ->native(false)
