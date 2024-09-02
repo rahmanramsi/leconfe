@@ -2,13 +2,15 @@
     class="relative w-min" 
     x-data="{ 
         openModal(){
+            if(!this.$wire.opened){
+                this.$wire.open();
+            }
             globalsearch.showModal();
         }
     }"
     >
     <button 
         x-on:click="openModal()"
-        x-on:mouseover.once="$wire.open()"
         x-on:keydown.meta.k.window="openModal()"
         class="navigation-menu-item btn btn-ghost no-animation btn-sm rounded-lg inline-flex items-center justify-center px-4 transition-colors focus:outline-none disabled:opacity-50 disabled:pointer-events-none group w-max gap-0 ease-out duration-300">
         <span>Conferences</span>
