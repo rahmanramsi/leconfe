@@ -175,8 +175,7 @@ class ListSession extends Page implements HasTable, HasForms
                     ->searchable(query: function (Builder $query, string $search): Builder {
                         return $query
                             ->where('sessions.name', 'like', "%{$search}%");
-                    })
-                    ->sortable(),
+                    }),
                 ToggleColumn::make('require_attendance')
                     ->disabled(fn (Model $record) => $record->timeline->isRequireAttendance())
                     ->tooltip(
