@@ -156,9 +156,9 @@ class PanelProvider extends ServiceProvider
     {
         return $panel
             ->maxContentWidth('full')
-            // ->when(!app()->isProduction(), fn(Panel $panel) => $panel->renderHook(
-            //     PanelsRenderHook::FOOTER,
-            //     fn() => Blade::render('<x-livewire-handle-error />')))
+            ->when(!app()->isProduction(), fn(Panel $panel) => $panel->renderHook(
+                PanelsRenderHook::FOOTER,
+                fn() => Blade::render('<x-livewire-handle-error />')))
             ->renderHook(
                 PanelsRenderHook::FOOTER,
                 fn() => Blade::render(<<<'Blade'
