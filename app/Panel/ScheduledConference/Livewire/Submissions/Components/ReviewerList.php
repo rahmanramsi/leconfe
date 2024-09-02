@@ -44,6 +44,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\HtmlString;
 use Livewire\Component;
 use App\Forms\Components\TinyEditor;
+use Filament\Support\Enums\FontWeight;
 use STS\FilamentImpersonate\Tables\Actions\Impersonate;
 
 class ReviewerList extends Component implements HasForms, HasTable
@@ -235,6 +236,11 @@ class ReviewerList extends Component implements HasForms, HasTable
                     ->icon('lineawesome-eye')
                     ->infolist(function (Review $record): array {
                         return [
+                            TextEntry::make('Reviewer')
+                                ->label(__('general.reviewer'))
+                                ->size('base')
+                                ->getStateUsing(fn (): string => $record->user->fullName . ' (' . $record->user->email . ')')
+                                ->weight(FontWeight::Bold),
                             TextEntry::make('Recommendation')
                                 ->label(__('general.recommendation'))
                                 ->size('base')
@@ -252,7 +258,7 @@ class ReviewerList extends Component implements HasForms, HasTable
                                 ->size('base')
                                 ->color('gray')
                                 ->html()
-                                ->getStateUsing(fn (): ?string => $record->review_author_editor),
+                                ->getStateUsing(fn (): ?string => $record->review_author_editor ?? '-'),
                             TextEntry::make('Review for Editor')
                                 ->label(__('general.review_for_editor'))
                                 ->hidden(
@@ -261,11 +267,10 @@ class ReviewerList extends Component implements HasForms, HasTable
                                 ->size('base')
                                 ->color('gray')
                                 ->html()
-                                ->getStateUsing(fn (): ?string => $record->review_editor),
+                                ->getStateUsing(fn (): ?string => $record->review_editor ?? '-'),
                             LivewireEntry::make('reviewer-files')
-                                ->livewire(Files\ReviewerFiles::class, [
-                                    'submission' => $record->submission,
-                                    'viewOnly' => true,
+                                ->livewire(ReviewerFiles::class, [
+                                    'record' => $record
                                 ])
                                 ->lazy(),
                         ];
