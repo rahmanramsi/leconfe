@@ -56,7 +56,7 @@ class Sitemap extends Page
             );
 
         Proceeding::query()
-            ->with(['conference', 'submissions' => ['galleys.file.media', 'conference']])
+            ->with(['conference', 'submissions' => fn($query) => $query->with(['galleys.file.media', 'conference'])->published()])
             ->published()
             ->lazy()->each(function (Proceeding $proceeding) use ($sitemap) {
                 $sitemap->add(
