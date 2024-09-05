@@ -256,6 +256,7 @@ return [
     'disabled_until' => 'Ndaluar deri në',
     'user_roles' => 'Rollet e Përdoruesit',
     'login_as' => 'Hyr si',
+    'login_as_user' => 'Hyr si :name',
     'enable_user' => 'Aktivizo Përdoruesin',
     'disable' => 'Ndalo',
     'until' => 'Derisa',

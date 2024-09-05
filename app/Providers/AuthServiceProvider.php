@@ -28,24 +28,22 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if (! $this->app->isProduction()) {
-            Gate::before(function (Authorizable $user, string $ability) {
-                if (! Str::contains($ability, ':')) {
-                    return null;
-                }
+        Gate::before(function (Authorizable $user, string $ability) {
+            if (! Str::contains($ability, ':')) {
+                return null;
+            }
 
-                $permission = Permission::getPermission(['name' => $ability]);
-                if (! $permission) {
-                    DB::transaction(function () use ($ability) {
-                        $permission = Permission::create([
-                            'name' => $ability,
-                        ]);
+            $permission = Permission::getPermission(['name' => $ability]);
+            if (! $permission) {
+                DB::transaction(function () use ($ability) {
+                    $permission = Permission::create([
+                        'name' => $ability,
+                    ]);
 
-                        $permission->assignRole(UserRole::Admin->value);
-                    });
-                }
-            });
-        }
+                    $permission->assignRole(UserRole::Admin->value);
+                });
+            }
+        });
 
         Gate::after(function ($user, $ability) {
             return $user->hasRole(UserRole::Admin) ? true : null;

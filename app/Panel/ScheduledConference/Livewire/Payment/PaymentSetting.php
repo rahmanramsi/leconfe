@@ -51,7 +51,7 @@ class PaymentSetting extends Component implements HasForms
                             ->toolbar('undo redo removeformat | formatselect fontsizeselect | bold italic | rtl ltr | alignjustify alignright aligncenter alignleft | numlist bullist | forecolor backcolor | blockquote table hr | image link code')
                             ->minHeight(450),
                     ])
-                    ->disabled(fn () =>  auth()->user()->cannot('RegistrationSetting:edit')),
+                    ->disabled(fn () =>  auth()->user()->cannot('RegistrationSetting:update')),
                 Actions::make([
                     Action::make('save_changes')
                         ->label(__('general.save_changes'))
@@ -84,8 +84,8 @@ class PaymentSetting extends Component implements HasForms
 
                             $action->success();
                         })
-                        ->authorize('RegistrationSetting:edit'),
-                ])->alignRight(),
+                        ->authorize('RegistrationSetting:update'),
+                ]),
             ])
             ->statePath('formData');
     }

@@ -257,6 +257,7 @@ return [
     'disabled_until' => 'Dinonaktifkan hingga',
     'user_roles' => 'Peran Pengguna',
     'login_as' => 'Masuk sebagai',
+    'login_as_user' => 'Masuk sebagai :name',
     'enable_user' => 'Aktifkan Pengguna',
     'disable' => 'Nonaktifkan',
     'until' => 'Hingga',

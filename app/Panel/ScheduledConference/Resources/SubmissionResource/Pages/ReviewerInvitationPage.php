@@ -24,6 +24,7 @@ use Filament\Infolists\Contracts\HasInfolists;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\Page;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\HtmlString;
 use Illuminate\View\Compilers\BladeCompiler;
@@ -78,30 +79,42 @@ class ReviewerInvitationPage extends Page implements HasActions, HasInfolists
             ->requiresConfirmation()
             ->successNotificationTitle('Request Accepted')
             ->action(function (Action $action) {
-                $this->review->update([
-                    'date_confirmed' => now(),
-                    'status' => ReviewerStatus::ACCEPTED,
-                ]);
 
-                $editors = $this->record
-                    ->participants()
-                    ->whereHas('role', fn ($query) => $query->where('name', UserRole::ConferenceEditor))
-                    ->get()
-                    ->pluck('user_id')
-                    ->toArray();
+                try {
+                    DB::beginTransaction();
 
-                $editors = User::whereIn('id', $editors)->get();
-                if ($editors->count()) {
-                    try {
-                        Mail::to($editors)
-                            ->send(
-                                new ReviewerAcceptedInvitationMail($this->review)
-                            );
-                    } catch (\Exception $e) {
-                        $action->failureNotificationTitle('Failed to send notification to author');
-                        $action->failure();
+                    $this->review->update([
+                        'date_confirmed' => now(),
+                        'status' => ReviewerStatus::ACCEPTED,
+                    ]);
+
+                    $editorsId = $this->record
+                        ->editors()
+                        ->pluck('user_id')
+                        ->toArray();
+
+                    $editors = User::whereIn('id', $editorsId)->get();
+                    if ($editors->count()) {
+                        try {
+                            Mail::to($editors)
+                                ->send(
+                                    new ReviewerAcceptedInvitationMail($this->review)
+                                );
+                        } catch (\Exception $e) {
+                            $action->failureNotificationTitle('Failed to send notification to author');
+                            $action->failure();
+                        }
                     }
+
+                    DB::commit();
+                } catch (\Throwable $th) {
+                    DB::rollBack();
+
+                    $action->failure();
+
+                    return;
                 }
+                
                 $action->success();
                 $action->redirect(SubmissionResource::getUrl('review', ['record' => $this->record->id]));
             });

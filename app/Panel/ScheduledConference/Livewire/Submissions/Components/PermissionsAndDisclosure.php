@@ -69,7 +69,7 @@ class PermissionsAndDisclosure extends \Livewire\Component implements HasForms
                             ->label(__('general.override'))
                             ->link()
                             ->color('primary')
-                            ->hidden(fn() => $this->submission->getMeta('copyright_holder'))
+                            ->hidden(fn() => $this->submission->getMeta('copyright_holder') || $form->isDisabled())
                             ->action(fn () => $this->overrideCopyrightHolder = true),
                     ]),
                 TextInput::make('meta.copyright_year')
@@ -84,7 +84,7 @@ class PermissionsAndDisclosure extends \Livewire\Component implements HasForms
                             ->label(__('general.override'))
                             ->link()
                             ->color('primary')
-                            ->hidden(fn() => $this->submission->getMeta('copyright_year'))
+                            ->hidden(fn() => $this->submission->getMeta('copyright_year') || $form->isDisabled())
                             ->action(fn () => $this->overrideCopyrightYear = true),
                     ]),
                 TextInput::make('meta.license_url')
@@ -110,7 +110,7 @@ class PermissionsAndDisclosure extends \Livewire\Component implements HasForms
                             ->label(__('general.override'))
                             ->link()
                             ->color('primary')
-                            ->hidden(fn() => $this->submission->getMeta('license_url'))
+                            ->hidden(fn() => $this->submission->getMeta('license_url') || $form->isDisabled())
                             ->action(fn () => $this->overrideLicenseUrl = true),
                     ]),
             ])

@@ -186,7 +186,7 @@ class RegistrationTypeTable extends Component implements HasTable, HasForms
                             }
                             return $data;
                         })
-                        ->authorize('RegistrationSetting:edit'),
+                        ->authorize('RegistrationSetting:update'),
                     DeleteAction::make()
                         ->using(fn(Model $record) => RegistrationTypeDeleteAction::run($record))
                         ->authorize('RegistrationSetting:delete'),

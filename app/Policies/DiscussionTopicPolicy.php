@@ -10,7 +10,7 @@ class DiscussionTopicPolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): bool
+    public function viewAny(User $user)
     {
         if ($user->can('DiscussionTopic:viewAny')) {
             return true;
@@ -20,7 +20,7 @@ class DiscussionTopicPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, DiscussionTopic $discussionTopic): bool
+    public function view(User $user, DiscussionTopic $discussionTopic)
     {
         if ($user->can('DiscussionTopic:view')) {
             return true;
@@ -30,7 +30,7 @@ class DiscussionTopicPolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(User $user)
     {
         if ($user->can('DiscussionTopic:create')) {
             return true;
@@ -40,7 +40,7 @@ class DiscussionTopicPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, DiscussionTopic $discussionTopic): bool
+    public function update(User $user, DiscussionTopic $discussionTopic)
     {
         // Can't edit when topic is closed.
         if (! $discussionTopic->open) {
@@ -55,9 +55,16 @@ class DiscussionTopicPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, DiscussionTopic $discussionTopic): bool
+    public function delete(User $user, DiscussionTopic $discussionTopic)
     {
         if ($user->can('DiscussionTopic:delete')) {
+            return true;
+        }
+    }
+
+    public function close(User $user, DiscussionTopic $discussionTopic)
+    {
+        if ($user->can('DiscussionTopic:close')) {
             return true;
         }
     }

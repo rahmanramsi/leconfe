@@ -260,6 +260,7 @@ return [
     'disabled_until' => 'Disabled until',
     'user_roles' => 'User Roles',
     'login_as' => 'Login as',
+    'login_as_user' => 'Login as :name',
     'enable_user' => 'Enable User',
     'disable' => 'Disable',
     'until' => 'Until',

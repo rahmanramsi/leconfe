@@ -5,8 +5,10 @@ namespace App\Policies;
 use App\Models\Enums\RegistrationPaymentState;
 use App\Models\Enums\SubmissionStage;
 use App\Models\Enums\SubmissionStatus;
+use App\Models\Enums\UserRole;
 use App\Models\Submission;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 
 class SubmissionPolicy
 {
@@ -164,11 +166,6 @@ class SubmissionPolicy
         }
 
         if (filled($submission->withdrawn_reason)) {
-            return false;
-        }
-
-        // Cannot upload an abstract if it has not been accepted yet.
-        if ($submission->stage == SubmissionStage::CallforAbstract) {
             return false;
         }
 
@@ -474,6 +471,21 @@ class SubmissionPolicy
         }
 
         if ($user->can('Submission:deleteRegistration')) {
+            return true;
+        }
+    }
+
+    public function preview(User $user, Submission $submission)
+    {
+        $editorIds = $submission->participants()
+            ->whereHas('role', fn(Builder $query) => $query->withoutGlobalScopes()->whereIn('name', [UserRole::ConferenceEditor]))
+            ->pluck('user_id');
+
+        if(in_array($user->getKey(), $editorIds->toArray())) {
+            return true;
+        }
+
+        if ($user->can('Submission:preview')) {
             return true;
         }
     }

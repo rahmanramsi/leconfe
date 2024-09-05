@@ -94,7 +94,7 @@ class ReviewSubmissionPage extends Page implements HasActions, HasInfolists
                                 TextEntry::make('Keywords')
                                     ->color('gray')
                                     ->getStateUsing(
-                                        fn (Submission $record): string => $record->tagsWithType('submissionKeywords')->pluck('name')->join(', ')
+                                        fn (Submission $record): string => $record->tagsWithType('submissionKeywords')->pluck('name')->join(', ')  ?: '-'
                                     ),
                                 TextEntry::make('Abstract')
                                     ->color('gray')
@@ -200,11 +200,10 @@ class ReviewSubmissionPage extends Page implements HasActions, HasInfolists
                         'recommendation' => $this->recommendation,
                     ]);
 
-                    $editors = $this->record->participants()
-                        ->whereHas('role', fn ($query) => $query->where('name', UserRole::ConferenceEditor))
-                        ->get()
+                    $editors = $this->record->editors()
                         ->pluck('user_id')
                         ->toArray();
+
 
                     $editors = User::whereIn('id', $editors)->get();
                     if ($editors->count()) {

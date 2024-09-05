@@ -254,6 +254,7 @@ return [
     'disabled_until' => 'معطل حتى',
     'user_roles' => 'أدوار المستخدم',
     'login_as' => 'تسجيل الدخول كـ',
+    'login_as_user' => 'تسجيل الدخول كـ :name',
     'enable_user' => 'تمكين المستخدم',
     'disable' => 'تعطيل',
     'until' => 'حتى',
