@@ -93,6 +93,10 @@ class Application extends LaravelApplication
         if ($this->currentConferenceId && !$this->currentConference) {
             $this->currentConference = Conference::find($this->getCurrentConferenceId());
         }
+        
+        if($this->currentConference && $this->currentConference->getKey() !== $this->getCurrentConferenceId()){
+            $this->currentConference = Conference::find($this->getCurrentConferenceId());
+        }
 
         return $this->currentConference;
     }
@@ -120,6 +124,10 @@ class Application extends LaravelApplication
     public function getCurrentScheduledConference(): ?ScheduledConference
     {
         if ($this->currentScheduledConferenceId && !$this->currentScheduledConference) {
+            $this->currentScheduledConference = ScheduledConference::find($this->getCurrentScheduledConferenceId());
+        }
+
+        if($this->currentScheduledConference && $this->currentScheduledConference->getKey() !== $this->getCurrentScheduledConferenceId()){
             $this->currentScheduledConference = ScheduledConference::find($this->getCurrentScheduledConferenceId());
         }
 
