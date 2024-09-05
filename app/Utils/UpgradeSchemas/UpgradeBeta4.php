@@ -3,9 +3,6 @@
 namespace App\Utils\UpgradeSchemas;
 
 use App\Actions\MailTemplates\MailTemplatePopulateDefaultData;
-use App\Models\Role;
-use App\Actions\Roles\RoleAssignDefaultPermissions;
-use App\Actions\Permissions\PermissionPopulateAction;
 use App\Models\Conference;
 use App\Models\ScheduledConference;
 use App\Models\Submission;
@@ -21,12 +18,6 @@ class UpgradeBeta4 extends UpgradeBase
 
 		Conference::lazy()->each(function (Conference $conference) {
 			MailTemplatePopulateDefaultData::run($conference);
-		});
-
-		PermissionPopulateAction::run();
-
-		Role::lazy()->each(function (Role $role) {
-			RoleAssignDefaultPermissions::run($role);
 		});
 	}
 

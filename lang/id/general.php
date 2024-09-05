@@ -320,7 +320,7 @@ return [
     'submission_is_not_open' => 'Pengajuan Belum Dibuka',
 
     'before_you_begin' => 'Sebelum Anda Mulai',
-    'before_you_begin_current_scheduled' => "<p>Terima kasih telah mengirimkan ke :variable. Anda akan diminta untuk mengunggah file, mengidentifikasi rekan penulis, dan memberikan informasi seperti judul dan abstrak.</p>
+    'before_you_begin_current_scheduled' => "<p>Terima kasih telah mengirimkan ke :title. Anda akan diminta untuk mengunggah file, mengidentifikasi rekan penulis, dan memberikan informasi seperti judul dan abstrak.</p>
     <p>Silakan baca Pedoman Pengiriman kami jika Anda belum melakukannya. Saat mengisi formulir, berikan detail sebanyak mungkin untuk membantu editor kami mengevaluasi pekerjaan Anda.</p>
     <p>Setelah Anda memulai, Anda dapat menyimpan pengiriman Anda dan kembali ke itu nanti. Anda akan dapat meninjau dan memperbaiki informasi sebelum Anda mengirimkan.</p>",
     'submission_checklist_following_requirements' => '<p>Semua pengiriman harus memenuhi persyaratan berikut.</p>

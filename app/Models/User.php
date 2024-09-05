@@ -268,4 +268,24 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasMedia,
 
         return $this->assignRole($roles);
     }
+
+    public function hasPermissionTo($permission, $guardName = null): bool
+    {
+        if ($this->getWildcardClass()) {
+            return $this->hasWildcardPermission($permission, $guardName);
+        }
+
+        $permission = $this->filterPermission($permission, $guardName);
+
+        return $this->roleHasDefaultPermission($permission) || $this->hasDirectPermission($permission) || $this->hasPermissionViaRole($permission);
+    }
+
+    public function roleHasDefaultPermission($permission)
+    {
+        return $this->roles->contains(
+            function ($role) use ($permission) {
+                return $role->hasDefaultPermission($permission);
+            }
+        );
+    }
 }

@@ -36,11 +36,9 @@ class AuthServiceProvider extends ServiceProvider
             $permission = Permission::getPermission(['name' => $ability]);
             if (! $permission) {
                 DB::transaction(function () use ($ability) {
-                    $permission = Permission::create([
+                    Permission::create([
                         'name' => $ability,
                     ]);
-
-                    $permission->assignRole(UserRole::Admin->value);
                 });
             }
         });

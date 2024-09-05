@@ -324,7 +324,7 @@ return [
     'submission_is_not_open' => 'Submission is not open',
 
     'before_you_begin' => 'Before You Begin',
-    'before_you_begin_current_scheduled' => "<p>Thank you for submitting to :variable. You will be asked to upload files, identify co-authors, and provide information such as the title and abstract.</p>
+    'before_you_begin_current_scheduled' => "<p>Thank you for submitting to :title. You will be asked to upload files, identify co-authors, and provide information such as the title and abstract.</p>
     <p>Please read our Submission Guidelines if you haven't already. When filling out the forms, provide as many details as possible to help our editors evaluate your work.</p>
     <p>Once you begin, you can save your submission and come back to it later. You will be able to review and correct any information before you submit.</p>",
     'submission_checklist_following_requirements' => '<p>All submissions must meet the following requirements.</p>

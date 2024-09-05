@@ -185,6 +185,10 @@ class SubmissionPolicy
             return false;
         }
 
+        if($submission->user_id !== $user->getKey()) {
+            return false;
+        }
+
         if ($user->can('Submission:uploadPaper')) {
             return true;
         }
@@ -478,8 +482,9 @@ class SubmissionPolicy
     public function preview(User $user, Submission $submission)
     {
         $editorIds = $submission->participants()
-            ->whereHas('role', fn(Builder $query) => $query->withoutGlobalScopes()->whereIn('name', [UserRole::ConferenceEditor]))
+            ->whereHas('role', fn(Builder $query) => $query->withoutGlobalScopes()->whereIn('name', [UserRole::ScheduledConferenceEditor]))
             ->pluck('user_id');
+        
 
         if(in_array($user->getKey(), $editorIds->toArray())) {
             return true;

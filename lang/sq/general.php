@@ -318,7 +318,7 @@ return [
     'submission_is_not_open' => 'Dërgesa nuk është e hapur',
 
     'before_you_begin' => 'Para se të Filloni',
-    'before_you_begin_current_scheduled' => "<p>Faleminderit për dërgesën tuaj në :variable. Do të kërkohet të ngarkoni skedarë, të identifikoni bashkëautorët dhe të jepni informacion si titulli dhe abstrakti.</p>
+    'before_you_begin_current_scheduled' => "<p>Faleminderit për dërgesën tuaj në :title. Do të kërkohet të ngarkoni skedarë, të identifikoni bashkëautorët dhe të jepni informacion si titulli dhe abstrakti.</p>
     <p>Ju lutemi lexoni udhëzimet tona për dërgesën nëse nuk e keni bërë tashmë. Kur plotësoni format, ofroni sa më shumë detaje të mundshme për të ndihmuar redaktorët tanë në vlerësimin e punës suaj.</p>
     <p>Sapo të filloni, mund të ruani dërgesën tuaj dhe të ktheheni më vonë. Do të jeni në gjendje të rishikoni dhe të korrigjoni çdo informacion para se të dorëzoni.</p>",
     'submission_checklist_following_requirements' => '<p>Të gjitha dërgesat duhet të plotësojnë kërkesat e mëposhtme.</p>

@@ -50,9 +50,9 @@ class ReviewSetupSetting extends Component implements HasForms
             ->schema([
                 Section::make()
                     ->schema([
-                        Radio::make('meta.review_mode')
-                            ->label(__('general.review_mode'))
-                            ->options(Review::getModeOptions()),
+                        // Radio::make('meta.review_mode')
+                        //     ->label(__('general.review_mode'))
+                        //     ->options(Review::getModeOptions()),
                         TextInput::make('meta.review_invitation_response_deadline')
                             ->label(__('general.default_response_deadline'))
                             ->helperText(__('general.deadline_reviewers_invitations'))

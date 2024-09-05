@@ -64,7 +64,13 @@ class ScheduledConference extends Model implements HasMedia, HasAvatar, HasName
     {
         return [
             'timezone' => 'UTC',
-			'submission_payment' => true,
+			'submission_payment' => false,
+            'before_you_begin' => __('general.before_you_begin_current_scheduled', ['title' => $this->title]),
+            'submission_checklist' => __('general.submission_checklist_following_requirements'),
+            'review_mode' => Review::MODE_DOUBLE_ANONYMOUS,
+            'review_invitation_response_deadline' => 30,
+            'review_completion_deadline' => 30,
+            'timezone' => 'UTC',
         ];
     }
 

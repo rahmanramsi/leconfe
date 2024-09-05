@@ -142,16 +142,5 @@ class ScheduledConferenceObserver
         TrackPopulateAction::run($scheduledConference);
         RolePopulateScheduledConferenceAction::run($scheduledConference);
         FilesTypePopulateAction::run($scheduledConference);
-
-        $scheduledConference->setManyMeta([
-            'before_you_begin' => __('general.before_you_begin_current_scheduled', ['variable' => $scheduledConference->title]),
-            'submission_checklist' => __('general.submission_checklist_following_requirements'),
-            'review_mode' => Review::MODE_DOUBLE_ANONYMOUS,
-            'review_invitation_response_deadline' => 30,
-            'review_completion_deadline' => 30,
-            'timezone' => 'UTC',
-            'submission_payment' => true,
-        ]);
-
     }
 }

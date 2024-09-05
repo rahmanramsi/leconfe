@@ -30,12 +30,9 @@ class ProceedingDetail extends Page
 
     public function canAccess(): bool
     {
-        return $this->proceeding->isPublished();
-    }
+        
 
-    public function canPreview(): bool
-    {
-        return !$this->proceeding->isPublished();
+        return $this->proceeding->isPublished();
     }
 
     public function getBreadcrumbs(): array

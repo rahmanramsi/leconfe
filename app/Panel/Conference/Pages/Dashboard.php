@@ -20,16 +20,4 @@ class Dashboard extends PagesDashboard
     {
         return false;
     }
-
-
-    public static function internalRoles(): array
-    {
-        return [
-            UserRole::Admin->value,
-            UserRole::ConferenceManager->value,
-            UserRole::SeriesManager->value,
-            UserRole::ConferenceEditor->value,
-        ];
-    }
-
 }
