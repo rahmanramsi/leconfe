@@ -106,6 +106,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                 ),
             Action::make('assign_proceeding')
                 ->label(__('general.publication'))
+                ->authorize('publish', $this->record)
                 ->modalHeading(__('general.assign_proceeding_for_publication'))
                 ->visible(fn() => !$this->record->proceeding && $this->record->stage == SubmissionStage::Editing)
                 ->modalWidth(MaxWidth::ExtraLarge)

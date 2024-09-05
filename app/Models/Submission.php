@@ -189,7 +189,7 @@ class Submission extends Model implements HasMedia, Sortable
     public function editors()
     {
         return $this->participants()
-            ->whereHas('role', fn (Builder $query) => $query->where('name', UserRole::ConferenceEditor));
+            ->whereHas('role', fn (Builder $query) => $query->whereIn('name', [UserRole::ScheduledConferenceEditor, UserRole::TrackEditor]));
     }
 
     public function authors()
@@ -270,13 +270,10 @@ class Submission extends Model implements HasMedia, Sortable
      */
     public function getEditors(): Collection
     {
-        return $this->participants()
-            ->whereHas('role', function ($query) {
-                $query->where('name', UserRole::ConferenceEditor->value);
-            })
-            ->get()
-            ->pluck('user_id')
-            ->map(fn ($userId) => User::find($userId));
+        $editorIds = $this->editors()
+            ->pluck('user_id');
+
+        return User::whereIn('id', $editorIds)->get();
     }
 
     public function state(): BaseSubmissionState

@@ -2,7 +2,6 @@
 
 namespace App\Observers;
 
-use App\Actions\Roles\RoleAssignDefaultPermissions;
 use App\Application;
 use App\Facades\Plugin;
 use App\Models\Enums\UserRole;
@@ -92,9 +91,7 @@ class SiteObserver
             ],
         ]);
 
-        $role = Role::firstOrCreate(['name' => UserRole::Admin->value]);
-
-        RoleAssignDefaultPermissions::run($role);
+        Role::firstOrCreate(['name' => UserRole::Admin]);
     }
 
     /**

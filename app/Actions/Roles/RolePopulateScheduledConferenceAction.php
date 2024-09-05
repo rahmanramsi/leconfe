@@ -24,7 +24,6 @@ class RolePopulateScheduledConferenceAction
                 'scheduled_conference_id' => $scheduledConference->getKey(),
             ]);
 
-            RoleAssignDefaultPermissions::run($role);
         }
     }
 }

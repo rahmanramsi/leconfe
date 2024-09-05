@@ -69,7 +69,8 @@ class ManageSubmissions extends ManageRecords
             ->withCount('editors');
 
         if ($user->hasAnyRole([
-            UserRole::ConferenceEditor,
+            UserRole::ScheduledConferenceEditor,
+            UserRole::TrackEditor,
             UserRole::ConferenceManager,
             UserRole::Admin,
         ])) {
@@ -96,9 +97,13 @@ class ManageSubmissions extends ManageRecords
                     ]));
         }
 
-
         if ($user->hasRole(UserRole::Reviewer)) {
+            
             $query->orWhere(fn ($query) => $query->whereHas('reviews', fn (Builder $query) => $query->where('user_id', Auth::id())))
+                ->when($tab == static::TAB_PRESENTATION, fn ($query) =>  $query->whereIn('status', [
+                    SubmissionStatus::OnPresentation,
+                    SubmissionStatus::Editing,
+                ]))
                 ->when($tab == static::TAB_MYQUEUE, fn ($query) =>  $query->whereIn('status', [
                     SubmissionStatus::OnReview,
                     SubmissionStatus::Editing,
@@ -148,7 +153,7 @@ class ManageSubmissions extends ManageRecords
         if ($user->hasAnyRole([
             UserRole::Admin,
             UserRole::ConferenceManager,
-            UserRole::ConferenceEditor,
+            UserRole::ScheduledConferenceEditor,
         ])) {
             $tabs[static::TAB_UNASSIGNED] = $this->createTab(__('general.unassigned'), static::TAB_UNASSIGNED);
             $tabs[static::TAB_ACTIVE] = $this->createTab(__('general.active'), static::TAB_ACTIVE);
@@ -158,7 +163,7 @@ class ManageSubmissions extends ManageRecords
             UserRole::Author,
             UserRole::Admin,
             UserRole::ConferenceManager,
-            UserRole::ConferenceEditor,
+            UserRole::ScheduledConferenceEditor,
         ])) {
             $tabs[static::TAB_PRESENTATION] = $this->createTab(__('general.presentation'), static::TAB_PRESENTATION);
         }
@@ -180,3 +185,4 @@ class ManageSubmissions extends ManageRecords
             ->badgeColor(fn (): string => $count > 0 ? 'primary' : 'gray');
     }
 }
+ 

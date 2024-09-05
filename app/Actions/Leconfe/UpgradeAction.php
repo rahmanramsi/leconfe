@@ -32,6 +32,12 @@ class UpgradeAction
             ['Upgrade version', $codeVersion],
         ]);
 
+        if(version_compare($installedVersion, $codeVersion, '>=')) {
+            info('Your application is already up to date!');
+
+            return;
+        }
+
         warning('This action will run upgrade scripts your application. Please make sure you have a backup of your database and files before proceeding.');
         $confirmUpgrade = $command->option('confirm') ?: confirm('Are you sure you want to upgrade? This action cannot be undone. (y/n)');
 

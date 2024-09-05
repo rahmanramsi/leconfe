@@ -136,28 +136,11 @@ class Paper extends Page
             return false;
         }
 
-        if (auth()->user()?->can('editing', $this->paper)) {
+        if (auth()->user()?->can('preview', $this->paper)) {
             return true;
         }
 
         if ($this->paper->isPublished() && $this->paper->proceeding->isPublished()) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public function canPreview(): bool
-    {
-        if (!$this->paper->proceeding?->isPublished()) {
-            return true;
-        }
-
-        $isSubmissionNotPublished = !$this->paper->isPublished();
-
-        $canUserEdit = auth()->user()?->can('editing', $this->paper);
-
-        if ($isSubmissionNotPublished && $canUserEdit) {
             return true;
         }
 

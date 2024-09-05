@@ -270,7 +270,7 @@ class UserResource extends Resource
                     Impersonate::make()
                         ->grouped()
                         ->hidden(fn ($record) => !auth()->user()->can('loginAs', $record))
-                        ->label(fn (User $record) => __('general.login_as') . $record->given_name)
+                        ->label(fn (User $record) => __('general.login_as_user', ['name' => $record->full_name]))
                         ->icon('heroicon-m-key')
                         ->color('primary')
                         ->redirectTo(fn () => app()->getCurrentScheduledConference()?->getPanelUrl() ?? app()->getCurrentConference()?->getPanelUrl()),

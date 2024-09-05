@@ -19,8 +19,6 @@ class RolePopulateConferenceAction
     {
         foreach (UserRole::conferenceRoles() as $role) {
             $role = Role::firstOrCreate(['name' => $role->value, 'conference_id' => $conference->getKey()]);
-
-            RoleAssignDefaultPermissions::run($role);
         }
     }
 }

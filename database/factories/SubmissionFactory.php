@@ -64,7 +64,7 @@ class SubmissionFactory extends Factory
             if (in_array($state, [SubmissionStatus::Incomplete, SubmissionStatus::Queued])) {
                 $conferenceEditorRole = Role::withoutGlobalScopes()
                     ->where('scheduled_conference_id', $submission->scheduled_conference_id)
-                    ->where('name', UserRole::ConferenceEditor)->first();
+                    ->whereIn('name', [UserRole::ScheduledConferenceEditor, UserRole::TrackEditor])->first();
                 $userConferenceEditor = $conferenceEditorRole->users->first();
 
 

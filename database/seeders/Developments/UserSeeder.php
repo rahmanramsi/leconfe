@@ -42,7 +42,8 @@ class UserSeeder extends Seeder
             UserRole::Reviewer,
             UserRole::Author,
             UserRole::Reader,
-            UserRole::ConferenceEditor,
+            UserRole::ScheduledConferenceEditor,
+            UserRole::TrackEditor,
         ]);
 
         foreach ($scheduledConferences as $key => $scheduledConference) {

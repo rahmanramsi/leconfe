@@ -39,8 +39,8 @@ class RedirectPanelIfCannotAccess
 			->whereHas('users', fn ($query) => $query->where('id', $user->id))
 			->first();
 
-
 		if ($panel->getId() === PanelProvider::PANEL_CONFERENCE) {
+
 			if ($user->can('view', $conference)) {
 				return $next($request);
 			}

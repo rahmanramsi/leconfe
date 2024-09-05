@@ -16,7 +16,6 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        Actions\Permissions\PermissionPersistAction::class,
         Actions\Permissions\PermissionPopulateAction::class,
         Actions\Leconfe\InstallAction::class,
         Actions\Leconfe\UpgradeAction::class,

@@ -5,6 +5,7 @@ namespace App\Panel\ScheduledConference\Livewire\Submissions\Components\Discussi
 use App\Actions\Submissions\CreateDiscussionTopic;
 use App\Actions\Submissions\UpdateDiscussionTopic;
 use App\Infolists\Components\LivewireEntry;
+use App\Models\DiscussionTopic as ModelsDiscussionTopic;
 use App\Models\Enums\SubmissionStage;
 use App\Models\Submission;
 use App\Notifications\NewDiscussionTopic;
@@ -123,7 +124,7 @@ class DiscussionTopic extends \Livewire\Component implements HasForms, HasTable
                                 'user_id' => $record->participants()->pluck('user_id')->toArray(),
                             ]);
                         })
-                        ->authorize('DiscussionTopic:update')
+                        ->authorize(fn($record) => auth()->user()->can('update', $record))
                         ->form($this->getFormSchema())
                         ->successNotificationTitle(__('general.topic_updated_successfully'))
                         ->action(function (Action $action, array $data, Model $record) {
@@ -134,8 +135,8 @@ class DiscussionTopic extends \Livewire\Component implements HasForms, HasTable
                             );
                             $action->success();
                         }),
-                    Action::make('update-status-action')
-                        ->authorize('DiscussionTopic:update')
+                    Action::make('close')
+                        ->authorize(fn($record) => auth()->user()->can('close', $record))
                         ->label(fn ($record): string => $record->open ? __('general.close') : __('general.open'))
                         ->color(fn ($record): string => $record->open ? 'warning' : 'success')
                         ->icon(fn ($record): string => $record->open ? 'lineawesome-lock-solid' : 'lineawesome-unlock-solid')
@@ -151,7 +152,7 @@ class DiscussionTopic extends \Livewire\Component implements HasForms, HasTable
             ])
             ->headerActions([
                 Action::make('create-topic')
-                    ->authorize('DiscussionTopic:create')
+                    ->authorize('create', ModelsDiscussionTopic::class)
                     ->icon('lineawesome-plus-solid')
                     ->outlined()
                     ->label(__('general.topic'))
