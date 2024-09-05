@@ -14,10 +14,29 @@
                                     </div>
                                 </div>
                             @endif
-                            <div class="profile-description">
+                            <div class="profile-description space-y-1">
                                 <p class="text-content">{{ $committee->fullName }}</p>
-                                @if ($committee->hasMeta('affiliation'))
+                                @if ($committee->getMeta('affiliation'))
                                     <span class="text-xs">{{ $committee->getMeta('affiliation') }}</span>
+                                @endif
+                                @if($committee->getMeta('scopus_url') || $committee->getMeta('google_scholar_url') || $committee->getMeta('orcid_url'))
+                                    <div class="flex items-center gap-1">
+                                        @if($committee->getMeta('orcid_url'))
+                                        <a href="{{ $committee->getMeta('orcid_url') }}" target="_blank">
+                                            <x-academicon-orcid class="w-5 h-5 text-[#A1C837]" />
+                                        </a>
+                                        @endif
+                                        @if($committee->getMeta('google_scholar_url'))
+                                        <a href="{{ $committee->getMeta('google_scholar_url') }}" target="_blank">
+                                            <x-academicon-google-scholar class="w-5 h-5 text-[#4185F4]" />
+                                        </a>
+                                        @endif
+                                        @if($committee->getMeta('scopus_url'))
+                                        <a href="{{ $committee->getMeta('scopus_url') }}" target="_blank">
+                                            <x-academicon-scopus class="w-5 h-5 text-[#e9711c]" />
+                                        </a>
+                                        @endif
+                                    </div>
                                 @endif
                             </div>
                         </div>
