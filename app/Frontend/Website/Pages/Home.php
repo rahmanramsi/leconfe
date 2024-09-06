@@ -6,6 +6,7 @@ use App\Models\Topic;
 use App\Models\Conference;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Livewire\Attributes\On;
 use Livewire\WithPagination;
 use Livewire\WithoutUrlPagination;
 use App\Models\ScheduledConference;
@@ -40,16 +41,9 @@ class Home extends Page
         return __('general.home');
     }
 
-    public function clearFilter(): void
-    {
-        $this->search = '';
-        $this->scope = null;
-        $this->state = null;
-        $this->topic = [];
-        $this->topicSearch = '';
-        $this->coordinator = [];
-        $this->coordinatorSearch = '';
-    }
+    protected $listeners = [
+        'changeFilter' => 'filterChanged',
+    ];
 
     public function clearScope(): void
     {
@@ -59,6 +53,14 @@ class Home extends Page
     public function clearState(): void
     {
         $this->state = null;
+    }
+
+    public function filterChanged(array $filterData)
+    {
+        $this->scope = $filterData['scope'] ?? $this->scope;
+        $this->state = $filterData['state'] ?? $this->state;
+        $this->topic = $filterData['topic'] ?? $this->topic;
+        $this->coordinator = $filterData['coordinator'] ?? $this->coordinator;
     }
 
     protected function getViewData(): array

@@ -73,7 +73,7 @@
                         </li>
                     </ul>
                 </div>
-                
+
                 <div class="col-span-4 sm:col-span-2 dropdown h-fit">
                     <button tabindex="0" role="button" class="btn btn-sm btn-outline border-gray-300 w-full">
                         {{ __('general.topic') }} {{ count($this->topic) > 0 ? "(" . count($this->topic) . ")" : null }}
@@ -128,6 +128,47 @@
                             </li>
                         @endif
                     </ul>
+                </div>
+
+                <div class="col-span-4 sm:col-span-2">
+                    @livewire(\App\Livewire\FilterButton::class, [
+                        'filterName' => 'scope',
+                        'filterOptions' => [
+                            App\Models\Conference::SCOPE_INTERNATIONAL => __('general.international'),
+                            App\Models\Conference::SCOPE_NATIONAL => __('general.national'),
+                        ],
+                        'multiple' => false,
+                    ])
+                </div>
+
+                <div class="col-span-4 sm:col-span-2">
+                    @livewire(\App\Livewire\FilterButton::class, [
+                        'filterName' => 'state',
+                        'filterOptions' => [
+                            'active' => __('general.active'),
+                            'over' => __('general.over'),
+                        ],
+                        'multiple' => false,
+                    ])
+                </div>
+
+
+                <div class="col-span-4 sm:col-span-2">
+                    @livewire(\App\Livewire\FilterButton::class, [
+                        'filterName' => 'topic',
+                        'filterOptions' => $topics->pluck('name', 'id')->toArray(),
+                        'multiple' => true,
+                    ])
+                </div>
+
+                <div class="col-span-4 sm:col-span-2">
+                    @livewire(\App\Livewire\FilterButton::class, [
+                        'filterName' => 'coordinator',
+                        'filterOptions' => $scheduledConferencesWithCoordinators->mapWithKeys(function ($scheduledConference) {
+                            return [$scheduledConference->id => $scheduledConference->getMeta('coordinator')];
+                        })->toArray(),
+                        'multiple' => true,
+                    ])
                 </div>
             </div>
             <hr class="!my-6">
