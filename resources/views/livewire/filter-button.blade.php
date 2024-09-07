@@ -12,27 +12,27 @@
         <li>
             @if ($isMultiple)
                 <label class="mb-2 input input-xs input-bordered !outline-none bg-white flex items-center">
-                    <input type="text" class="grow" placeholder="{{ __('general.search') }}" wire:model.live.debounce="search" wire:change="searchFilter('asdasd')" />
+                    <input type="text" class="grow" placeholder="{{ __('general.search') }}" wire:model.live="search" />
                     <x-heroicon-m-magnifying-glass class="h-3 w-3 opacity-70" />
                 </label>
-            @else
-                <button class="mb-2 btn btn-xs btn-outline border-gray-300 w-full" wire:click="clearFilter" wire:loading.attr="disabled">
-                    Clear
-                </button>
             @endif
+
+            <button class="mb-2 btn btn-xs btn-outline border-gray-300 w-full" wire:click="clearFilter" wire:loading.attr="disabled">
+                Clear
+            </button>
         </li>
 
         @if ($isMultiple)
-            @foreach ($filterOptions as $filterKey => $filterValue)
+            @foreach ($filterOutputOptions as $filterKey => $filterValue)
                 <li>
                     <label class="py-1.5 label cursor-pointer">
                         <span class="label-text px-2">{{ $filterValue }}</span>
-                        <input type="checkbox" class="checkbox checkbox-xs" value="{{ $filterKey }}" wire:model.live="multipleFilterValue" wire:change="filterChanged" />
+                        <input type="checkbox" class="checkbox checkbox-xs" value="{{ $filterKey }}" wire:model.live="multipleFilterValue" wire:change="filterChanged()" />
                     </label>
                 </li>
             @endforeach
         @else
-            @foreach ($filterOptions as $filterKey => $filterValue)
+            @foreach ($filterOutputOptions as $filterKey => $filterValue)
                 <li>
                     <label class="py-1.5 label cursor-pointer">
                         <span class="label-text px-2">{{ $filterValue }}</span>
@@ -42,7 +42,7 @@
             @endforeach
         @endif
 
-        @if (empty($filterOptions))
+        @if (empty($filterOutputOptions))
             <li>
                 <p class="text-center text-xs">Option are empty</p>
             </li>

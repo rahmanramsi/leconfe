@@ -55,6 +55,11 @@ class Home extends Page
         $this->state = null;
     }
 
+    public function clearFilter(): void
+    {
+        $this->dispatch('clearAllFilter');
+    }
+
     public function filterChanged(array $filterData)
     {
         $this->scope = $filterData['scope'] ?? $this->scope;

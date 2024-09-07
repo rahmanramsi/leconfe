@@ -2,7 +2,6 @@
 
 namespace App\Livewire;
 
-use Illuminate\Support\Arr;
 use Livewire\Component;
 use Illuminate\Support\Str;
 
@@ -10,9 +9,9 @@ class FilterButton extends Component
 {
     public string $filterName;
 
-    public ?array $filterOptions = null;
+    public array $filterOptions = [];
 
-    public ?array $filterOutputOptions = null;
+    public array $filterOutputOptions = [];
 
     public array $multipleFilterValue = [];
 
@@ -21,6 +20,11 @@ class FilterButton extends Component
     public bool $multiple;
 
     public string $search = "";
+
+
+    protected $listeners = [
+        'clearAllFilter' => 'clearFilter',
+    ];
 
     public function mount(string $filterName, array $filterOptions, bool $multiple = false): void
     {
@@ -40,28 +44,34 @@ class FilterButton extends Component
     {
         $this->multipleFilterValue = [];
         $this->singleFilterValue = "";
+        $this->search = "";
 
         $this->filterChanged();
     }
 
-    public function searchFilter(string $search): void
-    {
-        $outputOptions = Arr::mapWithKeys($this->filterOptions, function ($value, $key) {
-            $stringValue = is_string($value) ? $value : (string) $value;
-            if(str_contains($stringValue, $this->search) || $this->search === "") {
-                return [$key => $value];
-            }
-        });
-
-        $this->filterOutputOptions = $outputOptions;
-    }
 
     public function render()
     {
+        $filterOptions = collect($this->filterOptions ?? []);
+
+        $this->filterOutputOptions = $filterOptions->filter(function (mixed $value) {
+            $stringValue = is_string($value) ? $value : (string) $value;
+
+            if ($this->search === "") {
+                return true;
+            }
+
+            if (Str::contains(Str::lower($stringValue), Str::lower($this->search))) {
+                return true;
+            }
+
+            return false;
+        })->toArray();
+
         return view('livewire.filter-button', [
             'isMultiple' => $this->multiple ?? false,
             'filterName' => $this->filterName,
-            'filterOptions' => $this->filterOutputOptions,
+            'filterOutputOptions' => $this->filterOutputOptions,
             // value
             'multipleFilterValue' => $this->multipleFilterValue ?? [],
             'singleFilterValue' => $this->singleFilterValue ?? "",
