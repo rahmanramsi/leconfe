@@ -22,7 +22,7 @@ class Home extends Page
 
     protected static string $view = 'frontend.website.pages.home';
 
-    public string $search = '';
+    public string $search = "";
 
     public ?string $scope = null;
 
@@ -43,6 +43,8 @@ class Home extends Page
 
     public function clearFilter(): void
     {
+        $this->search = "";
+
         $this->dispatch('clearAllFilter');
     }
 

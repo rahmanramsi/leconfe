@@ -10,17 +10,13 @@
 
             <x-website::heading-title title="Conference List" class="grow"/>
 
-            <div class="mt-6 mb-6 grid grid-cols-8 gap-2">
-                <div class="col-span-6 gap-2">
+            <div class="mt-6 mb-6 grid grid-cols-10 gap-2">
+                <div class="col-span-full gap-2">
                     <label class="input input-sm input-bordered !outline-none bg-white flex items-center gap-2">
-                        <input type="text" class="grow" placeholder="{{ __('general.search') }}" wire:model.live.debounce="search" />
+                        <input type="search" class="grow" placeholder="{{ __('general.search') }}" wire:model.live.debounce="search" />
                         <x-heroicon-m-magnifying-glass class="h-4 w-4 opacity-70" />
                     </label>
                 </div>
-
-                <button class="col-span-2 btn btn-sm btn-primary w-full" wire:click="clearFilter" wire:loading.attr="disabled">
-                    {{ __('general.clear') }}
-                </button>
 
                 <div class="col-span-4 sm:col-span-2">
                     @livewire(\App\Livewire\FilterButton::class, [
@@ -44,7 +40,6 @@
                     ])
                 </div>
 
-
                 <div class="col-span-4 sm:col-span-2">
                     @livewire(\App\Livewire\FilterButton::class, [
                         'name' => 'topic',
@@ -62,6 +57,10 @@
                         'is_multiple' => true,
                     ])
                 </div>
+
+                <button class="col-span-2 btn btn-sm btn-primary w-full tooltip" data-tip="Clear all the filter and the search input." wire:click="clearFilter" wire:loading.attr="disabled">
+                    {{ __('general.clear') }} All
+                </button>
             </div>
             <hr class="!my-6">
             <div class="space-y-4 conference-current">

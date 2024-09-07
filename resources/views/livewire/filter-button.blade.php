@@ -25,18 +25,18 @@
         @if ($isMultiple)
             @foreach ($filterOutputOptions as $filterKey => $filterValue)
                 <li>
-                    <label class="py-1.5 label cursor-pointer">
+                    <label class="py-1.5 label cursor-pointer hover:bg-neutral-content hover:!text-white transition-colors rounded">
                         <span class="label-text px-2">{{ $filterValue }}</span>
-                        <input type="checkbox" class="checkbox checkbox-xs" value="{{ $filterKey }}" wire:model.live="multipleFilterValue" wire:change="filterChanged()" />
+                        <input type="checkbox" class="checkbox checkbox-xs mx-1.5" value="{{ $filterKey }}" wire:model.live="multipleFilterValue" wire:change="filterChanged()" />
                     </label>
                 </li>
             @endforeach
         @else
             @foreach ($filterOutputOptions as $filterKey => $filterValue)
                 <li>
-                    <label class="py-1.5 label cursor-pointer">
+                    <label class="py-1.5 label cursor-pointer hover:bg-neutral-content hover:!text-white transition-colors rounded">
                         <span class="label-text px-2">{{ $filterValue }}</span>
-                        <input type="radio" class="radio radio-xs" value="{{ $filterKey }}" wire:model.live="singleFilterValue" wire:change="filterChanged" />
+                        <input type="radio" class="radio radio-xs mx-1.5" value="{{ $filterKey }}" wire:model.live="singleFilterValue" wire:change="filterChanged" />
                     </label>
                 </li>
             @endforeach
