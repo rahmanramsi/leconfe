@@ -18,7 +18,7 @@
                     </label>
                 </div>
 
-                <div class="col-span-4 sm:col-span-2">
+                <div class="col-span-full sm:col-span-5 md:col-span-2">
                     @livewire(\App\Livewire\FilterButton::class, [
                         'name' => 'scope',
                         'options' => [
@@ -29,7 +29,7 @@
                     ])
                 </div>
 
-                <div class="col-span-4 sm:col-span-2">
+                <div class="col-span-full sm:col-span-5 md:col-span-2">
                     @livewire(\App\Livewire\FilterButton::class, [
                         'name' => 'state',
                         'options' => [
@@ -40,7 +40,7 @@
                     ])
                 </div>
 
-                <div class="col-span-4 sm:col-span-2">
+                <div class="col-span-full sm:col-span-5 md:col-span-2">
                     @livewire(\App\Livewire\FilterButton::class, [
                         'name' => 'topic',
                         'options' => $topics->pluck('name', 'id')->toArray(),
@@ -48,7 +48,7 @@
                     ])
                 </div>
 
-                <div class="col-span-4 sm:col-span-2">
+                <div class="col-span-full sm:col-span-5 md:col-span-2">
                     @livewire(\App\Livewire\FilterButton::class, [
                         'name' => 'coordinator',
                         'options' => $scheduledConferencesWithCoordinators->mapWithKeys(function ($scheduledConference) {
@@ -58,7 +58,7 @@
                     ])
                 </div>
 
-                <button class="col-span-2 btn btn-sm btn-primary w-full tooltip" data-tip="Clear all the filter and the search input." wire:click="clearFilter" wire:loading.attr="disabled">
+                <button class="col-span-full md:col-span-2 btn btn-sm btn-primary w-full tooltip" data-tip="Clear all the filter and the search input." wire:click="clearFilter" wire:loading.attr="disabled">
                     {{ __('general.clear') }} All
                 </button>
             </div>
