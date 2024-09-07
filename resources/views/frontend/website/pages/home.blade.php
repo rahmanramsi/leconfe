@@ -24,42 +24,42 @@
 
                 <div class="col-span-4 sm:col-span-2">
                     @livewire(\App\Livewire\FilterButton::class, [
-                        'filterName' => 'scope',
-                        'filterOptions' => [
+                        'name' => 'scope',
+                        'options' => [
                             App\Models\Conference::SCOPE_INTERNATIONAL => __('general.international'),
                             App\Models\Conference::SCOPE_NATIONAL => __('general.national'),
                         ],
-                        'multiple' => false,
+                        'is_multiple' => false,
                     ])
                 </div>
 
                 <div class="col-span-4 sm:col-span-2">
                     @livewire(\App\Livewire\FilterButton::class, [
-                        'filterName' => 'state',
-                        'filterOptions' => [
+                        'name' => 'state',
+                        'options' => [
                             'active' => __('general.active'),
                             'over' => __('general.over'),
                         ],
-                        'multiple' => false,
+                        'is_multiple' => false,
                     ])
                 </div>
 
 
                 <div class="col-span-4 sm:col-span-2">
                     @livewire(\App\Livewire\FilterButton::class, [
-                        'filterName' => 'topic',
-                        'filterOptions' => $topics->pluck('name', 'id')->toArray(),
-                        'multiple' => true,
+                        'name' => 'topic',
+                        'options' => $topics->pluck('name', 'id')->toArray(),
+                        'is_multiple' => true,
                     ])
                 </div>
 
                 <div class="col-span-4 sm:col-span-2">
                     @livewire(\App\Livewire\FilterButton::class, [
-                        'filterName' => 'coordinator',
-                        'filterOptions' => $scheduledConferencesWithCoordinators->mapWithKeys(function ($scheduledConference) {
+                        'name' => 'coordinator',
+                        'options' => $scheduledConferencesWithCoordinators->mapWithKeys(function ($scheduledConference) {
                             return [$scheduledConference->id => $scheduledConference->getMeta('coordinator')];
                         })->toArray(),
-                        'multiple' => true,
+                        'is_multiple' => true,
                     ])
                 </div>
             </div>

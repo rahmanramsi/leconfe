@@ -26,11 +26,11 @@ class FilterButton extends Component
         'clearAllFilter' => 'clearFilter',
     ];
 
-    public function mount(string $filterName, array $filterOptions, bool $multiple = false): void
+    public function mount(string $name, array $options, bool $is_multiple = false): void
     {
-        $this->filterName = $filterName;
-        $this->filterOptions = $filterOptions;
-        $this->multiple = $multiple;
+        $this->filterName = $name;
+        $this->filterOptions = $options;
+        $this->multiple = $is_multiple;
     }
 
     public function filterChanged(): void
