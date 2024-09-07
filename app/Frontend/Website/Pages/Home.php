@@ -30,29 +30,15 @@ class Home extends Page
 
     public array $topic = [];
 
-    public string $topicSearch = '';
-
     public array $coordinator = [];
-
-    public string $coordinatorSearch = '';
-
-    public function getTitle(): string|Htmlable
-    {
-        return __('general.home');
-    }
 
     protected $listeners = [
         'changeFilter' => 'filterChanged',
     ];
 
-    public function clearScope(): void
+    public function getTitle(): string|Htmlable
     {
-        $this->scope = null;
-    }
-
-    public function clearState(): void
-    {
-        $this->state = null;
+        return __('general.home');
     }
 
     public function clearFilter(): void
@@ -133,7 +119,6 @@ class Home extends Page
         }
 
         $topics = Topic::withoutGlobalScopes()
-            ->where('name', 'LIKE', "%{$this->topicSearch}%")
             ->with(['conference'])
             ->orderBy('name', 'ASC')
             ->get();
@@ -141,10 +126,6 @@ class Home extends Page
         $scheduledConferencesWithCoordinators = ScheduledConference::withoutGlobalScopes()->get()
             ->filter(function (ScheduledConference $scheduledConference) {
                 if(!$scheduledConference->getMeta('coordinator')) {
-                    return false;
-                }
-
-                if(!Str::contains(Str::lower($scheduledConference->getMeta('coordinator')), Str::lower($this->coordinatorSearch)) && ($this->coordinatorSearch !== '')) {
                     return false;
                 }
 
