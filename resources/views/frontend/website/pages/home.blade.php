@@ -59,7 +59,7 @@
                 </div>
 
                 <button class="col-span-full md:col-span-2 btn btn-sm btn-primary w-full tooltip" data-tip="Clear all the filter and the search input." wire:click="clearFilter" wire:loading.attr="disabled">
-                    {{ __('general.clear') }} All
+                    Reset All
                 </button>
             </div>
             <hr class="!my-6">

@@ -12,13 +12,13 @@
         <li>
             @if ($isMultiple)
                 <label class="mb-2 input input-xs input-bordered !outline-none bg-white flex items-center">
-                    <input type="text" class="grow" placeholder="{{ __('general.search') }}" wire:model.live="search" />
+                    <input type="search" class="grow" placeholder="{{ __('general.search') }}" wire:model.live="search" />
                     <x-heroicon-m-magnifying-glass class="h-3 w-3 opacity-70" />
                 </label>
             @endif
 
             <button class="mb-2 btn btn-xs btn-outline border-gray-300 w-full" wire:click="clearFilter" wire:loading.attr="disabled">
-                Clear
+                Reset
             </button>
         </li>
 

@@ -44,7 +44,6 @@ class FilterButton extends Component
     {
         $this->multipleFilterValue = [];
         $this->singleFilterValue = "";
-        $this->search = "";
 
         $this->filterChanged();
     }

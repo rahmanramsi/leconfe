@@ -43,8 +43,6 @@ class Home extends Page
 
     public function clearFilter(): void
     {
-        $this->search = "";
-
         $this->dispatch('clearAllFilter');
     }
 
