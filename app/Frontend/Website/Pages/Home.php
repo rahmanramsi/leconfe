@@ -97,7 +97,7 @@ class Home extends Page
         if(count($this->topic) > 0) {
             $filteredConference = $filteredConference->filter(function (Conference $conference) {
                 foreach($this->topic as $topic) {
-                    if(!in_array((int) $topic, $conference->topics->pluck('id')->toArray())) {
+                    if(!in_array($topic, $conference->topics->pluck('name')->toArray())) {
                         return false;
                     }
                 }
@@ -107,9 +107,14 @@ class Home extends Page
         }
 
         if(count($this->coordinator) > 0) {
+            // super unoptimized code (i had no other idea)
             $filteredConference = $filteredConference->filter(function (Conference $conference) {
+                $coordinators = $conference->scheduledConferences->load(['meta'])->mapWithKeys(function ($scheduledConference) {
+                    return [$scheduledConference->getKey() => $scheduledConference->getMeta('coordinator')];
+                })->toArray();
+
                 foreach($this->coordinator as $coordinator) {
-                    if(!in_array($coordinator, $conference->scheduledConferences->pluck('id')->toArray())) {
+                    if(!in_array($coordinator, $coordinators)) {
                         return false;
                     }
                 }

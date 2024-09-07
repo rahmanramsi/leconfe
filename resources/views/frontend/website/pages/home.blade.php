@@ -61,8 +61,31 @@
                 <button class="col-span-full md:col-span-2 btn btn-sm btn-primary w-full tooltip" data-tip="Clear all the filter and the search input." wire:click="clearFilter" wire:loading.attr="disabled">
                     Reset All
                 </button>
+
+                <div class="col-span-full w-full">
+                    @if ($this->scope)
+                        <span class="px-3 py-0.5 badge badge-primary text-xs">
+                            Scope: {{ Str::headline($this->scope) }}
+                        </span>
+                    @endif
+                    @if ($this->state)
+                        <span class="px-3 py-0.5 badge badge-primary text-xs">
+                            State: {{ Str::headline($this->state) }}
+                        </span>
+                    @endif
+                    @if (!empty($this->topic))
+                        <span class="px-3 py-0.5 badge badge-primary text-xs">
+                            Topic: {{ implode(', ', $this->topic) }}
+                        </span>
+                    @endif
+                    @if (!empty($this->coordinator))
+                        <span class="px-3 py-0.5 badge badge-primary text-xs">
+                            Coordinator: {{ implode(', ', $this->coordinator) }}
+                        </span>
+                    @endif
+                </div>
             </div>
-            <hr class="!my-6">
+            <hr class="!my-5">
             <div class="space-y-4 conference-current">
                 @if ($conferences->isNotEmpty())
                     <div class="grid gap-6 xl:grid-cols-2">
