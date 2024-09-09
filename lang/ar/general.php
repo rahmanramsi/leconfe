@@ -917,5 +917,10 @@ return [
     'conference_scope_description' => "نطاق المؤتمر",
     'clear' => "مسح",
     'coordinator_setting_description' => "الفرد أو الفريق المسؤول عن تنظيم وإدارة المؤتمر.",
-    
+
+    'option_are_empty' => "الخيار فارغ",
+    'reset' => "إعادة تعيين",
+    'reset_all' => "إعادة تعيين الكل",
+    'incoming' => "وارد",
+
 ];

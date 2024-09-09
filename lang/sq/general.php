@@ -919,5 +919,10 @@ return [
     'conference_scope_description' => "Fusha e veprimit të konferencës",
     'clear' => "Pastro",
     'coordinator_setting_description' => "Individi ose ekipi që është përgjegjës për organizimin dhe menaxhimin e konferencës.",
-    
+
+    'option_are_empty' => "Opsionet janë bosh",
+    'reset' => "Rivendos",
+    'reset_all' => "Rivendos të gjitha",
+    'incoming' => "Në ardhje",
+
 ];

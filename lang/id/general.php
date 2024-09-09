@@ -900,5 +900,10 @@ return [
     'conference_scope_description' => "Ruang lingkup konferensi",
     'clear' => "Bersihkan",
     'coordinator_setting_description' => "Individu atau tim yang bertanggung jawab untuk mengatur dan mengelola konferensi.",
-    
+
+    'option_are_empty' => "Opsi kosong",
+    'reset' => "Atur Ulang",
+    'reset_all' => "Atur Ulang Semua",
+    'incoming' => "Masuk",
+
 ];

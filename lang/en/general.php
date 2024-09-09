@@ -925,7 +925,7 @@ return [
     'apply' => "Apply",
     'search' => "Search",
     'filter' => "Filter",
-    
+
     'scope' => "Scope",
     'coordinator' => "Coordinator",
     'over' => 'Over',
@@ -935,5 +935,10 @@ return [
     'conference_scope_description' => "Scope of the conference",
     'clear' => "Clear",
     'coordinator_setting_description' => "Individual or team that responsible for organizing and managing the conference.",
+
+    'option_are_empty' => "Option are empty",
+    'reset' => "Reset",
+    'reset_all' => "Reset All",
+    'incoming' => "Incoming",
     
 ];

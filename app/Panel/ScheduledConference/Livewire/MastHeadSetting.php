@@ -89,7 +89,7 @@ class MastHeadSetting extends Component implements HasForms
                                     ->helperText(__('general.acronym_rather_than_the_full_conference')),
                                 TextInput::make('meta.coordinator')
                                     ->label(__('general.coordinator'))
-                                    ->helperText('Individual or team that responsible for organizing and managing the conference.'),
+                                    ->helperText(__('general.coordinator_setting_description')),
                                 TextInput::make('meta.theme')
                                     ->label(__('general.theme'))
                                     ->helperText(__('general.theme_information'))

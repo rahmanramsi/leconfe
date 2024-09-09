@@ -20,13 +20,13 @@
 
                 <div class="col-span-full sm:col-span-5 md:col-span-2 dropdown h-fit w-full">
                     <button tabindex="0" role="button" class="btn btn-sm btn-outline border-gray-300 w-full">
-                        Scope <x-heroicon-o-chevron-down class="h-4 w-4" />
+                        {{ __('general.scope') }} <x-heroicon-o-chevron-down class="h-4 w-4" />
                     </button>
 
                     <ul tabindex="0" class="mt-2 p-2 w-full grid dropdown-content bg-white border rounded z-[1] shadow-xl overflow-y-auto max-h-[50vh]">
                         <li>
                             <button class="mb-2 btn btn-xs btn-outline border-neutral-300 w-full" wire:click="resetFilter('scope')" wire:loading.attr="disabled">
-                                Reset
+                                {{ __('general.reset') }}
                             </button>
                         </li>
                         <li>
@@ -46,30 +46,30 @@
 
                 <div class="col-span-full sm:col-span-5 md:col-span-2 dropdown h-fit w-full">
                     <button tabindex="0" role="button" class="btn btn-sm btn-outline border-gray-300 w-full">
-                        State <x-heroicon-o-chevron-down class="h-4 w-4" />
+                        {{ __('general.state') }} <x-heroicon-o-chevron-down class="h-4 w-4" />
                     </button>
 
                     <ul tabindex="0" class="mt-2 p-2 w-full grid dropdown-content bg-white border rounded z-[1] shadow-xl overflow-y-auto max-h-[50vh]">
                         <li>
                             <button class="mb-2 btn btn-xs btn-outline border-neutral-300 w-full" wire:click="resetFilter('state')" wire:loading.attr="disabled">
-                                Reset
+                                {{ __('general.reset') }}
                             </button>
                         </li>
                         <li>
                             <label class="py-1.5 label cursor-pointer hover:bg-neutral-200 hover:!text-white transition-colors rounded">
-                                <span class="label-text px-2">Current</span>
+                                <span class="label-text px-2">{{ __('general.current') }}</span>
                                 <input type="checkbox" class="checkbox checkbox-xs mx-1.5" value="{{ self::STATE_CURRENT }}" wire:model.live="filter.state.value" />
                             </label>
                         </li>
                         <li>
                             <label class="py-1.5 label cursor-pointer hover:bg-neutral-200 hover:!text-white transition-colors rounded">
-                                <span class="label-text px-2">Incoming</span>
+                                <span class="label-text px-2">{{ __('general.incoming') }}</span>
                                 <input type="checkbox" class="checkbox checkbox-xs mx-1.5" value="{{ self::STATE_INCOMING }}" wire:model.live="filter.state.value" />
                             </label>
                         </li>
                         <li>
                             <label class="py-1.5 label cursor-pointer hover:bg-neutral-200 hover:!text-white transition-colors rounded">
-                                <span class="label-text px-2">Archived</span>
+                                <span class="label-text px-2">{{ __('general.archived') }}</span>
                                 <input type="checkbox" class="checkbox checkbox-xs mx-1.5" value="{{ self::STATE_ARCHIVED }}" wire:model.live="filter.state.value" />
                             </label>
                         </li>
@@ -78,7 +78,7 @@
 
                 <div class="col-span-full sm:col-span-5 md:col-span-2 dropdown h-fit w-full">
                     <button tabindex="0" role="button" class="btn btn-sm btn-outline border-gray-300 w-full">
-                        Topic <x-heroicon-o-chevron-down class="h-4 w-4" />
+                        {{ __('general.topic') }} <x-heroicon-o-chevron-down class="h-4 w-4" />
                     </button>
 
                     <ul tabindex="0" class="mt-2 p-2 w-full grid dropdown-content bg-white border rounded z-[1] shadow-xl overflow-y-auto max-h-[50vh]">
@@ -88,7 +88,7 @@
                                 <x-heroicon-m-magnifying-glass class="h-3 w-3 opacity-70" />
                             </label>
                             <button class="mb-2 btn btn-xs btn-outline border-neutral-300 w-full" wire:click="resetFilter('topic')" wire:loading.attr="disabled">
-                                Reset
+                                {{ __('general.reset') }}
                             </button>
                         </li>
 
@@ -103,7 +103,9 @@
 
                         @if ($topics->isEmpty())
                             <li>
-                                <p class="text-center text-xs">Option are empty</p>
+                                <p class="text-center text-xs">
+                                    {{ __('general.option_are_empty') }}
+                                </p>
                             </li>
                         @endif
                     </ul>
@@ -111,7 +113,7 @@
 
                 <div class="col-span-full sm:col-span-5 md:col-span-2 dropdown h-fit w-full">
                     <button tabindex="0" role="button" class="btn btn-sm btn-outline border-gray-300 w-full">
-                        Coordinator <x-heroicon-o-chevron-down class="h-4 w-4" />
+                        {{ __('general.coordinator') }} <x-heroicon-o-chevron-down class="h-4 w-4" />
                     </button>
 
                     <ul tabindex="0" class="mt-2 p-2 w-full grid dropdown-content bg-white border rounded z-[1] shadow-xl overflow-y-auto max-h-[50vh]">
@@ -121,7 +123,7 @@
                                 <x-heroicon-m-magnifying-glass class="h-3 w-3 opacity-70" />
                             </label>
                             <button class="mb-2 btn btn-xs btn-outline border-neutral-300 w-full" wire:click="resetFilter('coordinator')" wire:loading.attr="disabled">
-                                Reset
+                                {{ __('general.reset') }}
                             </button>
                         </li>
 
@@ -136,21 +138,23 @@
 
                         @if ($contributorScheduleConferences->isEmpty())
                             <li>
-                                <p class="text-center text-xs">Option are empty</p>
+                                <p class="text-center text-xs">
+                                    {{ __('general.option_are_empty') }}
+                                </p>
                             </li>
                         @endif
                     </ul>
                 </div>
 
                 <button class="col-span-full md:col-span-2 btn btn-sm btn-primary w-full tooltip" data-tip="Clear all the filter and the search input." wire:click="resetFilters" wire:loading.attr="disabled">
-                    Reset All
+                    {{ __('general.reset_all') }}
                 </button>
 
                 <div class="col-span-full w-full">
 
                     @if ($scopeSelected)
                         <span class="px-3 py-0.5 badge badge-primary text-xs">
-                            Scope: {{ Str::headline($scopeSelected) }}
+                            {{ __('general.scope') }}: {{ Str::headline($scopeSelected) }}
                             <span class="ml-2">
                                 <x-heroicon-o-x-mark class="h-3 w-3 cursor-pointer hover:text-neutral" wire:click="clearFilter('scope')" />
                             </span>
@@ -159,7 +163,7 @@
 
                     @if ($stateSelected)
                         <span class="px-3 py-0.5 badge badge-primary text-xs">
-                            State: {{ implode(', ', $stateSelected) }}
+                            {{ __('general.state') }}: {{ implode(', ', $stateSelected) }}
                             <span class="ml-2">
                                 <x-heroicon-o-x-mark class="h-3 w-3 cursor-pointer hover:text-neutral" wire:click="clearFilter('state')" />
                             </span>
@@ -168,7 +172,7 @@
 
                     @if (!empty($topicSelected))
                         <span class="px-3 py-0.5 badge badge-primary text-xs">
-                            Topic: {{ implode(', ', $topicSelected) }}
+                            {{ __('general.topic') }}: {{ implode(', ', $topicSelected) }}
                             <span class="ml-2">
                                 <x-heroicon-o-x-mark class="h-3 w-3 cursor-pointer hover:text-neutral" wire:click="clearFilter('topic')" />
                             </span>
@@ -177,7 +181,7 @@
 
                     @if (!empty($coordinatorSelected))
                         <span class="px-3 py-0.5 badge badge-primary text-xs">
-                            Coordinator: {{ implode(', ', $coordinatorSelected) }}
+                            {{ __('general.coordinator') }}: {{ implode(', ', $coordinatorSelected) }}
                             <span class="ml-2">
                                 <x-heroicon-o-x-mark class="h-3 w-3 cursor-pointer hover:text-neutral" wire:click="clearFilter('coordinator')" />
                             </span>
@@ -186,7 +190,7 @@
 
                 </div>
             </div>
-            
+
             <hr class="!my-5">
             <div class="space-y-4 conference-current">
                 @if ($conferences->isNotEmpty())
