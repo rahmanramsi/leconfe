@@ -156,7 +156,7 @@
                         <span class="px-3 py-0.5 badge badge-primary text-xs">
                             {{ __('general.scope') }}: {{ Str::headline($scopeSelected) }}
                             <span class="ml-2">
-                                <x-heroicon-o-x-mark class="h-3 w-3 cursor-pointer hover:text-neutral" wire:click="clearFilter('scope')" />
+                                <x-heroicon-o-x-mark class="h-3 w-3 cursor-pointer hover:text-neutral" wire:click="resetFilter('scope')" />
                             </span>
                         </span>
                     @endif
@@ -165,7 +165,7 @@
                         <span class="px-3 py-0.5 badge badge-primary text-xs">
                             {{ __('general.state') }}: {{ implode(', ', $stateSelected) }}
                             <span class="ml-2">
-                                <x-heroicon-o-x-mark class="h-3 w-3 cursor-pointer hover:text-neutral" wire:click="clearFilter('state')" />
+                                <x-heroicon-o-x-mark class="h-3 w-3 cursor-pointer hover:text-neutral" wire:click="resetFilter('state')" />
                             </span>
                         </span>
                     @endif
@@ -174,7 +174,7 @@
                         <span class="px-3 py-0.5 badge badge-primary text-xs">
                             {{ __('general.topic') }}: {{ implode(', ', $topicSelected) }}
                             <span class="ml-2">
-                                <x-heroicon-o-x-mark class="h-3 w-3 cursor-pointer hover:text-neutral" wire:click="clearFilter('topic')" />
+                                <x-heroicon-o-x-mark class="h-3 w-3 cursor-pointer hover:text-neutral" wire:click="resetFilter('topic')" />
                             </span>
                         </span>
                     @endif
@@ -183,7 +183,7 @@
                         <span class="px-3 py-0.5 badge badge-primary text-xs">
                             {{ __('general.coordinator') }}: {{ implode(', ', $coordinatorSelected) }}
                             <span class="ml-2">
-                                <x-heroicon-o-x-mark class="h-3 w-3 cursor-pointer hover:text-neutral" wire:click="clearFilter('coordinator')" />
+                                <x-heroicon-o-x-mark class="h-3 w-3 cursor-pointer hover:text-neutral" wire:click="resetFilter('coordinator')" />
                             </span>
                         </span>
                     @endif
