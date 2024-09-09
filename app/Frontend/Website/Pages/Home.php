@@ -41,9 +41,9 @@ class Home extends Page
         return __('general.home');
     }
 
-    public function clearFilter(): void
+    public function clearFilter(?string $specifiedFilter = null): void
     {
-        $this->dispatch('clearAllFilter');
+        $this->dispatch('clearFilter', specifiedFilter: $specifiedFilter);
     }
 
     public function filterChanged(array $filterData)

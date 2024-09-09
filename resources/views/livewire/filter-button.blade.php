@@ -1,10 +1,6 @@
 <div class="dropdown h-fit w-full">
     <button tabindex="0" role="button" class="btn btn-sm btn-outline border-gray-300 w-full">
-        @if ($isMultiple)
-            {{ Str::headline($filterName) }} {{ !empty($multipleFilterValue) ? "(" . count($multipleFilterValue) . ")" : null }}
-        @else
-            {{ Str::headline($filterName) }} {{ $singleFilterValue ? "(Selected)" : null }}
-        @endif
+        {{ Str::headline($filterName) }}
         <x-heroicon-o-chevron-down class="h-4 w-4" />
     </button>
 

@@ -23,7 +23,7 @@ class FilterButton extends Component
 
 
     protected $listeners = [
-        'clearAllFilter' => 'clearFilter',
+        'clearFilter' => 'clearFilter',
     ];
 
     public function mount(string $name, array $options, bool $is_multiple = false): void
@@ -40,8 +40,12 @@ class FilterButton extends Component
         ]);
     }
 
-    public function clearFilter(): void
+    public function clearFilter(?string $specifiedFilter = null): void
     {
+        if($specifiedFilter !== $this->filterName && $specifiedFilter) {
+            return;
+        }
+
         $this->multipleFilterValue = [];
         $this->singleFilterValue = "";
 
@@ -71,9 +75,6 @@ class FilterButton extends Component
             'isMultiple' => $this->multiple ?? false,
             'filterName' => $this->filterName,
             'filterOutputOptions' => $this->filterOutputOptions,
-            // value
-            'multipleFilterValue' => $this->multipleFilterValue ?? [],
-            'singleFilterValue' => $this->singleFilterValue ?? "",
         ]);
     }
 }

@@ -66,21 +66,33 @@
                     @if ($this->scope)
                         <span class="px-3 py-0.5 badge badge-primary text-xs">
                             Scope: {{ Str::headline($this->scope) }}
+                            <span class="ml-2">
+                                <x-heroicon-o-x-mark class="h-3 w-3 cursor-pointer hover:text-neutral" wire:click="clearFilter('scope')" />
+                            </span>
                         </span>
                     @endif
                     @if ($this->state)
                         <span class="px-3 py-0.5 badge badge-primary text-xs">
                             State: {{ Str::headline($this->state) }}
+                            <span class="ml-2">
+                                <x-heroicon-o-x-mark class="h-3 w-3 cursor-pointer hover:text-neutral" wire:click="clearFilter('state')" />
+                            </span>
                         </span>
                     @endif
                     @if (!empty($this->topic))
                         <span class="px-3 py-0.5 badge badge-primary text-xs">
                             Topic: {{ implode(', ', $this->topic) }}
+                            <span class="ml-2">
+                                <x-heroicon-o-x-mark class="h-3 w-3 cursor-pointer hover:text-neutral" wire:click="clearFilter('topic')" />
+                            </span>
                         </span>
                     @endif
                     @if (!empty($this->coordinator))
                         <span class="px-3 py-0.5 badge badge-primary text-xs">
                             Coordinator: {{ implode(', ', $this->coordinator) }}
+                            <span class="ml-2">
+                                <x-heroicon-o-x-mark class="h-3 w-3 cursor-pointer hover:text-neutral" wire:click="clearFilter('coordinator')" />
+                            </span>
                         </span>
                     @endif
                 </div>
