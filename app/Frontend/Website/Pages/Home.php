@@ -73,7 +73,6 @@ class Home extends Page
                 ->orWhere('path', 'LIKE', "%{$this->search}%");
         }
 
-        // TODO: try using select
         $filteredConference = $conferences->get();
 
         if($this->scope) {
