@@ -161,7 +161,7 @@
                         </span>
                     @endif
 
-                    @if ($stateSelected)
+                    @if (!empty($stateSelected))
                         <span class="px-3 py-0.5 badge badge-primary text-xs">
                             {{ __('general.state') }}: {{ implode(', ', $stateSelected) }}
                             <span class="ml-2">
