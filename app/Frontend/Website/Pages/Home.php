@@ -156,7 +156,7 @@ class Home extends Page
                     return false;
                 }
 
-                if($this->filter['coordinator']['search'] !== "" && !Str::contains($scheduledConference->getMeta('coordinator'), $this->filter['coordinator']['search'])) {
+                if(strlen($this->filter['coordinator']['search']) > 0 && !Str::contains(Str::lower($scheduledConference->getMeta('coordinator')), Str::lower($this->filter['coordinator']['search']))) {
                     return false;
                 }
 
