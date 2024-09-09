@@ -254,6 +254,7 @@ return [
     'disabled_until' => 'معطل حتى',
     'user_roles' => 'أدوار المستخدم',
     'login_as' => 'تسجيل الدخول كـ',
+    'login_as_user' => 'تسجيل الدخول كـ :name',
     'enable_user' => 'تمكين المستخدم',
     'disable' => 'تعطيل',
     'until' => 'حتى',
@@ -270,9 +271,9 @@ return [
     'select_a_country' => 'اختر بلدًا',
     'phone' => 'الهاتف',
     'scholar_profile' => 'ملف تعريف الباحث',
-    'orcid_id' => 'معرف ORCID',
+    'orcid_id' => 'ORCID',
     'google_scholar' => 'Google Scholar',
-    'scopus_id' => 'معرف Scopus',
+    'scopus_id' => 'Scopus',
     'phone_format_international' => 'التنسيق الدولي، مثل +6281234567890',
     'roles' => 'الأدوار',
     'hide_users_with_no_roles' => 'إخفاء المستخدمين بدون أدوار في هذا المؤتمر المجدول.',
@@ -315,7 +316,7 @@ return [
     'submission_is_not_open' => 'التقديم غير مفتوح',
 
     'before_you_begin' => 'قبل أن تبدأ',
-    'before_you_begin_current_scheduled' => "<p>شكرًا لتقديمك لـ :variable. ستطلب منك تحميل الملفات، تحديد المؤلفين المشاركين، وتقديم معلومات مثل العنوان والملخص.</p>
+    'before_you_begin_current_scheduled' => "<p>شكرًا لتقديمك لـ :title. ستطلب منك تحميل الملفات، تحديد المؤلفين المشاركين، وتقديم معلومات مثل العنوان والملخص.</p>
     <p>يرجى قراءة إرشادات التقديم إذا لم تقم بذلك بالفعل. عند ملء النماذج، قدم أكبر قدر ممكن من التفاصيل لمساعدة المحررين لدينا في تقييم عملك.</p>
     <p>بمجرد أن تبدأ، يمكنك حفظ تقديمك والعودة إليه لاحقًا. سيكون بإمكانك مراجعة وتصحيح أي معلومات قبل التقديم.</p>",
     'submission_checklist_following_requirements' => '<p>يجب أن تلبي جميع التقديمات المتطلبات التالية.</p>

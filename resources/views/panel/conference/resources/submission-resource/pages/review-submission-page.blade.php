@@ -19,8 +19,7 @@
         <div class="col-span-8 space-y-4">
             @livewire(App\Panel\ScheduledConference\Livewire\Submissions\Components\ReviewerAssignedFiles::class, ['record' => $review])
             {{ $this->reviewForm }}
-            @livewire(App\Panel\ScheduledConference\Livewire\Submissions\Components\Files\ReviewerFiles::class, ['submission' => $record, 'lazy' => true])
-            {{-- @livewire(App\Panel\ScheduledConference\Livewire\Submissions\SubmissionDetail\Discussions::class, ['record' => $record, 'lazy' => true]) --}}
+            @livewire(App\Panel\ScheduledConference\Livewire\Submissions\Components\ReviewerFiles::class, ['record' => $review])
         </div>
         <div class="col-span-4 space-y-4 self-start sticky top-20">
             {{ $this->infolist }}

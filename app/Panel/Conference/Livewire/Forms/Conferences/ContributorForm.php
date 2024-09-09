@@ -87,17 +87,17 @@ class ContributorForm extends Component
                 ->schema([
                     Forms\Components\Grid::make(2)
                         ->schema([
-                            Forms\Components\TextInput::make('meta.orcid_id')
+                            Forms\Components\TextInput::make('meta.orcid_url')
                                 ->prefixIcon('academicon-orcid')
-                                ->placeholder('0000-0000-0000-0000')
+                                ->url()
                                 ->label(__('general.orcid_id')),
-                            Forms\Components\TextInput::make('meta.google_scholar_id')
+                            Forms\Components\TextInput::make('meta.google_scholar_url')
                                 ->prefixIcon('academicon-google-scholar')
-                                ->placeholder('abcdefgh1234')
+                                ->url()
                                 ->label(__('general.google_scholar')),
-                            Forms\Components\TextInput::make('meta.scopus_id')
+                            Forms\Components\TextInput::make('meta.scopus_url')
                                 ->label(__('general.scopus_id'))
-                                ->placeholder('7005557890')
+                                ->url()
                                 ->prefixIcon('academicon-scopus-square'),
                         ]),
                 ]),

@@ -48,11 +48,9 @@ class ReviewSubmissionPage extends Page implements HasActions, HasInfolists
     {
         abort_unless(auth()->user()->can('review', $this->record), 403);
 
-        $this->review = $this->record->reviews()
-            ->user(auth()->user())
+        $this->review = $this->record->reviews
+            ->where('user_id', auth()->user()->getKey())
             ->first() ?? null;
-
-        abort_if(! $this->review, 404);
 
         abort_if($this->review->status == ReviewerStatus::DECLINED, 403, 'You have declined this review request');
         abort_if($this->review->status == ReviewerStatus::CANCELED, 403, 'This review request has been canceled');
@@ -96,7 +94,7 @@ class ReviewSubmissionPage extends Page implements HasActions, HasInfolists
                                 TextEntry::make('Keywords')
                                     ->color('gray')
                                     ->getStateUsing(
-                                        fn (Submission $record): string => $record->tagsWithType('submissionKeywords')->pluck('name')->join(', ')
+                                        fn (Submission $record): string => $record->tagsWithType('submissionKeywords')->pluck('name')->join(', ')  ?: '-'
                                     ),
                                 TextEntry::make('Abstract')
                                     ->color('gray')
@@ -202,11 +200,10 @@ class ReviewSubmissionPage extends Page implements HasActions, HasInfolists
                         'recommendation' => $this->recommendation,
                     ]);
 
-                    $editors = $this->record->participants()
-                        ->whereHas('role', fn ($query) => $query->where('name', UserRole::ConferenceEditor))
-                        ->get()
+                    $editors = $this->record->editors()
                         ->pluck('user_id')
                         ->toArray();
+
 
                     $editors = User::whereIn('id', $editors)->get();
                     if ($editors->count()) {

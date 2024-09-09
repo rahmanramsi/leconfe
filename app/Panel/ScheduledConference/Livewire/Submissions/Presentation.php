@@ -41,7 +41,7 @@ class Presentation extends Component implements HasActions, HasForms
             ->label(__('general.send_to_editing'))
             ->modalHeading(__('general.send_to_editing'))
             ->modalSubmitActionLabel(__('general.send_to_editing'))
-            ->authorize('acceptAbstract', $this->submission)
+            ->authorize('sendToEditing', $this->submission)
             ->modalWidth('2xl')
             ->record($this->submission)
             ->successNotificationTitle(__('general.accepted'))

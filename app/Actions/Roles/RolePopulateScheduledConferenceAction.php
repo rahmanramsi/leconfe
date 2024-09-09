@@ -18,13 +18,12 @@ class RolePopulateScheduledConferenceAction
     public function handle(ScheduledConference $scheduledConference)
     {
         foreach (UserRole::scheduledConferenceRoles() as $role) {
-            $role = Role::firstOrCreate([
+            $role = Role::withoutGlobalScopes()->firstOrCreate([
                 'name' => $role->value,
                 'conference_id' => $scheduledConference->conference_id,
                 'scheduled_conference_id' => $scheduledConference->getKey(),
             ]);
 
-            RoleAssignDefaultPermissions::run($role);
         }
     }
 }

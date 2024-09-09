@@ -115,7 +115,7 @@ class Timeline extends Model
             ->first();
 
         if (!$latest_session) {
-            return $this->date;
+            return $this->date->endOfDay();
         }
 
         return $latest_session->getEndDate();

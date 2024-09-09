@@ -260,6 +260,7 @@ return [
     'disabled_until' => 'Disabled until',
     'user_roles' => 'User Roles',
     'login_as' => 'Login as',
+    'login_as_user' => 'Login as :name',
     'enable_user' => 'Enable User',
     'disable' => 'Disable',
     'until' => 'Until',
@@ -277,9 +278,9 @@ return [
     'select_a_country' => 'Select a country',
     'phone' => 'Phone',
     'scholar_profile' => 'Scholar Profile',
-    'orcid_id' => 'ORCID iD',
+    'orcid_id' => 'ORCID',
     'google_scholar' => 'Google Scholar',
-    'scopus_id' => 'Scopus ID',
+    'scopus_id' => 'Scopus',
     'phone_format_international' => 'International format, e.g. +6281234567890',
     'roles' => 'Roles',
     'hide_users_with_no_roles' => 'Hide users with no roles in this scheduled conference.',
@@ -323,7 +324,7 @@ return [
     'submission_is_not_open' => 'Submission is not open',
 
     'before_you_begin' => 'Before You Begin',
-    'before_you_begin_current_scheduled' => "<p>Thank you for submitting to :variable. You will be asked to upload files, identify co-authors, and provide information such as the title and abstract.</p>
+    'before_you_begin_current_scheduled' => "<p>Thank you for submitting to :title. You will be asked to upload files, identify co-authors, and provide information such as the title and abstract.</p>
     <p>Please read our Submission Guidelines if you haven't already. When filling out the forms, provide as many details as possible to help our editors evaluate your work.</p>
     <p>Once you begin, you can save your submission and come back to it later. You will be able to review and correct any information before you submit.</p>",
     'submission_checklist_following_requirements' => '<p>All submissions must meet the following requirements.</p>

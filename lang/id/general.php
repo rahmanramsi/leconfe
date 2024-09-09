@@ -257,6 +257,7 @@ return [
     'disabled_until' => 'Dinonaktifkan hingga',
     'user_roles' => 'Peran Pengguna',
     'login_as' => 'Masuk sebagai',
+    'login_as_user' => 'Masuk sebagai :name',
     'enable_user' => 'Aktifkan Pengguna',
     'disable' => 'Nonaktifkan',
     'until' => 'Hingga',
@@ -273,9 +274,9 @@ return [
     'select_a_country' => 'Pilih negara',
     'phone' => 'Telepon',
     'scholar_profile' => 'Profil Akademik',
-    'orcid_id' => 'ID ORCID',
+    'orcid_id' => 'ORCID',
     'google_scholar' => 'Google Scholar',
-    'scopus_id' => 'ID Scopus',
+    'scopus_id' => 'Scopus',
     'phone_format_international' => 'Format internasional, misalnya +6281234567890',
     'roles' => 'Peran',
     'hide_users_with_no_roles' => 'Sembunyikan pengguna tanpa peran di konferensi terjadwal ini.',
@@ -319,7 +320,7 @@ return [
     'submission_is_not_open' => 'Pengajuan Belum Dibuka',
 
     'before_you_begin' => 'Sebelum Anda Mulai',
-    'before_you_begin_current_scheduled' => "<p>Terima kasih telah mengirimkan ke :variable. Anda akan diminta untuk mengunggah file, mengidentifikasi rekan penulis, dan memberikan informasi seperti judul dan abstrak.</p>
+    'before_you_begin_current_scheduled' => "<p>Terima kasih telah mengirimkan ke :title. Anda akan diminta untuk mengunggah file, mengidentifikasi rekan penulis, dan memberikan informasi seperti judul dan abstrak.</p>
     <p>Silakan baca Pedoman Pengiriman kami jika Anda belum melakukannya. Saat mengisi formulir, berikan detail sebanyak mungkin untuk membantu editor kami mengevaluasi pekerjaan Anda.</p>
     <p>Setelah Anda memulai, Anda dapat menyimpan pengiriman Anda dan kembali ke itu nanti. Anda akan dapat meninjau dan memperbaiki informasi sebelum Anda mengirimkan.</p>",
     'submission_checklist_following_requirements' => '<p>Semua pengiriman harus memenuhi persyaratan berikut.</p>

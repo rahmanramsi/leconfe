@@ -193,7 +193,7 @@ class CitationManager
         $citationData->accessed = $accessed;
 
         $issued = new \stdClass();
-        $issued->raw = $paper->published_at->format('Y-m-d');
+        $issued->raw = $paper->published_at?->format('Y-m-d');
         $citationData->issued = $issued;
 
         $styleConfig = $this->getCitationStyleConfig($citationStyle);

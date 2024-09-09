@@ -32,9 +32,9 @@ class SubmissionParticipant extends Model
 
     public function scopeEditor(Builder $builder)
     {
-        $roleEditor = Role::where('name', UserRole::ConferenceEditor->value)->first();
+        $editorIds = Role::where('name', [UserRole::ScheduledConferenceEditor, UserRole::TrackEditor])->pluck('id')->toArray();
 
-        return $builder->where('role_id', $roleEditor->getKey());
+        return $builder->where('role_id', $editorIds);
     }
 
     public function submission()

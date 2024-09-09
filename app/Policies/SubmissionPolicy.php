@@ -5,8 +5,10 @@ namespace App\Policies;
 use App\Models\Enums\RegistrationPaymentState;
 use App\Models\Enums\SubmissionStage;
 use App\Models\Enums\SubmissionStatus;
+use App\Models\Enums\UserRole;
 use App\Models\Submission;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 
 class SubmissionPolicy
 {
@@ -167,11 +169,6 @@ class SubmissionPolicy
             return false;
         }
 
-        // Cannot upload an abstract if it has not been accepted yet.
-        if ($submission->stage == SubmissionStage::CallforAbstract) {
-            return false;
-        }
-
         if ($user->can('Submission:uploadPresentation')) {
             return true;
         }
@@ -185,6 +182,10 @@ class SubmissionPolicy
         }
 
         if (filled($submission->withdrawn_reason)) {
+            return false;
+        }
+
+        if($submission->user_id !== $user->getKey()) {
             return false;
         }
 
@@ -289,11 +290,11 @@ class SubmissionPolicy
 
     public function review(User $user, Submission $submission)
     {
-        if ($submission->stage != SubmissionStage::PeerReview || $submission->status != SubmissionStatus::OnReview) {
+        if (!in_array($submission->stage, [SubmissionStage::PeerReview, SubmissionStage::Presentation, SubmissionStage::Editing, SubmissionStage::Proceeding])) {
             return false;
         }
 
-        if (filled($submission->withdrawn_reason)) {
+        if(!$submission->reviews->where('user_id', $user->getKey())->first()){
             return false;
         }
 
@@ -474,6 +475,22 @@ class SubmissionPolicy
         }
 
         if ($user->can('Submission:deleteRegistration')) {
+            return true;
+        }
+    }
+
+    public function preview(User $user, Submission $submission)
+    {
+        $editorIds = $submission->participants()
+            ->whereHas('role', fn(Builder $query) => $query->withoutGlobalScopes()->whereIn('name', [UserRole::ScheduledConferenceEditor]))
+            ->pluck('user_id');
+        
+
+        if(in_array($user->getKey(), $editorIds->toArray())) {
+            return true;
+        }
+
+        if ($user->can('Submission:preview')) {
             return true;
         }
     }

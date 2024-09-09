@@ -14,6 +14,8 @@ export default {
         './resources/views/forms/**/*.blade.php',
         './resources/views/panel/**/*.blade.php',
         './resources/views/vendor/**/*.blade.php',
+        './resources/views/infolists/**/*.blade.php',
+        './resources/views/forms/**/*.blade.php',
         './vendor/awcodes/filament-tiptap-editor/resources/**/*.blade.php',
         './vendor/filament/**/*.blade.php',
     ],

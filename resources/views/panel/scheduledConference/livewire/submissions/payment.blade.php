@@ -188,7 +188,7 @@
             @endif
         </div>
         <div class="flex flex-col self-start col-span-4 gap-3" x-data="{ decision:@js($submissionDecision) }">
-            @if($submission->getEditors()->isEmpty() && ! $user->hasRole(\App\Models\Enums\UserRole::ConferenceEditor->value))
+            @if($submission->getEditors()->isEmpty() && ! $user->hasAnyRole([UserRole::ScheduledConferenceEditor, UserRole::TrackEditor]))
                 <div class="px-4 py-3.5 text-base text-white rounded-lg border-2 border-primary-700 bg-primary-500">
                     {{ $user->can('assignParticipant', $submission) ? __('general.assign_an_editor_to_enable_the_editorial') : __('general.no_editor_assigned_submission') }}
                 </div>

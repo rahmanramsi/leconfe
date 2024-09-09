@@ -62,6 +62,7 @@ class PluginResource extends Resource
                     ->label(__('general.author')),
                 ToggleColumn::make('enabled')
                     ->label(__('general.enabled'))
+                    ->visible(auth()->user()->can('Plugin:update'))
                     ->getStateUsing(fn (Plugin $record) => FacadesPlugin::getSetting($record->id, 'enabled'))
                     ->updateStateUsing(function (Plugin $record, $state) {
                         FacadesPlugin::enable($record->id, $state);
@@ -77,6 +78,7 @@ class PluginResource extends Resource
             ->actions([
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\DeleteAction::make()
+                        ->authorize(fn(Plugin $record) => auth()->user()->can('delete', $record))
                         ->action(function (Plugin $record) {
                             FacadesPlugin::uninstall($record->id);
                         }),
