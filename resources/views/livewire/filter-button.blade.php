@@ -13,7 +13,7 @@
                 </label>
             @endif
 
-            <button class="mb-2 btn btn-xs btn-outline border-gray-300 w-full" wire:click="clearFilter" wire:loading.attr="disabled">
+            <button class="mb-2 btn btn-xs btn-outline border-neutral-300 w-full" wire:click="clearFilter" wire:loading.attr="disabled">
                 Reset
             </button>
         </li>
@@ -21,7 +21,7 @@
         @if ($isMultiple)
             @foreach ($filterOutputOptions as $filterKey => $filterValue)
                 <li>
-                    <label class="py-1.5 label cursor-pointer hover:bg-neutral-content hover:!text-white transition-colors rounded">
+                    <label class="py-1.5 label cursor-pointer hover:bg-neutral-200 hover:!text-white transition-colors rounded">
                         <span class="label-text px-2">{{ $filterValue }}</span>
                         <input type="checkbox" class="checkbox checkbox-xs mx-1.5" value="{{ $filterValue }}" wire:model.live="multipleFilterValue" wire:change="filterChanged()" />
                     </label>
@@ -30,7 +30,7 @@
         @else
             @foreach ($filterOutputOptions as $filterKey => $filterValue)
                 <li>
-                    <label class="py-1.5 label cursor-pointer hover:bg-neutral-content hover:!text-white transition-colors rounded">
+                    <label class="py-1.5 label cursor-pointer hover:bg-neutral-200 hover:!text-white transition-colors rounded">
                         <span class="label-text px-2">{{ $filterValue }}</span>
                         <input type="radio" class="radio radio-xs mx-1.5" value="{{ $filterValue }}" wire:model.live="singleFilterValue" wire:change="filterChanged" />
                     </label>

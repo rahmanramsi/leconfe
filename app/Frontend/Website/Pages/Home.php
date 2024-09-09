@@ -24,19 +24,13 @@ class Home extends Page
     protected static string $view = 'frontend.website.pages.home';
 
     public const STATE_CURRENT = 'current';
-
     public const STATE_INCOMING = 'incoming';
-
     public const STATE_ARCHIVED = 'archived';
 
     public string $search = "";
-
     public ?string $scope = null;
-
     public array $state = [];
-
     public array $topic = [];
-
     public array $coordinator = [];
 
     protected $listeners = [
