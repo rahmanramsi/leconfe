@@ -27,32 +27,50 @@ class Home extends Page
     public const STATE_INCOMING = 'incoming';
     public const STATE_ARCHIVED = 'archived';
 
-    public string $search = "";
-    public ?string $scope = null;
-    public array $state = [];
-    public array $topic = [];
-    public array $coordinator = [];
-
-    protected $listeners = [
-        'changeFilter' => 'filterChanged',
+    public array $filter = [
+        'search' => [
+            'value' => '',
+        ],
+        'scope' => [
+            'value' => '',
+        ],
+        'state' => [
+            'value' => [],
+        ],
+        'topic' => [
+            'search' => '',
+            'value' => [],
+        ],
+        'coordinator' => [
+            'search' => '',
+            'value' => [],
+        ],
     ];
 
-    public function getTitle(): string|Htmlable
+    public function getTitle(): string | Htmlable
     {
         return __('general.home');
     }
 
-    public function clearFilter(?string $specifiedFilter = null): void
+    public function resetFilter(string $filterName): void
     {
-        $this->dispatch('clearFilter', specifiedFilter: $specifiedFilter);
+        if(is_string($this->filter[$filterName]['value'])) {
+
+            $this->filter[$filterName]['value'] = '';
+
+        } else if(is_array($this->filter[$filterName]['value'])) {
+
+            $this->filter[$filterName]['value'] = [];
+
+        }
     }
 
-    public function filterChanged(array $filterData)
+    public function resetFilters(): void
     {
-        $this->scope = $filterData['scope'] ?? $this->scope;
-        $this->state = $filterData['state'] ?? $this->state;
-        $this->topic = $filterData['topic'] ?? $this->topic;
-        $this->coordinator = $filterData['coordinator'] ?? $this->coordinator;
+        $this->filter['scope']['value'] = '';
+        $this->filter['state']['value'] = [];
+        $this->filter['topic']['value'] = [];
+        $this->filter['coordinator']['value'] = [];
     }
 
     protected function getViewData(): array
@@ -66,46 +84,41 @@ class Home extends Page
                 'scheduledConferences' => fn (Builder $query) => $query->with('conference')->withoutGlobalScopes(),
             ]);
 
-        if(strlen($this->search) > 0) {
+        if(($search = $this->filter['search']['value']) > 0) {
             $conferences
-                ->where('name', 'LIKE', "%{$this->search}%")
-                ->orWhere('path', 'LIKE', "%{$this->search}%");
+                ->where('name', 'LIKE', "%{$search}%")
+                ->orWhere('path', 'LIKE', "%{$search}%");
         }
 
         $filteredConference = $conferences->get();
 
-        if($this->scope) {
-            $filteredConference = $filteredConference->filter(function (Conference $conference) {
-                if(Str::lower($conference->getMeta('scope')) === $this->scope) {
+        if($scope = $this->filter['scope']['value']) {
+            $filteredConference = $filteredConference->filter(function (Conference $conference) use ($scope) {
+                if(Str::lower($conference->getMeta('scope')) === $scope) {
                     return true;
                 }
             });
         }
 
-        if($this->state) {
-            $filteredConference = $filteredConference->filter(function (Conference $conference) {
-                foreach($this->state as $state) {
-                    switch(Str::lower($state)) {
-                        case self::STATE_CURRENT:
-                            return $conference->scheduledConferences
-                                ->where('state', ScheduledConferenceState::Current)
-                                ->isNotEmpty();
-                        case self::STATE_INCOMING:
-                            return $conference->scheduledConferences
-                                ->where('state', ScheduledConferenceState::Published)
-                                ->isNotEmpty();
-                        case self::STATE_ARCHIVED:
-                            return $conference->scheduledConferences
-                                ->where('state', ScheduledConferenceState::Archived)
-                                ->isNotEmpty();
+        if($states = $this->filter['state']['value']) {
+            $filteredConference = $filteredConference->filter(function (Conference $conference) use ($states) {
+                foreach($states as $state) {
+                    if(Str::lower($state) === self::STATE_CURRENT && $conference->scheduledConferences->where('state', ScheduledConferenceState::Current)->whereNull('deleted_at')->isEmpty()) {
+                        return false;
+                    } else if(Str::lower($state) === self::STATE_INCOMING && $conference->scheduledConferences->where('state', ScheduledConferenceState::Published)->whereNull('deleted_at')->isEmpty()) {
+                        return false;
+                    } else if(Str::lower($state) === self::STATE_ARCHIVED && $conference->scheduledConferences->where('state', ScheduledConferenceState::Archived)->whereNull('deleted_at')->isEmpty()) {
+                        return false;
                     }
                 }
+
+                return true;
             });
         }
 
-        if(!empty($this->topic)) {
-            $filteredConference = $filteredConference->filter(function (Conference $conference) {
-                foreach($this->topic as $topic) {
+        if(!empty($topics = $this->filter['topic']['value'])) {
+            $filteredConference = $filteredConference->filter(function (Conference $conference) use ($topics) {
+                foreach($topics as $topic) {
                     if(!in_array($topic, $conference->topics->pluck('name')->toArray())) {
                         return false;
                     }
@@ -115,15 +128,14 @@ class Home extends Page
             });
         }
 
-        if(!empty($this->coordinator)) {
-            // super unoptimized code (i had no other idea)
-            $filteredConference = $filteredConference->filter(function (Conference $conference) {
-                $coordinators = $conference->scheduledConferences->load(['meta'])->mapWithKeys(function ($scheduledConference) {
+        if(!empty($coordinators = $this->filter['coordinator']['value'])) {
+            $filteredConference = $filteredConference->filter(function (Conference $conference) use ($coordinators) {
+                $coordinatorList = $conference->scheduledConferences->load(['meta'])->mapWithKeys(function ($scheduledConference) {
                     return [$scheduledConference->getKey() => $scheduledConference->getMeta('coordinator')];
                 })->toArray();
 
-                foreach($this->coordinator as $coordinator) {
-                    if(!in_array($coordinator, $coordinators)) {
+                foreach($coordinators as $coordinator) {
+                    if(!in_array($coordinator, $coordinatorList)) {
                         return false;
                     }
                 }
@@ -133,13 +145,18 @@ class Home extends Page
         }
 
         $topics = Topic::withoutGlobalScopes()
+            ->where('name', 'LIKE', "%{$this->filter['topic']['search']}%")
             ->with(['conference'])
             ->orderBy('name', 'ASC')
             ->get();
 
-        $scheduledConferencesWithCoordinators = ScheduledConference::withoutGlobalScopes()->get()
+        $contributorScheduleConferences = ScheduledConference::withoutGlobalScopes()->limit(20)->get()
             ->filter(function (ScheduledConference $scheduledConference) {
                 if(!$scheduledConference->getMeta('coordinator')) {
+                    return false;
+                }
+
+                if($this->filter['coordinator']['search'] !== "" && !Str::contains($scheduledConference->getMeta('coordinator'), $this->filter['coordinator']['search'])) {
                     return false;
                 }
 
@@ -147,9 +164,14 @@ class Home extends Page
             });
 
         return [
-            'scheduledConferencesWithCoordinators' => $scheduledConferencesWithCoordinators,
-            'conferences' => $filteredConference,
             'topics' => $topics,
+            'conferences' => $filteredConference,
+            'contributorScheduleConferences' => $contributorScheduleConferences,
+            // Selected Filter Data
+            'scopeSelected' => $this->filter['scope']['value'],
+            'stateSelected' => $this->filter['state']['value'],
+            'topicSelected' => $this->filter['topic']['value'],
+            'coordinatorSelected' => $this->filter['coordinator']['value'],
         ];
     }
 
