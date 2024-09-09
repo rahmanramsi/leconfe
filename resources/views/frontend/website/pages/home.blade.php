@@ -34,7 +34,7 @@
                         'name' => 'state',
                         'options' => [
                             self::STATE_CURRENT => 'Current',
-                            self::STATE_INCOMING => 'Incomint',
+                            self::STATE_INCOMING => 'Incoming',
                             self::STATE_ARCHIVED => 'Archived',
                         ],
                         'is_multiple' => true,

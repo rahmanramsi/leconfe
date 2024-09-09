@@ -63,7 +63,6 @@ class Home extends Page
 
     protected function getViewData(): array
     {
-        // conferences
         $conferences = Conference::query()
             ->with([
                 'media',
