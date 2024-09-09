@@ -33,10 +33,11 @@
                     @livewire(\App\Livewire\FilterButton::class, [
                         'name' => 'state',
                         'options' => [
-                            'active' => __('general.active'),
-                            'over' => __('general.over'),
+                            self::STATE_CURRENT => 'Current',
+                            self::STATE_INCOMING => 'Incomint',
+                            self::STATE_ARCHIVED => 'Archived',
                         ],
-                        'is_multiple' => false,
+                        'is_multiple' => true,
                     ])
                 </div>
 
@@ -73,7 +74,7 @@
                     @endif
                     @if ($this->state)
                         <span class="px-3 py-0.5 badge badge-primary text-xs">
-                            State: {{ Str::headline($this->state) }}
+                            State: {{ implode(', ', $this->state) }}
                             <span class="ml-2">
                                 <x-heroicon-o-x-mark class="h-3 w-3 cursor-pointer hover:text-neutral" wire:click="clearFilter('state')" />
                             </span>

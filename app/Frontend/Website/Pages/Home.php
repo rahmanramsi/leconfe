@@ -4,6 +4,7 @@ namespace App\Frontend\Website\Pages;
 
 use App\Models\Topic;
 use App\Models\Conference;
+use App\Models\Enums\ScheduledConferenceState;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Livewire\Attributes\On;
@@ -22,11 +23,17 @@ class Home extends Page
 
     protected static string $view = 'frontend.website.pages.home';
 
+    public const STATE_CURRENT = 'current';
+
+    public const STATE_INCOMING = 'incoming';
+
+    public const STATE_ARCHIVED = 'archived';
+
     public string $search = "";
 
     public ?string $scope = null;
 
-    public ?string $state = null;
+    public array $state = [];
 
     public array $topic = [];
 
@@ -63,7 +70,6 @@ class Home extends Page
                 'meta',
                 'topics' => fn (Builder $query) => $query->with('conference')->withoutGlobalScopes(),
                 'currentScheduledConference' => fn (Builder $query) => $query->with('conference')->withoutGlobalScopes(),
-                'activeScheduledConference' => fn (Builder $query) => $query->with('conference')->withoutGlobalScopes(),
                 'scheduledConferences' => fn (Builder $query) => $query->with('conference')->withoutGlobalScopes(),
             ]);
 
@@ -77,7 +83,7 @@ class Home extends Page
 
         if($this->scope) {
             $filteredConference = $filteredConference->filter(function (Conference $conference) {
-                if($conference->getMeta('scope') === $this->scope) {
+                if(Str::lower($conference->getMeta('scope')) === $this->scope) {
                     return true;
                 }
             });
@@ -85,15 +91,26 @@ class Home extends Page
 
         if($this->state) {
             $filteredConference = $filteredConference->filter(function (Conference $conference) {
-                if($this->state === 'active' && !$conference->activeScheduledConference->isEmpty()) {
-                    return true;
-                } else if($this->state === 'over' && $conference->activeScheduledConference->isEmpty()) {
-                    return true;
+                foreach($this->state as $state) {
+                    switch(Str::lower($state)) {
+                        case self::STATE_CURRENT:
+                            return $conference->scheduledConferences
+                                ->where('state', ScheduledConferenceState::Current)
+                                ->isNotEmpty();
+                        case self::STATE_INCOMING:
+                            return $conference->scheduledConferences
+                                ->where('state', ScheduledConferenceState::Published)
+                                ->isNotEmpty();
+                        case self::STATE_ARCHIVED:
+                            return $conference->scheduledConferences
+                                ->where('state', ScheduledConferenceState::Archived)
+                                ->isNotEmpty();
+                    }
                 }
             });
         }
 
-        if(count($this->topic) > 0) {
+        if(!empty($this->topic)) {
             $filteredConference = $filteredConference->filter(function (Conference $conference) {
                 foreach($this->topic as $topic) {
                     if(!in_array($topic, $conference->topics->pluck('name')->toArray())) {
@@ -105,7 +122,7 @@ class Home extends Page
             });
         }
 
-        if(count($this->coordinator) > 0) {
+        if(!empty($this->coordinator)) {
             // super unoptimized code (i had no other idea)
             $filteredConference = $filteredConference->filter(function (Conference $conference) {
                 $coordinators = $conference->scheduledConferences->load(['meta'])->mapWithKeys(function ($scheduledConference) {
