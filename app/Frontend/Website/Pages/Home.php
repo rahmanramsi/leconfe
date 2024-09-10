@@ -145,9 +145,12 @@ class Home extends Page
         }
 
         $topics = Topic::withoutGlobalScopes()
-            ->where('name', 'LIKE', "%{$this->filter['topic']['search']}%")
             ->with(['conference'])
+            ->select('name')
+            ->where('name', 'LIKE', "%{$this->filter['topic']['search']}%")
             ->orderBy('name', 'ASC')
+            ->limit(20)
+            ->distinct()
             ->get();
 
         $contributorScheduleConferences = ScheduledConference::withoutGlobalScopes()->limit(20)->get()
