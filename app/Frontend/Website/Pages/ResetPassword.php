@@ -2,6 +2,8 @@
 
 namespace App\Frontend\Website\Pages;
 
+use App\Mail\Templates\ResetPasswordMail;
+use App\Models\User;
 use Livewire\Attributes\Rule;
 use Filament\Facades\Filament;
 use Livewire\Attributes\Title;
@@ -10,22 +12,22 @@ use Illuminate\Validation\ValidationException;
 use DanHarrin\LivewireRateLimiting\WithRateLimiting;
 use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Route;
+use Livewire\Attributes\Locked;
+use Rahmanramsi\LivewirePageGroup\PageGroup;
 
-class Login extends Page
+class ResetPassword extends Page
 {
     use WithRateLimiting;
 
-    protected static string $view = 'frontend.website.pages.login';
+    protected static string $view = 'frontend.website.pages.reset-password';
 
-    #[Rule('required|email')]
     public ?string $email = null;
 
-    #[Rule('required')]
-    public ?string $password = null;
-
-    #[Rule('boolean')]
-    public bool $remember = false;
-
+    #[Locked]
+    public bool $success = false;
+ 
     public function mount()
     {
         if (auth()->check()) {
@@ -35,7 +37,7 @@ class Login extends Page
 
     public function getTitle(): string|Htmlable
     {
-        return __('general.login');
+        return __('general.reset_password');
     }
 
     public function getRedirectUrl(): string
@@ -43,11 +45,10 @@ class Login extends Page
         return route('filament.administration.home');
     }
 
-    public function getViewData() : array
+    public function getViewData(): array
     {
         return [
             'registerUrl' => null,
-            'resetPasswordUrl' => route('livewirePageGroup.website.pages.reset-password'),
         ];
     }
 
@@ -55,16 +56,24 @@ class Login extends Page
     {
         return [
             url('/') => __('general.home'),
-            __('general.login'),
+            __('general.reset_password'),
         ];
     }
 
-    public function login()
+
+    public function rules() 
+    {
+        return [
+            'email' => 'required|email|exists:users',
+        ];
+    }
+
+    public function submit()
     {
         try {
-            $this->rateLimit(5, 300);
+            $this->rateLimit(5, 300, 'submit');
         } catch (TooManyRequestsException $exception) {
-            $this->addError('throttle', __('general.throttle_to_many_login_attempts', [
+            $this->addError('throttle', __('general.throttle_to_many_reset_password_attempts', [
                 'seconds' => $exception->secondsUntilAvailable,
                 'minutes' => ceil($exception->secondsUntilAvailable / 60),
             ]));
@@ -74,19 +83,11 @@ class Login extends Page
 
         $this->validate();
 
-        if (! auth()->attempt([
-            'email' => $this->email,
-            'password' => $this->password,
-        ], $this->remember)) {
-            throw ValidationException::withMessages([
-                'email' => __('general.failed_credentials'),
-            ]);
-        }
+        $user = User::where('email', $this->email)->first();
 
-        session()->regenerate();
+        Mail::to($this->email)
+            ->send(new ResetPasswordMail($user));
 
-        auth()->user()->setMeta('last_login', now());
-
-        $this->redirect($this->getRedirectUrl(), navigate: false);
+        $this->success = true;
     }
 }

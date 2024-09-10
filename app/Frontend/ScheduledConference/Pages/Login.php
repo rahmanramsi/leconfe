@@ -9,6 +9,7 @@ class Login extends WebsiteLogin
     public function getViewData() : array 
     {
         return [
+            'resetPasswordUrl' => route('livewirePageGroup.scheduledConference.pages.reset-password'),
             'registerUrl' => route('livewirePageGroup.scheduledConference.pages.register'),
         ];
     }

@@ -56,7 +56,7 @@ abstract class TemplateMailable extends BaseTemplateMailable implements Interfac
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new Address(config('mail.from.address'), app()->getCurrentConference()->name ?? config('mail.from.name')),
+            from: new Address(config('mail.from.address'), app()->getCurrentConference()->name ?? app()->getSite()->getMeta('name')),
         );
     }
 }
