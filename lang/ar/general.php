@@ -902,5 +902,17 @@ return [
     'submission_license_url' => 'رابط الترخيص',
     'submission_license_url_helper' => 'سيتم تعيين الترخيص تلقائيًا إلى <a class="text-primary-700 underline" href=\':licenseUrl\' target=\'_blank\'>:licenseName</a> عند النشر.' ,
     'override' => 'تجاوز',
-    'copyright_statement' => 'حقوق النشر (c) :copyrightYear :copyrightHolder'
+    'copyright_statement' => 'حقوق النشر (c) :copyrightYear :copyrightHolder',
+
+    'forgot_password_question' => "هل نسيت كلمة المرور؟",
+    'reset_password' => "إعادة تعيين كلمة المرور",
+    'please_enter_email_to_reset_password' => "يرجى إدخال عنوان البريد الإلكتروني المرتبط بحسابك المسجل أدناه. سيتم إرسال بريد إلكتروني إلى هذا العنوان مع تعليمات حول كيفية إعادة تعيين كلمة المرور الخاصة بك.",
+    'throttle_to_many_reset_password_attempts' => 'عدد محاولات إعادة تعيين كلمة المرور كثيرة جدًا. يرجى المحاولة مرة أخرى بعد :seconds ثانية.',
+    'throttle_to_many_register_attempts' => 'عدد محاولات التسجيل كثيرة جدًا. يرجى المحاولة مرة أخرى بعد :seconds ثانية.',
+    'new_password' => 'كلمة المرور الجديدة',
+    'confirm_password' => 'تأكيد كلمة المرور',
+    'reset_password_confirmation' => 'تأكيد إعادة تعيين كلمة المرور',
+    'reset_password_mail_sent' => 'تم إرسال تأكيد إلى عنوان بريدك الإلكتروني. يرجى اتباع التعليمات في البريد الإلكتروني لإعادة تعيين كلمة المرور الخاصة بك.',
+    'enter_password_to_update' => 'أدخل كلمة المرور الجديدة لتحديث كلمة المرور الخاصة بك.',
+    'reset_password_update_success' => 'تم تحديث كلمة المرور بنجاح. يرجى تسجيل الدخول باستخدام كلمة المرور المحدثة.',
 ];

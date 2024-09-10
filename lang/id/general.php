@@ -886,4 +886,16 @@ return [
     'finished_registration_30_days' => "Pendaftaran selesai dalam 30 hari terakhir",
 
     'you_have_to_register_to_complete_submission_payment' => "Anda harus mendaftar ke salah satu jenis pendaftaran di bawah ini untuk menyelesaikan pembayaran pengajuan Anda.",
+
+    'forgot_password_question' => "Lupa kata sandi?",
+    'reset_password' => "Atur Ulang Kata Sandi",
+    'please_enter_email_to_reset_password' => "Silakan masukkan alamat email yang terkait dengan akun terdaftar Anda di bawah ini. Sebuah email akan dikirim ke alamat ini dengan instruksi tentang cara mengatur ulang kata sandi Anda.",
+    'throttle_to_many_reset_password_attempts' => 'Terlalu banyak percobaan pengaturan ulang kata sandi. Silakan coba lagi dalam :seconds detik.',
+    'throttle_to_many_register_attempts' => 'Terlalu banyak percobaan pendaftaran. Silakan coba lagi dalam :seconds detik.',
+    'new_password' => 'Kata Sandi Baru',
+    'confirm_password' => 'Konfirmasi Kata Sandi',
+    'reset_password_confirmation' => 'Konfirmasi Pengaturan Ulang Kata Sandi',
+    'reset_password_mail_sent' => 'Konfirmasi telah dikirim ke alamat email Anda. Silakan ikuti petunjuk dalam email untuk mengatur ulang kata sandi Anda.',
+    'enter_password_to_update' => 'Masukkan kata sandi baru untuk memperbarui kata sandi login.',
+    'reset_password_update_success' => 'Kata sandi telah berhasil diperbarui. Silakan masuk dengan kata sandi yang diperbarui.',
 ];
