@@ -172,7 +172,7 @@
         @else
             <p>{{ __('general.registration_complete_message') }}</p>
             <ul class='list-disc list-inside'>
-                <li>.
+                <li>
                     <x-website::link class="link link-primary link-hover" href="{{ route('filament.scheduledConference.pages.profile') }}">
                         {{ __('general.edit_my_profile') }}
                     </x-website::link>
