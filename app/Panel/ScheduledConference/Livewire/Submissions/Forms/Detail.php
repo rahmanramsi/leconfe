@@ -13,6 +13,8 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use App\Forms\Components\TinyEditor;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Get;
 
 class Detail extends \Livewire\Component implements HasForms
 {
@@ -40,6 +42,15 @@ class Detail extends \Livewire\Component implements HasForms
             })
             ->model($this->submission)
             ->schema([
+                Toggle::make('meta.paper_published_on_external')
+                    ->label(__('general.paper_published_on_external'))
+                    ->reactive(),
+                TextInput::make('meta.paper_external_url')
+                    ->label(__('general.paper_external_url'))
+                    ->visible(fn (Get $get) => $get('meta.paper_published_on_external'))
+                    ->url()
+                    ->required()
+                    ->placeholder('https://'),
                 TextInput::make('meta.title')
                     ->label(__('general.title')),
                 TextInput::make('meta.subtitle')

@@ -67,6 +67,8 @@ class Sitemap extends Page
                 );
 
                 $proceeding->submissions->each(function (Submission $submission) use($sitemap) {
+                    if($submission->isPublishedOnExternal()) return;
+                    
                     $sitemap->add(
                         Url::create($submission->getUrl())
                             ->setLastModificationDate($submission->updated_at)

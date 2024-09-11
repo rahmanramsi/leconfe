@@ -2,15 +2,24 @@
 
 <div class="paper-summary flex flex-col sm:flex-row gap-4">
     @if($paper->getFirstMediaUrl('cover'))
-        <a href="{{ route('livewirePageGroup.conference.pages.paper', ['submission' => $paper->id]) }}" class="cover max-w-56 grow">
+        <a href="{{ $paper->getPublicUrl() }}" class="cover max-w-56 grow">
             <img src="{{ $paper->getFirstMediaUrl('cover') }}" class="w-full" alt="Paper Cover">
         </a>
     @endif
     <div class="flex-1">
         <h3 class="title text-base">
-            <a href="{{ route('livewirePageGroup.conference.pages.paper', ['submission' => $paper->id]) }}" class="font-semibold text-gray-700 hover:text-primary">{{ $paper->getMeta('title') }}</a>
-            <div class="text-xs text-gray-500">{{ $paper->getMeta('subtitle') }}</div>
+            <a 
+                target="{{ $paper->isPublishedOnExternal() ? '_blank' : '_self' }}"
+                href="{{ $paper->getPublicUrl() }}" 
+                class="font-semibold text-gray-700 hover:text-primary flex items-center"
+                >
+                {{ $paper->getMeta('title') }}
+                @if($paper->isPublishedOnExternal())
+                    <x-lineawesome-external-link-alt-solid class="w-4 h-4 ml-1" />
+                @endif
+            </a>
         </h3>
+        <div class="text-xs text-gray-500">{{ $paper->getMeta('subtitle') }}</div>
         <div class="meta space-y-2">
             <div class="flex-1 flex gap-y-2 flex-wrap items-center justify-between">
                 <div class="authors text-sm text-gray-600">
