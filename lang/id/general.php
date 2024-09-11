@@ -906,4 +906,6 @@ return [
     'reset_all' => "Atur Ulang Semua",
     'incoming' => "Masuk",
 
+    'conference_list' => "Daftar Konferensi",
+
 ];

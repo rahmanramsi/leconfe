@@ -8,7 +8,7 @@
 
         <div class="space-y-4 conferences">
 
-            <x-website::heading-title title="Conference List" class="grow"/>
+            <x-website::heading-title title="{{ __('general.conference_list') }}" class="grow"/>
 
             <div class="mt-6 mb-6 grid grid-cols-10 gap-2">
                 <div class="col-span-full gap-2">

@@ -923,4 +923,6 @@ return [
     'reset_all' => "إعادة تعيين الكل",
     'incoming' => "وارد",
 
+    'conference_list' => "قائمة المؤتمرات",
+
 ];

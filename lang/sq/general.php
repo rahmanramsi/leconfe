@@ -925,4 +925,6 @@ return [
     'reset_all' => "Rivendos të gjitha",
     'incoming' => "Në ardhje",
 
+    'conference_list' => "Lista e konferencave",
+
 ];

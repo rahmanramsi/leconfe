@@ -940,5 +940,7 @@ return [
     'reset' => "Reset",
     'reset_all' => "Reset All",
     'incoming' => "Incoming",
-    
+
+    'conference_list' => "Conference List",
+
 ];
