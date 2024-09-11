@@ -9,6 +9,7 @@ use App\Models\Enums\UserRole;
 use Filament\Facades\Filament;
 use App\Actions\User\UserCreateAction;
 use App\Facades\Setting;
+use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
 use Rahmanramsi\LivewirePageGroup\Pages\Page;
 use DanHarrin\LivewireRateLimiting\WithRateLimiting;
 use Illuminate\Contracts\Support\Htmlable;
@@ -71,12 +72,13 @@ class Register extends Page
             'email' => [
                 'required',
                 'email',
+                'indisposable',
                 'unique:users,email'
             ],
             'password' => [
                 'required',
                 'confirmed',
-                'min:8',
+                'min:12',
             ],
             'privacy_statement_agree' => [
                 'required',
@@ -123,6 +125,17 @@ class Register extends Page
 
     public function register()
     {
+        try {
+            $this->rateLimit(5, 300);
+        } catch (TooManyRequestsException $exception) {
+            $this->addError('throttle', __('general.throttle_to_many_register_attempts', [
+                'seconds' => $exception->secondsUntilAvailable,
+                'minutes' => ceil($exception->secondsUntilAvailable / 60),
+            ]));
+
+            return null;
+        }
+
         $data = $this->validate();
         $user = UserCreateAction::run([
             ...Arr::only($data, ['given_name', 'family_name', 'email', 'password']),

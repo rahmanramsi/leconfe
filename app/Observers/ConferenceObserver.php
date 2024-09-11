@@ -112,8 +112,6 @@ class ConferenceObserver
         ]);
 
         RolePopulateConferenceAction::run($conference);
-
-        MailTemplatePopulateDefaultData::run($conference);
     }
 
     /**

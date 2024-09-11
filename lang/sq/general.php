@@ -927,4 +927,16 @@ return [
 
     'conference_list' => "Lista e konferencave",
 
+
+    'forgot_password_question' => "Keni harruar fjalëkalimin?",
+    'reset_password' => "Rivendos Fjalëkalimin",
+    'please_enter_email_to_reset_password' => "Ju lutem shkruani adresën e email-it të lidhur me llogarinë tuaj të regjistruar më poshtë. Një email do t'i dërgohet në këtë adresë me udhëzime për të rivendosur fjalëkalimin tuaj.",
+    'throttle_to_many_reset_password_attempts' => 'Shumë tentime për rivendosjen e fjalëkalimit. Ju lutem provoni përsëri pas :seconds sekondash.',
+    'throttle_to_many_register_attempts' => 'Shumë tentime për regjistrim. Ju lutem provoni përsëri pas :seconds sekondash.',
+    'new_password' => 'Fjalëkalim i Ri',
+    'confirm_password' => 'Konfirmo Fjalëkalimin',
+    'reset_password_confirmation' => 'Konfirmim Rivendosje Fjalëkalimi',
+    'reset_password_mail_sent' => 'Një konfirmim është dërguar në adresën tuaj të email-it. Ju lutem ndiqni udhëzimet në email për të rivendosur fjalëkalimin tuaj.',
+    'enter_password_to_update' => 'Shkruani fjalëkalimin e ri për të azhurnuar fjalëkalimin e hyrjes.',
+    'reset_password_update_success' => 'Fjalëkalimi është azhurnuar me sukses. Ju lutem kyçuni me fjalëkalimin e azhurnuar.',
 ];

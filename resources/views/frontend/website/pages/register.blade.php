@@ -10,6 +10,11 @@
         @if (!$registerComplete)
             @if (Setting::get('allow_registration'))
                 <form wire:submit='register' class="space-y-4">
+                    @error('throttle')
+                        <div class="text-sm text-red-600">
+                            {{ $message }}
+                        </div>
+                    @enderror
                     <div class="grid gap-4 sm:grid-cols-6">
                         <div class="gap-2 form-control sm:col-span-3">
                             <label class="label-text">
@@ -167,7 +172,7 @@
         @else
             <p>{{ __('general.registration_complete_message') }}</p>
             <ul class='list-disc list-inside'>
-                <li>.
+                <li>
                     <x-website::link class="link link-primary link-hover" href="{{ route('filament.scheduledConference.pages.profile') }}">
                         {{ __('general.edit_my_profile') }}
                     </x-website::link>

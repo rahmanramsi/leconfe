@@ -921,6 +921,17 @@ return [
     'finished_registration_30_days' => "Finished registrations in the last 30 days",
 
     'you_have_to_register_to_complete_submission_payment' => "You have to register to one of these registration type below to finish your submission payment.",
+    'forgot_password_question' => "Forgot password?",
+    'reset_password' => "Reset Password",
+    'please_enter_email_to_reset_password' => "Please enter the email address associated with your registered account below. An email will be sent to this address with instructions on how to reset your password.",
+    'throttle_to_many_reset_password_attempts' => 'Too many reset password attempts. Please try again in :seconds seconds.',
+    'throttle_to_many_register_attempts' => 'Too many register attempts. Please try again in :seconds seconds.',
+    'new_password' => 'New Password',
+    'confirm_password' => 'Confirm Password',
+    'reset_password_confirmation' => 'Reset Password Confirmation',
+    'reset_password_mail_sent' => 'A confirmation has been sent to your email address. Please follow the instructions in the email to reset your password.',
+    'enter_password_to_update' => 'Enter new password to update login password.',
+    'reset_password_update_success' => 'Password has been updated successfully. Please login with updated password.',
 
     'apply' => "Apply",
     'search' => "Search",

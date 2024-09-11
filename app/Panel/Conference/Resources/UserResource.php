@@ -118,6 +118,7 @@ class UserResource extends Resource
                                     ->label(__('general.password_confirmation'))
                                     ->requiredWith('password')
                                     ->password()
+                                    ->minLength(12)
                                     ->dehydrated(false),
                                 ...ContributorForm::additionalFormField(),
                             ])
