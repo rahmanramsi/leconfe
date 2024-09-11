@@ -932,4 +932,26 @@ return [
     'reset_password_mail_sent' => 'A confirmation has been sent to your email address. Please follow the instructions in the email to reset your password.',
     'enter_password_to_update' => 'Enter new password to update login password.',
     'reset_password_update_success' => 'Password has been updated successfully. Please login with updated password.',
+
+    'apply' => "Apply",
+    'search' => "Search",
+    'filter' => "Filter",
+
+    'scope' => "Scope",
+    'coordinator' => "Coordinator",
+    'over' => 'Over',
+    'international' => "International",
+    'national' => "National",
+    'unsigned' => "Unsigned",
+    'conference_scope_description' => "Scope of the conference",
+    'clear' => "Clear",
+    'coordinator_setting_description' => "Individual or team that responsible for organizing and managing the conference.",
+
+    'option_are_empty' => "Option are empty",
+    'reset' => "Reset",
+    'reset_all' => "Reset All",
+    'incoming' => "Incoming",
+
+    'conference_list' => "Conference List",
+
 ];

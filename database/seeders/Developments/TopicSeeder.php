@@ -14,7 +14,7 @@ class TopicSeeder extends Seeder
     public function run(): void
     {
         Conference::lazy()->each(function (Conference $conference) {
-            Topic::factory()->count(10)->for($conference)->create();
+            Topic::factory()->count(100)->for($conference)->create();
         });
     }
 }

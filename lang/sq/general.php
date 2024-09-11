@@ -906,6 +906,28 @@ return [
 
     'you_have_to_register_to_complete_submission_payment' => "Duhet të regjistroheni në një nga këto lloje regjistrimi më poshtë për të përfunduar pagesën e dorëzimit.",
 
+    'apply' => "Apliko",
+    'search' => "Kërko",
+    'filter' => "Filtro",
+
+    'scope' => "Fusha e Veprimit",
+    'coordinator' => "Koordinatori",
+    'over' => 'Mbi',
+    'international' => "Ndërkombëtare",
+    'national' => "Kombëtare",
+    'unsigned' => "E Panënshkruar",
+    'conference_scope_description' => "Fusha e veprimit të konferencës",
+    'clear' => "Pastro",
+    'coordinator_setting_description' => "Individi ose ekipi që është përgjegjës për organizimin dhe menaxhimin e konferencës.",
+
+    'option_are_empty' => "Opsionet janë bosh",
+    'reset' => "Rivendos",
+    'reset_all' => "Rivendos të gjitha",
+    'incoming' => "Në ardhje",
+
+    'conference_list' => "Lista e konferencave",
+
+
     'forgot_password_question' => "Keni harruar fjalëkalimin?",
     'reset_password' => "Rivendos Fjalëkalimin",
     'please_enter_email_to_reset_password' => "Ju lutem shkruani adresën e email-it të lidhur me llogarinë tuaj të regjistruar më poshtë. Një email do t'i dërgohet në këtë adresë me udhëzime për të rivendosur fjalëkalimin tuaj.",
