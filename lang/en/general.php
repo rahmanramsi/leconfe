@@ -953,5 +953,6 @@ return [
     'incoming' => "Incoming",
 
     'conference_list' => "Conference List",
-
+    'paper_published_on_external' => "Paper published on external website",
+    'paper_external_url' => "Paper External URL",
 ];

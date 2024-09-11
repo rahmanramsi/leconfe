@@ -192,6 +192,16 @@ class Submission extends Model implements HasMedia, Sortable
             ->whereHas('role', fn (Builder $query) => $query->whereIn('name', [UserRole::ScheduledConferenceEditor, UserRole::TrackEditor]));
     }
 
+    public function isPublishedOnExternal()
+    {
+        return $this->getMeta('paper_published_on_external', false);
+    }
+
+    public function getPublicUrl()
+    {
+        return $this->isPublishedOnExternal() ? $this->getMeta('paper_external_url') : route('livewirePageGroup.conference.pages.paper', ['submission' => $this->id]);
+    }
+
     public function authors()
     {
         return $this->hasMany(Author::class);

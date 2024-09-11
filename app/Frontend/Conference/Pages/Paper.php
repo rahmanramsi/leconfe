@@ -32,6 +32,10 @@ class Paper extends Page
             return abort(404);
         }
 
+        if($this->paper->isPublishedOnExternal()){
+            return redirect($this->paper->getPublicUrl());
+        }
+
         if (!$this->canAccess()) {
             abort(404);
         }
