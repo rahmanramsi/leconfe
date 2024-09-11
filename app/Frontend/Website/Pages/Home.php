@@ -79,72 +79,12 @@ class Home extends Page
             ->with([
                 'media',
                 'meta',
-                'topics' => fn (Builder $query) => $query->with('conference')->withoutGlobalScopes(),
+                'topics',
+                'scheduledConferences',
                 'currentScheduledConference' => fn (Builder $query) => $query->with('conference')->withoutGlobalScopes(),
-                'scheduledConferences' => fn (Builder $query) => $query->with('conference')->withoutGlobalScopes(),
             ]);
 
-        if(($search = $this->filter['search']['value']) > 0) {
-            $conferences
-                ->where('name', 'LIKE', "%{$search}%")
-                ->orWhere('path', 'LIKE', "%{$search}%");
-        }
-
-        $filteredConference = $conferences->get();
-
-        if($scope = $this->filter['scope']['value']) {
-            $filteredConference = $filteredConference->filter(function (Conference $conference) use ($scope) {
-                if(Str::lower($conference->getMeta('scope')) === $scope) {
-                    return true;
-                }
-            });
-        }
-
-        if($states = $this->filter['state']['value']) {
-            $filteredConference = $filteredConference->filter(function (Conference $conference) use ($states) {
-                foreach($states as $state) {
-                    if(Str::lower($state) === self::STATE_CURRENT && $conference->scheduledConferences->where('state', ScheduledConferenceState::Current)->whereNull('deleted_at')->isEmpty()) {
-                        return false;
-                    } else if(Str::lower($state) === self::STATE_INCOMING && $conference->scheduledConferences->where('state', ScheduledConferenceState::Published)->whereNull('deleted_at')->isEmpty()) {
-                        return false;
-                    } else if(Str::lower($state) === self::STATE_ARCHIVED && $conference->scheduledConferences->where('state', ScheduledConferenceState::Archived)->whereNull('deleted_at')->isEmpty()) {
-                        return false;
-                    }
-                }
-
-                return true;
-            });
-        }
-
-        if(!empty($topics = $this->filter['topic']['value'])) {
-            $filteredConference = $filteredConference->filter(function (Conference $conference) use ($topics) {
-                foreach($topics as $topic) {
-                    if(!in_array($topic, $conference->topics->pluck('name')->toArray())) {
-                        return false;
-                    }
-                }
-
-                return true;
-            });
-        }
-
-        if(!empty($coordinators = $this->filter['coordinator']['value'])) {
-            $filteredConference = $filteredConference->filter(function (Conference $conference) use ($coordinators) {
-                $coordinatorList = $conference->scheduledConferences->load(['meta'])->mapWithKeys(function ($scheduledConference) {
-                    return [$scheduledConference->getKey() => $scheduledConference->getMeta('coordinator')];
-                })->toArray();
-
-                foreach($coordinators as $coordinator) {
-                    if(!in_array($coordinator, $coordinatorList)) {
-                        return false;
-                    }
-                }
-
-                return true;
-            });
-        }
-
-        $topics = Topic::withoutGlobalScopes()
+        $topicList = Topic::withoutGlobalScopes()
             ->with(['conference'])
             ->select('name')
             ->where('name', 'LIKE', "%{$this->filter['topic']['search']}%")
@@ -153,22 +93,76 @@ class Home extends Page
             ->distinct()
             ->get();
 
-        $contributorScheduleConferences = ScheduledConference::withoutGlobalScopes()->limit(20)->get()
-            ->filter(function (ScheduledConference $scheduledConference) {
-                if(!$scheduledConference->getMeta('coordinator')) {
-                    return false;
-                }
+        $contributorScheduleConferences = ScheduledConference::withoutGlobalScopes()
+            ->whereHas('meta', function ($query) {
+                $query
+                    ->where('key', 'coordinator')
+                    ->where('value', 'LIKE', "%{$this->filter['coordinator']['search']}%");
+            })
+            ->limit(20)
+            ->distinct()
+            ->get();
 
-                if(strlen($this->filter['coordinator']['search']) > 0 && !Str::contains(Str::lower($scheduledConference->getMeta('coordinator')), Str::lower($this->filter['coordinator']['search']))) {
-                    return false;
-                }
+        // data filter
 
-                return true;
+        if(($search = $this->filter['search']['value']) > 0) {
+            $conferences->where('name', 'LIKE', "%{$search}%");
+        }
+
+        if($scope = $this->filter['scope']['value']) {
+            $conferences
+                ->whereHas('meta', function ($query) use ($scope) {
+                    $query
+                        ->where('key', 'scope')
+                        ->where('value', $scope);
+                });
+        }
+
+        if($states = $this->filter['state']['value']) {
+            $stateOption = Arr::map($states, function ($value) {
+                return match (Str::lower($value)) {
+                    self::STATE_CURRENT => ScheduledConferenceState::Current,
+                    self::STATE_INCOMING => ScheduledConferenceState::Published,
+                    self::STATE_ARCHIVED => ScheduledConferenceState::Archived,
+                };
             });
 
+            $conferences
+                ->whereHas('scheduledConferences', function ($query) use ($stateOption) {
+                    $query
+                        ->withTrashed()
+                        ->withoutGlobalScopes()
+                        ->whereIn('state', $stateOption);
+                });
+
+        }
+
+        if(!empty($topics = $this->filter['topic']['value'])) {
+            $conferences
+                ->whereHas('topics', function ($query) use ($topics) {
+                    $query
+                        ->withoutGlobalScopes()
+                        ->whereIn('name', $topics);
+                });
+        }
+
+        if(!empty($coordinators = $this->filter['coordinator']['value'])) {
+            $conferences
+                ->whereHas('scheduledConferences', function ($query) use ($coordinators) {
+                    $query
+                        ->withTrashed()
+                        ->withoutGlobalScopes()
+                        ->whereHas('meta', function ($query) use($coordinators) {
+                            $query
+                                ->where('key', 'coordinator')
+                                ->whereIn('value', $coordinators);
+                        });
+                });
+        }
+
         return [
-            'topics' => $topics,
-            'conferences' => $filteredConference,
+            'topics' => $topicList,
+            'conferences' => $conferences->get(),
             'contributorScheduleConferences' => $contributorScheduleConferences,
             // Selected Filter Data
             'scopeSelected' => $this->filter['scope']['value'],
