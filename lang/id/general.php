@@ -886,4 +886,26 @@ return [
     'finished_registration_30_days' => "Pendaftaran selesai dalam 30 hari terakhir",
 
     'you_have_to_register_to_complete_submission_payment' => "Anda harus mendaftar ke salah satu jenis pendaftaran di bawah ini untuk menyelesaikan pembayaran pengajuan Anda.",
+
+    'apply' => "Terapkan",
+    'search' => "Cari",
+    'filter' => "Filter",
+
+    'scope' => "Ruang Lingkup",
+    'coordinator' => "Koordinator",
+    'over' => 'Lebih',
+    'international' => "Internasional",
+    'national' => "Nasional",
+    'unsigned' => "Belum Ditandatangani",
+    'conference_scope_description' => "Ruang lingkup konferensi",
+    'clear' => "Bersihkan",
+    'coordinator_setting_description' => "Individu atau tim yang bertanggung jawab untuk mengatur dan mengelola konferensi.",
+
+    'option_are_empty' => "Opsi kosong",
+    'reset' => "Atur Ulang",
+    'reset_all' => "Atur Ulang Semua",
+    'incoming' => "Masuk",
+
+    'conference_list' => "Daftar Konferensi",
+
 ];

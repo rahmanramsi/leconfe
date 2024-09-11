@@ -921,4 +921,26 @@ return [
     'finished_registration_30_days' => "Finished registrations in the last 30 days",
 
     'you_have_to_register_to_complete_submission_payment' => "You have to register to one of these registration type below to finish your submission payment.",
+
+    'apply' => "Apply",
+    'search' => "Search",
+    'filter' => "Filter",
+
+    'scope' => "Scope",
+    'coordinator' => "Coordinator",
+    'over' => 'Over',
+    'international' => "International",
+    'national' => "National",
+    'unsigned' => "Unsigned",
+    'conference_scope_description' => "Scope of the conference",
+    'clear' => "Clear",
+    'coordinator_setting_description' => "Individual or team that responsible for organizing and managing the conference.",
+
+    'option_are_empty' => "Option are empty",
+    'reset' => "Reset",
+    'reset_all' => "Reset All",
+    'incoming' => "Incoming",
+
+    'conference_list' => "Conference List",
+
 ];
