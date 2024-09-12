@@ -13,20 +13,9 @@ This project is created to make the conference management seamless including the
 - Paper Submission Workflow
 - Participant Registration & Attendance
 
-## Why is this open-source? 🔓
-
-WIP
-
 ## Requirements ⚙️
 
 Leconfe is a regular Laravel application that can be installed on any server that meets the [Laravel server requirements](https://laravel.com/docs/10.x/deployment#server-requirements).
-
-## Local development 💻
-
-WIP
-
-## Documentation
-Serve the app using `php artisan serve` and visit [http://localhost:8000/docs](http://localhost:8000/docs) to view the documentation.
 
 ## Contributing 🤝
 
