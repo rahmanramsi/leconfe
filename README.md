@@ -17,10 +17,6 @@ This project is created to make the conference management seamless including the
 
 Leconfe is a regular Laravel application that can be installed on any server that meets the [Laravel server requirements](https://laravel.com/docs/10.x/deployment#server-requirements).
 
-## Contributing 🤝
-
-Thank you for considering contributing to Leconfe! Here are some guidelines to help you get started:
-
 ### Structure and Maintainability
 
 -   Avoid adding new dependencies unless absolutely necessary.
