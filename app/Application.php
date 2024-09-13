@@ -237,6 +237,10 @@ class Application extends LaravelApplication
 
     public function isUpgrading(): bool
     {
-        return version_compare($this->getInstalledVersion(), $this->getCodeVersion(), '<');
+        try {
+            return version_compare($this->getInstalledVersion(), $this->getCodeVersion(), '<');
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
 }
