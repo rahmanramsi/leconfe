@@ -36,7 +36,7 @@ use Illuminate\Foundation\Application as LaravelApplication;
 
 class Application extends LaravelApplication
 {
-    public const APP_VERSION = '1.0.0-beta.5';
+    public const APP_VERSION = '1.0.0';
 
     public const PHP_MIN_VERSION = '8.1';
 
@@ -233,5 +233,10 @@ class Application extends LaravelApplication
         }
 
         return route('livewirePageGroup.website.pages.login');
+    }
+
+    public function isUpgrading(): bool
+    {
+        return version_compare($this->getInstalledVersion(), $this->getCodeVersion(), '<');
     }
 }
