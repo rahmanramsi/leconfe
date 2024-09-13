@@ -3,6 +3,7 @@
 namespace App\Actions\Leconfe;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Artisan;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 use function Laravel\Prompts\alert;
@@ -15,8 +16,11 @@ class UpgradeAction
 {
     use AsAction;
 
-    public function handle(array $params)
+    public function handle(array $params = [])
     {
+        Artisan::call('optimize:clear');
+        Artisan::call('modelCache:clear');
+
         $upgrader = new \App\Utils\Upgrader($params);
         $upgrader->run();
     }

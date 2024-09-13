@@ -45,7 +45,7 @@ class ResetPasswordConfirmation extends Page
             // Silently abort the request
             abort(403, 'Invalid or expired signature');
         }
-        // dd($hash, sha1($user->email . $user->password . $user->getMeta('last_login')));
+        
         if($hash !== sha1($user->email . $user->password . $user->getMeta('last_login'))){
             abort(403, 'Invalid or expired signature');
         }

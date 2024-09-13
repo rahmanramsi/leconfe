@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Frontend\Website\Pages\Installation;
+use App\Frontend\Website\Pages\Upgrade;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -23,9 +24,14 @@ class InstallationMiddleware
         }
 
         $installationPage = Installation::getSlug();
+        $upgradePage = Upgrade::getSlug();
 
         if (! app()->isInstalled() && Route::getCurrentRoute()->uri !== $installationPage) {
             return redirect($installationPage);
+        }
+
+        if(app()->isUpgrading() && Route::getCurrentRoute()->uri !== $upgradePage){
+            return redirect($upgradePage);
         }
 
         return $next($request);

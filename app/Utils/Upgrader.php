@@ -21,6 +21,11 @@ class Upgrader extends Installer
     ) {
         $this->installedVersion = App::getInstalledVersion();
         $this->codeVersion = App::getCodeVersion();
+
+
+        if(version_compare($this->installedVersion, $this->codeVersion, '>=')){
+            throw new \Exception('Your application is already up to date!');
+        }
     }
 
     public function run()
