@@ -28,6 +28,8 @@ use App\Models\Conference;
 use App\Models\Enums\UserRole;
 use App\Models\ScheduledConference;
 use GuzzleHttp\Psr7\MimeType;
+use Illuminate\Support\Facades\Route;
+use Livewire\Livewire;
 
 class PanelProvider extends ServiceProvider
 {
@@ -219,6 +221,10 @@ class PanelProvider extends ServiceProvider
         Blade::anonymousComponentPath(resource_path('views/panel/conference/components'), 'panel');
         Blade::anonymousComponentPath(resource_path('views/panel/administration/components'), 'administration');
         Blade::anonymousComponentPath(resource_path('views/panel/scheduledConference/components'), 'scheduledConference');
+
+        Livewire::setScriptRoute(function ($handle) {
+            return Route::get(request()->getBaseUrl() . '/livewire/livewire.js', $handle);
+        });        
     }
 
     public static function getMiddleware(): array

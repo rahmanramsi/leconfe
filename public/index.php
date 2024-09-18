@@ -1,10 +1,10 @@
 <?php
 
 use Illuminate\Contracts\Http\Kernel;
-use Illuminate\Http\Request;
+use App\Http\Request;
 
 define('LARAVEL_START', microtime(true));
-
+define('LECONFE_SUBDIR', 'leconfe');
 /*
 |--------------------------------------------------------------------------
 | Check If The Application Is Under Maintenance

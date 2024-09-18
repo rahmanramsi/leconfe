@@ -6,6 +6,7 @@
 /public/sitemap.xml
 /storage/*.key
 /storage/installed
+/storage/media-library/temp
 /vendor
 .env
 .env.backup
