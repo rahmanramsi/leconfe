@@ -4,7 +4,7 @@ use Illuminate\Contracts\Http\Kernel;
 use App\Http\Request;
 
 define('LARAVEL_START', microtime(true));
-define('LECONFE_SUBDIR', 'leconfe');
+define('LECONFE_SUBDIR', '');
 /*
 |--------------------------------------------------------------------------
 | Check If The Application Is Under Maintenance
