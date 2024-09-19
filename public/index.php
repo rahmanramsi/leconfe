@@ -4,7 +4,6 @@ use Illuminate\Contracts\Http\Kernel;
 use App\Http\Request;
 
 define('LARAVEL_START', microtime(true));
-define('LECONFE_SUBDIR', '');
 /*
 |--------------------------------------------------------------------------
 | Check If The Application Is Under Maintenance
@@ -47,6 +46,7 @@ require __DIR__.'/../vendor/autoload.php';
 $app = require_once __DIR__.'/../bootstrap/app.php';
 
 $kernel = $app->make(Kernel::class);
+
 
 $response = $kernel->handle(
     $request = Request::capture()
