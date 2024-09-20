@@ -1,0 +1,73 @@
+name: Leconfe Release
+
+on:
+  push:
+    tags:
+      - '*.*.*'
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.1'
+        extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, dom, filter, gd, iconv, json, mbstring, pdo
+    
+    - name: Install PHP dependencies
+      run: composer install --prefer-dist --no-progress
+    
+    - name: Setup Bun
+      uses: oven-sh/setup-bun@v1
+      with:
+        bun-version: latest
+    
+    - name: Install JS dependencies
+      run: bun install
+    
+    - name: Build JS assets
+      run: bun run build
+    
+    - name: Create tar.gz archive
+      run: |
+        mkdir -p ./release
+        tar -czf ./release/leconfe.tar.gz \
+          --exclude='./release' \
+          --exclude='./.git' \
+          --exclude='./node_modules' \
+          --exclude='./tests' \
+          --exclude='./.github' \
+          -C . .
+        ls -l ./release/leconfe.tar.gz
+        if [ ! -f ./release/leconfe.tar.gz ]; then
+          echo "Error: leconfe.tar.gz was not created"
+          exit 1
+        fi
+    
+    - name: Create Release
+      id: create_release
+      uses: softprops/action-gh-release@v2
+      if: startsWith(github.ref, 'refs/tags/')
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        name: Leconfe Release ${{ github.ref_name }}
+        draft: true
+        prerelease: false
+        generate_release_notes: true
+
+    
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./release/leconfe.tar.gz
+        asset_name: leconfe-${{ github.ref_name }}.tar.gz
+        asset_content_type: application/gzip
