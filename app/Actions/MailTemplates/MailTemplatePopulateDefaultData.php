@@ -26,7 +26,6 @@ class MailTemplatePopulateDefaultData
         }
 
         $namespace = str($namespace);
-
         foreach ($filesystem->allFiles($directory) as $file) {
             $variableNamespace = $namespace->contains('*') ? str_ireplace(
                 ['\\'.$namespace->before('*'), $namespace->after('*')],
