@@ -24,12 +24,11 @@ class InstallationMiddleware
         }
 
         $installationPage = Installation::getSlug();
-        $upgradePage = Upgrade::getSlug();
-
         if (! app()->isInstalled() && Route::getCurrentRoute()->uri !== $installationPage) {
             return redirect($installationPage);
         }
-
+        
+        $upgradePage = Upgrade::getSlug();
         if(app()->isUpgrading() && Route::getCurrentRoute()->uri !== $upgradePage){
             return redirect($upgradePage);
         }

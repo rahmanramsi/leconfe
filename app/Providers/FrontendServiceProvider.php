@@ -35,7 +35,6 @@ class FrontendServiceProvider extends ServiceProvider
             Livewire::addPersistentMiddleware([
                 'web',
                 SetLocale::class,
-                IdentifyConference::class,
             ]);
 
         });

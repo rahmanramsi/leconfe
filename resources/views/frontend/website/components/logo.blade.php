@@ -1,5 +1,5 @@
 @props([
-    'homeUrl' => '/',
+    'homeUrl' => url('/'),
     'headerLogo' => null,
     'headerLogoAltText' => config('app.name'),
 ])

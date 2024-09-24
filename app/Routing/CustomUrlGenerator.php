@@ -37,4 +37,17 @@ class CustomUrlGenerator extends UrlGenerator
 
         return parent::route($name, $parameters, $absolute);
     }
+
+    /**
+     * Get the Route URL generator instance.
+     *
+     * @return \Illuminate\Routing\RouteUrlGenerator
+     */
+    protected function routeUrl()
+    {
+        if (! $this->routeGenerator) {
+            $this->routeGenerator = new CustomRouteUrlGenerator($this, $this->request);
+        }
+        return $this->routeGenerator;
+    }
 }
