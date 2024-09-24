@@ -26,6 +26,7 @@ use Filament\Forms\Components\DatePicker;
 use Illuminate\Database\Eloquent\Builder;
 use App\Mail\Templates\ApprovePaymentMail;
 use App\Mail\Templates\DeclinePaymentMail;
+use App\Models\DefaultMailTemplate;
 use Filament\Actions\Contracts\HasActions;
 use Filament\Infolists\Components\TextEntry;
 use App\Models\Enums\RegistrationPaymentType;
@@ -217,7 +218,7 @@ class Payment extends Component implements HasActions, HasForms
             ->modalDescription('Are you sure you want to decline the payment? Previous progress will return to payment (previous files and discussions will not be lost). ')
             ->modalWidth('2xl')
             ->mountUsing(function (Form $form) {
-                $mailTemplate = MailTemplate::where('mailable', DeclinePaymentMail::class)->first();
+                $mailTemplate = DefaultMailTemplate::where('mailable', DeclinePaymentMail::class)->first();
                 $form->fill([
                     'email' => $this->submission->user->email,
                     'subject' => $mailTemplate ? $mailTemplate->subject : '',
@@ -282,7 +283,7 @@ class Payment extends Component implements HasActions, HasForms
             ->modalWidth('2xl')
             ->modalSubmitActionLabel(__('general.accept'))
             ->mountUsing(function (Form $form) {
-                $mailTemplate = MailTemplate::where('mailable', ApprovePaymentMail::class)->first();
+                $mailTemplate = DefaultMailTemplate::where('mailable', ApprovePaymentMail::class)->first();
                 $form->fill([
                     'email' => $this->submission->user->email,
                     'subject' => $mailTemplate ? $mailTemplate->subject : '',

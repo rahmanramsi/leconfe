@@ -23,6 +23,7 @@ use Filament\Actions\Contracts\HasActions;
 use App\Mail\Templates\RevisionRequestMail;
 use Filament\Forms\Concerns\InteractsWithForms;
 use App\Actions\Submissions\SubmissionUpdateAction;
+use App\Models\DefaultMailTemplate;
 use Filament\Actions\Concerns\InteractsWithActions;
 use App\Panel\ScheduledConference\Resources\SubmissionResource;
 
@@ -50,7 +51,7 @@ class PeerReview extends Component implements HasActions, HasForms
             ->color('danger')
             ->outlined()
             ->mountUsing(function (Form $form) {
-                $mailTemplate = MailTemplate::where('mailable', DeclinePaperMail::class)->first();
+                $mailTemplate = DefaultMailTemplate::where('mailable', DeclinePaperMail::class)->first();
                 $form->fill([
                     'email' => $this->submission->user->email,
                     'subject' => $mailTemplate ? $mailTemplate->subject : '',
@@ -114,7 +115,7 @@ class PeerReview extends Component implements HasActions, HasForms
             ->label(__('general.accept_submission'))
             ->modalSubmitActionLabel(__('general.accept'))
             ->mountUsing(function (Form $form) {
-                $mailTemplate = MailTemplate::where('mailable', AcceptPaperMail::class)->first();
+                $mailTemplate = DefaultMailTemplate::where('mailable', AcceptPaperMail::class)->first();
                 $form->fill([
                     'email' => $this->submission->user->email,
                     'subject' => $mailTemplate ? $mailTemplate->subject : '',
@@ -180,7 +181,7 @@ class PeerReview extends Component implements HasActions, HasForms
             ->color(Color::Orange)
             ->label(__('general.request_revision'))
             ->mountUsing(function (Form $form): void {
-                $mailTemplate = MailTemplate::where('mailable', RevisionRequestMail::class)->first();
+                $mailTemplate = DefaultMailTemplate::where('mailable', RevisionRequestMail::class)->first();
                 $form->fill([
                     'email' => $this->submission->user->email,
                     'subject' => $mailTemplate ? $mailTemplate->subject : '',

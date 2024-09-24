@@ -44,6 +44,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\HtmlString;
 use Livewire\Component;
 use App\Forms\Components\TinyEditor;
+use App\Models\DefaultMailTemplate;
 use Filament\Support\Enums\FontWeight;
 use STS\FilamentImpersonate\Tables\Actions\Impersonate;
 
@@ -358,7 +359,7 @@ class ReviewerList extends Component implements HasForms, HasTable
                         ->successNotificationTitle(__('general.reviewer_canceled'))
                         ->modalWidth('2xl')
                         ->mountUsing(function (Form $form, Review $record) {
-                            $mailTemplate = MailTemplate::where('mailable', ReviewerCancelationMail::class)->first();
+                            $mailTemplate = DefaultMailTemplate::where('mailable', ReviewerCancelationMail::class)->first();
                             $form->fill([
                                 'email' => $record->user->email,
                                 'subject' => $mailTemplate ? $mailTemplate->subject : '',
@@ -465,7 +466,7 @@ class ReviewerList extends Component implements HasForms, HasTable
             ->headerActions([
                 Action::make('add-reviewer')
                     ->mountUsing(function (Form $form): void {
-                        $mailTemplate = MailTemplate::where('mailable', ReviewerInvitationMail::class)->first();
+                        $mailTemplate = DefaultMailTemplate::where('mailable', ReviewerInvitationMail::class)->first();
                         $form->fill([
                             'subject' => $mailTemplate ? $mailTemplate->subject : '',
                             'message' => $mailTemplate ? $mailTemplate->html_template : '',
