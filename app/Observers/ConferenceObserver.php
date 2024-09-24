@@ -3,7 +3,6 @@
 namespace App\Observers;
 
 use App\Actions\Authors\AuthorRolePopulateDefaultDataAction;
-use App\Actions\MailTemplates\MailTemplatePopulateDefaultData;
 use App\Actions\Roles\RolePopulateConferenceAction;
 use App\Facades\Plugin;
 use App\Models\Conference;
