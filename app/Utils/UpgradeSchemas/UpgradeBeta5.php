@@ -2,7 +2,6 @@
 
 namespace App\Utils\UpgradeSchemas;
 
-use App\Actions\MailTemplates\MailTemplatePopulateDefaultData;
 use App\Actions\Roles\RolePopulateScheduledConferenceAction;
 use App\Models\Conference;
 use App\Models\Enums\UserRole;

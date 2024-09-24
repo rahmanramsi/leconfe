@@ -43,6 +43,7 @@ use Filament\Infolists\Components\Tabs\Tab as HorizontalTab;
 use App\Panel\ScheduledConference\Livewire\Submissions\CallforAbstract;
 use App\Panel\ScheduledConference\Livewire\Submissions\Forms\References;
 use App\Forms\Components\TinyEditor;
+use App\Models\DefaultMailTemplate;
 use App\Panel\ScheduledConference\Livewire\Submissions\Components\GalleyList;
 use App\Panel\ScheduledConference\Livewire\Submissions\Components\ActivityLogList;
 use App\Panel\ScheduledConference\Livewire\Submissions\Components\ContributorList;
@@ -126,7 +127,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                 ->authorize('publish', $this->record)
                 ->successNotificationTitle(__('general.assign_proceeding_for_publication'))
                 ->mountUsing(function (Form $form) {
-                    $mailTemplate = MailTemplate::where('mailable', PublishSubmissionMail::class)->first();
+                    $mailTemplate = DefaultMailTemplate::where('mailable', PublishSubmissionMail::class)->first();
                     $form->fill([
                         'email' => $this->record->user->email,
                         'subject' => $mailTemplate ? $mailTemplate->subject : '',

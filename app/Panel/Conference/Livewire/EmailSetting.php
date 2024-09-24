@@ -2,7 +2,6 @@
 
 namespace App\Panel\Conference\Livewire;
 
-use App\Actions\MailTemplates\MailTemplateRestoreDefaultData;
 use App\Actions\Settings\SettingUpdateAction;
 use App\Facades\Setting;
 use App\Infolists\Components\BladeEntry;
@@ -36,6 +35,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use App\Forms\Components\TinyEditor;
+use App\Models\DefaultMailTemplate;
 
 class EmailSetting extends Component implements HasForms, HasInfolists, HasTable
 {
@@ -60,7 +60,7 @@ class EmailSetting extends Component implements HasForms, HasInfolists, HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->query(MailTemplate::query())
+            ->query(DefaultMailTemplate::query())
             ->columns([
                 Split::make([
                     Stack::make([
@@ -76,7 +76,7 @@ class EmailSetting extends Component implements HasForms, HasInfolists, HasTable
                             ->color('gray'),
                         TextColumn::make('key')
                             ->label(__('general.key'))
-                            ->getStateUsing(fn (MailTemplate $record) => Str::afterLast($record->mailable, '\\'))
+                            ->getStateUsing(fn (DefaultMailTemplate $record) => Str::afterLast($record->mailable, '\\'))
                             ->badge()
                             ->color('primary'),
                     ]),
@@ -87,8 +87,10 @@ class EmailSetting extends Component implements HasForms, HasInfolists, HasTable
             ])
             ->actions([
                 ActionGroup::make([
-                    EditAction::make()
+                    TableAction::make('edit')
                         ->color('primary')
+                        ->icon('heroicon-m-pencil-square')
+                        ->fillForm(fn(DefaultMailTemplate $record) => $record->toArray())
                         ->form([
                             TextInput::make('subject')
                                 ->label(__('general.subject'))
@@ -100,18 +102,33 @@ class EmailSetting extends Component implements HasForms, HasInfolists, HasTable
                                 ->required()
                                 ->profile('email')
                                 ->rules('required'),
-                        ]),
+                        ])
+                        ->action(function (DefaultMailTemplate $record, array $data){
+                            $data['description'] = $record->description;
+                            $data['text_template'] = preg_replace("/\n\s+/", "\n", rtrim(html_entity_decode(strip_tags($data['html_template']))));
+
+                            MailTemplate::updateOrCreate(
+                                [
+                                    'conference_id' => app()->getCurrentConference()->id,
+                                    'mailable' => $record->mailable
+                                ],
+                                $data
+                            );
+                        }),
                     TableAction::make('restoreDefault')
-                        ->color('gray')
+                        ->color('danger')
                         ->successNotificationTitle(__('general.email_template_restored_to_default_data'))
                         ->icon('heroicon-o-arrow-path')
                         ->label(__('general.restore_default'))
                         ->requiresConfirmation()
                         ->failureNotificationTitle(__('general.are_sure_want_restore_default_data'))
-                        ->action(function (MailTemplate $record, TableAction $action) {
-
+                        ->visible(fn (DefaultMailTemplate $record) => $record->custom)
+                        ->action(function (DefaultMailTemplate $record, TableAction $action) {
                             try {
-                                MailTemplateRestoreDefaultData::run($record);
+                                MailTemplate::query()
+                                    ->where('mailable', $record->mailable)
+                                    ->delete();
+
                                 $action->sendSuccessNotification();
                             } catch (\Throwable $th) {
                                 $action->failure();

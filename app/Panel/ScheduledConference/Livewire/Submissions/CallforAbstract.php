@@ -24,6 +24,7 @@ use Filament\Forms\Form;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 use App\Forms\Components\TinyEditor;
+use App\Models\DefaultMailTemplate;
 
 class CallforAbstract extends Component implements HasActions, HasForms
 {
@@ -47,7 +48,7 @@ class CallforAbstract extends Component implements HasActions, HasForms
             ->modalSubmitActionLabel(__('general.decline'))
             ->extraAttributes(['class' => 'w-full'], true)
             ->mountUsing(function (Form $form): void {
-                $mailTempalte = MailTemplate::where('mailable', DeclineAbstractMail::class)->first();
+                $mailTempalte = DefaultMailTemplate::where('mailable', DeclineAbstractMail::class)->first();
                 $form->fill([
                     'subject' => $mailTempalte ? $mailTempalte->subject : '',
                     'message' => $mailTempalte ? $mailTempalte->html_template : '',
@@ -123,7 +124,7 @@ class CallforAbstract extends Component implements HasActions, HasForms
             ->extraAttributes(['class' => 'w-full'])
             ->icon('lineawesome-check-circle-solid')
             ->mountUsing(function (Form $form): void {
-                $mailTemplate = MailTemplate::where('mailable', AcceptAbstractMail::class)->first();
+                $mailTemplate = DefaultMailTemplate::where('mailable', AcceptAbstractMail::class)->first();
                 $form->fill([
                     'subject' => $mailTemplate ? $mailTemplate->subject : '',
                     'message' => $mailTemplate ? $mailTemplate->html_template : '',

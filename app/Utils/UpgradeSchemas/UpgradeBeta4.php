@@ -2,9 +2,6 @@
 
 namespace App\Utils\UpgradeSchemas;
 
-use App\Actions\MailTemplates\MailTemplatePopulateDefaultData;
-use App\Models\Conference;
-use App\Models\ScheduledConference;
 use App\Models\Submission;
 use App\Models\RegistrationType;
 use Illuminate\Support\Facades\Schema;
@@ -15,10 +12,6 @@ class UpgradeBeta4 extends UpgradeBase
 	public function run(): void
 	{
 		$this->addColumns();
-
-		Conference::lazy()->each(function (Conference $conference) {
-			MailTemplatePopulateDefaultData::run($conference);
-		});
 	}
 
 	public function addColumns(): void

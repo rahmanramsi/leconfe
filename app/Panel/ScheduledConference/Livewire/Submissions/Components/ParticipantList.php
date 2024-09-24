@@ -41,6 +41,7 @@ use Filament\Forms\Components\Placeholder;
 use Illuminate\View\Compilers\BladeCompiler;
 use App\Models\Enums\RegistrationPaymentState;
 use App\Mail\Templates\ParticipantAssignedMail;
+use App\Models\DefaultMailTemplate;
 use App\Models\Enums\SubmissionStage;
 use App\Panel\ScheduledConference\Resources\RegistrantResource\Pages\EnrollUser;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -113,7 +114,8 @@ class ParticipantList extends Component implements HasForms, HasTable
                     ->modalSubmitActionLabel(__('general.assign'))
                     ->modalWidth('2xl')
                     ->mountUsing(function (Form $form): void {
-                        $mailTemplate = MailTemplate::where('mailable', ParticipantAssignedMail::class)->first();
+                        $mailTemplate = DefaultMailTemplate::where('mailable', ParticipantAssignedMail::class)->first();
+
                         $form->fill([
                             'subject' => $mailTemplate ? $mailTemplate->subject : '',
                             'message' => $mailTemplate ? $mailTemplate->html_template : '',
