@@ -78,6 +78,7 @@ return [
     'data_could_not_saved' => 'Data tidak dapat disimpan.',
 
     'setup' => 'Pengaturan',
+    'site_setup' => 'Pengaturan Situs',
     'website_name' => 'Nama Website',
     'logo' => 'Logo',
     'description' => 'Deskripsi',
@@ -920,4 +921,7 @@ return [
     'reset_password_mail_sent' => 'Konfirmasi telah dikirim ke alamat email Anda. Silakan ikuti petunjuk dalam email untuk mengatur ulang kata sandi Anda.',
     'enter_password_to_update' => 'Masukkan kata sandi baru untuk memperbarui kata sandi login.',
     'reset_password_update_success' => 'Kata sandi telah berhasil diperbarui. Silakan masuk dengan kata sandi yang diperbarui.',
+
+    'conference_redirect' => 'Pengalihan Konferensi',
+    'conference_redirect_hint' => 'Mengalihkan permintaan dari situs web utama ke konferensi yang ditentukan. Berguna untuk situs konferensi individual.'
 ];

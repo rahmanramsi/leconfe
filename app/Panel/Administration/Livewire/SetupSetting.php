@@ -14,6 +14,7 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Livewire\Component;
 use App\Forms\Components\TinyEditor;
+use App\Models\Conference;
 use Filament\Forms\Components\Select;
 use Squire\Models\Country;
 use Stevebauman\Purify\Facades\Purify;
@@ -45,6 +46,10 @@ class SetupSetting extends Component implements HasForms
                         TextInput::make('meta.name')
                             ->label(__('general.website_name'))
                             ->required(),
+                        Select::make('meta.conference_redirect')
+                            ->label(__('general.conference_redirect'))
+                            ->helperText(__('general.conference_redirect_hint'))
+                            ->options(Conference::query()->pluck('name', 'id')),
                         SpatieMediaLibraryFileUpload::make('logo')
                             ->collection('logo')
                             ->label(__('general.logo'))

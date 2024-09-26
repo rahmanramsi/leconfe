@@ -77,6 +77,7 @@ return [
     'data_could_not_saved' => 'Të dhënat nuk mund të ruheshin.',
 
     'setup' => 'Konfigurimi',
+    'site_setup' => 'Konfigurimi i Faqes',
     'website_name' => 'Emri i Faqes',
     'logo' => 'Logo',
     'description' => 'Përshkrimi',
@@ -939,4 +940,8 @@ return [
     'reset_password_mail_sent' => 'Një konfirmim është dërguar në adresën tuaj të email-it. Ju lutem ndiqni udhëzimet në email për të rivendosur fjalëkalimin tuaj.',
     'enter_password_to_update' => 'Shkruani fjalëkalimin e ri për të azhurnuar fjalëkalimin e hyrjes.',
     'reset_password_update_success' => 'Fjalëkalimi është azhurnuar me sukses. Ju lutem kyçuni me fjalëkalimin e azhurnuar.',
+
+    'conference_redirect' => 'Përcjell Konferencën',
+    'conference_redirect_hint' => "Ridrejton kërkesat nga faqja kryesore e internetit në konferencën e specifikuar. I dobishëm për faqet individuale të konferencave."
+
 ];

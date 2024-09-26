@@ -80,6 +80,7 @@ return [
     'data_could_not_saved' => 'Data could not be saved.',
 
     'setup' => 'Setup',
+    'site_setup' => 'Site Setup',
     'website_name' => 'Website Name',
     'logo' => 'Logo',
     'description' => 'Description',
@@ -955,4 +956,6 @@ return [
     'conference_list' => "Conference List",
     'paper_published_on_external' => "Paper published on external website",
     'paper_external_url' => "Paper External URL",
+    'conference_redirect' => "Conference Redirect",
+    'conference_redirect_hint' => "Redirects main website requests to the selected conference. Useful for single conference sites."
 ];

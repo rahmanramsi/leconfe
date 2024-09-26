@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Http\Middleware\IdentifyConference;
 use App\Http\Middleware\IdentifyScheduledConference;
+use App\Http\Middleware\RedirectToConference;
 use App\Http\Middleware\SetLocale;
 use App\Http\Middleware\SetupConference;
 use Illuminate\Support\Facades\Blade;
@@ -65,6 +66,7 @@ class FrontendServiceProvider extends ServiceProvider
             })
             ->middleware([
                 'web',
+                RedirectToConference::class,
             ], true)
             ->discoverPages(in: app_path('Frontend/Website/Pages'), for: 'App\\Frontend\\Website\\Pages');
     }
