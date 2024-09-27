@@ -19,7 +19,7 @@ jobs:
         extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, dom, filter, gd, iconv, json, mbstring, pdo
     
     - name: Install PHP dependencies
-      run: composer install --prefer-dist --no-progress
+      run: composer install --no-ansi --no-dev --no-interaction --no-plugins --no-progress --optimize-autoloader
     
     - name: Setup Bun
       uses: oven-sh/setup-bun@v1
