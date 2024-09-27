@@ -108,7 +108,7 @@ class ScheduledConferenceResource extends Resource
                         ->color('primary')
                         ->form([
                             Checkbox::make('set_as_current')
-                                ->label(__('general.set_as_current_serie')),
+                                ->label(__('general.set_as_current')),
                         ])
                         ->hidden(fn (ScheduledConference $record) => $record->isArchived() || $record->isCurrent() || $record->isPublished() || $record->trashed())
                         ->action(function (ScheduledConference $record, array $data, Tables\Actions\Action $action) {
@@ -125,6 +125,13 @@ class ScheduledConferenceResource extends Resource
                         ->color('success')
                         ->hidden(fn (ScheduledConference $record) => $record->isCurrent() || $record->isDraft() || $record->trashed())
                         ->action(fn (ScheduledConference $record, Tables\Actions\Action $action) => $record->update(['state' => ScheduledConferenceState::Current]) && $action->success())
+                        ->successNotificationTitle(fn (ScheduledConference $scheduledConference) => $scheduledConference->title . ' is set as current'),
+                    Tables\Actions\Action::make('set_as_draft')
+                        ->label(__('general.set_as_draft'))
+                        ->requiresConfirmation()
+                        ->icon('heroicon-o-pencil-square')
+                        ->hidden(fn (ScheduledConference $record) => $record->isDraft() || $record->trashed())
+                        ->action(fn (ScheduledConference $record, Tables\Actions\Action $action) => $record->update(['state' => ScheduledConferenceState::Draft]) && $action->success())
                         ->successNotificationTitle(fn (ScheduledConference $scheduledConference) => $scheduledConference->title . ' is set as current'),
                     Tables\Actions\Action::make('move_to_archive')
                         ->label(__('general.move_to_archive'))
