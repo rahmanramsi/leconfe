@@ -939,4 +939,9 @@ return [
     'reset_password_mail_sent' => 'Një konfirmim është dërguar në adresën tuaj të email-it. Ju lutem ndiqni udhëzimet në email për të rivendosur fjalëkalimin tuaj.',
     'enter_password_to_update' => 'Shkruani fjalëkalimin e ri për të azhurnuar fjalëkalimin e hyrjes.',
     'reset_password_update_success' => 'Fjalëkalimi është azhurnuar me sukses. Ju lutem kyçuni me fjalëkalimin e azhurnuar.',
+
+    'current_conference' => "Konferenca Aktual",
+    'past_conference' => "Konferenca e Kaluar",
+    'upcoming_conference' => "Konferenca e Ardhshme",
+    'view_current_event' => 'Shiko Ngjarjen Aktual',
 ];

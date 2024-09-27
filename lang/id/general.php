@@ -920,4 +920,9 @@ return [
     'reset_password_mail_sent' => 'Konfirmasi telah dikirim ke alamat email Anda. Silakan ikuti petunjuk dalam email untuk mengatur ulang kata sandi Anda.',
     'enter_password_to_update' => 'Masukkan kata sandi baru untuk memperbarui kata sandi login.',
     'reset_password_update_success' => 'Kata sandi telah berhasil diperbarui. Silakan masuk dengan kata sandi yang diperbarui.',
+
+    'current_conference' => "Konferensi Saat Ini",
+    'past_conference' => "Konferensi Sebelumnya",
+    'upcoming_conference' => "Konferensi Mendatang",
+    'view_current_event' => 'Lihat Acara Saat Ini',
 ];

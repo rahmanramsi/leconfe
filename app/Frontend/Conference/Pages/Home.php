@@ -30,6 +30,12 @@ class Home extends Page
     protected function getViewData(): array
     {
         $conference = app()->getCurrentConference();
+        $upcomingScheduledConferences = ScheduledConference::query()
+            ->with(['media', 'meta', 'conference'])
+            ->where('state', ScheduledConferenceState::Published)
+            ->orderBy('date_start', 'desc')
+            ->get();
+
         $pastScheduledConferences = ScheduledConference::query()
             ->with(['media', 'meta', 'conference'])
             ->where('state', ScheduledConferenceState::Archived)
@@ -43,6 +49,7 @@ class Home extends Page
 
         return [
             'conference' => $conference,
+            'upcomingScheduledConferences' => $upcomingScheduledConferences,
             'pastScheduledConferences' => $pastScheduledConferences,
             'nextScheduledConference' => $nextScheduledConference,
         ];
