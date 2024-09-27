@@ -77,6 +77,7 @@ return [
     'data_could_not_saved' => 'لم يتم حفظ البيانات.',
 
     'setup' => 'إعداد',
+    'site_setup' => 'إعداد الموقع',
     'website_name' => 'اسم الموقع',
     'logo' => 'الشعار',
     'description' => 'الوصف',
@@ -939,6 +940,9 @@ return [
     'enter_password_to_update' => 'أدخل كلمة المرور الجديدة لتحديث كلمة المرور الخاصة بك.',
     'reset_password_update_success' => 'تم تحديث كلمة المرور بنجاح. يرجى تسجيل الدخول باستخدام كلمة المرور المحدثة.',
 
+
+    'conference_redirect' => 'إعادة توجيه المؤتمر',
+    'conference_redirect_hint' => 'يعيد توجيه الطلبات من الموقع الرئيسي إلى المؤتمر المحدد. مفيد لمواقع المؤتمرات الفردية.',
     'current_conference' => "المؤتمر الحالي",
     'past_conference' => "المؤتمر السابق",
     'upcoming_conference' => "المؤتمر القادم",
