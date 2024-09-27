@@ -942,6 +942,9 @@ return [
     'reset_password_update_success' => 'Fjalëkalimi është azhurnuar me sukses. Ju lutem kyçuni me fjalëkalimin e azhurnuar.',
 
     'conference_redirect' => 'Përcjell Konferencën',
-    'conference_redirect_hint' => "Ridrejton kërkesat nga faqja kryesore e internetit në konferencën e specifikuar. I dobishëm për faqet individuale të konferencave."
-
+    'conference_redirect_hint' => "Ridrejton kërkesat nga faqja kryesore e internetit në konferencën e specifikuar. I dobishëm për faqet individuale të konferencave.",
+    'current_conference' => "Konferenca Aktual",
+    'past_conference' => "Konferenca e Kaluar",
+    'upcoming_conference' => "Konferenca e Ardhshme",
+    'view_current_event' => 'Shiko Ngjarjen Aktual',
 ];

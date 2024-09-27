@@ -923,5 +923,9 @@ return [
     'reset_password_update_success' => 'Kata sandi telah berhasil diperbarui. Silakan masuk dengan kata sandi yang diperbarui.',
 
     'conference_redirect' => 'Pengalihan Konferensi',
-    'conference_redirect_hint' => 'Mengalihkan permintaan dari situs web utama ke konferensi yang ditentukan. Berguna untuk situs konferensi individual.'
+    'conference_redirect_hint' => 'Mengalihkan permintaan dari situs web utama ke konferensi yang ditentukan. Berguna untuk situs konferensi individual.',
+    'current_conference' => "Konferensi Saat Ini",
+    'past_conference' => "Konferensi Sebelumnya",
+    'upcoming_conference' => "Konferensi Mendatang",
+    'view_current_event' => 'Lihat Acara Saat Ini',
 ];

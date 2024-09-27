@@ -958,4 +958,8 @@ return [
     'paper_external_url' => "Paper External URL",
     'conference_redirect' => "Conference Redirect",
     'conference_redirect_hint' => "Redirects main website requests to the selected conference. Useful for single conference sites."
+    'current_conference' => "Current Conference",
+    'past_conference' => "Past Conference",
+    'upcoming_conference' => "Upcoming Conference",
+    'view_current_event' => "View Current Event",
 ];
