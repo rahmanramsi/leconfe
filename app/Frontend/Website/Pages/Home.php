@@ -5,6 +5,7 @@ namespace App\Frontend\Website\Pages;
 use App\Models\Topic;
 use App\Models\Conference;
 use App\Models\Enums\ScheduledConferenceState;
+use App\Models\Meta;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Livewire\Attributes\On;
@@ -93,14 +94,12 @@ class Home extends Page
             ->distinct()
             ->get();
 
-        $contributorScheduleConferences = ScheduledConference::withoutGlobalScopes()
-            ->whereHas('meta', function ($query) {
-                $query
-                    ->where('key', 'coordinator')
-                    ->where('value', 'LIKE', "%{$this->filter['coordinator']['search']}%");
-            })
-            ->limit(20)
-            ->distinct()
+        $coordinatorList = Meta::query()
+            ->where('metable_type', ScheduledConference::class)
+            ->where('key', 'coordinator')
+            ->whereRaw('value != ""')
+            ->whereNotNull('value')
+            ->tobase()
             ->get();
 
         // data filter
@@ -163,7 +162,7 @@ class Home extends Page
         return [
             'topics' => $topicList,
             'conferences' => $conferences->get(),
-            'contributorScheduleConferences' => $contributorScheduleConferences,
+            'coordinatorList' => $coordinatorList,
             // Selected Filter Data
             'scopeSelected' => $this->filter['scope']['value'],
             'stateSelected' => $this->filter['state']['value'],
