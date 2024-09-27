@@ -16,7 +16,7 @@ class RedirectToConference
 	 */
 	public function handle(Request $request, Closure $next): Response
 	{
-		if(!app()->inInstalled()){
+		if(!app()->isInstalled()){
 			return $next($request);
 		}
 
