@@ -16,6 +16,10 @@ class RedirectToConference
 	 */
 	public function handle(Request $request, Closure $next): Response
 	{
+		if(!app()->isInstalled()){
+			return $next($request);
+		}
+
 		$site = app()->getSite();
 		
 		if(!$site->getMeta('conference_redirect')){

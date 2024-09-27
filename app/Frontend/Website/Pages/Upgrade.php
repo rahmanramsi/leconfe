@@ -4,6 +4,7 @@ namespace App\Frontend\Website\Pages;
 
 use App\Actions\Leconfe\UpgradeAction;
 use App\Facades\MetaTag;
+use App\Http\Middleware\RedirectToConference;
 use App\Http\Middleware\SetLocale;
 use App\Utils\Installer;
 use Livewire\Attributes\Title;
@@ -22,6 +23,7 @@ class Upgrade extends Page
     protected static string|array $withoutRouteMiddleware = [
         SetLocale::class,
         SetupDefaultData::class,
+        RedirectToConference::class,
     ];
 
     public function mount()
