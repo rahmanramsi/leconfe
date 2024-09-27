@@ -955,4 +955,8 @@ return [
     'conference_list' => "Conference List",
     'paper_published_on_external' => "Paper published on external website",
     'paper_external_url' => "Paper External URL",
+    'current_conference' => "Current Conference",
+    'past_conference' => "Past Conference",
+    'upcoming_conference' => "Upcoming Conference",
+    'view_current_event' => "View Current Event",
 ];
