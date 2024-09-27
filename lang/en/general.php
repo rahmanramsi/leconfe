@@ -957,7 +957,7 @@ return [
     'paper_published_on_external' => "Paper published on external website",
     'paper_external_url' => "Paper External URL",
     'conference_redirect' => "Conference Redirect",
-    'conference_redirect_hint' => "Redirects main website requests to the selected conference. Useful for single conference sites."
+    'conference_redirect_hint' => "Redirects main website requests to the selected conference. Useful for single conference sites.",
     'current_conference' => "Current Conference",
     'past_conference' => "Past Conference",
     'upcoming_conference' => "Upcoming Conference",
