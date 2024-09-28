@@ -736,6 +736,7 @@ return [
     'switch_scheduled_conference' => 'Ganti Konferensi yang Dijadwalkan',
     'back_to_conference' => 'Kembali ke Konferensi',
     'view_current_event' => 'Lihat Acara Saat Ini',
+    'view_event' => 'Lihat Acara',
     'there_are_no_conferences_taking_place_at_this_time' => 'Saat ini tidak ada konferensi yang berlangsung',
     'session_name' => 'Nama Sesi',
     'detail_that_visible_to_all_user' => 'Detail yang terlihat oleh semua pengguna',

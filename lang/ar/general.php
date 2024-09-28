@@ -752,6 +752,7 @@ return [
     'back_to_conference' => 'العودة إلى المؤتمر',
     'select_country' => 'اختر البلد',
     'view_current_event' => 'عرض الحدث الحالي',
+    'view_event' => 'عرض الحدث',
     'there_are_no_conferences_taking_place_at_this_time' => 'لا توجد مؤتمرات تحدث في هذا الوقت',
     'session_name' => 'اسم الجلسة',
     'detail_that_visible_to_all_user' => 'تفاصيل مرئية لجميع المستخدمين',

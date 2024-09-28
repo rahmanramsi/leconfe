@@ -83,7 +83,7 @@
                                     </div>
                                 @endif
                                 <div class="scheduled-conference-link">
-                                    <a href="{{ $scheduledConference->getHomeUrl() }}" class="link link-primary text-sm">{{ __('general.view_current_event') }}</a>
+                                    <a href="{{ $scheduledConference->getHomeUrl() }}" class="link link-primary text-sm">{{ __('general.view_event') }}</a>
                                 </div>
                             </div>
                         </div>
@@ -125,7 +125,7 @@
                                     </div>
                                 @endif
                                 <div class="scheduled-conference-link">
-                                    <a href="{{ $scheduledConference->getHomeUrl() }}" class="link link-primary text-sm">{{ __('general.view_current_event') }}</a>
+                                    <a href="{{ $scheduledConference->getHomeUrl() }}" class="link link-primary text-sm">{{ __('general.view_event') }}</a>
                                 </div>
                             </div>
                         </div>
