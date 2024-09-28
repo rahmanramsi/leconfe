@@ -766,6 +766,7 @@ return [
     'back_to_conference' => 'Back to Conference',
     'select_country' => 'Select country',
     'view_current_event' => 'View Current Event',
+    'view_event' => 'View Event',
     'there_are_no_conferences_taking_place_at_this_time' => 'There are no conferences taking place at this time',
 
     'session_name' => 'Session name',
