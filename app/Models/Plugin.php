@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Facades\Plugin as FacadesPlugin;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Sushi\Sushi;
 
 class Plugin extends Model
@@ -28,11 +29,13 @@ class Plugin extends Model
     {
         return FacadesPlugin::getRegisteredPlugins()
             ->map(function ($pluginInfo, $pluginDir) {
-                $pluginInfo['id'] = $pluginInfo['folder'];
-                $pluginInfo['enabled'] = FacadesPlugin::getSetting($pluginInfo['folder'], 'enabled');
-                $pluginInfo['path'] = $pluginDir;
+                $data = Arr::only($pluginInfo, ['folder', 'name', 'author', 'description', 'version']);
 
-                return $pluginInfo;
+                $data['id'] = $pluginInfo['folder'];
+                $data['enabled'] = FacadesPlugin::getSetting($pluginInfo['folder'], 'enabled');
+                $data['path'] = $pluginDir;
+                
+                return $data;
             })
             ->values()
             ->toArray();
