@@ -39,12 +39,7 @@ class PaymentSetting extends Component implements HasForms
                 Section::make()
                     ->schema([
                         Toggle::make('meta.submission_payment')
-                            ->label(__('general.enable_submission_payment'))
-                            ->helperText(fn () => !app()->getCurrentScheduledConference()->isSubmissionRequirePayment() ? null : new HtmlString("
-                                <p class='!text-warning-500'>
-                                    ".__('general.submission_payment_toggle_warning')."
-                                </p>
-                            ")),
+                            ->label(__('general.enable_submission_payment')),
                         TinyEditor::make('meta.payment_policy')
                             ->label(__('general.payment_policy'))
                             ->plugins('advlist autoresize codesample directionality emoticons fullscreen hr image imagetools link lists media table toc wordcount code')
@@ -63,17 +58,6 @@ class PaymentSetting extends Component implements HasForms
                             try {
 
                                 ScheduledConferenceUpdateAction::run(app()->getCurrentScheduledConference(), $formData);
-
-                                Submission::where('stage', SubmissionStage::Payment)
-                                    ->orWhere('status', SubmissionStatus::OnPayment)
-                                    ->orWhere('status', SubmissionStatus::PaymentDeclined)
-                                    ->get()
-                                    ->each(function (Submission $submission) {
-                                        $submission->update([
-                                            'stage' => SubmissionStage::PeerReview,
-                                            'status' => SubmissionStatus::OnReview,
-                                        ]);
-                                    });
 
                             } catch (\Throwable $th) {
 

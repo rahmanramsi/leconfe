@@ -389,7 +389,6 @@ return [
     'submission_payment' => 'Pagesa e Dorëzimit',
     'enable_submission_payment' => 'Aktivizo pagesën e dorëzimit',
     'turn_off_to_disable_submission_payment' => "Çaktivizo për të çaktivizuar procesin e pagesës së dorëzimit.",
-    'submission_payment_toggle_warning' => "Kujdes: duke e çaktivizuar këtë, do të bëni që të gjitha parashtresat që janë në proces pagese të kalojnë në fazën tjetër, nuk do të mund t'i ktheni.",
     'submitted_abstract' => 'Keni dorëzuar abstraktin tuaj, dhe është dërguar një email për t\'ju njoftuar. Menaxheri do të shqyrtojë dorëzimin tuaj dhe do t\'ju dërgojë një email tjetër kur të përfundojë.',
     'go_to_submission_page' => 'Shkoni në <a href=":url" class="text-primary-500">Faqen e Dorëzimeve</a> për të kontrolluar statusin e dorëzimit tuaj.',
     'scheduled_conference_identity' => 'Identiteti i Konferencës të Programuar',
