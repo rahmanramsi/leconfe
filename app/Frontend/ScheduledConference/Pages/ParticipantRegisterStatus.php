@@ -2,15 +2,10 @@
 
 namespace App\Frontend\ScheduledConference\Pages;
 
-use Illuminate\Support\Str;
+use App\Facades\Hook;
 use App\Models\Registration;
 use App\Models\PaymentManual;
-use Livewire\Attributes\Title;
-use App\Models\RegistrationType;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Collection;
 use Rahmanramsi\LivewirePageGroup\PageGroup;
 use Rahmanramsi\LivewirePageGroup\Pages\Page;
 
@@ -41,22 +36,18 @@ class ParticipantRegisterStatus extends Page
             ->where('user_id', auth()->user()->id)
             ->first();
 
-        $paymentList = [];
-        $payments = PaymentManual::select('*')->get();
-
-        foreach ($payments as $payment) {
-            $paymentCurrencyCode = $payment->currency;
-            if(!isset($paymentList[$paymentCurrencyCode])) {
-                $paymentList[$paymentCurrencyCode] = [];
-            }
-            $paymentList[$paymentCurrencyCode][] = $payment;
+        $paymentDetails = [];
+        if($currentScheduledConference->getMeta('manual_payment_instructions')){
+            $paymentDetails[$currentScheduledConference->getMeta('manual_payment_name')] = $currentScheduledConference->getMeta('manual_payment_instructions');
         }
+
+        Hook::call('ParticipantRegisterStatus::PaymentDetails', [$this, $userRegistration, &$paymentDetails]);
 
         return [
             'currentScheduledConference' => $currentScheduledConference,
             'isLogged' => $isLogged,
             'userRegistration' => $userRegistration,
-            'paymentList' => $paymentList,
+            'paymentDetails' => $paymentDetails,
         ];
     }
 
@@ -71,7 +62,7 @@ class ParticipantRegisterStatus extends Page
     public function cancel()
     {
         Registration::withTrashed()
-            ->whereUserId(auth()->user()->id)
+            ->where('user_id', auth()->user()->id)
             ->first()
             ->forceDelete();
 
