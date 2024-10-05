@@ -13,6 +13,11 @@ use Rahmanramsi\LivewirePageGroup\PageGroup;
 
 class PaypalPaymentPlugin extends Plugin
 {
+	public function boot()
+	{
+		
+	}
+
 	public function onFrontend(PageGroup $frontend): void
     {
 		if($frontend->getId() !== 'scheduledConference'){
