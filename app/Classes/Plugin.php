@@ -114,7 +114,7 @@ abstract class Plugin implements HasPlugin
     /**
      * Get theme asset url.
      */
-    public function url(string $url, bool $absolute = true): string
+    public function url(string $url, bool $absolute = true, $versioning = true): string
     {
         $url = trim($url, '/');
 
@@ -123,22 +123,14 @@ abstract class Plugin implements HasPlugin
             return $url;
         }
 
-        // Check into Vite manifest file
-        $manifesPath = $this->getAssetsPath('manifest.json');
-        if (file_exists($manifesPath)) {
-            $manifest = file_get_contents($manifesPath);
-            $manifest = json_decode($manifest, true);
-
-            if (array_key_exists($url, $manifest)) {
-                // Lookup asset in current's theme assets path
-                $fullUrl = $this->getAssetsPath($manifest[$url]['file']);
-
-                return $absolute ? asset($fullUrl) : $fullUrl;
-            }
-        }
-
         // Lookup asset in current's theme assets path
         $fullUrl = $this->getAssetsPath($url);
+
+        // Add versioning to the asset URL
+        if($versioning){
+            $version = $this->getInfo('version') ?? '1.0.0';
+            $fullUrl .= '?v=' . $version;
+        }
 
         return $absolute ? asset($fullUrl) : $fullUrl;
     }
