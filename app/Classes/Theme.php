@@ -10,13 +10,12 @@ abstract class Theme extends Plugin
 {
 	public function activate(): void
 	{
+		$this->enablePublicAsset();
 		$this->loadViews();
 	}
 
 	protected function loadViews(): void
 	{
-		$this->assertPublicAssetsPath();
-
 		$viewPath = $this->getPluginPath('resources/views');
 
 		$viewFinder = View::getFinder();

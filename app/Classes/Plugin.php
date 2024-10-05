@@ -82,15 +82,15 @@ abstract class Plugin implements HasPlugin
 	/**
 	 * Create public assets directory path.
 	 */
-	protected function assertPublicAssetsPath(): void
+	public function enablePublicAsset(): void
 	{
-		$themeAssetsPath = $this->getPluginPath('public');
-		if (file_exists($themeAssetsPath)) {
-			$publicThemeAssetsPath = public_path($this->getAssetsPath());
+		$pluginAssetPath = $this->getPluginPath('public');
+		if (file_exists($pluginAssetPath)) {
+			$publicPluginAssetPath = public_path($this->getAssetsPath());
 
 			// Create target symlink public theme assets directory if required
-			if (! file_exists($publicThemeAssetsPath)) {
-				app(Filesystem::class)->relativeLink($themeAssetsPath, rtrim($publicThemeAssetsPath, '/'));
+			if (! file_exists($publicPluginAssetPath)) {
+				app(Filesystem::class)->relativeLink($pluginAssetPath, rtrim($publicPluginAssetPath, '/'));
 			}
 		}
 	}
