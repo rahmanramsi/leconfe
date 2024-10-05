@@ -388,7 +388,6 @@ return [
     'submission_payment' => 'Pembayaran Pengajuan',
     'enable_submission_payment' => 'Aktifkan Pembayaran Pengajuan',
     'turn_off_to_disable_submission_payment' => "Matikan untuk menonaktifkan proses pembayaran pengajuan.",
-    'submission_payment_toggle_warning' => "Peringatan: dengan menonaktifkan ini, Anda akan membuat semua kiriman yang sedang dalam proses pembayaran masuk ke tahap berikutnya, Anda tidak akan dapat mengembalikannya.",
     'submitted_abstract' => 'Anda telah mengirimkan abstrak Anda, dan email telah dikirim untuk memberi tahu Anda. Manajer akan meninjau pengajuan Anda dan mengirimkan email lain setelah mereka selesai.',
     'go_to_submission_page' => 'Pergi ke <a href=":url" class="text-primary-500">Halaman Pengajuan</a> untuk memeriksa status pengajuan Anda.',
     'scheduled_conference_identity' => 'Identitas Konferensi Terjadwal',

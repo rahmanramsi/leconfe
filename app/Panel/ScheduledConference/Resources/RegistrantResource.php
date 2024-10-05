@@ -98,19 +98,6 @@ class RegistrantResource extends Resource
                             $data['type'] = RegistrationPaymentType::Manual->value;
                         }
 
-                        if ($record) {
-                            try {
-                                $record->user->notify(
-                                    new RegistrationPaymentDecision(
-                                        registration: $record,
-                                        state: $data['state'],
-                                    )
-                                );
-                            } catch (\Throwable $th) {
-                                throw $th;
-                            }
-                        }
-
                         return $data;
                     })
             ])

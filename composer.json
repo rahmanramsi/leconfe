@@ -29,6 +29,7 @@
         "laravel/horizon": "^5.21",
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.8",
+        "league/omnipay": "^3",
         "lorisleiva/laravel-actions": "^2.5",
         "luizbills/css-generator": "^4.0",
         "matthieumastadenis/couleur": "^0.1.2",

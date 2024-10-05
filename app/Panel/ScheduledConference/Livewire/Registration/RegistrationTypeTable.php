@@ -4,8 +4,11 @@ namespace App\Panel\ScheduledConference\Livewire\Registration;
 
 use Filament\Forms\Get;
 use Livewire\Component;
+use App\Facades\Setting;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Illuminate\Support\Str;
+use Squire\Models\Currency;
 use App\Models\RegistrationType;
 use Filament\Support\Colors\Color;
 use Filament\Forms\Components\Grid;
@@ -14,6 +17,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\Textarea;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
@@ -32,9 +36,6 @@ use Filament\Tables\Concerns\InteractsWithTable;
 use App\Actions\RegistrationTypes\RegistrationTypeCreateAction;
 use App\Actions\RegistrationTypes\RegistrationTypeDeleteAction;
 use App\Actions\RegistrationTypes\RegistrationTypeUpdateAction;
-use App\Facades\Setting;
-use App\Panel\ScheduledConference\Livewire\Payment\PaymentManualTable;
-use Filament\Forms\Components\Textarea;
 
 class RegistrationTypeTable extends Component implements HasTable, HasForms
 {
@@ -82,7 +83,15 @@ class RegistrationTypeTable extends Component implements HasTable, HasForms
                                 Select::make('currency')
                                     ->label(__('general.currency'))
                                     ->formatStateUsing(fn($state) => ($state !== null) ? ($state !== 'free' ? $state : null) : null)
-                                    ->options(PaymentManualTable::getCurrencyOptions())
+                                    ->options(function(){
+                                        $currencies = Currency::get();
+                                        $currenciesOptions = $currencies->mapWithKeys(function (?Currency $value, int $key) {
+                                            $currencyCode = Str::upper($value->id);
+                                            $currencyName = $value->name;
+                                            return [$value->id => "($currencyCode) $currencyName"];
+                                        });
+                                        return $currenciesOptions;
+                                    })
                                     ->searchable()
                                     ->columnSpan(2)
                                     ->required(),

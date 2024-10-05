@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Facades\Plugin;
 use App\Http\Middleware\IdentifyConference;
 use App\Http\Middleware\IdentifyScheduledConference;
 use App\Http\Middleware\RedirectToConference;
@@ -49,8 +50,6 @@ class FrontendServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-
-
         Blade::anonymousComponentPath(resource_path('views/frontend/website/components'), 'website');
         Blade::anonymousComponentPath(resource_path('views/frontend/conference/components'), 'conference');
         Blade::anonymousComponentPath(resource_path('views/frontend/scheduledConference/components'), 'scheduledConference'); 
@@ -58,22 +57,24 @@ class FrontendServiceProvider extends ServiceProvider
 
     public function websitePageGroup(PageGroup $pageGroup): PageGroup
     {
-        return $pageGroup
+        $pageGroup
             ->id('website')
             ->path('')
             ->layout('frontend.website.components.layouts.app')
-            ->bootUsing(function () {
-            })
             ->middleware([
                 'web',
                 RedirectToConference::class,
             ], true)
             ->discoverPages(in: app_path('Frontend/Website/Pages'), for: 'App\\Frontend\\Website\\Pages');
+
+        Plugin::getPlugins()->each(fn($plugin) => $plugin->onFrontend($pageGroup));
+
+        return $pageGroup;
     }
 
     public function conferencePageGroup(PageGroup $pageGroup): PageGroup
     {
-        return $pageGroup
+        $pageGroup
             ->id('conference')
             ->path('{conference:path}')
             ->layout('frontend.website.components.layouts.app')
@@ -82,11 +83,15 @@ class FrontendServiceProvider extends ServiceProvider
                 IdentifyConference::class,
             ], true)
             ->discoverPages(in: app_path('Frontend/Conference/Pages'), for: 'App\\Frontend\\Conference\\Pages');
+
+        Plugin::getPlugins()->each(fn($plugin) =>  $plugin->onFrontend($pageGroup));
+
+        return $pageGroup;
     }
 
     public function scheduledConferencePageGroup(PageGroup $pageGroup): PageGroup
     {
-        return $pageGroup
+        $pageGroup
             ->id('scheduledConference')
             ->path('{conference:path}/scheduled/{serie:path}')
             ->layout('frontend.website.components.layouts.app')
@@ -96,5 +101,9 @@ class FrontendServiceProvider extends ServiceProvider
                 IdentifyScheduledConference::class,
             ], true)
             ->discoverPages(in: app_path('Frontend/ScheduledConference/Pages'), for: 'App\\Frontend\\ScheduledConference\\Pages');
+        
+        Plugin::getPlugins()->each(fn($plugin) =>  $plugin->onFrontend($pageGroup));
+
+        return $pageGroup;
     }
 }
