@@ -26,7 +26,7 @@ abstract class Plugin implements HasPlugin
     {
         $this->info = Yaml::parseFile($this->getPluginInformationPath());
 
-        View::addNamespace($this->getInfo('folder'), $this->getPluginPath('views'));
+        View::addNamespace($this->getInfo('folder'), $this->getPluginPath('resources/views'));
     }
 
     public function getInfo(?string $key = null)

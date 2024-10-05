@@ -17,7 +17,7 @@ abstract class Theme extends Plugin
 	{
 		$this->assertPublicAssetsPath();
 
-		$viewPath = $this->getPluginPath('views');
+		$viewPath = $this->getPluginPath('resources/views');
 
 		$viewFinder = View::getFinder();
 		$viewFinder->prependLocation("{$viewPath}");
