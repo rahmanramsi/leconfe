@@ -8,6 +8,7 @@ use Filament\Panel;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
+use Illuminate\Translation\Translator;
 use Rahmanramsi\LivewirePageGroup\PageGroup;
 use Symfony\Component\Yaml\Yaml;
 
@@ -27,6 +28,8 @@ abstract class Plugin implements HasPlugin
         $this->info = Yaml::parseFile($this->getPluginInformationPath());
 
         View::addNamespace($this->getInfo('folder'), $this->getPluginPath('resources/views'));
+
+        $this->loadTranslation();
     }
 
     public function getInfo(?string $key = null)
@@ -138,5 +141,13 @@ abstract class Plugin implements HasPlugin
         $fullUrl = $this->getAssetsPath($url);
 
         return $absolute ? asset($fullUrl) : $fullUrl;
+    }
+
+    protected function loadTranslation(): void
+    {
+        $langPath = $this->getPluginPath('lang');
+        $translator = app()->make(Translator::class);
+
+        $translator->addNamespace($this->getInfo('folder'), $langPath);
     }
 }
