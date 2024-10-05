@@ -5,6 +5,8 @@ namespace App\Classes;
 use App\Facades\Plugin as FacadesPlugin;
 use App\Interfaces\HasPlugin;
 use Filament\Panel;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Rahmanramsi\LivewirePageGroup\PageGroup;
 use Symfony\Component\Yaml\Yaml;
@@ -24,7 +26,7 @@ abstract class Plugin implements HasPlugin
     {
         $this->info = Yaml::parseFile($this->getPluginInformationPath());
 
-        View::addNamespace($this->getInfo('folder'), $this->getPluginPath() . DIRECTORY_SEPARATOR . 'views');
+        View::addNamespace($this->getInfo('folder'), $this->getPluginPath('views'));
     }
 
     public function getInfo(?string $key = null)
@@ -36,14 +38,14 @@ abstract class Plugin implements HasPlugin
         return $this->info;
     }
 
-    public function getPluginPath()
+    public function getPluginPath(?string $path = null)
     {
-        return $this->pluginPath;
+        return $this->pluginPath . ($path ? DIRECTORY_SEPARATOR . $path : '');
     }
 
     public function getPluginInformationPath()
     {
-        return $this->getPluginPath() . DIRECTORY_SEPARATOR . 'index.yaml';
+        return $this->getPluginPath('index.yaml');
     }
 
     public function setPluginPath($path): void
@@ -74,5 +76,67 @@ abstract class Plugin implements HasPlugin
     public function getPluginPage(): ?string
     {
         return null;
+    }
+
+
+	/**
+	 * Create public assets directory path.
+	 */
+	protected function assertPublicAssetsPath(): void
+	{
+		$themeAssetsPath = $this->getPluginPath('public');
+		if (file_exists($themeAssetsPath)) {
+			$publicThemeAssetsPath = public_path($this->getAssetsPath());
+
+			// Create target symlink public theme assets directory if required
+			if (! file_exists($publicThemeAssetsPath)) {
+				app(Filesystem::class)->relativeLink($themeAssetsPath, rtrim($publicThemeAssetsPath, '/'));
+			}
+		}
+	}
+
+	public function getAssetsPath(?string $path = null): string
+	{
+		return 'plugin/' . mb_strtolower($this->getInfo('folder')) . ($path ? '/' . $path : '');
+	}
+
+	/**
+     * Get theme's asset url.
+     */
+    public function asset(string $asset, bool $absolute = true): string
+    {
+        return $this->url($asset, $absolute);
+    }
+
+    /**
+     * Get theme asset url.
+     */
+    public function url(string $url, bool $absolute = true): string
+    {
+        $url = trim($url, '/');
+
+        // return external URLs unmodified
+        if (URL::isValidUrl($url)) {
+            return $url;
+        }
+
+        // Check into Vite manifest file
+        $manifesPath = $this->getAssetsPath('manifest.json');
+        if (file_exists($manifesPath)) {
+            $manifest = file_get_contents($manifesPath);
+            $manifest = json_decode($manifest, true);
+
+            if (array_key_exists($url, $manifest)) {
+                // Lookup asset in current's theme assets path
+                $fullUrl = $this->getAssetsPath($manifest[$url]['file']);
+
+                return $absolute ? asset($fullUrl) : $fullUrl;
+            }
+        }
+
+        // Lookup asset in current's theme assets path
+        $fullUrl = $this->getAssetsPath($url);
+
+        return $absolute ? asset($fullUrl) : $fullUrl;
     }
 }

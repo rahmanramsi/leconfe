@@ -3,8 +3,8 @@
 namespace App\Http\Middleware;
 
 use App\Facades\MetaTag;
+use App\Facades\Plugin;
 use Closure;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 use luizbills\CSS_Generator\Generator as CSSGenerator;
@@ -21,11 +21,11 @@ class SetupDefaultData
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(!app()->isInstalled()) return $next($request);
+        if (!app()->isInstalled()) return $next($request);
 
 
         $currentScheduledConference = app()->getCurrentScheduledConference();
-        if($currentScheduledConference){
+        if ($currentScheduledConference) {
             $this->setupScheduledConference($request, $currentScheduledConference);
             return $next($request);
         }
@@ -35,11 +35,10 @@ class SetupDefaultData
             $this->setupConference($request, $currentConference);
             return $next($request);
         }
-        
-        
+
+
         $this->setupSite();
         return $next($request);
-     
     }
 
     protected function setupSite()
@@ -54,6 +53,9 @@ class SetupDefaultData
         View::share('pageFooter', $site->getMeta('page_footer'));
         View::share('favicon', $site->getFirstMediaUrl('favicon'));
         View::share('styleSheet', $site->getFirstMediaUrl('styleSheet'));
+        View::share('theme', Plugin::getPlugin($site->getMeta('theme')));
+        
+        
 
         if ($appearanceColor = $site->getMeta('appearance_color')) {
             $primaryColor = ColorFactory::new($appearanceColor)->to(ColorSpace::OkLch);
@@ -78,6 +80,7 @@ class SetupDefaultData
         View::share('pageFooter', $currentConference->getMeta('page_footer'));
         View::share('favicon', $currentConference->getFirstMediaUrl('favicon'));
         View::share('styleSheet', $currentConference->getFirstMediaUrl('styleSheet'));
+        View::share('theme', Plugin::getPlugin($currentConference->getMeta('theme')));
 
         if ($appearanceColor = $currentConference->getMeta('appearance_color')) {
             $oklch = ColorFactory::new($appearanceColor)->to(ColorSpace::OkLch);
@@ -105,6 +108,7 @@ class SetupDefaultData
         View::share('pageFooter', $currentScheduledConference->getMeta('page_footer'));
         View::share('favicon', $currentScheduledConference->getFirstMediaUrl('favicon'));
         View::share('styleSheet', $currentScheduledConference->getFirstMediaUrl('styleSheet'));
+        View::share('theme', Plugin::getPlugin($currentScheduledConference->getMeta('theme')));
 
         if ($appearanceColor = $currentScheduledConference->getMeta('appearance_color')) {
             $oklch = ColorFactory::new($appearanceColor)->to(ColorSpace::OkLch);

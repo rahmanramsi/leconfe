@@ -23,22 +23,44 @@ class Plugin extends Model
         'version' => 'string',
         'enabled' => 'boolean',
         'path' => 'string',
+        'type' => 'string',
     ];
 
     public function getRows()
     {
         return FacadesPlugin::getRegisteredPlugins()
             ->map(function ($pluginInfo, $pluginDir) {
-                $data = Arr::only($pluginInfo, ['folder', 'name', 'author', 'description', 'version']);
+                $data = Arr::only($pluginInfo, ['folder', 'name', 'author', 'description', 'version', 'type']);
 
-                $data['id'] = $pluginInfo['folder'];
-                $data['enabled'] = FacadesPlugin::getSetting($pluginInfo['folder'], 'enabled');
-                $data['path'] = $pluginDir;
-                
+                $data['id']         = $pluginInfo['folder'];
+                $data['enabled']    = FacadesPlugin::getSetting($pluginInfo['folder'], 'enabled');
+                $data['path']       = $pluginDir;
+                $data['type']       ??= 'plugin';
                 return $data;
             })
             ->values()
             ->toArray();
+    }
+
+
+    public function scopeEnabled($query)
+    {
+        return $query->where('enabled', true);
+    }
+
+    public function scopeDisabled($query)
+    {
+        return $query->where('enabled', false);
+    }
+
+    public function scopeTheme($query)
+    {
+        return $query->where('type', 'theme');
+    }
+
+    public function scopeType($query, $type)
+    {
+        return $query->where('type', $type);
     }
 
     protected function sushiShouldCache()
