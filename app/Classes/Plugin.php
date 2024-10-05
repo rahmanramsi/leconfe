@@ -6,6 +6,7 @@ use App\Facades\Plugin as FacadesPlugin;
 use App\Interfaces\HasPlugin;
 use Filament\Panel;
 use Illuminate\Support\Facades\View;
+use Rahmanramsi\LivewirePageGroup\PageGroup;
 use Symfony\Component\Yaml\Yaml;
 
 abstract class Plugin implements HasPlugin
@@ -13,6 +14,11 @@ abstract class Plugin implements HasPlugin
     protected array $info;
 
     protected string $pluginPath;
+
+    public function boot()
+	{
+        // Implement this method to run your plugin
+    }
 
     public function load(): void
     {
@@ -58,6 +64,11 @@ abstract class Plugin implements HasPlugin
     public function onPanel(Panel $panel): void
     {
         // Implement this method to add your plugin to panel
+    }
+
+    public function onFrontend(PageGroup $frontend): void
+    {
+        // Implement this method to add your plugin to frontend
     }
 
     public function getPluginPage(): ?string

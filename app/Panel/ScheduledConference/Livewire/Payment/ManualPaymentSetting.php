@@ -10,16 +10,10 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Concerns\InteractsWithForms;
 use App\Actions\ScheduledConferences\ScheduledConferenceUpdateAction;
-use App\Models\Enums\SubmissionStage;
-use App\Models\Enums\SubmissionStatus;
-use App\Models\Submission;
 use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Toggle;
-use Filament\Infolists\Components\TextEntry;
-use Illuminate\Support\HtmlString;
-use Illuminate\View\Compilers\BladeCompiler;
+use Filament\Forms\Components\TextInput;
 
-class PaymentSetting extends Component implements HasForms
+class ManualPaymentSetting extends Component implements HasForms
 {
     use InteractsWithForms;
 
@@ -38,13 +32,14 @@ class PaymentSetting extends Component implements HasForms
             ->schema([
                 Section::make()
                     ->schema([
-                        Toggle::make('meta.submission_payment')
-                            ->label(__('general.enable_submission_payment')),
-                        TinyEditor::make('meta.payment_policy')
-                            ->label(__('general.payment_policy'))
-                            ->plugins('advlist autoresize codesample directionality emoticons fullscreen hr image imagetools link lists media table toc wordcount code')
-                            ->toolbar('undo redo removeformat | formatselect fontsizeselect | bold italic | rtl ltr | alignjustify alignright aligncenter alignleft | numlist bullist | forecolor backcolor | blockquote table hr | image link code')
-                            ->minHeight(450),
+                        TextInput::make('meta.manual_payment_name')
+                            ->label(__('general.name'))
+                            ->placeholder(__('general.input_name_payment_method'))
+                            ->required(),
+                        TinyEditor::make('meta.manual_payment_instructions')
+                            ->placeholder(__('general.input_payment_details'))
+                            ->helperText(__('general.add_instruction_here'))
+                            ->required(),
                     ])
                     ->disabled(fn () =>  auth()->user()->cannot('RegistrationSetting:update')),
                 Actions::make([

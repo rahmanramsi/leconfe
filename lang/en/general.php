@@ -398,7 +398,6 @@ return [
     'submission_payment' => 'Submission Payment',
     'enable_submission_payment' => 'Enable Submission Payment',
     'turn_off_to_disable_submission_payment' => "Turn off to disable submission payment process.",
-    'submission_payment_toggle_warning' => "Warning: by disabling this, you will make all submissions that are in the payment process go to the next stage, you will not be able to return it.",
     'submitted_abstract' => 'You have submitted your abstract, and an email has been sent to notify you. The manager will review your submission and send you another email once they are done.',
     'go_to_submission_page' => 'Go to <a href=":url" class="text-primary-500">Submissions Page</a> to check the status of your submission.',
     'scheduled_conference_identity' => 'Scheduled Conference Identity',
