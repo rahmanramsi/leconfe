@@ -20,8 +20,6 @@ class PluginResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-square-3-stack-3d';
 
-
-
     public static function getNavigationLabel(): string
     {
         return __('general.plugin');
@@ -41,7 +39,7 @@ class PluginResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return static::getModel()::query();
+        return static::getModel()::query()->hidden(false);
     }
 
     public static function table(Table $table): Table
@@ -55,22 +53,17 @@ class PluginResource extends Resource
                     ->sortable()
                     ->searchable()
                     ->description(fn (Plugin $record) => $record->description)
-                    ->weight(fn (Plugin $record) => FacadesPlugin::getSetting($record->id, 'enabled') ? FontWeight::SemiBold : FontWeight::Light)
-                    ->url(fn (Plugin $record) => FacadesPlugin::getSetting($record->id, 'enabled') ? FacadesPlugin::getPlugin($record->id)?->getPluginPage() : null)
-                    ->color(fn (Plugin $record) => (FacadesPlugin::getSetting($record->id, 'enabled') && FacadesPlugin::getPlugin($record->id)?->getPluginPage()) ? 'primary' : null),
+                    ->weight(fn (Plugin $record) => $record->plugin->isEnabled() ? FontWeight::SemiBold : FontWeight::Light)
+                    ->url(fn (Plugin $record) => $record->plugin->isEnabled() ? $record->plugin?->getPluginPage() : null)
+                    ->color(fn (Plugin $record) => ($record->plugin->isEnabled() && $record->plugin?->getPluginPage()) ? 'primary' : null),
                 TextColumn::make('author')
                     ->label(__('general.author')),
                 ToggleColumn::make('enabled')
                     ->label(__('general.enabled'))
                     ->visible(auth()->user()->can('Plugin:update'))
-                    ->getStateUsing(fn (Plugin $record) => FacadesPlugin::getSetting($record->id, 'enabled'))
+                    ->getStateUsing(fn (Plugin $record) => $record->plugin->isEnabled())
                     ->updateStateUsing(function (Plugin $record, $state) {
-                        FacadesPlugin::enable($record->id, $state);
-
-                        $record->enabled = $state;
-                        if ($state) {
-                            FacadesPlugin::bootPlugin($record->path);
-                        }
+                        $record->plugin->enable($state);
 
                         return $state;
                     }),
