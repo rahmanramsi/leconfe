@@ -12,6 +12,12 @@ abstract class Theme extends Plugin
 	{
 		$this->enablePublicAsset();
 		$this->loadViews();
+		$this->onActivate();
+	}
+
+	public function onActivate(): void
+	{
+		// Implement this method to run your theme activation logic
 	}
 
 	protected function loadViews(): void
@@ -50,8 +56,10 @@ abstract class Theme extends Plugin
 		return [];
 	}
 
-	public function saveFormData(array $data): void
+	public function saveFormData(array $data) : void
 	{
-		// Implement this method to save the form data
+		foreach ($data as $key => $value) {
+			$this->updateSetting($key, $value);
+		}
 	}
 }

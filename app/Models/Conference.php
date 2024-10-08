@@ -228,6 +228,7 @@ class Conference extends Model implements HasAvatar, HasMedia, HasName
             'copyright_holder' => 'conference',
             'license_url' => "https://creativecommons.org/licenses/by-nc-nd/4.0",
             'copyright_year' => 'paper',
+            'theme' => 'default',
         ];
     }
 }

@@ -5,12 +5,10 @@ namespace App\Panel\ScheduledConference\Livewire;
 use App\Actions\ScheduledConferences\ScheduledConferenceUpdateAction;
 use App\Facades\Plugin as FacadesPlugin;
 use App\Forms\Components\CssFileUpload;
-use App\Managers\PluginManager;
 use App\Models\Plugin;
 use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\BaseFileUpload;
-use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -22,7 +20,6 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
-use Livewire\Livewire;
 
 class ThemeSetting extends Component implements HasForms
 {
@@ -66,31 +63,24 @@ class ThemeSetting extends Component implements HasForms
 
                                 $livewire->formData['theme'] = FacadesPlugin::getPlugin($get('meta.theme'))?->getFormData();
                             })
-                            ->placeholder('Default'),
-                        Grid::make(1)
-                            ->visible(fn(Get $get) => !$get('meta.theme'))
-                            ->schema([
-                                ColorPicker::make('meta.appearance_color')
-                                    ->regex('/^#?(([a-f0-9]{3}){1,2})$/i')
-                                    ->label(__('general.appearance_color')),
-                            ]),
+                            ->required(),
                         Grid::make(1)
                             ->visible(fn(Get $get) => $get('meta.theme'))
                             ->statePath('theme')
                             ->schema(function (Get $get): array {
                                 return FacadesPlugin::getPlugin($get('meta.theme'))?->getFormSchema() ?? [];
+                            }),
+                        CssFileUpload::make('styleSheet')
+                            ->label(__('general.custom_stylesheet'))
+                            ->collection('styleSheet')
+                            ->getUploadedFileNameForStorageUsing(static function (BaseFileUpload $component, TemporaryUploadedFile $file) {
+                                return Str::random().'.css';
                             })
-                        // CssFileUpload::make('styleSheet')
-                        //     ->label(__('general.custom_stylesheet'))
-                        //     ->collection('styleSheet')
-                        //     ->getUploadedFileNameForStorageUsing(static function (BaseFileUpload $component, TemporaryUploadedFile $file) {
-                        //         return Str::random().'.css';
-                        //     })
-                        //     ->acceptedFileTypes(['text/css'])
-                        //     ->columnSpan([
-                        //         'xl' => 1,
-                        //         'sm' => 2,
-                        //     ]),
+                            ->acceptedFileTypes(['text/css'])
+                            ->columnSpan([
+                                'xl' => 1,
+                                'sm' => 2,
+                            ]),
                     ]),
                 Actions::make([
                     Action::make('save')

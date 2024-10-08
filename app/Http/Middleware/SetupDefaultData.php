@@ -7,9 +7,6 @@ use App\Facades\Plugin;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
-use luizbills\CSS_Generator\Generator as CSSGenerator;
-use matthieumastadenis\couleur\ColorFactory;
-use matthieumastadenis\couleur\ColorSpace;
 use Symfony\Component\HttpFoundation\Response;
 
 class SetupDefaultData
@@ -55,18 +52,6 @@ class SetupDefaultData
         View::share('styleSheet', $site->getFirstMediaUrl('styleSheet'));
         View::share('theme', Plugin::getPlugin($site->getMeta('theme')));
         
-        
-
-        if ($appearanceColor = $site->getMeta('appearance_color')) {
-            $primaryColor = ColorFactory::new($appearanceColor)->to(ColorSpace::OkLch);
-            $primaryColorContent = ($primaryColor->lightness < 75) ? $primaryColor->change(lightness: 100) : $primaryColor->change(lightness: 13);
-            $css = new CSSGenerator();
-            $css->root_variable('p', "{$primaryColor->lightness}% {$primaryColor->chroma} {$primaryColor->hue}");
-            $css->root_variable('pc', "{$primaryColorContent->lightness}% {$primaryColorContent->chroma} {$primaryColorContent->hue}");
-
-            View::share('appearanceColor', $css->get_output());
-        }
-
         MetaTag::add('description', $site->getMeta('description'));
     }
 
@@ -81,14 +66,6 @@ class SetupDefaultData
         View::share('favicon', $currentConference->getFirstMediaUrl('favicon'));
         View::share('styleSheet', $currentConference->getFirstMediaUrl('styleSheet'));
         View::share('theme', Plugin::getPlugin($currentConference->getMeta('theme')));
-
-        if ($appearanceColor = $currentConference->getMeta('appearance_color')) {
-            $oklch = ColorFactory::new($appearanceColor)->to(ColorSpace::OkLch);
-            $css = new CSSGenerator();
-            $css->root_variable('p', "{$oklch->lightness}% {$oklch->chroma} {$oklch->hue}");
-
-            View::share('appearanceColor', $css->get_output());
-        }
 
         MetaTag::add('description', preg_replace("/\r|\n/", '', $currentConference->getMeta('description')));
 
@@ -109,15 +86,6 @@ class SetupDefaultData
         View::share('favicon', $currentScheduledConference->getFirstMediaUrl('favicon'));
         View::share('styleSheet', $currentScheduledConference->getFirstMediaUrl('styleSheet'));
         View::share('theme', Plugin::getPlugin($currentScheduledConference->getMeta('theme')));
-
-        if ($appearanceColor = $currentScheduledConference->getMeta('appearance_color')) {
-            $oklch = ColorFactory::new($appearanceColor)->to(ColorSpace::OkLch);
-            $css = new CSSGenerator();
-            $css->root_variable('p', "{$oklch->lightness}% {$oklch->chroma} {$oklch->hue}");
-
-            View::share('appearanceColor', $css->get_output());
-        }
-
         MetaTag::add('description', preg_replace("/\r|\n/", '', $currentScheduledConference->getMeta('description')));
 
         foreach ($currentScheduledConference->getMeta('meta_tags') ?? [] as $name => $content) {

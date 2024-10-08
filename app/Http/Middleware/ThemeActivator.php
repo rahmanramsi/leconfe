@@ -24,18 +24,20 @@ class ThemeActivator
             return $next($request);
         }
 
-        if($currentScheduledConference = app()->getCurrentScheduledConference()){
-            Plugin::getPlugin($currentScheduledConference->getMeta('theme'))?->activate();
-            return $next($request);
-        }
+        $theme ??= app()->getSite()->getMeta('theme') ?? 'default';
 
         if($currentConference = app()->getCurrentConference()){
-            Plugin::getPlugin($currentConference->getMeta('theme'))?->activate();
-            return $next($request);
+            $theme = $currentConference->getMeta('theme');
         }
 
-        $site = app()->getSite();
-        Plugin::getPlugin($site->getMeta('theme'))?->activate();
+        if($currentScheduledConference = app()->getCurrentScheduledConference()){
+            $theme = $currentScheduledConference->getMeta('theme');
+        }
+
+        $themePlugin = Plugin::getPlugin($theme, true) ?? Plugin::getPlugin('DefaultTheme', true);
+
+        $themePlugin?->activate();
+
         return $next($request);
     }
 }

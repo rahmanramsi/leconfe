@@ -14,22 +14,35 @@ use Symfony\Component\Yaml\Yaml;
 
 abstract class Plugin implements HasPlugin
 {
-    protected array $info;
+    protected array $info = [];
 
     protected string $pluginPath;
 
+    protected bool $isBooted = false;
+
     public function boot()
-	{
+    {
         // Implement this method to run your plugin
     }
 
-    public function load(): void
+    public function bootPlugin()
     {
-        $this->info = Yaml::parseFile($this->getPluginInformationPath());
-
         View::addNamespace($this->getInfo('folder'), $this->getPluginPath('resources/views'));
 
+        $this->boot();
+
+        $this->isBooted = true;
+
+        return $this;
+    }
+
+    public function load() : static
+    {
         $this->loadTranslation();
+
+        $this->info = $this->loadInformation();
+
+        return $this;
     }
 
     public function getInfo(?string $key = null)
@@ -41,19 +54,59 @@ abstract class Plugin implements HasPlugin
         return $this->info;
     }
 
+    public function canBeDisabled(): bool
+    {
+        return true;
+    }
+
+    public function canBeEnabled(): bool
+    {
+        return true;
+    }
+
+    public function isEnabled() : bool
+    {
+        return $this->getSetting('enabled', false);
+    }
+
+    public function isDisabled() : bool
+    {
+        return ! $this->isEnabled();
+    }
+
+    public function enable($enable = true) : void
+    {
+        $this->updateSetting('enabled', $enable);
+    }
+
+    public function disable() : void
+    {
+        $this->enable(false);
+    }
+
+    /**
+     * Determine if a plugin is hidden from the admin panel
+     */
+    function isHidden()
+    {
+        return false;
+    }
+
     public function getPluginPath(?string $path = null)
     {
         return $this->pluginPath . ($path ? DIRECTORY_SEPARATOR . $path : '');
     }
 
-    public function getPluginInformationPath()
+    public function loadInformation()
     {
-        return $this->getPluginPath('index.yaml');
+        return Yaml::parseFile($this->getPluginPath('index.yaml'));
     }
 
-    public function setPluginPath($path): void
+    public function setPluginPath($path): static
     {
         $this->pluginPath = $path;
+
+        return $this;
     }
 
     public function getSetting($key, $default = null): mixed
@@ -81,29 +134,28 @@ abstract class Plugin implements HasPlugin
         return null;
     }
 
+    /**
+     * Create public assets directory path.
+     */
+    public function enablePublicAsset(): void
+    {
+        $pluginAssetPath = $this->getPluginPath('public');
+        if (file_exists($pluginAssetPath)) {
+            $publicPluginAssetPath = public_path($this->getAssetsPath());
 
-	/**
-	 * Create public assets directory path.
-	 */
-	public function enablePublicAsset(): void
-	{
-		$pluginAssetPath = $this->getPluginPath('public');
-		if (file_exists($pluginAssetPath)) {
-			$publicPluginAssetPath = public_path($this->getAssetsPath());
+            // Create target symlink public theme assets directory if required
+            if (! file_exists($publicPluginAssetPath)) {
+                app(Filesystem::class)->relativeLink($pluginAssetPath, rtrim($publicPluginAssetPath, '/'));
+            }
+        }
+    }
 
-			// Create target symlink public theme assets directory if required
-			if (! file_exists($publicPluginAssetPath)) {
-				app(Filesystem::class)->relativeLink($pluginAssetPath, rtrim($publicPluginAssetPath, '/'));
-			}
-		}
-	}
+    public function getAssetsPath(?string $path = null): string
+    {
+        return 'plugin/' . mb_strtolower($this->getInfo('folder')) . ($path ? '/' . $path : '');
+    }
 
-	public function getAssetsPath(?string $path = null): string
-	{
-		return 'plugin/' . mb_strtolower($this->getInfo('folder')) . ($path ? '/' . $path : '');
-	}
-
-	/**
+    /**
      * Get theme's asset url.
      */
     public function asset(string $asset, bool $absolute = true): string
@@ -127,7 +179,7 @@ abstract class Plugin implements HasPlugin
         $fullUrl = $this->getAssetsPath($url);
 
         // Add versioning to the asset URL
-        if($versioning){
+        if ($versioning) {
             $version = $this->getInfo('version') ?? '1.0.0';
             $fullUrl .= '?v=' . $version;
         }
