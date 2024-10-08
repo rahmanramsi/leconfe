@@ -29,15 +29,13 @@ class ThemeSetting extends Component implements HasForms
 
     public function mount(): void
     {
-        $scheduledConference = app()->getCurrentScheduledConference();
-        $activeTheme = $scheduledConference->getMeta('theme');
+        $activeTheme = app()->getCurrentTheme();
 
         $this->form->fill([
             'meta'  => [
-                'theme' => $activeTheme,
-                'appearance_color' => $scheduledConference->getMeta('appearance_color'),
+                'theme' => $activeTheme?->getInfo('folder'),
             ],
-            'theme' => FacadesPlugin::getPlugin($activeTheme)?->getFormData() ?? [],
+            'theme' => $activeTheme?->getFormData() ?? [],
         ]);
     }
 

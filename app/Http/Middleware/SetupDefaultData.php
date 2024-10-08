@@ -20,6 +20,7 @@ class SetupDefaultData
     {
         if (!app()->isInstalled()) return $next($request);
 
+        View::share('theme', app()->getCurrentTheme());
 
         $currentScheduledConference = app()->getCurrentScheduledConference();
         if ($currentScheduledConference) {
@@ -33,8 +34,8 @@ class SetupDefaultData
             return $next($request);
         }
 
-
         $this->setupSite();
+        
         return $next($request);
     }
 
@@ -50,7 +51,6 @@ class SetupDefaultData
         View::share('pageFooter', $site->getMeta('page_footer'));
         View::share('favicon', $site->getFirstMediaUrl('favicon'));
         View::share('styleSheet', $site->getFirstMediaUrl('styleSheet'));
-        View::share('theme', Plugin::getPlugin($site->getMeta('theme')));
         
         MetaTag::add('description', $site->getMeta('description'));
     }
@@ -65,7 +65,6 @@ class SetupDefaultData
         View::share('pageFooter', $currentConference->getMeta('page_footer'));
         View::share('favicon', $currentConference->getFirstMediaUrl('favicon'));
         View::share('styleSheet', $currentConference->getFirstMediaUrl('styleSheet'));
-        View::share('theme', Plugin::getPlugin($currentConference->getMeta('theme')));
 
         MetaTag::add('description', preg_replace("/\r|\n/", '', $currentConference->getMeta('description')));
 
@@ -85,7 +84,6 @@ class SetupDefaultData
         View::share('pageFooter', $currentScheduledConference->getMeta('page_footer'));
         View::share('favicon', $currentScheduledConference->getFirstMediaUrl('favicon'));
         View::share('styleSheet', $currentScheduledConference->getFirstMediaUrl('styleSheet'));
-        View::share('theme', Plugin::getPlugin($currentScheduledConference->getMeta('theme')));
         MetaTag::add('description', preg_replace("/\r|\n/", '', $currentScheduledConference->getMeta('description')));
 
         foreach ($currentScheduledConference->getMeta('meta_tags') ?? [] as $name => $content) {

@@ -123,7 +123,7 @@ class PluginManager
         return $this->plugins->when($onlyEnabled, fn($plugins) => $plugins->filter(fn($plugin) => $plugin->isEnabled()));
     }
 
-    public function getPlugin(string $path, bool $onlyEnabled = false): ?ClassesPlugin
+    public function getPlugin(?string $path, bool $onlyEnabled = false): ?ClassesPlugin
     {
         return $this->getPlugins($onlyEnabled)->get($path);
     }

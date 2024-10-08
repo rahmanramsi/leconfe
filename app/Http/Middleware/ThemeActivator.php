@@ -24,19 +24,7 @@ class ThemeActivator
             return $next($request);
         }
 
-        $theme ??= app()->getSite()->getMeta('theme') ?? 'default';
-
-        if($currentConference = app()->getCurrentConference()){
-            $theme = $currentConference->getMeta('theme');
-        }
-
-        if($currentScheduledConference = app()->getCurrentScheduledConference()){
-            $theme = $currentScheduledConference->getMeta('theme');
-        }
-
-        $themePlugin = Plugin::getPlugin($theme, true) ?? Plugin::getPlugin('DefaultTheme', true);
-
-        $themePlugin?->activate();
+        app()->getCurrentTheme()?->activate();
 
         return $next($request);
     }

@@ -2,12 +2,14 @@
 
 namespace App\Classes;
 
+use App\Facades\Hook;
 use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Support\Facades\View;
 use luizbills\CSS_Generator\Generator as CSSGenerator;
 use matthieumastadenis\couleur\ColorFactory;
 use matthieumastadenis\couleur\ColorSpace;
+use Illuminate\Support\Facades\Blade;
 
 class DefaultTheme extends Theme
 {
@@ -24,30 +26,22 @@ class DefaultTheme extends Theme
 	}
 
 	public function onActivate(): void
-	{
-		switch (true) {
-			case $currentScheduledConference = app()->getCurrentScheduledConference():
-				$appearanceColor = $currentScheduledConference->getMeta('appearance_color');
-				break;
+	{	
+		Hook::add('Frontend::Views::Head', function ($hookName, &$output){
+			$output .= Blade::render("@vite(['resources/frontend/css/frontend.css'])");
 			
-			case $currentConference = app()->getCurrentConference():
-				$appearanceColor = $currentConference->getMeta('appearance_color');
-				break;
-
-			default:
-				$site = app()->getSite();
-				$appearanceColor = $site->getMeta('appearance_color');
-				break;
-		}	
-
-
-        if ($appearanceColor = $currentScheduledConference->getMeta('appearance_color')) {
-            $oklch = ColorFactory::new($appearanceColor)->to(ColorSpace::OkLch);
-            $css = new CSSGenerator();
-            $css->root_variable('p', "{$oklch->lightness}% {$oklch->chroma} {$oklch->hue}");
-
-            View::share('appearanceColor', $css->get_output());
-        }
+			if ($appearanceColor = $this->getSetting('appearance_color')) {
+				$oklch = ColorFactory::new($appearanceColor)->to(ColorSpace::OkLch);
+				$css = new CSSGenerator();
+				$css->root_variable('p', "{$oklch->lightness}% {$oklch->chroma} {$oklch->hue}");
+	
+				$output .= <<<HTML
+					<style>
+						{$css->get_output()}
+					</style>
+				HTML;
+			}
+		});
 
 	}
 
@@ -63,7 +57,7 @@ class DefaultTheme extends Theme
 			"type" => "theme",
 		];
 	}
-	
+
 	public function getFormSchema(): array
 	{
 		return [

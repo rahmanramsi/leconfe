@@ -28,6 +28,8 @@ use Illuminate\Support\Collection;
 use App\Models\RegistrationPayment;
 use App\Models\ScheduledConference;
 use App\Actions\Site\SiteCreateAction;
+use App\Classes\Theme;
+use App\Facades\Plugin;
 use App\Models\PaymentManual;
 use App\Models\RegistrationAttendance;
 use App\Models\Scopes\ConferenceScope;
@@ -242,5 +244,37 @@ class Application extends LaravelApplication
         } catch (\Throwable $th) {
             return false;
         }
+    }
+
+    public function getCurrentTheme() : ?Theme
+    {
+        $theme ??= app()->getSite()->getMeta('theme') ?? 'default';
+
+        if($currentConference = app()->getCurrentConference()){
+            $theme = $currentConference->getMeta('theme');
+        }
+
+        if($currentScheduledConference = app()->getCurrentScheduledConference()){
+            $theme = $currentScheduledConference->getMeta('theme');
+        }
+
+        $theme ??= 'DefaultTheme';
+
+        return Plugin::getPlugin($theme, true) ?? Plugin::getPlugin('DefaultTheme');
+    }
+
+    public function updateCurrentTheme(string $theme)
+    {
+        if($currentScheduledConference = app()->getCurrentScheduledConference()){
+            $currentScheduledConference->setMeta('theme', $theme);
+            return;
+        }
+
+        if($currentConference = app()->getCurrentConference()){
+            $theme = $currentConference->setMeta('theme', $theme);
+            return;
+        }
+
+        app()->getSite()->setMeta('theme', $theme);
     }
 }

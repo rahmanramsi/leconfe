@@ -2,18 +2,21 @@
 
 namespace App\Panel\Administration\Livewire;
 
-
-use App\Actions\Conferences\ConferenceUpdateAction;
-use App\Actions\Site\SiteUpdateAction;
+use App\Actions\ScheduledConferences\ScheduledConferenceUpdateAction;
+use App\Facades\Plugin as FacadesPlugin;
 use App\Forms\Components\CssFileUpload;
+use App\Models\Plugin;
 use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\BaseFileUpload;
-use Filament\Forms\Components\ColorPicker;
+use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
@@ -26,11 +29,13 @@ class ThemeSetting extends Component implements HasForms
 
     public function mount(): void
     {
-        $site = app()->getSite();
+        $activeTheme = app()->getCurrentTheme();
 
         $this->form->fill([
-            ...$site->attributesToArray(),
-            'meta' => $site->getAllMeta(),
+            'meta'  => [
+                'theme' => $activeTheme?->getInfo('folder'),
+            ],
+            'theme' => $activeTheme?->getFormData() ?? [],
         ]);
     }
 
@@ -42,13 +47,27 @@ class ThemeSetting extends Component implements HasForms
     public function form(Form $form): Form
     {
         return $form
-            ->model(app()->getSite())
+            ->model()
             ->schema([
                 Section::make()
                     ->schema([
-                        ColorPicker::make('meta.appearance_color')
-                            ->regex('/^#?(([a-f0-9]{3}){1,2})$/i')
-                            ->label(__('general.appearance_color')),
+                        Select::make('meta.theme')
+                            ->reactive()
+                            ->options(fn() => Plugin::theme()->enabled()->pluck('name', 'id'))
+                            ->afterStateUpdated(function (Get $get, &$livewire): void {
+                                if(!$get('meta.theme')) {
+                                    return;
+                                }
+
+                                $livewire->formData['theme'] = FacadesPlugin::getPlugin($get('meta.theme'))?->getFormData();
+                            })
+                            ->required(),
+                        Grid::make(1)
+                            ->visible(fn(Get $get) => $get('meta.theme'))
+                            ->statePath('theme')
+                            ->schema(function (Get $get): array {
+                                return FacadesPlugin::getPlugin($get('meta.theme'))?->getFormSchema() ?? [];
+                            }),
                         CssFileUpload::make('styleSheet')
                             ->label(__('general.custom_stylesheet'))
                             ->collection('styleSheet')
@@ -67,9 +86,12 @@ class ThemeSetting extends Component implements HasForms
                         ->successNotificationTitle(__('general.saved'))
                         ->failureNotificationTitle(__('general.data_could_not_saved'))
                         ->action(function (Action $action) {
-                            $data = $this->form->getState();
+                            $formData = $this->form->getState();
                             try {
-                                SiteUpdateAction::run($data);
+                                app()->updateCurrentTheme($formData['meta']['theme']);
+                                $theme = FacadesPlugin::getPlugin($formData['meta']['theme']);
+                                $theme?->saveFormData($formData['theme'] ?? []);
+
                                 $action->sendSuccessNotification();
                             } catch (\Throwable $th) {
                                 throw $th;
