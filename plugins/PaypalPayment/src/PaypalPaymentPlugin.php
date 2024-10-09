@@ -56,7 +56,7 @@ class PaypalPaymentPlugin extends Plugin
 
 	public function isProperlySetup(): bool
 	{
-		return $this->getSetting('client_id') && $this->getSetting('client_secret');
+		return $this->getClientId() && $this->getClientSecret();
 	}
 
 	public function isTestMode() : bool 
