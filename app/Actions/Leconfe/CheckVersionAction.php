@@ -26,7 +26,7 @@ class CheckVersionAction
 
     public function getCommandSignature(): string
     {
-        return 'leconfe:check';
+        return 'leconfe:check-version';
     }
 
     public function getCommandDescription(): string
