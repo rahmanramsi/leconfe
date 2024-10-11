@@ -22,6 +22,13 @@ class CheckLatestVersion
 		return Cache::remember('get_latest_version', now()->addDay(), fn() => $this->getLatestVersion());
 	}
 
+	public static function isUpdateAvailable()
+	{
+		$data = static::run();
+
+		return version_compare(app()->getInstalledVersion(), $data['tag'], '<');
+	}
+
 	public function getLatestVersion()
 	{
 		$response = Http::when(true, function($http){
