@@ -15,7 +15,7 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['var(--font-family)', ...defaultTheme.fontFamily.sans],
+                sans: ['"Twemoji Country Flags"', 'var(--font-family)', ...defaultTheme.fontFamily.sans],
             },
             fontSize : {
                 '2xs' : '.65rem',
