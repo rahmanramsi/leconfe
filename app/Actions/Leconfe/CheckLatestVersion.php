@@ -31,7 +31,7 @@ class CheckLatestVersion
 
 	public function getLatestVersion()
 	{
-		$response = Http::when(config('app.beacon'), function($http){
+		$response = Http::when(config('app.beacon') && app()->isProduction(), function($http){
 			$http->withQueryParameters([
 				'unique_id' => app()->getUniqueIdentifier(),
 				'url' => url(''),
