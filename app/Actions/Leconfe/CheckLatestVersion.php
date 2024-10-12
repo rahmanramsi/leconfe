@@ -15,7 +15,7 @@ class CheckLatestVersion
 {
 	use AsAction;
 
-	public static $updateVersionApi = 'http://leconfe-control-panel.test/api/checkversion';
+	public static $updateVersionApi = 'https://panel.leconfe.com/api/checkversion';
 
 	public function handle()
 	{
@@ -31,7 +31,7 @@ class CheckLatestVersion
 
 	public function getLatestVersion()
 	{
-		$response = Http::when(true, function($http){
+		$response = Http::when(config('app.beacon'), function($http){
 			$http->withQueryParameters([
 				'unique_id' => app()->getUniqueIdentifier(),
 				'url' => url(''),
@@ -43,6 +43,9 @@ class CheckLatestVersion
 			]);
 		})->get(static::$updateVersionApi);
 
+		if($response->failed()) {
+			throw new \Exception('Failed to get latest version');
+		}
 
 		return $response->json();
 	}

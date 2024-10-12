@@ -14,7 +14,13 @@ class ShoutUpdateVersion extends ShoutEntry
 		parent::setUp();
 
 		$this
-			->visible(fn() => CheckLatestVersion::isUpdateAvailable())
+			->visible(function(){
+				try {
+					return CheckLatestVersion::isUpdateAvailable();
+				} catch (\Throwable $th) {
+					return false;
+				}
+			})
 			->content(function () {
 				$data = CheckLatestVersion::run();
 

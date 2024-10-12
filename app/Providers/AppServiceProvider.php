@@ -97,7 +97,11 @@ class AppServiceProvider extends ServiceProvider
     protected function handleEvent()
     {
         Event::listen(queueable(function (UserLoggedIn $event) {
-            CheckLatestVersion::run();
+            try {
+                CheckLatestVersion::run();
+            } catch (\Throwable $th) {
+                // 
+            }
         }));
         Event::subscribe(SubmissionEventSubscriber::class);    
     }
