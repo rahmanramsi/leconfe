@@ -1,0 +1,2 @@
+<p>New version of Leconfe is available! You are currently using <b>{{ $currentVersion }}</b>. The most recent version is <b>{{ $latestVersion }}</b></p>
+<p>Please contact your Server Administrator to update Leconfe to the latest version, more information can be found <a class="text-primary-700 underline" href="{{ $info }}" target="_blank">here</a>.</p>

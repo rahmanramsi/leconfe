@@ -243,4 +243,17 @@ class Application extends LaravelApplication
             return false;
         }
     }
+
+    public function getUniqueIdentifier(): string
+    {
+        $site = $this->getSite();
+        $uniqueId = $site->getMeta('unique_identifier');
+
+        if (!$uniqueId) {
+            $uniqueId = uniqid();
+            $site->setMeta('unique_identifier', $uniqueId);
+        }
+
+        return $uniqueId;
+    }
 }

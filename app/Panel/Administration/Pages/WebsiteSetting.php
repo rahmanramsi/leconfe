@@ -2,13 +2,18 @@
 
 namespace App\Panel\Administration\Pages;
 
+use App\Actions\Leconfe\CheckLatestVersion;
+use App\Actions\Leconfe\CheckVersionAction;
 use App\Infolists\Components\LivewireEntry;
+use App\Infolists\Components\ShoutUpdateVersion;
 use App\Infolists\Components\VerticalTabs;
 use App\Panel\Administration\Livewire\LanguageSetting;
 use App\Panel\Administration\Livewire\SetupSetting;
 use App\Panel\Administration\Livewire\SidebarSetting;
 use App\Panel\Administration\Livewire\ThemeSetting;
 use App\Panel\Conference\Livewire\NavigationMenuSetting;
+use Awcodes\Shout\Components\Shout;
+use Awcodes\Shout\Components\ShoutEntry;
 use Filament\Infolists\Components\Tabs;
 use Filament\Infolists\Concerns\InteractsWithInfolists;
 use Filament\Infolists\Contracts\HasInfolists;
@@ -16,6 +21,8 @@ use Filament\Infolists\Infolist;
 use Filament\Pages\Page;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Auth;
+use Filament\Support\Colors\Color;
+use Illuminate\Support\HtmlString;
 
 class WebsiteSetting extends Page implements HasInfolists
 {
@@ -56,6 +63,7 @@ class WebsiteSetting extends Page implements HasInfolists
     {
         return $infolist
             ->schema([
+                ShoutUpdateVersion::make('update-version'),
                 Tabs::make('site_settings')
                     ->tabs([
                         Tabs\Tab::make('Site Setup')
