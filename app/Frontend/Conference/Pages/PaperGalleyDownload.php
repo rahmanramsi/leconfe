@@ -8,7 +8,7 @@ use App\Models\Media;
 use App\Models\Submission;
 use Illuminate\Support\Facades\Route;
 use Rahmanramsi\LivewirePageGroup\PageGroup;
-use Rahmanramsi\LivewirePageGroup\Pages\Page;
+use App\Frontend\Website\Pages\Page;
 
 class PaperGalleyDownload extends Page
 {

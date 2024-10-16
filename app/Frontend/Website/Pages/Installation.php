@@ -11,7 +11,6 @@ use App\Utils\PermissionChecker;
 use Illuminate\Support\Facades\App;
 use App\Livewire\Forms\InstallationForm;
 use App\Http\Middleware\SetupDefaultData;
-use Rahmanramsi\LivewirePageGroup\Pages\Page;
 use Jackiedo\Timezonelist\Facades\Timezonelist;
 use Livewire\Mechanisms\ComponentRegistry;
 

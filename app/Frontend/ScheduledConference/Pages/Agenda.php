@@ -10,7 +10,7 @@ use App\Models\Registration;
 use Illuminate\Support\Facades\Route;
 use App\Models\RegistrationAttendance;
 use Rahmanramsi\LivewirePageGroup\PageGroup;
-use Rahmanramsi\LivewirePageGroup\Pages\Page;
+use App\Frontend\Website\Pages\Page;
 use App\Models\Enums\RegistrationPaymentState;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 

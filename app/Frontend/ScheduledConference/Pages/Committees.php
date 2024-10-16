@@ -4,7 +4,7 @@ namespace App\Frontend\ScheduledConference\Pages;
 
 use App\Models\CommitteeRole;
 use Livewire\Attributes\Title;
-use Rahmanramsi\LivewirePageGroup\Pages\Page;
+use App\Frontend\Website\Pages\Page;
 
 class Committees extends Page
 {

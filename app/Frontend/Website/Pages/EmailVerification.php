@@ -2,9 +2,6 @@
 
 namespace App\Frontend\Website\Pages;
 
-use App\Facades\Setting;
-use Livewire\Attributes\Title;
-use Rahmanramsi\LivewirePageGroup\Pages\Page;
 use DanHarrin\LivewireRateLimiting\WithRateLimiting;
 use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
 

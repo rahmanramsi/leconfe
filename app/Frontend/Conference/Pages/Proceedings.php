@@ -9,7 +9,7 @@ use Livewire\Attributes\Title;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Database\Eloquent\Collection;
 use Rahmanramsi\LivewirePageGroup\PageGroup;
-use Rahmanramsi\LivewirePageGroup\Pages\Page;
+use App\Frontend\Website\Pages\Page;
 
 class Proceedings extends Page
 {

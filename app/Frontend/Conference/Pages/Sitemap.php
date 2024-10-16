@@ -11,7 +11,7 @@ use App\Models\StaticPage;
 use App\Models\Submission;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Rahmanramsi\LivewirePageGroup\Pages\Page;
+use App\Frontend\Website\Pages\Page;
 use Spatie\Sitemap\Sitemap as SpatieSitemap;
 use Spatie\Sitemap\Tags\Url;
 
