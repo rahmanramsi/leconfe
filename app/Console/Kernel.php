@@ -20,6 +20,7 @@ class Kernel extends ConsoleKernel
         Actions\Leconfe\InstallAction::class,
         Actions\Leconfe\UpgradeAction::class,
         Actions\Leconfe\CheckVersionAction::class,
+        Actions\Leconfe\CheckLatestVersion::class,
         Actions\Leconfe\GetUpgradeActionHistory::class,
     ];
 

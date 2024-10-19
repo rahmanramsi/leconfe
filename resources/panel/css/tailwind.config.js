@@ -1,7 +1,20 @@
 import preset from '../../../vendor/filament/filament/tailwind.config.preset'
 
+import defaultTheme from 'tailwindcss/defaultTheme'
+
 export default {
     presets: [preset],
+    theme: {
+        extend: {
+            fontFamily: {
+                sans: [
+                    '"Twemoji Country Flags"',
+                    'var(--font-family)',
+                    ...defaultTheme.fontFamily.sans,
+                ],
+            },
+        },
+    },
     content: [
         './app/Administration/**/*.php',
         './app/Filament/**/*.php',

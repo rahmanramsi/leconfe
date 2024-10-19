@@ -2,9 +2,8 @@
 
 namespace App\Frontend\Website\Pages;
 
+use App\Events\UserLoggedIn;
 use Livewire\Attributes\Rule;
-use Filament\Facades\Filament;
-use Livewire\Attributes\Title;
 use Rahmanramsi\LivewirePageGroup\Pages\Page;
 use Illuminate\Validation\ValidationException;
 use DanHarrin\LivewireRateLimiting\WithRateLimiting;
@@ -83,9 +82,14 @@ class Login extends Page
             ]);
         }
 
+        $this->clearRateLimiter();
+
         session()->regenerate();
 
-        auth()->user()->setMeta('last_login', now());
+        $user = auth()->user();
+        $user->setMeta('last_login', now());
+
+        UserLoggedIn::dispatch($user);
 
         $this->redirect($this->getRedirectUrl(), navigate: false);
     }

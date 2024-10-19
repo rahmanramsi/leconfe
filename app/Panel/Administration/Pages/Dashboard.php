@@ -102,8 +102,6 @@ class Dashboard extends Page implements HasInfolists
 
     protected function expireUserSession(Action $action)
     {
-        throw new \Exception('Not implemented yet');
-
         try {
             $userAuth = Filament::auth()->user();
 

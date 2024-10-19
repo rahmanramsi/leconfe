@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Filament\Infolists\Components\Tabs;
 use App\Infolists\Components\VerticalTabs;
 use App\Infolists\Components\LivewireEntry;
+use App\Infolists\Components\ShoutUpdateVersion;
 use App\Panel\Administration\Livewire\SidebarSetting;
 use App\Panel\Conference\Livewire\DateAndTimeSetting;
 use App\Panel\Administration\Livewire\LanguageSetting;
@@ -57,6 +58,7 @@ class WebsiteSetting extends Page
 	{
 		return $infolist
 			->schema([
+				ShoutUpdateVersion::make('update-version'),
 				Tabs::make()
 					->contained(false)
 					->tabs([

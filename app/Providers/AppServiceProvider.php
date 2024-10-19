@@ -2,14 +2,13 @@
 
 namespace App\Providers;
 
+use App\Actions\Leconfe\CheckLatestVersion;
 use App\Application;
 use App\Classes\Setting;
-use App\Facades\SidebarFacade;
 use App\Models\ScheduledConference;
 use Livewire\Livewire;
-use App\Classes\Settings;
 use App\Console\Kernel as ConsoleKernel;
-use App\Facades\Hook;
+use App\Events\UserLoggedIn;
 use App\Http\Kernel as HttpKernel;
 use App\Listeners\SubmissionEventSubscriber;
 use App\Models\Conference;
@@ -18,7 +17,6 @@ use App\Managers\MetaTagManager;
 use App\Managers\SidebarManager;
 use Illuminate\Support\Facades\DB;
 use App\Routing\CustomUrlGenerator;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Route;
@@ -28,6 +26,9 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Http\Client\Factory as Http;
+
+use function Illuminate\Events\queueable;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -69,6 +70,13 @@ class AppServiceProvider extends ServiceProvider
                 $app['config']['app.asset_url']
             );
         });
+
+        $this->app->extend(Http::class, function ($service, $app) {
+            return $service->withHeaders([
+                'Leconfe-Version' => app()->getCodeVersion(),
+                'User-Agent' => 'Leconfe/' . app()->getCodeVersion(),
+            ]);
+        });
     }
 
     /**
@@ -82,7 +90,20 @@ class AppServiceProvider extends ServiceProvider
         $this->extendBlade();
         $this->detectConference();
 
-        Event::subscribe(SubmissionEventSubscriber::class);
+        $this->handleEvent();
+
+    }
+
+    protected function handleEvent()
+    {
+        Event::listen(queueable(function (UserLoggedIn $event) {
+            try {
+                CheckLatestVersion::run();
+            } catch (\Throwable $th) {
+                // 
+            }
+        }));
+        Event::subscribe(SubmissionEventSubscriber::class);    
     }
 
     protected function extendBlade(): void

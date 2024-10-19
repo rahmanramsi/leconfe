@@ -187,8 +187,7 @@ class ParticipantList extends Component implements HasForms, HasTable
                                         TextInput::make('subject')
                                             ->label(__('general.subject'))
                                             ->required()
-                                            ->columnSpanFull()
-                                            ->readOnly(),
+                                            ->columnSpanFull(),
                                         TinyEditor::make('message')
                                             ->label(__('general.message'))
                                             ->minHeight(300)
@@ -248,7 +247,7 @@ class ParticipantList extends Component implements HasForms, HasTable
             ])
             ->actions([
                 ActionGroup::make([
-                    Action::make('notify-participant')
+                    Action::make('notify-participant') 
                         ->authorize('SubmissionParticipant:notify')
                         ->color('primary')
                         ->modalHeading(__('general.notify_participant'))

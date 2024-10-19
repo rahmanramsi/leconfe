@@ -24,6 +24,7 @@
   "dependencies": {
     "@alpinejs/anchor": "^3.13.7",
     "@uvarov.frontend/vanilla-calendar": "^2.6.7",
+    "country-flag-emoji-polyfill": "^0.1.8",
     "masonry-layout": "^4.2.2",
     "motion": "^10.16.2",
     "photoswipe": "^5.3.9",

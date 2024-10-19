@@ -38,7 +38,7 @@ use Illuminate\Foundation\Application as LaravelApplication;
 
 class Application extends LaravelApplication
 {
-    public const APP_VERSION = '1.0.2';
+    public const APP_VERSION = '1.0.3';
 
     public const PHP_MIN_VERSION = '8.1';
 
@@ -276,5 +276,18 @@ class Application extends LaravelApplication
         }
 
         app()->getSite()->setMeta('theme', $theme);
+    }
+
+    public function getUniqueIdentifier(): string
+    {
+        $site = $this->getSite();
+        $uniqueId = $site->getMeta('unique_identifier');
+
+        if (!$uniqueId) {
+            $uniqueId = uniqid();
+            $site->setMeta('unique_identifier', $uniqueId);
+        }
+
+        return $uniqueId;
     }
 }
