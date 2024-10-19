@@ -71,6 +71,7 @@ class ScheduledConference extends Model implements HasMedia, HasAvatar, HasName
             'review_invitation_response_deadline' => 30,
             'review_completion_deadline' => 30,
             'timezone' => 'UTC',
+            'theme' => 'DefaultTheme',
         ];
     }
 

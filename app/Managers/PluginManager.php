@@ -4,7 +4,6 @@ namespace App\Managers;
 
 use App\Classes\Plugin as ClassesPlugin;
 use App\Events\PluginInstalled;
-use App\Models\Conference;
 use App\Models\PluginSetting;
 use Exception;
 use Illuminate\Contracts\Filesystem\Filesystem as FilesystemContract;
@@ -12,7 +11,6 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -21,26 +19,58 @@ use ZipArchive;
 
 class PluginManager
 {
-    protected Collection $registeredPlugins;
-
-    protected Collection $bootedPlugins;
+    protected Collection $plugins;
 
     protected bool $isBooted = false;
 
     public function __construct()
     {
-        $this->bootedPlugins = collect();
-        $this->registeredPlugins = collect();
+        $this->plugins = collect();
     }
 
-    public function boot()
+    public function initialize()
     {
         // TODO Add support for plugin in console 
         if (app()->runningInConsole()) {
             return;
         }
 
-        $this->bootPlugins();
+        if (!app()->isInstalled()) {
+            return;
+        }
+
+        $disk = $this->getDisk();
+
+        collect($disk->directories())
+            ->filter(function ($pluginDir) use ($disk) {
+                try {
+                    if (Str::contains($pluginDir, ' ')) {
+                        throw new Exception("Plugin folder name ({$pluginDir}) cannot contain spaces");
+                    }
+
+                    if (!$disk->exists($pluginDir . DIRECTORY_SEPARATOR . 'index.yaml')) {
+                        throw new Exception("Plugin ({$pluginDir}) is missing index.yaml file");
+                    }
+
+                    if (!$disk->exists($pluginDir . DIRECTORY_SEPARATOR . 'index.php')) {
+                        throw new Exception("Plugin ({$pluginDir}) is missing index.php file");
+                    }
+                } catch (\Throwable $th) {
+                    if (!app()->isProduction()) {
+                        throw $th;
+                    }
+
+                    return false;
+                }
+
+                return true;
+            })
+            ->each(function ($pluginPath) use ($disk) {
+                $plugin = $this->initiatePlugin($disk->path($pluginPath));
+
+                $this->register($pluginPath, $plugin, $this->getSetting($pluginPath, 'enabled', true));
+            });
+
     }
 
     public function getDisk(): FilesystemContract
@@ -58,131 +88,44 @@ class PluginManager
         return $this->getDisk()->path($path);
     }
 
-    protected function registerPlugins(): void
+    public function register(string $id, ClassesPlugin $plugin, bool $boot = false)
     {
-        $pluginsDisk = $this->getDisk();
-        $this->registeredPlugins = collect($pluginsDisk->directories())
-            ->filter(function ($pluginDir) use ($pluginsDisk) {
-                try {
-                    if (Str::contains($pluginDir, ' ')) {
-                        throw new Exception("Plugin folder name ({$pluginDir}) cannot contain spaces");
-                    }
+        try {
+            $plugin->load();
 
-                    if (!$pluginsDisk->exists($pluginDir . DIRECTORY_SEPARATOR . 'index.yaml')) {
-                        throw new Exception("Plugin ({$pluginDir}) is missing index.yaml file");
-                    }
+            if ($boot) {
+                $plugin->bootPlugin();
+            }
 
-                    if (!$pluginsDisk->exists($pluginDir . DIRECTORY_SEPARATOR . 'index.php')) {
-                        throw new Exception("Plugin ({$pluginDir}) is missing index.php file");
-                    }
-                } catch (\Throwable $th) {
-                    if (!app()->isProduction()) {
-                        throw $th;
-                    }
-
-                    return false;
-                }
-
-                return true;
-            })
-            ->mapWithKeys(fn ($pluginDir) => [$this->getPluginFullPath($pluginDir) => Yaml::parseFile($pluginsDisk->path($pluginDir . DIRECTORY_SEPARATOR . 'index.yaml'))]);
-    }
-
-    public function getPluginInfo($path)
-    {
-        return $this->getRegisteredPlugins()->get($path);
-    }
-
-    protected function bootPlugins($includeDisabled = false, $refresh = false): void
-    {
-        if (!app()->isInstalled()) {
-            return;
+            $this->plugins->put($id, $plugin);
+        } catch (\Throwable $th) {
+            throw $th;
         }
-
-        if ($this->isBooted && !$refresh) {
-            return;
-        }
-        $this->getRegisteredPlugins()
-            ->when(
-                !$includeDisabled,
-                fn ($plugins) => $plugins
-                    ->filter(fn ($pluginInfo, $pluginPath) => $this->getSetting($pluginInfo['folder'], 'enabled') && $this->loadPlugin($pluginPath, false))
-            )
-            ->each(fn ($pluginInfo, $pluginPath) => $this->bootPlugin($pluginPath));
-
-        $this->isBooted = true;
     }
 
-    public function bootPlugin($pluginPath): ?ClassesPlugin
-    {
-        $plugin = require $pluginPath . DIRECTORY_SEPARATOR . 'index.php';
-        $plugin->setPluginPath($pluginPath);
-        $plugin->load();
-        $plugin->boot();
-
-        $this->bootedPlugins->put($plugin->getInfo('folder'), $plugin);
-
-        return $plugin;
-    }
-
-    protected function loadPlugin(string $pluginPath, $throwError = true): mixed
+    protected function initiatePlugin(string $pluginPath): ?ClassesPlugin
     {
         try {
             $plugin = require $pluginPath . DIRECTORY_SEPARATOR . 'index.php';
-
+            $plugin->setPluginPath($pluginPath);
             if (!$plugin instanceof ClassesPlugin) {
                 throw new Exception('Plugin must return an instance of ' . ClassesPlugin::class);
             }
         } catch (\Throwable $th) {
-            if ($throwError) {
-                throw $th;
-            }
-
-            return false;
+            throw $th;
         }
-
-        $plugin->setPluginPath($pluginPath);
 
         return $plugin;
     }
 
-    public function getRegisteredPlugins(): Collection
+    public function getPlugins(bool $onlyEnabled = true)
     {
-        if ($this->registeredPlugins->isEmpty()) {
-            $this->registerPlugins();
-        }
-
-        return $this->registeredPlugins;
+        return $this->plugins->when($onlyEnabled, fn($plugins) => $plugins->filter(fn($plugin) => $plugin->isEnabled()));
     }
 
-    public function getPlugins()
+    public function getPlugin(?string $path, bool $onlyEnabled = false): ?ClassesPlugin
     {
-        if (empty($this->bootedPlugins)) {
-            $this->boot();
-        }
-
-        return $this->bootedPlugins;
-    }
-
-    public function getPlugin($path, $onlyEnabled = true): ?ClassesPlugin
-    {
-        $plugin = $this->getPlugins()->get($path);
-
-        if ($plugin || $onlyEnabled) {
-            return $plugin;
-        }
-
-        return $this->bootPlugin($path);
-    }
-
-    public function enable($pluginPath, $enable = true)
-    {
-        $this->updateSetting($pluginPath, 'enabled', $enable);
-    }
-
-    public function disable($pluginPath)
-    {
-        $this->enable($pluginPath, false);
+        return $this->getPlugins($onlyEnabled)->get($path);
     }
 
     protected function getCacheKey($plugin, $key)
@@ -250,15 +193,10 @@ class PluginManager
             throw new Exception('Cannot extract the plugin, please check the zip file');
         }
 
-        // if ($this->getDisk()->exists($folderName)) {
-        //     throw new Exception("Plugin already installed");
-        // }
-
         $this->validatePlugin($pluginTempDisk->path($folderName));
 
         try {
-            $plugin = $this->loadPlugin($pluginTempDisk->path($folderName));
-            $plugin->boot();
+            $plugin = $this->loadPlugin($pluginTempDisk->path($folderName), true);
         } catch (\Throwable $th) {
             $pluginTempDisk->deleteDirectory($folderName);
 
@@ -470,19 +408,4 @@ class PluginManager
                 return 'string';
         }
     }
-
-    public function installDefaultPlugins()
-    {
-        $defaultPluginsPath = base_path('stubs' . DIRECTORY_SEPARATOR . 'plugins');
-        $pluginsDisk = $this->getDisk();
-        foreach (File::directories($defaultPluginsPath) as $pluginPath) {
-            $pluginName = basename($pluginPath);
-            if ($pluginsDisk->exists($pluginName)) {
-                continue;
-            }
-            $fileSystem = new Filesystem();
-            $fileSystem->copyDirectory($pluginPath, $pluginsDisk->path($pluginName));
-        }
-    }
-
 }

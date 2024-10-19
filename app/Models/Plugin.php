@@ -3,7 +3,10 @@
 namespace App\Models;
 
 use App\Facades\Plugin as FacadesPlugin;
+use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Sushi\Sushi;
 
 class Plugin extends Model
@@ -14,28 +17,59 @@ class Plugin extends Model
 
     protected $keyType = 'string';
 
-    protected $schema = [
-        'id' => 'integer',
-        'plugin_name' => 'string',
-        'author' => 'string',
-        'description' => 'string',
-        'version' => 'string',
-        'enabled' => 'boolean',
-        'path' => 'string',
-    ];
-
-    public function getRows()
+    public function getRows(): array
     {
-        return FacadesPlugin::getRegisteredPlugins()
-            ->map(function ($pluginInfo, $pluginDir) {
-                $pluginInfo['id'] = $pluginInfo['folder'];
-                $pluginInfo['enabled'] = FacadesPlugin::getSetting($pluginInfo['folder'], 'enabled');
-                $pluginInfo['path'] = $pluginDir;
+        return FacadesPlugin::getPlugins(false)
+            ->map(function ($plugin) {
+                $data['id']             = $plugin->getInfo('folder');
+                $data['name']           = $plugin->getInfo('name');
+                $data['author']         = $plugin->getInfo('author');
+                $data['description']    = $plugin->getInfo('description');
+                $data['version']        = $plugin->getInfo('version');
+                $data['enabled']        = $plugin->isEnabled();
+                $data['path']           = $plugin->getPluginPath();
+                $data['type']           = $plugin->getInfo('type') ?? 'plugin';
+                $data['isHidden']       = $plugin->isHidden();
+                $data['canBeDisabled']  = $plugin->canBeDisabled();
+                $data['canBeEnabled']   = $plugin->canBeEnabled();
 
-                return $pluginInfo;
+                return $data;
             })
             ->values()
             ->toArray();
+    }
+
+    protected function plugin(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => FacadesPlugin::getPlugin($this->id),
+        );
+    }
+
+
+    public function scopeEnabled($query): Builder
+    {
+        return $query->where('enabled', true);
+    }
+
+    public function scopeDisabled($query): Builder
+    {
+        return $query->where('enabled', false);
+    }
+
+    public function scopeTheme($query): Builder
+    {
+        return $query->where('type', 'theme');
+    }
+
+    public function scopeType($query, $type): Builder
+    {
+        return $query->where('type', $type);
+    }
+
+    public function scopeHidden($query, $hidden = true): Builder
+    {
+        return $query->where('isHidden', $hidden);
     }
 
     protected function sushiShouldCache()

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Classes\DefaultTheme;
 use App\Facades\Plugin;
 use App\Managers\PluginManager;
 use Illuminate\Support\ServiceProvider;
@@ -24,6 +25,7 @@ class PluginServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Plugin::boot();
+        Plugin::register('DefaultTheme', new DefaultTheme(), true);
+        Plugin::initialize();
     }
 }

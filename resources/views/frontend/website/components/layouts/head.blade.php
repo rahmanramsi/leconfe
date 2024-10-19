@@ -29,16 +29,12 @@
         }
     </style>
 
+    @vite(['resources/frontend/js/frontend.js'])
+
     @livewireStyles
-    @vite(['resources/frontend/css/frontend.css', 'resources/frontend/js/frontend.js'])
+    
     @if(isset($styleSheet) && !empty($styleSheet))
         <link rel="stylesheet" type="text/css" href="{{ $styleSheet }}" />
-    @endif
-
-    @if (isset($appearanceColor))
-        <style>
-            {!! $appearanceColor !!}
-        </style>
     @endif
 
     @hook('Frontend::Views::Head')

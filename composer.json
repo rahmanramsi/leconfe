@@ -59,6 +59,7 @@
         "squirephp/currencies-en": "^3.4",
         "stechstudio/filament-impersonate": "^3.5",
         "stevebauman/purify": "^6.0",
+        "symfony/filesystem": "^6.4",
         "symfony/yaml": "^6.4"
     },
     "require-dev": {

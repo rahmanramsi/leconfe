@@ -13,23 +13,20 @@ use Rahmanramsi\LivewirePageGroup\PageGroup;
 
 class PaypalPaymentPlugin extends Plugin
 {
-	public function boot()
-	{
-		
-	}
+	public function boot() {}
 
 	public function onFrontend(PageGroup $frontend): void
-    {
-		if($frontend->getId() !== 'scheduledConference'){
+	{
+		if ($frontend->getId() !== 'scheduledConference') {
 			return;
 		}
-		
+
 		$frontend->discoverPages(in: $this->pluginPath . '/src/Frontend/ScheduledConference/Pages', for: 'PaypalPayment\\Frontend\\ScheduledConference\\Pages');
-    }
-	
+	}
+
 	public function onPanel(Panel $panel): void
 	{
-		if($panel->getId() !== 'scheduledConference'){
+		if ($panel->getId() !== 'scheduledConference') {
 			return;
 		}
 
@@ -41,12 +38,12 @@ class PaypalPaymentPlugin extends Plugin
 				->icon('heroicon-o-credit-card')
 				->schema([
 					LivewireEntry::make('settings')
-                        ->livewire(PaypalSetting::class)
+						->livewire(PaypalSetting::class)
 				]);
 		});
 
-		if($this->isProperlySetup()){
-			Hook::add('ParticipantRegisterStatus::PaymentDetails', function ($hookName, $participantRegisterStatus, $userRegistration, &$paymentDetails){
+		if ($this->isProperlySetup()) {
+			Hook::add('ParticipantRegisterStatus::PaymentDetails', function ($hookName, $participantRegisterStatus, $userRegistration, &$paymentDetails) {
 				$paymentDetails['Paypal'] = view('PaypalPayment::paypal-button', [
 					'url' => route(PaypalPage::getRouteName('scheduledConference'), ['id' => $userRegistration->id]),
 				]);
@@ -59,11 +56,11 @@ class PaypalPaymentPlugin extends Plugin
 		return $this->getClientId() && $this->getClientSecret();
 	}
 
-	public function isTestMode() : bool 
+	public function isTestMode(): bool
 	{
 		return $this->getSetting('test_mode', false);
 	}
-	
+
 	public function getClientId(): ?string
 	{
 		return $this->isTestMode() ? $this->getSetting('client_id_test') : $this->getSetting('client_id');
