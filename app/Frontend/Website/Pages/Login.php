@@ -4,7 +4,6 @@ namespace App\Frontend\Website\Pages;
 
 use App\Events\UserLoggedIn;
 use Livewire\Attributes\Rule;
-use Rahmanramsi\LivewirePageGroup\Pages\Page;
 use Illuminate\Validation\ValidationException;
 use DanHarrin\LivewireRateLimiting\WithRateLimiting;
 use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;

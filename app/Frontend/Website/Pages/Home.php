@@ -15,7 +15,6 @@ use App\Models\ScheduledConference;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Contracts\Support\Htmlable;
 use Rahmanramsi\LivewirePageGroup\PageGroup;
-use Rahmanramsi\LivewirePageGroup\Pages\Page;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 
 class Home extends Page

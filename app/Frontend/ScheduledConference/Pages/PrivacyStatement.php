@@ -3,7 +3,7 @@
 namespace App\Frontend\ScheduledConference\Pages;
 
 use Livewire\Attributes\Title;
-use Rahmanramsi\LivewirePageGroup\Pages\Page;
+use App\Frontend\Website\Pages\Page;
 
 class PrivacyStatement extends Page
 {

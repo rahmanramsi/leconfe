@@ -7,7 +7,6 @@ use App\Facades\MetaTag;
 use App\Http\Middleware\RedirectToConference;
 use App\Http\Middleware\SetLocale;
 use App\Http\Middleware\SetupDefaultData;
-use Rahmanramsi\LivewirePageGroup\Pages\Page;
 
 class Upgrade extends Page
 {

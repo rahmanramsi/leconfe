@@ -9,7 +9,7 @@ use App\Models\Track;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Route;
 use Rahmanramsi\LivewirePageGroup\PageGroup;
-use Rahmanramsi\LivewirePageGroup\Pages\Page;
+use App\Frontend\Website\Pages\Page;
 use Illuminate\Support\Str;
 
 class ProceedingDetail extends Page

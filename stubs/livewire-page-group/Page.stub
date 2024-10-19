@@ -2,7 +2,7 @@
 
 namespace {{ namespace }};
 
-use Rahmanramsi\LivewirePageGroup\Pages\Page;
+use App\Frontend\Website\Pages\Page;
 
 class {{ class }} extends Page
 {

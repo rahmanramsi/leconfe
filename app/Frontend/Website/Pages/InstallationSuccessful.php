@@ -3,7 +3,6 @@
 namespace App\Frontend\Website\Pages;
 
 use App\Facades\MetaTag;
-use Rahmanramsi\LivewirePageGroup\Pages\Page;
 
 class InstallationSuccessful extends Page
 {

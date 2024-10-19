@@ -6,7 +6,7 @@ use App\Facades\Plugin;
 use App\Frontend\ScheduledConference\Pages\ParticipantRegisterStatus;
 use App\Models\Enums\RegistrationPaymentState;
 use App\Models\Registration;
-use Rahmanramsi\LivewirePageGroup\Pages\Page;
+use App\Frontend\Website\Pages\Page;
 use Illuminate\Support\Str;
 use Omnipay\Omnipay;
 

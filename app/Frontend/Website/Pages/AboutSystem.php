@@ -2,8 +2,6 @@
 
 namespace App\Frontend\Website\Pages;
 
-use Rahmanramsi\LivewirePageGroup\Pages\Page;
-
 class AboutSystem extends Page
 {
     protected static string $view = 'frontend.website.pages.about-system';

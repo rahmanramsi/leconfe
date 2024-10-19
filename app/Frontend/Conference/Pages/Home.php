@@ -17,7 +17,7 @@ use Livewire\Attributes\Title;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\HtmlString;
 use Rahmanramsi\LivewirePageGroup\PageGroup;
-use Rahmanramsi\LivewirePageGroup\Pages\Page;
+use App\Frontend\Website\Pages\Page;
 
 class Home extends Page
 {

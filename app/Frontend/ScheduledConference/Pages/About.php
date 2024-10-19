@@ -2,9 +2,9 @@
 
 namespace App\Frontend\ScheduledConference\Pages;
 
+use App\Frontend\Website\Pages\Page;
 use Livewire\Attributes\Title;
 use Illuminate\Contracts\Support\Htmlable;
-use Rahmanramsi\LivewirePageGroup\Pages\Page;
 
 class About extends Page
 {

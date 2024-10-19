@@ -2,8 +2,6 @@
 
 namespace App\Frontend\Website\Pages;
 
-use Rahmanramsi\LivewirePageGroup\Pages\Page;
-
 class Logout extends Page
 {
     function __invoke()

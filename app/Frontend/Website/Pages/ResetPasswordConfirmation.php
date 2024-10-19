@@ -2,19 +2,10 @@
 
 namespace App\Frontend\Website\Pages;
 
-use App\Mail\Templates\ResetPasswordMail;
 use App\Models\User;
-use Livewire\Attributes\Rule;
-use Filament\Facades\Filament;
-use Livewire\Attributes\Title;
-use Rahmanramsi\LivewirePageGroup\Pages\Page;
-use Illuminate\Validation\ValidationException;
-use DanHarrin\LivewireRateLimiting\WithRateLimiting;
-use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\Rules\Password;
 use Livewire\Attributes\Locked;
