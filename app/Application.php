@@ -44,6 +44,9 @@ class Application extends LaravelApplication
 
     public const CONTEXT_WEBSITE = 0;
 
+    // public const API_URL = 'https://panel.leconfe.com/api/';
+    public const API_URL = 'http://leconfe-control-panel.test/api/';
+
     protected ?int $currentConferenceId = null;
 
     protected ?Site $site = null;
@@ -289,5 +292,10 @@ class Application extends LaravelApplication
         }
 
         return $uniqueId;
+    }
+
+    public function getApiUrl(?string $path = null): string
+    {
+        return static::API_URL . $path;
     }
 }

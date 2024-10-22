@@ -4,13 +4,17 @@ namespace App\Panel\Administration\Resources;
 
 use App\Facades\Plugin as FacadesPlugin;
 use App\Models\Plugin;
+use App\Models\PluginGallery;
 use App\Panel\Administration\Resources\PluginResource\Pages;
+use App\Panel\ScheduledConference\Livewire\Submissions\Components\Files\SelectFiles;
 use App\Tables\Columns\IndexColumn;
 use Filament\Resources\Resource;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -19,6 +23,11 @@ class PluginResource extends Resource
     protected static ?string $model = Plugin::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-square-3-stack-3d';
+
+    public static function isDiscovered(): bool
+    {
+        return false;
+    }
 
     public static function getNavigationLabel(): string
     {
@@ -78,6 +87,14 @@ class PluginResource extends Resource
                 ]),
                 // TODO : Add actions based on plugin. Currently there's no way to create a dinamically action
 
+            ])
+            ->filters([
+                SelectFilter::make('enabled')
+                    ->label(__('general.enabled'))
+                    ->options([
+                        '1' => __('general.enabled'),
+                        '0' => __('general.disabled'),
+                    ]),
             ])
             ->emptyStateActions([]);
     }

@@ -15,8 +15,6 @@ class CheckLatestVersion
 {
 	use AsAction;
 
-	public static $updateVersionApi = 'https://panel.leconfe.com/api/checkversion';
-
 	public function handle()
 	{
 		return Cache::remember('get_latest_version', now()->addDay(), fn() => $this->getLatestVersion());
@@ -41,7 +39,7 @@ class CheckLatestVersion
 					'total_conferences' => Conference::count(),
 				]
 			]);
-		})->get(static::$updateVersionApi);
+		})->get(app()->getApiUrl('checkversion'));
 
 		if($response->failed()) {
 			throw new \Exception('Failed to get latest version');

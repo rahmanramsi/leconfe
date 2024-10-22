@@ -194,4 +194,9 @@ abstract class Plugin implements HasPlugin
 
         $translator->addNamespace($this->getInfo('folder'), $langPath);
     }
+
+    public function getVersion() : string
+    {
+        return $this->getInfo('version') ?? '1.0.0';
+    }
 }

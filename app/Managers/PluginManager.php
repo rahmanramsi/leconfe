@@ -56,10 +56,6 @@ class PluginManager
                         throw new Exception("Plugin ({$pluginDir}) is missing index.php file");
                     }
                 } catch (\Throwable $th) {
-                    if (!app()->isProduction()) {
-                        throw $th;
-                    }
-
                     return false;
                 }
 
@@ -71,6 +67,12 @@ class PluginManager
                 $this->register($pluginPath, $plugin, $this->getSetting($pluginPath, 'enabled', true));
             });
 
+    }
+
+    public function reinitialize()
+    {
+        $this->plugins = collect();
+        $this->initialize();
     }
 
     public function getDisk(): FilesystemContract
@@ -106,7 +108,8 @@ class PluginManager
     protected function initiatePlugin(string $pluginPath): ?ClassesPlugin
     {
         try {
-            $plugin = require $pluginPath . DIRECTORY_SEPARATOR . 'index.php';
+            $plugin = include $pluginPath . DIRECTORY_SEPARATOR . 'index.php';
+
             $plugin->setPluginPath($pluginPath);
             if (!$plugin instanceof ClassesPlugin) {
                 throw new Exception('Plugin must return an instance of ' . ClassesPlugin::class);
@@ -195,18 +198,23 @@ class PluginManager
 
         $this->validatePlugin($pluginTempDisk->path($folderName));
 
+        
+        $fileSystem = new Filesystem();
+        $fileSystem->moveDirectory($pluginTempDisk->path($folderName), $this->getDisk()->path($folderName), true);
+      
         try {
-            $plugin = $this->loadPlugin($pluginTempDisk->path($folderName), true);
+            $plugin = $this->initiatePlugin($this->getDisk()->path($folderName), true);
         } catch (\Throwable $th) {
             $pluginTempDisk->deleteDirectory($folderName);
 
             throw $th;
         }
 
-        $fileSystem = new Filesystem();
-        $fileSystem->moveDirectory($pluginTempDisk->path($folderName), $this->getDisk()->path($folderName), true);
-
         PluginInstalled::dispatch($plugin);
+
+        $this->getTempDisk()->delete($file);
+
+        $this->reinitialize();
 
         return true;
     }
@@ -293,9 +301,8 @@ class PluginManager
 
     public function uninstall(string $pluginPath): void
     {
-        $pluginsDisk = $this->getDisk();
-
-        $pluginsDisk->deleteDirectory($pluginPath);
+        // Delete the plugin after response is sent
+        app()->terminating(fn() =>  $this->getDisk()->deleteDirectory($pluginPath));
     }
 
     /**

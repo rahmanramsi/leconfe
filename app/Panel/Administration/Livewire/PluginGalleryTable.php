@@ -1,0 +1,94 @@
+<?php
+
+namespace App\Panel\Administration\Livewire;
+
+use App\Models\PluginGallery;
+use App\Tables\Columns\IndexColumn;
+use Filament\Actions\StaticAction;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
+use Filament\Notifications\Notification;
+use Filament\Support\Enums\FontWeight;
+use Filament\Support\Enums\MaxWidth;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Concerns\InteractsWithTable;
+use Filament\Tables\Contracts\HasTable;
+use Filament\Tables\Table;
+use Illuminate\Contracts\View\View;
+use Livewire\Component;
+
+class PluginGalleryTable extends Component implements HasForms, HasTable
+{
+    use InteractsWithForms, InteractsWithTable;
+
+    public function render()
+    {
+        return view('tables.table');
+    }
+
+    public function table(Table $table): Table
+    {
+        return $table
+            ->query(PluginGallery::query())
+            ->columns([
+                IndexColumn::make('no'),
+                TextColumn::make('name')
+                    ->searchable()
+                    ->color('primary')
+                    ->weight(FontWeight::Medium)
+                    ->action(
+                        Action::make('details')
+                            ->modal()
+                            ->modalHeading(fn($record) => $record->name)
+                            ->registerModalActions([
+                                Action::make('install')
+                                    ->extraAttributes([
+                                        'class' => 'w-full',
+                                    ])
+                                    ->action(fn(PluginGallery $record) => $this->install($record))
+                                    ->cancelParentActions('details'),
+                                Action::make('upgrade')
+                                    ->extraAttributes([
+                                        'class' => 'w-full',
+                                    ])
+                                    ->action(fn(PluginGallery $record) => $this->install($record))
+                                    ->cancelParentActions('details'),
+                            ])
+                            ->modalSubmitAction(false)
+                            ->modalCancelAction(false)
+                            ->modalContent(fn(PluginGallery $record, Action $action): View => view('tables.actions.plugin-gallery-details', ['record' => $record, 'action' => $action]))
+                    ),
+                TextColumn::make('summary')
+                    ->searchable()
+                    ->html()
+                    ->wrap(),
+                TextColumn::make('status')
+                    ->getStateUsing(fn(PluginGallery $record) => $record->isUpgradable() ? 'Upgradeable' : '')
+                    ->badge()
+                    ->color('success'),
+            ])
+            ->filters([])
+            ->emptyStateActions([]);
+    }
+
+    public function install(PluginGallery $record)
+    {
+        $message = $record->isUpgradable() ? 'Upgrade' : 'Install';
+
+        $process = $record->install();
+
+        $notification = Notification::make();
+
+        if ($process) {
+            $notification->success()->title("{$message} Success");
+        } else {
+            $notification->danger()->title("{$message} Failed");
+        }
+
+        $notification->send();
+
+        $this->dispatch('close-modal', id: 'details');
+    }
+}

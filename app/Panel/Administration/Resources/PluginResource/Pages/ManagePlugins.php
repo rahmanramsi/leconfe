@@ -16,16 +16,7 @@ use Illuminate\Support\Facades\Log;
 class ManagePlugins extends ManageRecords
 {
     protected static string $resource = PluginResource::class;
-
-    public function getTabs(): array
-    {
-        return [
-            'all' => Tab::make(__('general.all')),
-            'disabled' => Tab::make(__('general.disabled'))
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('enabled', false)),
-        ];
-    }
-
+    
     protected function getHeaderActions(): array
     {
         return [
