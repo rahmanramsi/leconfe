@@ -16,6 +16,7 @@ use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class PluginTable extends Component implements HasForms, HasTable
@@ -27,10 +28,16 @@ class PluginTable extends Component implements HasForms, HasTable
         return view('tables.table');
     }
 
+    #[On('refresh-table')]
+    public function refreshTable()
+    {
+        $this->resetPage();
+    }
+
     public function table(Table $table): Table
     {
         return $table
-            ->query(Plugin::query())
+            ->query(Plugin::query()->hidden(false))
             ->columns([
                 IndexColumn::make('no'),
                 TextColumn::make('name')
@@ -58,9 +65,14 @@ class PluginTable extends Component implements HasForms, HasTable
                 ActionGroup::make([
                     DeleteAction::make()
                         ->authorize(fn(Plugin $record) => auth()->user()->can('delete', $record))
-                        ->action(function (Plugin $record) {
+                        ->action(function (Plugin $record, $action) {
                             FacadesPlugin::uninstall($record->id);
-                        }),
+
+                            $this->dispatch('refresh-table')->to(PluginGalleryTable::class);
+
+                            $action->success();
+                        })
+                        ->successNotificationTitle(fn(Plugin $record) => $record->name . ' uninstalled.'),
                 ]),
                 // TODO : Add actions based on plugin. Currently there's no way to create a dinamically action
 

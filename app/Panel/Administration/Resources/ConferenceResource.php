@@ -3,30 +3,16 @@
 namespace App\Panel\Administration\Resources;
 
 use App\Actions\Conferences\ConferenceUpdateAction;
-use App\Facades\Setting;
 use App\Models\Conference;
-use App\Models\Enums\ScheduledConferenceType;
 use App\Panel\Administration\Resources\ConferenceResource\Pages;
 use App\Tables\Columns\IndexColumn;
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Placeholder;
-use Filament\Forms\Components\Radio;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Support\Enums\MaxWidth;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Support\HtmlString;
-use Squire\Models\Country;
 
 class ConferenceResource extends Resource
 {

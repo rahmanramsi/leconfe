@@ -212,8 +212,6 @@ class PluginManager
 
         PluginInstalled::dispatch($plugin);
 
-        $this->getTempDisk()->delete($file);
-
         $this->reinitialize();
 
         return true;
