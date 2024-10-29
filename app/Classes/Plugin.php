@@ -143,7 +143,7 @@ abstract class Plugin implements HasPlugin
         if (file_exists($pluginAssetPath)) {
             $publicPluginAssetPath = public_path($this->getAssetsPath());
 
-            // Create target symlink public theme assets directory if required
+            // Create target symlink public plugins assets directory if required
             if (! file_exists($publicPluginAssetPath)) {
                 app(Filesystem::class)->relativeLink($pluginAssetPath, rtrim($publicPluginAssetPath, '/'));
             }
