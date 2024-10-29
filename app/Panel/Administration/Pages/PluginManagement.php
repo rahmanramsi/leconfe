@@ -22,6 +22,8 @@ class PluginManagement extends Page implements HasForms, HasInfolists
 
     protected static string $view = 'panel.administration.pages.plugin-management';
 
+    protected static ?int $navigationSort = 99;
+
     public static function getNavigationGroup(): string
     {
         return __('general.settings');

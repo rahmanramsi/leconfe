@@ -63,8 +63,8 @@ class PluginManager
             })
             ->each(function ($pluginPath) use ($disk) {
                 $plugin = $this->initiatePlugin($disk->path($pluginPath));
-
-                $this->register($pluginPath, $plugin, $this->getSetting($pluginPath, 'enabled', true));
+          
+                $this->register($pluginPath, $plugin, $this->getSetting($pluginPath, 'enabled', false));
             });
 
     }
@@ -211,8 +211,6 @@ class PluginManager
         }
 
         PluginInstalled::dispatch($plugin);
-
-        $this->getTempDisk()->delete($file);
 
         $this->reinitialize();
 

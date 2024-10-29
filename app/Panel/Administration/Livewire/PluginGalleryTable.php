@@ -17,6 +17,8 @@ use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\HtmlString;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class PluginGalleryTable extends Component implements HasForms, HasTable
@@ -36,7 +38,9 @@ class PluginGalleryTable extends Component implements HasForms, HasTable
                 IndexColumn::make('no'),
                 TextColumn::make('name')
                     ->searchable()
+                    ->description(fn(PluginGallery $record) => new HtmlString($record->summary))
                     ->color('primary')
+                    ->wrap()
                     ->weight(FontWeight::Medium)
                     ->action(
                         Action::make('details')
@@ -47,12 +51,17 @@ class PluginGalleryTable extends Component implements HasForms, HasTable
                                     ->extraAttributes([
                                         'class' => 'w-full',
                                     ])
+                                    ->authorize(fn(PluginGallery $record) => auth()->user()->can('install', $record))
+                                    ->visible(fn(PluginGallery $record) => auth()->user()->can('install', $record))
                                     ->action(fn(PluginGallery $record) => $this->install($record))
                                     ->cancelParentActions('details'),
                                 Action::make('upgrade')
+                                    ->authorize(fn(PluginGallery $record) => auth()->user()->can('install', $record))
+                                    ->visible(fn(PluginGallery $record) => auth()->user()->can('install', $record))
                                     ->extraAttributes([
                                         'class' => 'w-full',
                                     ])
+                                    ->color('success')
                                     ->action(fn(PluginGallery $record) => $this->install($record))
                                     ->cancelParentActions('details'),
                             ])
@@ -60,14 +69,32 @@ class PluginGalleryTable extends Component implements HasForms, HasTable
                             ->modalCancelAction(false)
                             ->modalContent(fn(PluginGallery $record, Action $action): View => view('tables.actions.plugin-gallery-details', ['record' => $record, 'action' => $action]))
                     ),
-                TextColumn::make('summary')
-                    ->searchable()
-                    ->html()
-                    ->wrap(),
+                TextColumn::make('author')
+                    ->searchable(),
                 TextColumn::make('status')
-                    ->getStateUsing(fn(PluginGallery $record) => $record->isUpgradable() ? 'Upgradeable' : '')
+                    ->getStateUsing(function(PluginGallery $record){
+                        if(!$record->isInstalled()){
+                            return 'Not Installed';
+                        }
+
+                        if($record->isUpgradable()){
+                            return 'Upgradable';
+                        }
+
+                        return 'Installed';
+                    })
                     ->badge()
-                    ->color('success'),
+                    ->color(function(PluginGallery $record){
+                        if(!$record->isInstalled()){
+                            return 'gray';
+                        }
+
+                        if($record->isUpgradable()){
+                            return 'success';
+                        }
+
+                        return 'primary';
+                    }),
             ])
             ->filters([])
             ->emptyStateActions([]);
@@ -89,6 +116,13 @@ class PluginGalleryTable extends Component implements HasForms, HasTable
 
         $notification->send();
 
-        $this->dispatch('close-modal', id: 'details');
+        $this->dispatch('refresh-table')->to(PluginTable::class);
+    }
+
+
+    #[On('refresh-table')]
+    public function refreshTable()
+    {
+        $this->resetPage();
     }
 }

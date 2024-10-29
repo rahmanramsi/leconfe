@@ -6,6 +6,7 @@ use App\Classes\Plugin as ClassesPlugin;
 use App\Facades\Plugin;
 use Composer\Semver\Semver;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Sushi\Sushi;
@@ -25,6 +26,7 @@ class PluginGallery extends Model
         'description' => 'string',
         'homepage' => 'string',
         'releases' => 'string',
+        'author' => 'string',
     ];
 
     protected $casts = [
@@ -52,10 +54,10 @@ class PluginGallery extends Model
                 $releases = collect($plugin['releases']);
                 $currentVersion = app()->getInstalledVersion();
 
-                return $releases->contains(fn($release) => collect($release['compatibility'])->contains(fn($value)  => Semver::satisfies($currentVersion, $value)));
+                return $releases->contains(fn($release) => collect($release['compatibility'])->contains(fn($value) => Semver::satisfies($currentVersion, $value)));
             })
-            ->map(function ($plugin) {
-                return [
+            ->map(
+                fn($plugin) => [
                     'id' => $plugin['id'],
                     'cover' => $plugin['cover'],
                     'name' => $plugin['name'],
@@ -65,8 +67,11 @@ class PluginGallery extends Model
                     'description' => $plugin['description'],
                     'homepage' => $plugin['homepage'],
                     'releases' => json_encode($plugin['releases']),
-                ];
-            })->values()->toArray();
+                    'author' => $plugin['author'],
+                ],
+            )
+            ->values()
+            ->toArray();
     }
 
     public function isInstalled(): bool
@@ -87,12 +92,12 @@ class PluginGallery extends Model
         return $latestRelease && version_compare($plugin->getVersion(), $latestRelease['version'], '<');
     }
 
-    public function getLatestCompatibleRelease(): array
+    public function getLatestCompatibleRelease(): Collection
     {
         $releases = collect($this->releases);
         $currentVersion = app()->getInstalledVersion();
 
-        return $releases->first(fn($release) => collect($release['compatibility'])->contains(fn($value)  => Semver::satisfies($currentVersion, $value)));
+        return collect($releases->first(fn($release) => collect($release['compatibility'])->contains(fn($value) => Semver::satisfies($currentVersion, $value))));
     }
 
     public function install()
@@ -104,11 +109,19 @@ class PluginGallery extends Model
 
         $filename = uniqid() . '.zip';
 
-        if (!Plugin::getTempDisk()->put($filename, file_get_contents($latestRelease['download_url']))) {
-            throw new \Exception('The file could not be written to disk');
+        
+        try {
+            if (!Plugin::getTempDisk()->put($filename, file_get_contents($latestRelease['download_url']))) {
+                throw new \Exception('The file could not be written to disk');
+            }
+    
+            Plugin::install(Plugin::getTempDisk()->path($filename));
+    
+        } catch (\Throwable $th) {
+            throw $th;
+        } finally {
+            Plugin::getTempDisk()->delete($filename);
         }
-
-        Plugin::install(Plugin::getTempDisk()->path($filename));
 
         return true;
     }
