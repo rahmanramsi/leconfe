@@ -93,7 +93,18 @@ class SubmissionDOI extends Component implements HasForms, HasTable
                                     ->action(fn (Set $set) => $set('doi', DOIGenerator::generate()))
                             ),
                     ])
-                    ->action(fn (Submission $record, array $data) => $record->doi()->updateOrCreate(['id' => $record->doi?->id], ['doi' => $data['doi']])),
+                    ->action(function (Submission $record, array $data){
+                        if(!$data['doi']){
+                            $record->doi?->delete();
+                            return;
+                        }
+                        $record->doi()->updateOrCreate(['id' => $record->doi?->id], ['doi' => $data['doi']]);
+
+                        return Notification::make()
+                            ->title('DOI Updated')
+                            ->success()
+                            ->send();
+                    }),
                 ...$registrationAgency ? DOIRegistrationFacade::driver($registrationAgency)?->getTableActions() : [],
             ])
             ->bulkActions([
