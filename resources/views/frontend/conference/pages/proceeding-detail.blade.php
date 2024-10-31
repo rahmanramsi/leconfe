@@ -32,17 +32,19 @@
                 </div>
             </div>
             
-            <div class="tracks">
+            <div class="tracks space-y-6">
                 @foreach ($tracks as $track)    
-                    <x-website::heading-title :title="$track->title" class="track-title" class="mb-5"/>
-                    <div class="space-y-5">
-                        @forelse($track->submissions as $paper)
-                            <x-conference::paper-summary :paper="$paper"/>  
-                        @empty
-                            <div class="text-center text-gray-500">
-                                No paper found.
-                            </div>
-                        @endforelse
+                    <div class="track space-y-4">
+                        <x-website::heading-title :title="$track->title" class="track-title"/>
+                        <div class="paper-summaries space-y-4">
+                            @forelse($track->submissions as $paper)
+                                <x-conference::paper-summary :paper="$paper"/>  
+                            @empty
+                                <div class="text-center text-gray-500">
+                                    No paper found.
+                                </div>
+                            @endforelse
+                        </div>
                     </div>
                 @endforeach
             </div>

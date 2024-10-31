@@ -1,6 +1,6 @@
 @props(['paper'])
 
-<div class="paper-summary flex flex-col sm:flex-row gap-4">
+<div class="paper-summary flex flex-col sm:flex-row gap-2 sm:gap-4">
     @if($paper->getFirstMediaUrl('cover'))
         <a href="{{ $paper->getPublicUrl() }}" class="cover max-w-56 grow">
             <img src="{{ $paper->getFirstMediaUrl('cover') }}" class="w-full" alt="Paper Cover">
@@ -19,7 +19,9 @@
                 @endif
             </a>
         </h3>
-        <div class="text-xs text-gray-500">{{ $paper->getMeta('subtitle') }}</div>
+        @if($paper->getMeta('subtitle'))
+            <div class="text-xs text-gray-500">{{ $paper->getMeta('subtitle') }}</div>
+        @endif
         <div class="meta space-y-2">
             <div class="flex-1 flex gap-y-2 flex-wrap items-center justify-between">
                 <div class="authors text-sm text-gray-600">
