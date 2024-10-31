@@ -55,6 +55,12 @@ class AppearanceSetupSetting extends Component implements HasForms
                             ->image()
                             ->imageResizeUpscale(false)
                             ->conversion('thumb'),
+                        SpatieMediaLibraryFileUpload::make('favicon')
+                            ->collection('favicon')
+                            ->label("Favicon")
+                            ->image()
+                            ->imageResizeUpscale(false)
+                            ->conversion('thumb'),
                         SpatieMediaLibraryFileUpload::make('thumbnail')
                             ->label(__('general.scheduled_conference_thumbnail'))
                             ->collection('thumbnail')

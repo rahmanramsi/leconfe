@@ -57,6 +57,13 @@ class SetupSetting extends Component implements HasForms
                             ->image()
                             ->imageResizeUpscale(false)
                             ->conversion('thumb'),
+                        SpatieMediaLibraryFileUpload::make('favicon')
+                            ->collection('favicon')
+                            ->label("Favicon")
+                            ->model(app()->getSite())
+                            ->image()
+                            ->imageResizeUpscale(false)
+                            ->conversion('thumb'),
                         Textarea::make('meta.description')
                             ->label(__('general.description'))
                             ->rows(3)

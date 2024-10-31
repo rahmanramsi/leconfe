@@ -49,7 +49,7 @@ class SetupDefaultData
         View::share('headerLogoAltText', $site->getMeta('name'));
         View::share('contextName', $site->getMeta('name'));
         View::share('pageFooter', $site->getMeta('page_footer'));
-        View::share('favicon', $site->getFirstMediaUrl('favicon'));
+        View::share('favicon', $site->getFirstMedia('favicon')?->getAvailableUrl(['tenant', 'thumb', 'thumb-xl']));
         View::share('styleSheet', $site->getFirstMediaUrl('styleSheet'));
         
         MetaTag::add('description', $site->getMeta('description'));
@@ -63,7 +63,7 @@ class SetupDefaultData
         View::share('headerLogoAltText', $currentConference->name);
         View::share('contextName', $currentConference->name);
         View::share('pageFooter', $currentConference->getMeta('page_footer'));
-        View::share('favicon', $currentConference->getFirstMediaUrl('favicon'));
+        View::share('favicon', $currentConference->getFirstMedia('favicon')?->getAvailableUrl(['tenant', 'thumb', 'thumb-xl']));
         View::share('styleSheet', $currentConference->getFirstMediaUrl('styleSheet'));
 
         MetaTag::add('description', preg_replace("/\r|\n/", '', $currentConference->getMeta('description')));
@@ -82,7 +82,7 @@ class SetupDefaultData
         View::share('headerLogoAltText', $currentScheduledConference->title);
         View::share('contextName', $currentScheduledConference->title);
         View::share('pageFooter', $currentScheduledConference->getMeta('page_footer'));
-        View::share('favicon', $currentScheduledConference->getFirstMediaUrl('favicon'));
+        View::share('favicon', $currentScheduledConference->getFirstMedia('favicon')?->getAvailableUrl(['tenant', 'thumb', 'thumb-xl']));
         View::share('styleSheet', $currentScheduledConference->getFirstMediaUrl('styleSheet'));
         MetaTag::add('description', preg_replace("/\r|\n/", '', $currentScheduledConference->getMeta('description')));
 

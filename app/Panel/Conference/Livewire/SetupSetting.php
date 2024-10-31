@@ -54,6 +54,12 @@ class SetupSetting extends Component implements HasForms
                             ->image()
                             ->imageResizeUpscale(false)
                             ->conversion('thumb'),
+                        SpatieMediaLibraryFileUpload::make('favicon')
+                            ->collection('favicon')
+                            ->label("Favicon")
+                            ->image()
+                            ->imageResizeUpscale(false)
+                            ->conversion('thumb'),
                         SpatieMediaLibraryFileUpload::make('thumbnail')
                             ->label(__('general.conference_thumbnail'))
                             ->collection('thumbnail')
