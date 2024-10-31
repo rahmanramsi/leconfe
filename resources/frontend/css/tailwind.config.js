@@ -10,7 +10,6 @@ export default {
         './resources/views/errors/**/*.blade.php',
         './resources/views/livewire/**/*.blade.php',
         './stubs/plugins/**/*.blade.php',
-        './plugins/**/*.blade.php',
     ],
     theme: {
         extend: {
