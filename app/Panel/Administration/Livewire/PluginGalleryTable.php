@@ -69,6 +69,9 @@ class PluginGalleryTable extends Component implements HasForms, HasTable
                             ->modalCancelAction(false)
                             ->modalContent(fn(PluginGallery $record, Action $action): View => view('tables.actions.plugin-gallery-details', ['record' => $record, 'action' => $action]))
                     ),
+                TextColumn::make('version')
+                    ->label(__('general.version'))
+                    ->getStateUsing(fn(PluginGallery $record) => $record->getLatestCompatibleRelease()?->get('version')),
                 TextColumn::make('author')
                     ->searchable(),
                 TextColumn::make('status')
