@@ -61,7 +61,6 @@ class Installer
     public function configureOptimization()
     {
         $this->call('optimize:clear');
-        $this->call('storage:link');
         $this->iconCache();
     }
 
