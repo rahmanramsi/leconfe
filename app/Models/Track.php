@@ -7,10 +7,12 @@ use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Plank\Metable\Metable;
+use Spatie\EloquentSortable\Sortable;
+use Spatie\EloquentSortable\SortableTrait;
 
-class Track extends Model
+class Track extends Model implements Sortable
 {
-    use BelongsToScheduledConference, Metable, Cachable;
+    use BelongsToScheduledConference, Metable, Cachable, SortableTrait;
 
     protected $fillable = [
         'title',
@@ -22,9 +24,14 @@ class Track extends Model
     {
         static::deleting(function (Track $track) {
             if($track->submissions()->exists()) {
-                abort(403, 'Before this track can be deleted, you must move paper submitted to it into other track');
+                throw new \Exception('Before this track can be deleted, you must move paper submitted to it into other track');
             }
         });
+    }
+
+    public function buildSortQuery()
+    {
+        return static::query()->where('scheduled_conference_id', $this->scheduled_conference_id);
     }
 
     public function scopeActive($query)

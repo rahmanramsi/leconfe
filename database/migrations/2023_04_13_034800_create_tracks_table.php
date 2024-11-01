@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('abbreviation');
             $table->boolean('is_active')->default(true);
+            $table->unsignedInteger('order_column')->nullable();
             $table->timestamps();
         });
     }
