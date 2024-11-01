@@ -6,6 +6,7 @@ use App\Facades\Plugin as FacadesPlugin;
 use App\Interfaces\HasPlugin;
 use Filament\Panel;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
@@ -146,8 +147,9 @@ abstract class Plugin implements HasPlugin
 
             if(file_exists($publicPluginAssetPath) && !is_link($publicPluginAssetPath)){
                 try {
-                    unlink($publicPluginAssetPath);
+                    File::deleteDirectory($publicPluginAssetPath);
                 } catch (\Throwable $th) {
+                    throw $th;
                     Log::warning('Failed to fix public plugin asset directory symlink: ' . $publicPluginAssetPath . ' (please remove if manually)');
                 }
             }
