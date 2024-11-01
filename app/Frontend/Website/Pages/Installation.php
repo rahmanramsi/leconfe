@@ -2,6 +2,7 @@
 
 namespace App\Frontend\Website\Pages;
 
+use App\Facades\Hook;
 use App\Facades\MetaTag;
 use App\Http\Middleware\RedirectToConference;
 use App\Http\Middleware\SetLocale;
@@ -11,6 +12,8 @@ use App\Utils\PermissionChecker;
 use Illuminate\Support\Facades\App;
 use App\Livewire\Forms\InstallationForm;
 use App\Http\Middleware\SetupDefaultData;
+use App\Http\Middleware\ThemeActivator;
+use Illuminate\Support\Facades\Blade;
 use Jackiedo\Timezonelist\Facades\Timezonelist;
 use Livewire\Mechanisms\ComponentRegistry;
 
@@ -22,6 +25,7 @@ class Installation extends Page
         SetLocale::class,
         SetupDefaultData::class,
         RedirectToConference::class,
+        ThemeActivator::class,
     ];
 
     public array $folders = [];
@@ -37,6 +41,10 @@ class Installation extends Page
         }
         
         MetaTag::add('robots', 'noindex, nofollow');
+
+        Hook::add('Frontend::Views::Head', function ($hookName, &$output){
+			$output .= Blade::render("@vite(['resources/frontend/css/frontend.css'])");
+		});
 
         $this->checkPermission();
     }
