@@ -49,6 +49,8 @@ class PluginTable extends Component implements HasForms, HasTable
                     ->weight(fn(Plugin $record) => $record->plugin->isEnabled() ? FontWeight::SemiBold : FontWeight::Light)
                     ->url(fn(Plugin $record) => $record->plugin->isEnabled() ? $record->plugin?->getPluginPage() : null)
                     ->color(fn(Plugin $record) => ($record->plugin->isEnabled() && $record->plugin?->getPluginPage()) ? 'primary' : null),
+                TextColumn::make('version')
+                    ->label(__('general.version')),
                 TextColumn::make('author')
                     ->label(__('general.author')),
                 ToggleColumn::make('enabled')

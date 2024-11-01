@@ -118,6 +118,7 @@ return [
     'plugin' => 'Plugin',
     'enabled' => 'Enabled',
     'author' => 'Author',
+    'version' => 'Version',
     'all' => 'All',
     'disabled' => 'Disabled',
     'upload_plugin' => 'Upload Plugin',
