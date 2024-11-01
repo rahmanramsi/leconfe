@@ -157,6 +157,7 @@ class PanelProvider extends ServiceProvider
     public function setupPanel(Panel $panel): Panel
     {
         return $panel
+            ->favicon(asset('favicon.ico'))
             ->maxContentWidth('full')
             ->when(app()->isProduction(), fn(Panel $panel) => $panel->renderHook(
                 PanelsRenderHook::FOOTER,

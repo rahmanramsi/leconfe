@@ -79,7 +79,8 @@ class WebsiteSetting extends Page
 											->icon('heroicon-o-cog')
 											->schema([
 												LivewireEntry::make('setup-setting')
-													->livewire(SetupSetting::class),
+													->livewire(SetupSetting::class)
+													->lazy(),
 											]),
 										VerticalTabs\Tab::make('Sidebar')
                                             ->label(__('general.sidebar'))
