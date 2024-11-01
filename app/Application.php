@@ -38,7 +38,7 @@ use Illuminate\Foundation\Application as LaravelApplication;
 
 class Application extends LaravelApplication
 {
-    public const APP_VERSION = '1.0.3';
+    public const APP_VERSION = '1.1.0';
 
     public const PHP_MIN_VERSION = '8.1';
 
