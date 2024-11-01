@@ -38,7 +38,7 @@ class TrackTable extends Component implements HasForms, HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->query(Track::query())
+            ->query(Track::query()->orderBy('order_column'))
             ->heading(__('general.track'))
             ->columns([
                 IndexColumn::make('no')
@@ -46,6 +46,7 @@ class TrackTable extends Component implements HasForms, HasTable
                 TextColumn::make('title')
                     ->label(__('general.title')),
             ])
+            ->reorderable('order_column')
             ->headerActions([
                 CreateAction::make()
                     ->label(__('general.new_track'))
