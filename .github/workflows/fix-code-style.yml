@@ -3,7 +3,7 @@ name: fix-code-style
 on:
   push:
     branches:
-      - main
+      - development
 
 jobs:
   fix-code-style:
