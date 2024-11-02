@@ -2,8 +2,8 @@
 
 namespace App\Actions\Speakers;
 
-use App\Models\SpeakerRole;
 use App\Models\ScheduledConference;
+use App\Models\SpeakerRole;
 use Illuminate\Support\Facades\DB;
 use Lorisleiva\Actions\Concerns\AsAction;
 

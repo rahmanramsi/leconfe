@@ -3,7 +3,6 @@
 namespace App\Panel\Conference\Livewire\Forms\Conferences;
 
 use App\Actions\Conferences\ConferenceUpdateAction;
-use App\Models\Conference;
 use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\KeyValue;

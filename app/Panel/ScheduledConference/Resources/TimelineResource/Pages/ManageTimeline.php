@@ -4,10 +4,10 @@ namespace App\Panel\ScheduledConference\Resources\TimelineResource\Pages;
 
 use App\Models\Session;
 use App\Models\Timeline;
-use Filament\Actions;
-use Filament\Support\Enums\MaxWidth;
-use Filament\Resources\Pages\ListRecords;
 use App\Panel\ScheduledConference\Resources\TimelineResource;
+use Filament\Actions;
+use Filament\Resources\Pages\ListRecords;
+use Filament\Support\Enums\MaxWidth;
 
 class ManageTimeline extends ListRecords
 {

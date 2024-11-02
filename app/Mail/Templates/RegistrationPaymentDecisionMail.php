@@ -3,16 +3,15 @@
 namespace App\Mail\Templates;
 
 use App\Classes\Log;
-use App\Models\User;
-use Illuminate\Support\Str;
 use App\Models\Registration;
+use Illuminate\Support\Str;
 
 class RegistrationPaymentDecisionMail extends TemplateMailable
 {
     public string $userName;
 
     public string $paymentStatus;
-    
+
     public Log $log;
 
     public function __construct(Registration $registration, string $state)

@@ -3,41 +3,32 @@
 namespace App\Panel\Conference\Livewire;
 
 use App\Classes\DOIGenerator;
-use App\Classes\ImportExport\ExportArticleCrossref;
 use App\Facades\DOIRegistrationFacade;
-use App\Models\DOI;
 use App\Models\Enums\DOIStatus;
-use App\Models\Proceeding;
 use App\Models\Submission;
 use App\Tables\Columns\IndexColumn;
 use Filament\Forms\Components\Actions\Action as FormAction;
-use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
-use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Notifications\Notification;
 use Filament\Support\Enums\MaxWidth;
-use Filament\Support\View\Components\Modal;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Filters\SelectFilter;
-use Livewire\Component;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Livewire\Component;
 
 class SubmissionDOI extends Component implements HasForms, HasTable
 {
-    use InteractsWithTable;
     use InteractsWithForms;
+    use InteractsWithTable;
 
-    public function mount()
-    {
-    }
+    public function mount() {}
 
     public function table(Table $table): Table
     {
@@ -66,7 +57,7 @@ class SubmissionDOI extends Component implements HasForms, HasTable
                     ->options(DOIStatus::options())
                     ->attribute('doi.status')
                     ->modifyQueryUsing(function ($data, $query) {
-                        return !$data['value'] ? $query : $query->whereHas('doi', fn ($query) => $query->where('status', $data['value']));
+                        return ! $data['value'] ? $query : $query->whereHas('doi', fn ($query) => $query->where('status', $data['value']));
                     }),
             ])
             ->actions([
@@ -93,9 +84,10 @@ class SubmissionDOI extends Component implements HasForms, HasTable
                                     ->action(fn (Set $set) => $set('doi', DOIGenerator::generate()))
                             ),
                     ])
-                    ->action(function (Submission $record, array $data){
-                        if(!$data['doi']){
+                    ->action(function (Submission $record, array $data) {
+                        if (! $data['doi']) {
                             $record->doi?->delete();
+
                             return;
                         }
                         $record->doi()->updateOrCreate(['id' => $record->doi?->id], ['doi' => $data['doi']]);
@@ -111,6 +103,7 @@ class SubmissionDOI extends Component implements HasForms, HasTable
                 // ...
             ]);
     }
+
     public function render()
     {
         return view('panel.conference.livewire.proceeding-doi');

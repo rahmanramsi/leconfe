@@ -6,6 +6,7 @@ use App\Models\Proceeding;
 use App\Models\Submission;
 use App\Panel\Conference\Resources\ProceedingResource;
 use App\Tables\Columns\IndexColumn;
+use Filament\Actions;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
@@ -18,14 +19,12 @@ use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Model;
-use Filament\Actions;
-
 
 class ViewProceeding extends Page implements HasForms, HasTable
 {
+    use InteractsWithForms;
     use InteractsWithRecord;
     use InteractsWithTable;
-    use InteractsWithForms;
 
     protected static string $resource = ProceedingResource::class;
 
@@ -33,7 +32,7 @@ class ViewProceeding extends Page implements HasForms, HasTable
 
     public ?array $data = null;
 
-    public function mount(int | string $record): void
+    public function mount(int|string $record): void
     {
         $this->record = $this->resolveRecord($record);
 
@@ -48,7 +47,7 @@ class ViewProceeding extends Page implements HasForms, HasTable
             Actions\Action::make('preview')
                 ->label(__('general.preview'))
                 ->icon('heroicon-o-eye')
-                ->hidden(fn (Proceeding $record) => !$record->published)
+                ->hidden(fn (Proceeding $record) => ! $record->published)
                 ->url(fn (Proceeding $record) => route('livewirePageGroup.conference.pages.proceeding-detail', [$record->id]), true),
         ];
     }
@@ -58,7 +57,7 @@ class ViewProceeding extends Page implements HasForms, HasTable
         abort_unless(static::getResource()::canView($this->getRecord()), 403);
     }
 
-    public function can(string $action, Model | null $record = null)
+    public function can(string $action, ?Model $record = null)
     {
         return static::getResource()::can($action, $record);
     }
@@ -68,7 +67,7 @@ class ViewProceeding extends Page implements HasForms, HasTable
         return __('filament-panels::resources/pages/view-record.breadcrumb');
     }
 
-    function getTitle(): string|Htmlable
+    public function getTitle(): string|Htmlable
     {
         return $this->record->title;
     }
@@ -76,13 +75,12 @@ class ViewProceeding extends Page implements HasForms, HasTable
     public function form(Form $form): Form
     {
         $form
-            ->disabled(fn () => !$this->can('update', $this->record))
+            ->disabled(fn () => ! $this->can('update', $this->record))
             ->model($this->record);
 
         return static::getResource()::form($form)
             ->statePath('data');
     }
-
 
     public function submit()
     {
@@ -123,7 +121,7 @@ class ViewProceeding extends Page implements HasForms, HasTable
                     ->label(__('general.remove'))
                     ->requiresConfirmation()
                     ->color('danger')
-                    ->action(fn (Submission $record) => $record->unassignProceeding())
+                    ->action(fn (Submission $record) => $record->unassignProceeding()),
             ])
             ->bulkActions([
                 // ...

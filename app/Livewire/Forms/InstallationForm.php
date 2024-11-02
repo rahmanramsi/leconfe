@@ -2,7 +2,6 @@
 
 namespace App\Livewire\Forms;
 
-use App\Models\Conference;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -76,7 +75,7 @@ class InstallationForm extends Form
                 Schema::createDatabase($dbName);
             }
         } catch (\Throwable $th) {
-            $this->addError('error', 'Create database failed: Please manually create your database '. $th->getMessage());
+            $this->addError('error', 'Create database failed: Please manually create your database '.$th->getMessage());
 
             return false;
         }

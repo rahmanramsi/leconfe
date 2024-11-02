@@ -2,13 +2,12 @@
 
 namespace App\Models\Enums;
 
-use Illuminate\Support\Str;
-use Filament\Support\Contracts\HasLabel;
 use App\Models\Enums\Concern\UsefulEnums;
 use Filament\Support\Colors\Color;
 use Filament\Support\Contracts\HasColor;
+use Filament\Support\Contracts\HasLabel;
 
-enum RegistrationPaymentState: string implements HasLabel, HasColor
+enum RegistrationPaymentState: string implements HasColor, HasLabel
 {
     use UsefulEnums;
 

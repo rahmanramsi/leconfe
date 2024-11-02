@@ -5,12 +5,11 @@ namespace App\Panel\ScheduledConference\Livewire\Submissions\Forms;
 use App\Actions\Submissions\SubmissionUpdateAction;
 use App\Classes\Log;
 use App\Models\Submission;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
-use App\Forms\Components\TinyEditor;
-use Filament\Forms\Components\Textarea;
 
 class References extends \Livewire\Component implements HasForms
 {

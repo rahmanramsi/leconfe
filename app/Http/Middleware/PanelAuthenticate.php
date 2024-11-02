@@ -8,11 +8,11 @@ class PanelAuthenticate extends Authenticate
 {
     protected function redirectTo($request): ?string
     {
-        if(app()->getCurrentScheduledConference()){
+        if (app()->getCurrentScheduledConference()) {
             return route('livewirePageGroup.scheduledConference.pages.login');
         }
 
-        if(app()->getCurrentConference()){
+        if (app()->getCurrentConference()) {
             return route('livewirePageGroup.website.pages.login');
         }
 

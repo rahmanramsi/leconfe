@@ -3,11 +3,10 @@
 namespace App\Frontend\ScheduledConference\Pages;
 
 use App\Facades\Hook;
+use App\Frontend\Website\Pages\Page;
 use App\Models\Registration;
-use App\Models\PaymentManual;
 use Illuminate\Support\Facades\Route;
 use Rahmanramsi\LivewirePageGroup\PageGroup;
-use App\Frontend\Website\Pages\Page;
 
 class ParticipantRegisterStatus extends Page
 {
@@ -18,12 +17,13 @@ class ParticipantRegisterStatus extends Page
     public function mount()
     {
         $isLogged = auth()->check();
-        $userRegistration = !$isLogged ? null : Registration::withTrashed()
+        $userRegistration = ! $isLogged ? null : Registration::withTrashed()
             ->whereUserId(auth()->user()->id)
             ->first();
 
-        if (!$userRegistration)
+        if (! $userRegistration) {
             return redirect(route(ParticipantRegister::getRouteName()));
+        }
     }
 
     protected function getViewData(): array
@@ -32,12 +32,12 @@ class ParticipantRegisterStatus extends Page
 
         $isLogged = auth()->check();
 
-        $userRegistration = !$isLogged ? null : Registration::withTrashed()
+        $userRegistration = ! $isLogged ? null : Registration::withTrashed()
             ->where('user_id', auth()->user()->id)
             ->first();
 
         $paymentDetails = [];
-        if($currentScheduledConference->getMeta('manual_payment_instructions')){
+        if ($currentScheduledConference->getMeta('manual_payment_instructions')) {
             $paymentDetails[$currentScheduledConference->getMeta('manual_payment_name')] = $currentScheduledConference->getMeta('manual_payment_instructions');
         }
 

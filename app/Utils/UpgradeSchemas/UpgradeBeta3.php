@@ -7,10 +7,10 @@ use App\Models\Conference;
 
 class UpgradeBeta3 extends UpgradeBase
 {
-	public function run(): void
-	{
-		Conference::lazy()->each(function ($conference) {
-			AuthorRolePopulateDefaultDataAction::run($conference);
-		});
-	}
-}	
+    public function run(): void
+    {
+        Conference::lazy()->each(function ($conference) {
+            AuthorRolePopulateDefaultDataAction::run($conference);
+        });
+    }
+}

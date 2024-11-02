@@ -3,7 +3,6 @@
 namespace App\Actions\Conferences;
 
 use App\Models\Conference;
-use App\Models\Enums\ConferenceStatus;
 use App\Models\Scopes\ConferenceScope;
 use Illuminate\Support\Facades\DB;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -94,7 +93,7 @@ class ConferenceCloneAction
 
         while (Conference::where('path', $uniquePath)->exists()) {
             $counter++;
-            $uniquePath = $basePath . $counter;
+            $uniquePath = $basePath.$counter;
         }
 
         return $uniquePath;

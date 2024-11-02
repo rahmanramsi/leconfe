@@ -7,7 +7,6 @@ use App\Facades\Setting;
 use App\Infolists\Components\LivewireEntry;
 use App\Mail\Templates\ReviewerAcceptedInvitationMail;
 use App\Mail\Templates\ReviewerDeclinedInvitationMail;
-use App\Models\Enums\UserRole;
 use App\Models\Review;
 use App\Models\Submission;
 use App\Models\User;
@@ -45,7 +44,7 @@ class ReviewerInvitationPage extends Page implements HasActions, HasInfolists
     {
         $this->review = $this->record->reviews()->where('user_id', auth()->id())->first() ?? null;
 
-        if (!$this->review) {
+        if (! $this->review) {
             abort(404);
         }
     }
@@ -114,7 +113,7 @@ class ReviewerInvitationPage extends Page implements HasActions, HasInfolists
 
                     return;
                 }
-                
+
                 $action->success();
                 $action->redirect(SubmissionResource::getUrl('review', ['record' => $this->record->id]));
             });

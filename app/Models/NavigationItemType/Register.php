@@ -19,16 +19,16 @@ class Register extends BaseNavigationItemType
 
     public static function getIsDisplayed(NavigationMenuItem $navigationMenuItem): bool
     {
-        return app()->getCurrentScheduledConferenceId() && Setting::get('allow_registration') && !auth()->check();
+        return app()->getCurrentScheduledConferenceId() && Setting::get('allow_registration') && ! auth()->check();
     }
 
     public static function getUrl(NavigationMenuItem $navigationMenuItem): string
     {
-        if(app()->getCurrentScheduledConferenceId()){
+        if (app()->getCurrentScheduledConferenceId()) {
             return route('livewirePageGroup.scheduledConference.pages.register');
         }
 
-        if(app()->getCurrentConferenceId()){
+        if (app()->getCurrentConferenceId()) {
             $currentScheduledConference = app()->getCurrentConference()->currentScheduledConference;
 
             return route('livewirePageGroup.scheduledConference.pages.register', ['serie' => $currentScheduledConference]);

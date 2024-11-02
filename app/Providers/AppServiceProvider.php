@@ -6,28 +6,28 @@ use App\Actions\Leconfe\CheckLatestVersion;
 use App\Actions\System\StorageLinkValidate;
 use App\Application;
 use App\Classes\Setting;
-use App\Models\ScheduledConference;
-use Livewire\Livewire;
 use App\Console\Kernel as ConsoleKernel;
 use App\Events\UserLoggedIn;
 use App\Http\Kernel as HttpKernel;
 use App\Listeners\SubmissionEventSubscriber;
-use App\Models\Conference;
-use Illuminate\Support\Str;
 use App\Managers\MetaTagManager;
 use App\Managers\SidebarManager;
-use Illuminate\Support\Facades\DB;
+use App\Models\Conference;
+use App\Models\ScheduledConference;
 use App\Routing\CustomUrlGenerator;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Http\Client\Factory as Http;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
+use Livewire\Livewire;
 
 use function Illuminate\Events\queueable;
 
@@ -47,7 +47,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         $this->app->bind(Setting::class, function ($app) {
-            return new Setting();
+            return new Setting;
         });
 
         // Use a custom URL generator to accomodate multi context.
@@ -75,7 +75,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->extend(Http::class, function ($service, $app) {
             return $service->withHeaders([
                 'Leconfe-Version' => app()->getCodeVersion(),
-                'User-Agent' => 'Leconfe/' . app()->getCodeVersion(),
+                'User-Agent' => 'Leconfe/'.app()->getCodeVersion(),
             ]);
         });
     }
@@ -101,10 +101,10 @@ class AppServiceProvider extends ServiceProvider
             try {
                 CheckLatestVersion::run();
             } catch (\Throwable $th) {
-                // 
+                //
             }
         }));
-        Event::subscribe(SubmissionEventSubscriber::class);    
+        Event::subscribe(SubmissionEventSubscriber::class);
     }
 
     protected function handlePublicStorage()
@@ -115,7 +115,7 @@ class AppServiceProvider extends ServiceProvider
     protected function extendBlade(): void
     {
         Blade::directive('hook', function (string $name) {
-            return '<?php $output = null; \App\Facades\Hook::call(' . "$name" . ',[&$output]); echo $output; ?>';
+            return '<?php $output = null; \App\Facades\Hook::call('."$name".',[&$output]); echo $output; ?>';
         });
     }
 
@@ -125,7 +125,7 @@ class AppServiceProvider extends ServiceProvider
          * Add macro to Str class to mask email address.
          */
         Str::macro('maskEmail', function ($email) {
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 return $email;
             }
 
@@ -150,7 +150,7 @@ class AppServiceProvider extends ServiceProvider
 
         // Since this is a performance concern only, don’t halt
         // production for violations.
-        Model::preventLazyLoading(!$this->app->isProduction());
+        Model::preventLazyLoading(! $this->app->isProduction());
     }
 
     protected function setupMorph(): void
@@ -208,7 +208,7 @@ class AppServiceProvider extends ServiceProvider
 
     protected function detectConference(): void
     {
-        if ($this->app->runningInConsole() || !$this->app->isInstalled()) {
+        if ($this->app->runningInConsole() || ! $this->app->isInstalled()) {
             return;
         }
         $this->app->scopeCurrentConference();
@@ -216,7 +216,7 @@ class AppServiceProvider extends ServiceProvider
         $pathInfos = explode('/', request()->getPathInfo());
         $conferencePath = $pathInfos[1] ?? null;
 
-        $isOnScheduledPath = isset($pathInfos[2]) && $pathInfos[2] == 'scheduled' && isset($pathInfos[3]) && !blank($pathInfos[3]);
+        $isOnScheduledPath = isset($pathInfos[2]) && $pathInfos[2] == 'scheduled' && isset($pathInfos[3]) && ! blank($pathInfos[3]);
         $scheduledConferencePath = $pathInfos[3] ?? null;
 
         // Detect conference from URL path
@@ -228,11 +228,10 @@ class AppServiceProvider extends ServiceProvider
 
             $conference ? $this->app->setCurrentConferenceId($conference->getKey()) : $this->app->setCurrentConferenceId(Application::CONTEXT_WEBSITE);
 
-            
-            if (!$conference && $isOnScheduledPath){
+            if (! $conference && $isOnScheduledPath) {
                 abort(404);
             }
-            
+
             // Detect scheduledConference from URL path when conference is set
             if ($conference && $isOnScheduledPath) {
                 if ($scheduledConference = ScheduledConference::where('path', $scheduledConferencePath)->first()) {
@@ -249,10 +248,10 @@ class AppServiceProvider extends ServiceProvider
             $currentScheduledConference = $this->app->getCurrentScheduledConference();
             if ($isOnScheduledPath && $currentScheduledConference && $currentScheduledConference->path === $scheduledConferencePath) {
                 Livewire::setUpdateRoute(
-                    fn ($handle) => Route::post($currentConference->path . '/scheduled/' . $currentScheduledConference->path . '/livewire/update', $handle)->middleware('web')
+                    fn ($handle) => Route::post($currentConference->path.'/scheduled/'.$currentScheduledConference->path.'/livewire/update', $handle)->middleware('web')
                 );
             } else {
-                Livewire::setUpdateRoute(fn ($handle) => Route::post($currentConference->path . '/livewire/update', $handle)->middleware('web'));
+                Livewire::setUpdateRoute(fn ($handle) => Route::post($currentConference->path.'/livewire/update', $handle)->middleware('web'));
             }
         }
     }

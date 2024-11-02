@@ -2,10 +2,7 @@
 
 namespace Database\Seeders;
 
-use Database\Seeders\Productions\MailTemplateSeeder;
 use Database\Seeders\Productions\PermissionSeeder;
-use Database\Seeders\Productions\RoleSeeder;
-use Database\Seeders\Productions\SubmissionFileTypeSeeder;
 use Illuminate\Database\Seeder;
 
 class ProductionSeeder extends Seeder

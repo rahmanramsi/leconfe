@@ -3,27 +3,26 @@
 namespace App\Panel\Administration\Resources;
 
 use App\Actions\StaticPages\StaticPageUpdateAction;
+use App\Forms\Components\TinyEditor;
 use App\Models\StaticPage;
 use App\Panel\Administration\Resources\StaticPageResource\Pages;
+use App\Tables\Columns\IndexColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Validation\Rules\Unique;
-use App\Forms\Components\TinyEditor;
-use App\Tables\Columns\IndexColumn;
-use Filament\Tables\Actions\Action;
 
 class StaticPageResource extends Resource
 {
     protected static ?string $model = StaticPage::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-credit-card';
-
 
     public static function getNavigationLabel(): string
     {
@@ -35,24 +34,21 @@ class StaticPageResource extends Resource
         return __('general.static_page');
     }
 
-
     public static function getNavigationGroup(): string
     {
         return __('general.settings');
     }
 
-
     public static function getEloquentQuery(): Builder
     {
         $query = static::getModel()::query();
 
-        if(!app()->getCurrentScheduledConferenceId()){
+        if (! app()->getCurrentScheduledConferenceId()) {
             $query->where('scheduled_conference_id', 0);
         }
 
         return $query;
     }
-
 
     public static function form(Form $form): Form
     {
@@ -97,7 +93,7 @@ class StaticPageResource extends Resource
                 Action::make('preview')
                     ->label(__('general.preview'))
                     ->icon('heroicon-o-eye')
-                    ->url(fn($record) => $record->getUrl())
+                    ->url(fn ($record) => $record->getUrl())
                     ->openUrlInNewTab(),
                 EditAction::make()
                     ->mutateRecordDataUsing(function (StaticPage $record, array $data) {
@@ -105,7 +101,7 @@ class StaticPageResource extends Resource
 
                         return $data;
                     })
-                    ->using(fn(StaticPage $record, array $data) => StaticPageUpdateAction::run($record, $data)),
+                    ->using(fn (StaticPage $record, array $data) => StaticPageUpdateAction::run($record, $data)),
                 DeleteAction::make(),
             ])
             ->defaultSort('created_at', 'desc');

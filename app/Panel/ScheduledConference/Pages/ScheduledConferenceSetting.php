@@ -2,27 +2,21 @@
 
 namespace App\Panel\ScheduledConference\Pages;
 
-use Filament\Infolists\Infolist;
-use Filament\Pages\Page;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Auth;
-use Filament\Infolists\Components\Tabs;
 use App\Infolists\Components\LivewireEntry;
-use App\Panel\Administration\Livewire\SidebarSetting;
-use App\Panel\Conference\Livewire\NavigationMenuSetting;
 use App\Panel\ScheduledConference\Livewire\ContactSetting;
 use App\Panel\ScheduledConference\Livewire\MastHeadSetting;
-use App\Panel\ScheduledConference\Livewire\SetupSetting;
-use App\Panel\ScheduledConference\Livewire\SponsorSetting;
-use App\Panel\ScheduledConference\Livewire\TopicTable;
+use Filament\Infolists\Components\Tabs;
+use Filament\Infolists\Infolist;
+use Filament\Pages\Page;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 
 class ScheduledConferenceSetting extends Page
 {
     protected static string $view = 'panel.scheduledConference.pages.scheduled-conference-setting';
 
     protected static ?string $navigationIcon = 'heroicon-o-calendar-days';
-
 
     public static function getNavigationLabel(): string
     {
@@ -34,12 +28,10 @@ class ScheduledConferenceSetting extends Page
         return __('general.scheduled_conference');
     }
 
-
     public static function getNavigationGroup(): string
     {
         return __('general.settings');
     }
-
 
     public function mount(): void
     {

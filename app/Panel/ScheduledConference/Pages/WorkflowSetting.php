@@ -2,22 +2,22 @@
 
 namespace App\Panel\ScheduledConference\Pages;
 
-use Filament\Infolists\Infolist;
-use Filament\Pages\Page;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Auth;
-use Filament\Infolists\Components\Tabs;
 use App\Infolists\Components\LivewireEntry;
-use App\Panel\ScheduledConference\Livewire\AuthorGuidance;
 use App\Infolists\Components\VerticalTabs as InfolistsVerticalTabs;
 use App\Panel\Conference\Livewire\EmailSetting;
+use App\Panel\ScheduledConference\Livewire\AuthorGuidance;
 use App\Panel\ScheduledConference\Livewire\AuthorRoleTable;
 use App\Panel\ScheduledConference\Livewire\ReviewGuidance;
 use App\Panel\ScheduledConference\Livewire\ReviewSetupSetting;
 use App\Panel\ScheduledConference\Livewire\SubmissionFileTypeTable;
 use App\Panel\ScheduledConference\Livewire\TopicTable;
 use App\Panel\ScheduledConference\Livewire\TrackTable;
+use Filament\Infolists\Components\Tabs;
+use Filament\Infolists\Infolist;
+use Filament\Pages\Page;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 
 class WorkflowSetting extends Page
 {
@@ -39,8 +39,6 @@ class WorkflowSetting extends Page
     }
 
     protected static ?string $navigationIcon = 'heroicon-o-window';
-
-
 
     public function mount(): void
     {

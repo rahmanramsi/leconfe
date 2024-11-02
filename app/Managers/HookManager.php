@@ -2,33 +2,31 @@
 
 namespace App\Managers;
 
-use Closure;
-use Illuminate\Support\Facades\Pipeline;
 use Throwable;
 
 class HookManager
 {
     public const SEQUENCE_CORE = 0;
+
     public const SEQUENCE_NORMAL = 256;
+
     public const SEQUENCE_LATE = 512;
+
     public const SEQUENCE_LAST = 768;
 
-
     public const CONTINUE = false;
-    public const ABORT = true;
 
+    public const ABORT = true;
 
     protected array $hooks = [];
 
     /**
      * Register Hook
-     *
      */
     public function add(string $name, callable $callback, int $sequence = self::SEQUENCE_NORMAL): void
     {
         $this->hooks[$name][$sequence][] = &$callback;
     }
-
 
     /**
      * Call Hook
@@ -36,7 +34,7 @@ class HookManager
     public function call(string $name, mixed $params): bool
     {
         $hooks = $this->getHooks();
-        if (!isset($hooks[$name])) {
+        if (! isset($hooks[$name])) {
             return self::CONTINUE;
         }
 
@@ -64,16 +62,15 @@ class HookManager
         }
 
         $returner = null;
+
         return $returner;
     }
 
     /**
      * Clear hook by name
      *
-     * @param string $name
-     * 
+     *
      * @return [type]
-     * 
      */
     public function clear(string $name): void
     {
@@ -86,7 +83,6 @@ class HookManager
      * Handle the given exception.
      *
      * @param  mixed  $passable
-     * @param  \Throwable  $e
      * @return mixed
      *
      * @throws \Throwable

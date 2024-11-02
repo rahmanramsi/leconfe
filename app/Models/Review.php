@@ -12,8 +12,10 @@ class Review extends Model implements HasMedia
     use HasFactory, InteractsWithMedia;
 
     public const MODE_DOUBLE_ANONYMOUS = 1;
+
     public const MODE_ANONYMOUS = 2;
-    public const MODE_OPEN  = 3;
+
+    public const MODE_OPEN = 3;
 
     protected $casts = [
         'date_assigned' => 'datetime',
@@ -88,7 +90,7 @@ class Review extends Model implements HasMedia
         return is_null($this->date_confirmed);
     }
 
-    public static function getModeOptions() : array
+    public static function getModeOptions(): array
     {
         return [
             self::MODE_DOUBLE_ANONYMOUS => __('general.anonymous_author'),

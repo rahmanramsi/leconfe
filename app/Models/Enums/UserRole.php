@@ -25,9 +25,9 @@ enum UserRole: string implements HasLabel
     public static function selfAssignedRoles(): array
     {
         return [
-            static::Reader,
-            static::Author,
-            static::Reviewer,
+            self::Reader,
+            self::Author,
+            self::Reviewer,
         ];
     }
 
@@ -44,27 +44,27 @@ enum UserRole: string implements HasLabel
     public static function conferenceRoles(): array
     {
         return [
-            static::ConferenceManager,
-            static::Reviewer,
-            static::Author,
-            static::Reader,
+            self::ConferenceManager,
+            self::Reviewer,
+            self::Author,
+            self::Reader,
         ];
     }
 
-    public static function scheduledConferenceRoles(): array 
+    public static function scheduledConferenceRoles(): array
     {
         return [
-            static::ScheduledConferenceEditor,
-            static::TrackEditor,
+            self::ScheduledConferenceEditor,
+            self::TrackEditor,
         ];
     }
 
     public static function internalRoles(): array
     {
         return [
-            static::Admin,
-            static::ConferenceManager,
-            static::ScheduledConferenceEditor,
+            self::Admin,
+            self::ConferenceManager,
+            self::ScheduledConferenceEditor,
         ];
     }
 }

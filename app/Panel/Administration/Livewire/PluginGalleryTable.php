@@ -4,14 +4,11 @@ namespace App\Panel\Administration\Livewire;
 
 use App\Models\PluginGallery;
 use App\Tables\Columns\IndexColumn;
-use Filament\Actions\StaticAction;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
 use Filament\Support\Enums\FontWeight;
-use Filament\Support\Enums\MaxWidth;
 use Filament\Tables\Actions\Action;
-use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
@@ -38,61 +35,61 @@ class PluginGalleryTable extends Component implements HasForms, HasTable
                 IndexColumn::make('no'),
                 TextColumn::make('name')
                     ->searchable()
-                    ->description(fn(PluginGallery $record) => new HtmlString($record->summary))
+                    ->description(fn (PluginGallery $record) => new HtmlString($record->summary))
                     ->color('primary')
                     ->wrap()
                     ->weight(FontWeight::Medium)
                     ->action(
                         Action::make('details')
                             ->modal()
-                            ->modalHeading(fn($record) => $record->name)
+                            ->modalHeading(fn ($record) => $record->name)
                             ->registerModalActions([
                                 Action::make('install')
                                     ->extraAttributes([
                                         'class' => 'w-full',
                                     ])
-                                    ->authorize(fn(PluginGallery $record) => auth()->user()->can('install', $record))
-                                    ->visible(fn(PluginGallery $record) => auth()->user()->can('install', $record))
-                                    ->action(fn(PluginGallery $record) => $this->install($record))
+                                    ->authorize(fn (PluginGallery $record) => auth()->user()->can('install', $record))
+                                    ->visible(fn (PluginGallery $record) => auth()->user()->can('install', $record))
+                                    ->action(fn (PluginGallery $record) => $this->install($record))
                                     ->cancelParentActions('details'),
                                 Action::make('upgrade')
-                                    ->authorize(fn(PluginGallery $record) => auth()->user()->can('install', $record))
-                                    ->visible(fn(PluginGallery $record) => auth()->user()->can('install', $record))
+                                    ->authorize(fn (PluginGallery $record) => auth()->user()->can('install', $record))
+                                    ->visible(fn (PluginGallery $record) => auth()->user()->can('install', $record))
                                     ->extraAttributes([
                                         'class' => 'w-full',
                                     ])
                                     ->color('success')
-                                    ->action(fn(PluginGallery $record) => $this->install($record))
+                                    ->action(fn (PluginGallery $record) => $this->install($record))
                                     ->cancelParentActions('details'),
                             ])
                             ->modalSubmitAction(false)
                             ->modalCancelAction(false)
-                            ->modalContent(fn(PluginGallery $record, Action $action): View => view('tables.actions.plugin-gallery-details', ['record' => $record, 'action' => $action]))
+                            ->modalContent(fn (PluginGallery $record, Action $action): View => view('tables.actions.plugin-gallery-details', ['record' => $record, 'action' => $action]))
                     ),
                 TextColumn::make('version')
                     ->label(__('general.version'))
-                    ->getStateUsing(fn(PluginGallery $record) => $record->getLatestCompatibleRelease()?->get('version')),
+                    ->getStateUsing(fn (PluginGallery $record) => $record->getLatestCompatibleRelease()?->get('version')),
                 TextColumn::make('author')
                     ->searchable(),
                 TextColumn::make('status')
-                    ->getStateUsing(function(PluginGallery $record){
-                        if(!$record->isInstalled()){
+                    ->getStateUsing(function (PluginGallery $record) {
+                        if (! $record->isInstalled()) {
                             return 'Not Installed';
                         }
 
-                        if($record->isUpgradable()){
+                        if ($record->isUpgradable()) {
                             return 'Upgradable';
                         }
 
                         return 'Installed';
                     })
                     ->badge()
-                    ->color(function(PluginGallery $record){
-                        if(!$record->isInstalled()){
+                    ->color(function (PluginGallery $record) {
+                        if (! $record->isInstalled()) {
                             return 'gray';
                         }
 
-                        if($record->isUpgradable()){
+                        if ($record->isUpgradable()) {
                             return 'success';
                         }
 
@@ -121,7 +118,6 @@ class PluginGalleryTable extends Component implements HasForms, HasTable
 
         $this->dispatch('refresh-table')->to(PluginTable::class);
     }
-
 
     #[On('refresh-table')]
     public function refreshTable()

@@ -3,7 +3,6 @@
 namespace App\Http\Middleware;
 
 use App\Facades\MetaTag;
-use App\Facades\Plugin;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
@@ -18,24 +17,27 @@ class SetupDefaultData
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!app()->isInstalled()) return $next($request);
+        if (! app()->isInstalled()) {
+            return $next($request);
+        }
 
         View::share('theme', app()->getCurrentTheme());
 
         $currentScheduledConference = app()->getCurrentScheduledConference();
         if ($currentScheduledConference) {
             $this->setupScheduledConference($request, $currentScheduledConference);
+
             return $next($request);
         }
 
-
         if ($currentConference = app()->getCurrentConference()) {
             $this->setupConference($request, $currentConference);
+
             return $next($request);
         }
 
         $this->setupSite();
-        
+
         return $next($request);
     }
 
@@ -51,7 +53,7 @@ class SetupDefaultData
         View::share('pageFooter', $site->getMeta('page_footer'));
         View::share('favicon', $site->getFirstMedia('favicon')?->getAvailableUrl(['tenant', 'thumb', 'thumb-xl']));
         View::share('styleSheet', $site->getFirstMediaUrl('styleSheet'));
-        
+
         MetaTag::add('description', $site->getMeta('description'));
     }
 

@@ -7,14 +7,13 @@ use App\Http\Middleware\IdentifyConference;
 use App\Http\Middleware\IdentifyScheduledConference;
 use App\Http\Middleware\RedirectToConference;
 use App\Http\Middleware\SetLocale;
-use App\Http\Middleware\SetupConference;
+use App\Http\Responses\Auth\LogoutResponse;
+use Filament\Http\Responses\Auth\Contracts\LogoutResponse as LogoutResponseContract;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
 use Rahmanramsi\LivewirePageGroup\Facades\LivewirePageGroup;
 use Rahmanramsi\LivewirePageGroup\PageGroup;
-use Filament\Http\Responses\Auth\Contracts\LogoutResponse as LogoutResponseContract;
-use App\Http\Responses\Auth\LogoutResponse;
 
 class FrontendServiceProvider extends ServiceProvider
 {
@@ -52,7 +51,7 @@ class FrontendServiceProvider extends ServiceProvider
     {
         Blade::anonymousComponentPath(resource_path('views/frontend/website/components'), 'website');
         Blade::anonymousComponentPath(resource_path('views/frontend/conference/components'), 'conference');
-        Blade::anonymousComponentPath(resource_path('views/frontend/scheduledConference/components'), 'scheduledConference'); 
+        Blade::anonymousComponentPath(resource_path('views/frontend/scheduledConference/components'), 'scheduledConference');
     }
 
     public function websitePageGroup(PageGroup $pageGroup): PageGroup
@@ -67,7 +66,7 @@ class FrontendServiceProvider extends ServiceProvider
             ], true)
             ->discoverPages(in: app_path('Frontend/Website/Pages'), for: 'App\\Frontend\\Website\\Pages');
 
-        Plugin::getPlugins()->each(fn($plugin) => $plugin->onFrontend($pageGroup));
+        Plugin::getPlugins()->each(fn ($plugin) => $plugin->onFrontend($pageGroup));
 
         return $pageGroup;
     }
@@ -84,7 +83,7 @@ class FrontendServiceProvider extends ServiceProvider
             ], true)
             ->discoverPages(in: app_path('Frontend/Conference/Pages'), for: 'App\\Frontend\\Conference\\Pages');
 
-        Plugin::getPlugins()->each(fn($plugin) =>  $plugin->onFrontend($pageGroup));
+        Plugin::getPlugins()->each(fn ($plugin) => $plugin->onFrontend($pageGroup));
 
         return $pageGroup;
     }
@@ -101,8 +100,8 @@ class FrontendServiceProvider extends ServiceProvider
                 IdentifyScheduledConference::class,
             ], true)
             ->discoverPages(in: app_path('Frontend/ScheduledConference/Pages'), for: 'App\\Frontend\\ScheduledConference\\Pages');
-        
-        Plugin::getPlugins()->each(fn($plugin) =>  $plugin->onFrontend($pageGroup));
+
+        Plugin::getPlugins()->each(fn ($plugin) => $plugin->onFrontend($pageGroup));
 
         return $pageGroup;
     }

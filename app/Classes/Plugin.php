@@ -5,7 +5,6 @@ namespace App\Classes;
 use App\Facades\Plugin as FacadesPlugin;
 use App\Interfaces\HasPlugin;
 use Filament\Panel;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
@@ -38,7 +37,7 @@ abstract class Plugin implements HasPlugin
         return $this;
     }
 
-    public function load() : static
+    public function load(): static
     {
         $this->loadTranslation();
 
@@ -66,22 +65,22 @@ abstract class Plugin implements HasPlugin
         return true;
     }
 
-    public function isEnabled() : bool
+    public function isEnabled(): bool
     {
         return $this->getSetting('enabled', false);
     }
 
-    public function isDisabled() : bool
+    public function isDisabled(): bool
     {
         return ! $this->isEnabled();
     }
 
-    public function enable($enable = true) : void
+    public function enable($enable = true): void
     {
         $this->updateSetting('enabled', $enable);
     }
 
-    public function disable() : void
+    public function disable(): void
     {
         $this->enable(false);
     }
@@ -89,14 +88,14 @@ abstract class Plugin implements HasPlugin
     /**
      * Determine if a plugin is hidden from the admin panel
      */
-    function isHidden()
+    public function isHidden()
     {
         return false;
     }
 
     public function getPluginPath(?string $path = null)
     {
-        return $this->pluginPath . ($path ? DIRECTORY_SEPARATOR . $path : '');
+        return $this->pluginPath.($path ? DIRECTORY_SEPARATOR.$path : '');
     }
 
     public function loadInformation()
@@ -145,17 +144,17 @@ abstract class Plugin implements HasPlugin
         if (file_exists($pluginAssetPath)) {
             $publicPluginAssetPath = public_path($this->getAssetsPath());
 
-            if(file_exists($publicPluginAssetPath) && !is_link($publicPluginAssetPath)){
+            if (file_exists($publicPluginAssetPath) && ! is_link($publicPluginAssetPath)) {
                 try {
                     File::deleteDirectory($publicPluginAssetPath);
                 } catch (\Throwable $th) {
                     throw $th;
-                    Log::warning('Failed to fix public plugin asset directory symlink: ' . $publicPluginAssetPath . ' (please remove if manually)');
+                    Log::warning('Failed to fix public plugin asset directory symlink: '.$publicPluginAssetPath.' (please remove if manually)');
                 }
             }
 
             // Create target symlink public plugins assets directory if required
-            if (!file_exists($publicPluginAssetPath)) {
+            if (! file_exists($publicPluginAssetPath)) {
                 File::relativeLink($pluginAssetPath, rtrim($publicPluginAssetPath, '/'));
             }
         }
@@ -163,7 +162,7 @@ abstract class Plugin implements HasPlugin
 
     public function getAssetsPath(?string $path = null): string
     {
-        return 'plugin/' . mb_strtolower($this->getInfo('folder')) . ($path ? '/' . $path : '');
+        return 'plugin/'.mb_strtolower($this->getInfo('folder')).($path ? '/'.$path : '');
     }
 
     /**
@@ -192,7 +191,7 @@ abstract class Plugin implements HasPlugin
         // Add versioning to the asset URL
         if ($versioning) {
             $version = $this->getInfo('version') ?? '1.0.0';
-            $fullUrl .= '?v=' . $version;
+            $fullUrl .= '?v='.$version;
         }
 
         return $absolute ? asset($fullUrl) : $fullUrl;
@@ -206,7 +205,7 @@ abstract class Plugin implements HasPlugin
         $translator->addNamespace($this->getInfo('folder'), $langPath);
     }
 
-    public function getVersion() : string
+    public function getVersion(): string
     {
         return $this->getInfo('version') ?? '1.0.0';
     }

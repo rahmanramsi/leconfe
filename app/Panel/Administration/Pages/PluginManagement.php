@@ -2,28 +2,28 @@
 
 namespace App\Panel\Administration\Pages;
 
+use App\Facades\Plugin as PluginFacade;
 use App\Infolists\Components\LivewireEntry;
+use App\Models\Plugin;
 use App\Panel\Administration\Livewire\PluginGalleryTable;
 use App\Panel\Administration\Livewire\PluginTable;
+use Filament\Actions\Action;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Infolists\Components\Tabs;
 use Filament\Infolists\Concerns\InteractsWithInfolists;
 use Filament\Infolists\Contracts\HasInfolists;
 use Filament\Infolists\Infolist;
-use Filament\Pages\Page;
-use Filament\Infolists\Components\Tabs;
-use App\Facades\Plugin as PluginFacade;
-use App\Models\Plugin;
-use Filament\Actions\Action;
-use Filament\Forms\Components\FileUpload;
 use Filament\Notifications\Notification;
+use Filament\Pages\Page;
 use Filament\Support\Enums\MaxWidth;
 use Illuminate\Support\Facades\Log;
 
 class PluginManagement extends Page implements HasForms, HasInfolists
 {
-    use InteractsWithInfolists;
     use InteractsWithForms;
+    use InteractsWithInfolists;
 
     protected static ?string $navigationIcon = 'heroicon-o-square-3-stack-3d';
 
@@ -47,7 +47,7 @@ class PluginManagement extends Page implements HasForms, HasInfolists
             Action::make('upload-plugin')
                 ->label(__('general.upload_plugin'))
                 ->modalHeading(__('general.upload_plugin'))
-                ->visible(fn() => auth()->user()->can('install', Plugin::class))
+                ->visible(fn () => auth()->user()->can('install', Plugin::class))
                 ->form([
                     FileUpload::make('file')
                         ->label(__('general.file'))
@@ -73,7 +73,7 @@ class PluginManagement extends Page implements HasForms, HasInfolists
                     }
 
                     $this->dispatch('refresh-table');
-                    
+
                     Notification::make('install-success')
                         ->title(__('general.install_success'))
                         ->success()
@@ -102,7 +102,7 @@ class PluginManagement extends Page implements HasForms, HasInfolists
                                     ->lazy(),
                             ]),
                     ])
-                    ->contained(false)
+                    ->contained(false),
             ]);
     }
 }

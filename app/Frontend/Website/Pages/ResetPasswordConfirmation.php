@@ -23,7 +23,7 @@ class ResetPasswordConfirmation extends Page
 
     public string $password_confirmation;
 
-    #[Locked] 
+    #[Locked]
     public bool $success = false;
 
     public function mount(User $user, string $hash, Request $request)
@@ -32,12 +32,12 @@ class ResetPasswordConfirmation extends Page
             $this->redirect($this->getRedirectUrl(), navigate: false);
         }
 
-        if (!$request->hasValidSignature()) {
+        if (! $request->hasValidSignature()) {
             // Silently abort the request
             abort(403, 'Invalid or expired signature');
         }
-        
-        if($hash !== sha1($user->email . $user->password . $user->getMeta('last_login'))){
+
+        if ($hash !== sha1($user->email.$user->password.$user->getMeta('last_login'))) {
             abort(403, 'Invalid or expired signature');
         }
 
@@ -68,7 +68,7 @@ class ResetPasswordConfirmation extends Page
         ];
     }
 
-    public function rules() 
+    public function rules()
     {
         return [
             'password' => ['required', 'confirmed', Password::min(12)],
@@ -86,7 +86,6 @@ class ResetPasswordConfirmation extends Page
 
         $this->success = true;
     }
-
 
     public static function routes(PageGroup $pageGroup): void
     {

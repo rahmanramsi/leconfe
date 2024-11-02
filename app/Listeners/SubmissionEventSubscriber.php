@@ -5,8 +5,6 @@ namespace App\Listeners;
 use App\Classes\DOIGenerator;
 use App\Events\Submissions\Accepted;
 use App\Events\Submissions\Published;
-use Illuminate\Auth\Events\Login;
-use Illuminate\Auth\Events\Logout;
 use Illuminate\Events\Dispatcher;
 
 class SubmissionEventSubscriber
@@ -17,11 +15,17 @@ class SubmissionEventSubscriber
         $isAutomaticAssignmentUponReachingEditingStage = app()->getCurrentConference()->getMeta('doi_automatic_assignment') == 'edit_stage';
         $doiFormat = app()->getCurrentConference()->getMeta('doi_format');
 
-        if (!$doiEnabled) return;
-        if (!$isAutomaticAssignmentUponReachingEditingStage) return;
-        if ($doiFormat === 'none') return;
+        if (! $doiEnabled) {
+            return;
+        }
+        if (! $isAutomaticAssignmentUponReachingEditingStage) {
+            return;
+        }
+        if ($doiFormat === 'none') {
+            return;
+        }
 
-        if (!$event->submission->doi) {
+        if (! $event->submission->doi) {
             $event->submission
                 ->doi()
                 ->create(['doi' => DOIGenerator::generate()]);
@@ -34,11 +38,17 @@ class SubmissionEventSubscriber
         $isAutomaticAssignmentUponPublication = app()->getCurrentConference()->getMeta('doi_automatic_assignment') == 'published';
         $doiFormat = app()->getCurrentConference()->getMeta('doi_format');
 
-        if (!$doiEnabled) return;
-        if (!$isAutomaticAssignmentUponPublication) return;
-        if ($doiFormat === 'none') return;
+        if (! $doiEnabled) {
+            return;
+        }
+        if (! $isAutomaticAssignmentUponPublication) {
+            return;
+        }
+        if ($doiFormat === 'none') {
+            return;
+        }
 
-        if (!$event->submission->doi) {
+        if (! $event->submission->doi) {
             $event->submission
                 ->doi()
                 ->create(['doi' => DOIGenerator::generate()]);

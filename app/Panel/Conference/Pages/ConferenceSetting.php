@@ -24,7 +24,6 @@ class ConferenceSetting extends Page implements HasForms, HasInfolists
 
     protected static string $view = 'panel.conference.pages.conference';
 
-
     public static function getNavigationLabel(): string
     {
         return __('general.conference');
@@ -39,7 +38,6 @@ class ConferenceSetting extends Page implements HasForms, HasInfolists
     {
         return __('general.settings');
     }
-
 
     public function mount(): void
     {

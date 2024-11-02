@@ -3,14 +3,9 @@
 namespace App\Livewire;
 
 use App\Facades\Citation;
-use App\Facades\Hook;
-use App\Facades\Setting;
 use App\Models\Submission;
-use Illuminate\Support\Facades\App;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
-use Seboettg\CiteProc\CiteProc;
-use Seboettg\CiteProc\StyleSheet;
 
 class CitationStyleLanguage extends Component
 {
@@ -47,9 +42,9 @@ class CitationStyleLanguage extends Component
             return false;
         }
 
-        $citation           = trim(strip_tags(Citation::getCitation($this->submission, $citationStyle)));
-        $encodedFilename    = $this->submission->getMeta('title') . '.' . $styleConfig['fileExtension'];
-        $headers            = [
+        $citation = trim(strip_tags(Citation::getCitation($this->submission, $citationStyle)));
+        $encodedFilename = $this->submission->getMeta('title').'.'.$styleConfig['fileExtension'];
+        $headers = [
             'Content-Type' => $styleConfig['contentType'],
         ];
 

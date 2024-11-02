@@ -2,21 +2,17 @@
 
 namespace App\Frontend\ScheduledConference\Pages;
 
+use App\Frontend\Website\Pages\Page;
 use App\Models\Enums\RegistrationPaymentState;
-use Squire\Models\Country;
 use App\Models\Registration;
-use App\Models\Enums\UserRole;
-use Livewire\Attributes\Title;
 use App\Models\RegistrationType;
 use App\Models\Timeline;
 use App\Models\User;
 use App\Notifications\NewRegistration;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Route;
 use Rahmanramsi\LivewirePageGroup\PageGroup;
-use App\Frontend\Website\Pages\Page;
+use Squire\Models\Country;
 
 class ParticipantRegister extends Page
 {
@@ -33,18 +29,20 @@ class ParticipantRegister extends Page
     public function mount()
     {
         $isLogged = auth()->check();
-        $userRegistration = !$isLogged ? null : Registration::withTrashed()
+        $userRegistration = ! $isLogged ? null : Registration::withTrashed()
             ->where('user_id', auth()->user()->id)
             ->first();
-        if ($userRegistration)
+        if ($userRegistration) {
             return redirect(route(ParticipantRegisterStatus::getRouteName()));
+        }
     }
 
     public function rules(): array
     {
-        $rules =  [
+        $rules = [
             'type' => 'required',
         ];
+
         return $rules;
     }
 
@@ -53,19 +51,26 @@ class ParticipantRegister extends Page
         $message = [
             'type' => __('general.registration_type_have_to_selected'),
         ];
+
         return $message;
     }
 
     public function register()
     {
-        if (!auth()->check()) return;
+        if (! auth()->check()) {
+            return;
+        }
 
         $data = $this->validate();
         $registrationType = RegistrationType::where('id', $data['type'])->first();
 
-        if (!$registrationType) return;
+        if (! $registrationType) {
+            return;
+        }
 
-        if (!$registrationType->isOpen()) return;
+        if (! $registrationType->isOpen()) {
+            return;
+        }
 
         $this->formData = Arr::only($data, 'type');
         $this->isSubmit = true;
@@ -75,7 +80,9 @@ class ParticipantRegister extends Page
 
     public function confirm()
     {
-        if (!auth()->check()) return;
+        if (! auth()->check()) {
+            return;
+        }
 
         $data = $this->formData;
         $registrationType = RegistrationType::where('id', $data['type'])->first();
@@ -86,7 +93,7 @@ class ParticipantRegister extends Page
                 'user_id' => auth()->user()->id,
                 'registration_type_id' => $data['type'],
             ]);
-    
+
             $registration->registrationPayment()->create([
                 'name' => $registrationType->type,
                 'level' => $registrationType->level,
@@ -96,12 +103,12 @@ class ParticipantRegister extends Page
                 'state' => $isFree ? RegistrationPaymentState::Paid : RegistrationPaymentState::Unpaid,
                 'paid_at' => $isFree ? now() : null,
             ]);
-    
+
             User::whereHas('roles', function ($query) {
                 $query->whereHas('permissions', function ($query) {
                     $query->where('name', 'Registration:notified');
                 });
-            })->get()->each(function ($user) use($registration) {
+            })->get()->each(function ($user) use ($registration) {
                 $user->notify(
                     new NewRegistration(
                         registration: $registration,
@@ -129,13 +136,13 @@ class ParticipantRegister extends Page
 
         $isLogged = auth()->check();
 
-        $userRegistration = !$isLogged ? null : Registration::withTrashed()
+        $userRegistration = ! $isLogged ? null : Registration::withTrashed()
             ->where('user_id', auth()->user()->id)
             ->first();
 
-        $userModel = !$isLogged ? null : auth()->user();
+        $userModel = ! $isLogged ? null : auth()->user();
 
-        $userCountry = !$isLogged ? null : Country::find(auth()->user()->getMeta('country', null));
+        $userCountry = ! $isLogged ? null : Country::find(auth()->user()->getMeta('country', null));
 
         $registrationTypeList = RegistrationType::select('*')->get();
 

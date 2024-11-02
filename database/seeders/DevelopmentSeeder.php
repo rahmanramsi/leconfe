@@ -6,9 +6,9 @@ namespace Database\Seeders;
 
 use Database\Seeders\Developments\CommitteeSeeder;
 use Database\Seeders\Developments\ConferenceSeeder;
-use Database\Seeders\Developments\SpeakerSeeder;
 use Database\Seeders\Developments\ProceedingSeeder;
 use Database\Seeders\Developments\ScheduledConferenceSeeder;
+use Database\Seeders\Developments\SpeakerSeeder;
 use Database\Seeders\Developments\TimelineSeeder;
 use Database\Seeders\Developments\TopicSeeder;
 use Database\Seeders\Developments\UserSeeder;

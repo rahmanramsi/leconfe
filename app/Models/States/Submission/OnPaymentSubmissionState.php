@@ -2,18 +2,18 @@
 
 namespace App\Models\States\Submission;
 
+use App\Actions\Submissions\SubmissionUpdateAction;
 use App\Classes\Log;
 use App\Models\Enums\SubmissionStage;
 use App\Models\Enums\SubmissionStatus;
-use App\Actions\Submissions\SubmissionUpdateAction;
 use App\Models\States\Submission\Concerns\CanDeclinePayment;
 use App\Models\States\Submission\Concerns\CanWithdraw;
 
 class OnPaymentSubmissionState extends BaseSubmissionState
 {
-    use CanWithdraw;
     use CanDeclinePayment;
-    
+    use CanWithdraw;
+
     public function approvePayment(): void
     {
         SubmissionUpdateAction::run([

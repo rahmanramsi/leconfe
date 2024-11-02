@@ -19,6 +19,7 @@ class CommitteeFactory extends Factory
     public function definition(): array
     {
         $randomSerie = ScheduledConference::pluck('id')->random();
+
         return [
             'scheduled_conference_id' => $randomSerie,
             'committee_role_id' => CommitteeRole::withoutGlobalScopes()->where('scheduled_conference_id', $randomSerie)->pluck('id')->random(),

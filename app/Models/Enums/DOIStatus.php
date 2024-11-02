@@ -3,7 +3,6 @@
 namespace App\Models\Enums;
 
 use App\Models\Enums\Concern\UsefulEnums;
-use Filament\Support\Colors\Color;
 use Filament\Support\Contracts\HasColor;
 use Filament\Support\Contracts\HasLabel;
 
@@ -32,6 +31,4 @@ enum DOIStatus: int implements HasColor, HasLabel
             self::Stale => 'warning',
         };
     }
-
-
 }

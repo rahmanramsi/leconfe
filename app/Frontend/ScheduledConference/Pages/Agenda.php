@@ -2,17 +2,15 @@
 
 namespace App\Frontend\ScheduledConference\Pages;
 
-use App\Models\User;
-use App\Models\Session;
-use App\Models\Timeline;
-use Illuminate\Support\Arr;
-use App\Models\Registration;
-use Illuminate\Support\Facades\Route;
-use App\Models\RegistrationAttendance;
-use Rahmanramsi\LivewirePageGroup\PageGroup;
 use App\Frontend\Website\Pages\Page;
 use App\Models\Enums\RegistrationPaymentState;
+use App\Models\Registration;
+use App\Models\RegistrationAttendance;
+use App\Models\Session;
+use App\Models\Timeline;
 use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Route;
+use Rahmanramsi\LivewirePageGroup\PageGroup;
 
 class Agenda extends Page
 {
@@ -31,24 +29,27 @@ class Agenda extends Page
     public ?string $errorMessage = null;
 
     public const ATTEND_TYPE_TIMELINE = 'timeline';
+
     public const ATTEND_TYPE_SESSION = 'session';
 
-    public function mount()
-    {
-    }
+    public function mount() {}
 
     public function attend($id, $type): void
     {
-        if($type === self::ATTEND_TYPE_TIMELINE) {
+        if ($type === self::ATTEND_TYPE_TIMELINE) {
             $timeline = Timeline::where('id', $id)->first();
 
-            if(!$timeline) return;
+            if (! $timeline) {
+                return;
+            }
 
             $this->timelineData = $timeline;
         } else {
             $session = Session::where('id', $id)->first();
 
-            if(!$session) return;
+            if (! $session) {
+                return;
+            }
 
             $this->sessionData = $session;
         }
@@ -67,8 +68,9 @@ class Agenda extends Page
 
     public function confirm(): void
     {
-        if(!auth()->check()) {
+        if (! auth()->check()) {
             $this->errorMessage = __('general.youre_not_logged_in');
+
             return;
         }
 
@@ -78,22 +80,25 @@ class Agenda extends Page
             ->where('user_id', auth()->user()->id)
             ->first();
 
-        if(!$registration) {
-            $this->errorMessage = __('general.youre_not_registrant') . app()->getCurrentScheduledConference()->title;
+        if (! $registration) {
+            $this->errorMessage = __('general.youre_not_registrant').app()->getCurrentScheduledConference()->title;
+
             return;
         }
 
-        if($registration->registrationPayment->state !== RegistrationPaymentState::Paid->value) {
-            $this->errorMessage = __('general.youre_not_participant') . app()->getCurrentScheduledConference()->title;
+        if ($registration->registrationPayment->state !== RegistrationPaymentState::Paid->value) {
+            $this->errorMessage = __('general.youre_not_participant').app()->getCurrentScheduledConference()->title;
+
             return;
         }
 
-        if($typeData === self::ATTEND_TYPE_TIMELINE) {
+        if ($typeData === self::ATTEND_TYPE_TIMELINE) {
 
             $timeline = $this->timelineData;
 
-            if(!$timeline) {
+            if (! $timeline) {
                 $this->errorMessage = __('general.invalid_event_selection');
+
                 return;
             }
 
@@ -105,8 +110,9 @@ class Agenda extends Page
 
             $session = $this->sessionData;
 
-            if(!$session) {
+            if (! $session) {
                 $this->errorMessage = __('general.invalid_event_selection');
+
                 return;
             }
 
@@ -134,11 +140,11 @@ class Agenda extends Page
             ->orderBy('date', 'ASC')
             ->get();
 
-        $userRegistration = !$isLogged ? null : Registration::withTrashed()
+        $userRegistration = ! $isLogged ? null : Registration::withTrashed()
             ->where('user_id', auth()->user()->id)
             ->first();
 
-        $isParticipant = $userRegistration && ($userRegistration->registrationPayment->state === RegistrationPaymentState::Paid->value) ;
+        $isParticipant = $userRegistration && ($userRegistration->registrationPayment->state === RegistrationPaymentState::Paid->value);
 
         $typeData = $this->typeData ?? null;
         $timelineData = $this->timelineData ?? null;

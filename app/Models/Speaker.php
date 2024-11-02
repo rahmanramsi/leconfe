@@ -3,27 +3,27 @@
 namespace App\Models;
 
 use App\Models\Concerns\BelongsToScheduledConference;
-use Plank\Metable\Metable;
-use Illuminate\Support\Str;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\EloquentSortable\Sortable;
 use Database\Factories\SpeakerFactory;
-use Illuminate\Database\Eloquent\Model;
 use Filament\Models\Contracts\HasAvatar;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Builder;
-use Spatie\EloquentSortable\SortableTrait;
-use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
+use Plank\Metable\Metable;
+use Spatie\EloquentSortable\Sortable;
+use Spatie\EloquentSortable\SortableTrait;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Speaker extends Model implements HasAvatar, HasMedia, Sortable
 {
-    use BelongsToScheduledConference, Cachable, HasFactory, Metable, Notifiable, SortableTrait, InteractsWithMedia;
+    use BelongsToScheduledConference, Cachable, HasFactory, InteractsWithMedia, Metable, Notifiable, SortableTrait;
 
     protected $table = 'speakers';
 

@@ -2,26 +2,25 @@
 
 namespace App\Panel\ScheduledConference\Resources;
 
-use Filament\Forms;
-use Filament\Forms\Form;
-use App\Models\Committee;
-use Filament\Tables\Table;
-use Filament\Resources\Resource;
-use Filament\Forms\Components\Select;
-use Filament\Tables\Actions\CreateAction;
-use Illuminate\Database\Eloquent\Builder;
 use App\Actions\Committees\CommitteeCreateAction;
 use App\Actions\Committees\CommitteeDeleteAction;
 use App\Actions\Committees\CommitteeUpdateAction;
+use App\Models\Committee;
 use App\Models\Scopes\ConferenceScope;
-use Filament\Forms\Components\Actions\Action as FormAction;
 use App\Panel\Conference\Livewire\Forms\Conferences\ContributorForm;
 use App\Panel\ScheduledConference\Resources\CommitteeResource\Pages;
+use Filament\Forms;
+use Filament\Forms\Components\Actions\Action as FormAction;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Form;
+use Filament\Resources\Resource;
+use Filament\Tables\Actions\CreateAction;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class CommitteeResource extends Resource
 {
     protected static ?string $model = Committee::class;
-
 
     public static function getNavigationGroup(): string
     {
@@ -92,8 +91,9 @@ class CommitteeResource extends Resource
                     'family_name' => $committee->family_name,
                     'email' => $committee->email,
                     'committee_role_id' => $role->id ?? null,
-                    'meta' => $committee->getAllMeta()
+                    'meta' => $committee->getAllMeta(),
                 ];
+
                 return static::form($form)->fill($formData);
             })
             ->columnSpanFull();
@@ -150,6 +150,7 @@ class CommitteeResource extends Resource
     public static function renderSelectCommittee(Committee $committee): string
     {
         $committee->load(['serie' => fn ($query) => $query->withoutGlobalScopes([ConferenceScope::class])]);
+
         return view('forms.select-contributor-serie', ['contributor' => $committee])->render();
     }
 

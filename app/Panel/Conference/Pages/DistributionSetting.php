@@ -3,11 +3,11 @@
 namespace App\Panel\Conference\Pages;
 
 use App\Infolists\Components\LivewireEntry;
-use App\Panel\Conference\Livewire\Forms\Conferences\DOISetup;
-use App\Panel\Conference\Livewire\Forms\Conferences\SearchEngineSetting;
 use App\Infolists\Components\VerticalTabs as InfolistsVerticalTabs;
 use App\Panel\Conference\Livewire\CitationSetting;
 use App\Panel\Conference\Livewire\Forms\Conferences\DOIRegistration;
+use App\Panel\Conference\Livewire\Forms\Conferences\DOISetup;
+use App\Panel\Conference\Livewire\Forms\Conferences\SearchEngineSetting;
 use App\Panel\Conference\Livewire\LicenseSetting;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -30,7 +30,6 @@ class DistributionSetting extends Page implements HasForms, HasInfolists
 
     protected static string $view = 'panel.conference.pages.distribution';
 
-
     public static function getNavigationLabel(): string
     {
         return __('general.distribution');
@@ -41,12 +40,10 @@ class DistributionSetting extends Page implements HasForms, HasInfolists
         return __('general.distribution_settings');
     }
 
-
     public static function getNavigationGroup(): string
     {
         return __('general.settings');
     }
-
 
     public function mount(): void
     {
@@ -82,7 +79,7 @@ class DistributionSetting extends Page implements HasForms, HasInfolists
                                                 LivewireEntry::make('citation')
                                                     ->livewire(CitationSetting::class),
                                             ]),
-                                        
+
                                     ]),
                             ]),
                         Tabs\Tab::make('DOI')

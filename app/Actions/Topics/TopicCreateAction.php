@@ -10,13 +10,12 @@ class TopicCreateAction
 {
     use AsAction;
 
-    public function handle($data) : Topic
+    public function handle($data): Topic
     {
         try {
             DB::beginTransaction();
 
             $topic = Topic::create($data);
-
 
             DB::commit();
         } catch (\Throwable $th) {

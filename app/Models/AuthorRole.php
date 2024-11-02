@@ -10,13 +10,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
-use Spatie\Sluggable\HasSlug;
-use Spatie\Sluggable\SlugOptions;
-use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
 class AuthorRole extends Model implements Sortable
 {
-    use Cachable, BelongsToConference, HasFactory, SortableTrait;
+    use BelongsToConference, Cachable, HasFactory, SortableTrait;
 
     protected $table = 'author_roles';
 

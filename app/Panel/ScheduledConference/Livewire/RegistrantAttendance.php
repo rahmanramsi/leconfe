@@ -2,46 +2,45 @@
 
 namespace App\Panel\ScheduledConference\Livewire;
 
-use Filament\Forms\Get;
-use Livewire\Component;
 use App\Facades\Setting;
-use App\Models\Timeline;
-use Filament\Forms\Form;
-use Filament\Tables\Table;
 use App\Models\Registration;
-use Filament\Support\Colors\Color;
-use Filament\Tables\Actions\Action;
-use Filament\Forms\Components\Select;
 use App\Models\RegistrationAttendance;
-use Filament\Forms\Contracts\HasForms;
+use App\Models\Timeline;
+use App\Panel\ScheduledConference\Resources\TimelineResource;
+use Filament\Actions\Concerns\InteractsWithActions;
+use Filament\Actions\Contracts\HasActions;
 use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\TimePicker;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
+use Filament\Forms\Form;
+use Filament\Support\Colors\Color;
+use Filament\Support\Enums\IconPosition;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Contracts\HasTable;
-use Illuminate\Database\Eloquent\Model;
-use Filament\Support\Enums\IconPosition;
-use Filament\Forms\Components\TimePicker;
-use Illuminate\Database\Eloquent\Builder;
-use Filament\Actions\Contracts\HasActions;
-use Filament\Forms\Components\Placeholder;
-use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
-use Filament\Actions\Concerns\InteractsWithActions;
-use App\Panel\ScheduledConference\Resources\TimelineResource;
+use Filament\Tables\Contracts\HasTable;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\HtmlString;
 use Illuminate\View\Compilers\BladeCompiler;
+use Livewire\Component;
 
-class RegistrantAttendance extends Component implements HasForms, HasTable, HasActions
+class RegistrantAttendance extends Component implements HasActions, HasForms, HasTable
 {
-    use InteractsWithForms, InteractsWithTable, InteractsWithActions;
+    use InteractsWithActions, InteractsWithForms, InteractsWithTable;
 
     public Registration $registration;
 
     public Timeline $timeline;
 
     public const DAY_ATTENDANCE_MARK_TYPE_IN = 0;
+
     public const DAY_ATTENDANCE_MARK_TYPE_OUT = 1;
-    
+
     public function mount(Registration $registration, Timeline $timeline): void
     {
         $this->registration = $registration;
@@ -58,8 +57,9 @@ class RegistrantAttendance extends Component implements HasForms, HasTable, HasA
             )
             ->heading(function () {
                 $baseHeading = "{$this->timeline->name}";
-                if(($attendance = $this->registration->getAttendance($this->timeline)) && $this->timeline->isRequireAttendance()) {
+                if (($attendance = $this->registration->getAttendance($this->timeline)) && $this->timeline->isRequireAttendance()) {
                     $attendanceTime = $attendance->created_at->format(Setting::get('format_time'));
+
                     return new HtmlString(BladeCompiler::render(<<<BLADE
                         {$baseHeading}
                         <span class="mx-2 inline-block">
@@ -129,7 +129,7 @@ class RegistrantAttendance extends Component implements HasForms, HasTable, HasA
 
                         $action->success();
                     })
-                    ->visible(fn () => !$this->registration->isAttended($this->timeline) && $this->timeline->isRequireAttendance())
+                    ->visible(fn () => ! $this->registration->isAttended($this->timeline) && $this->timeline->isRequireAttendance())
                     ->authorize('markIn', RegistrationAttendance::class),
                 Action::make('mark_out_day')
                     ->label('Mark out')
@@ -144,7 +144,7 @@ class RegistrantAttendance extends Component implements HasForms, HasTable, HasA
                         try {
                             $attendance = $this->registration->getAttendance($this->timeline);
 
-                            if (!$attendance) {
+                            if (! $attendance) {
                                 return $action->failure();
                             }
 
@@ -170,17 +170,17 @@ class RegistrantAttendance extends Component implements HasForms, HasTable, HasA
                 TextColumn::make('name')
                     ->label(__('general.session_name')),
                 IconColumn::make('require_attendance')
-                    ->icon(fn(Model $record) => match ($record->getRequiresAttendanceStatus()) {
+                    ->icon(fn (Model $record) => match ($record->getRequiresAttendanceStatus()) {
                         'required' => 'heroicon-o-check-circle',
                         default => 'heroicon-o-x-circle',
                     })
-                    ->color(fn(Model $record) => match ($record->getRequiresAttendanceStatus()) {
+                    ->color(fn (Model $record) => match ($record->getRequiresAttendanceStatus()) {
                         'required' => Color::Green,
                         'not-required' => Color::Gray,
                         'timeline' => Color::Blue,
                     })
                     ->tooltip(
-                        fn(Model $record) => match ($record->getRequiresAttendanceStatus()) {
+                        fn (Model $record) => match ($record->getRequiresAttendanceStatus()) {
                             'not-required' => __('general.attendance_required'),
                             'timeline' => __('general.attendance_required_per_day_attendance'),
                             default => null,
@@ -237,14 +237,14 @@ class RegistrantAttendance extends Component implements HasForms, HasTable, HasA
                                     ->schema([
                                         Placeholder::make('attendance_date')
                                             ->label('')
-                                            ->content(fn() => $record->timeline->date->format(Setting::get('format_date'))),
+                                            ->content(fn () => $record->timeline->date->format(Setting::get('format_date'))),
                                     ]),
                                 TimePicker::make('attendance_time')
                                     ->default(now())
                                     ->helperText(__('general.input_participant_attendance_time'))
                                     ->seconds(false)
                                     ->native(false)
-                                    ->hint(fn() => $record->time_span)
+                                    ->hint(fn () => $record->time_span)
                                     ->required(),
                             ])
                             ->columns(1);
@@ -268,7 +268,7 @@ class RegistrantAttendance extends Component implements HasForms, HasTable, HasA
 
                         $action->success();
                     })
-                    ->visible(fn (Model $record) => !$this->registration->isAttended($record) && $record->isRequireAttendance())
+                    ->visible(fn (Model $record) => ! $this->registration->isAttended($record) && $record->isRequireAttendance())
                     ->authorize('markIn', RegistrationAttendance::class),
                 Action::make('mark_out')
                     ->icon('heroicon-m-finger-print')
@@ -279,7 +279,7 @@ class RegistrantAttendance extends Component implements HasForms, HasTable, HasA
                     ->action(function (Model $record, Action $action) {
                         $attendance = $this->registration->getAttendance($record);
 
-                        if (!$attendance) {
+                        if (! $attendance) {
                             return $action->failure();
                         }
 
@@ -287,7 +287,7 @@ class RegistrantAttendance extends Component implements HasForms, HasTable, HasA
 
                         $action->success();
                     })
-                    ->visible(fn(Model $record) => $this->registration->isAttended($record) && $record->isRequireAttendance())
+                    ->visible(fn (Model $record) => $this->registration->isAttended($record) && $record->isRequireAttendance())
                     ->authorize('markOut', RegistrationAttendance::class),
             ])
             ->emptyStateIcon('heroicon-m-calendar-days')
@@ -300,7 +300,7 @@ class RegistrantAttendance extends Component implements HasForms, HasTable, HasA
                     ->icon('heroicon-o-arrow-top-right-on-square')
                     ->iconPosition(IconPosition::After)
                     ->url(fn () => TimelineResource::getUrl('session', ['record' => $this->timeline]))
-                    ->openUrlInNewTab()
+                    ->openUrlInNewTab(),
             ])
             ->defaultSort('time_span')
             ->paginated(false);

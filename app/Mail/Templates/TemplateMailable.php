@@ -5,10 +5,10 @@ namespace App\Mail\Templates;
 use App\Models\MailTemplate;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use Spatie\MailTemplates\TemplateMailable as BaseTemplateMailable;
-use Illuminate\Mail\Mailables\Address;
 
 abstract class TemplateMailable extends BaseTemplateMailable implements Interfaces\HasDefaultMailVariable, ShouldQueue
 {
@@ -42,8 +42,9 @@ abstract class TemplateMailable extends BaseTemplateMailable implements Interfac
     {
         $conference = app()->getCurrentConference();
 
-        if (!$conference) return [];
-
+        if (! $conference) {
+            return [];
+        }
 
         return [
             'conferenceName' => $conference->name,

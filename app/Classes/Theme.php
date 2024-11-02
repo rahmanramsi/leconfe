@@ -8,58 +8,58 @@ use Illuminate\Support\Facades\View;
 
 abstract class Theme extends Plugin
 {
-	public function activate(): void
-	{
-		$this->enablePublicAsset();
-		$this->loadViews();
-		$this->onActivate();
-	}
+    public function activate(): void
+    {
+        $this->enablePublicAsset();
+        $this->loadViews();
+        $this->onActivate();
+    }
 
-	public function onActivate(): void
-	{
-		// Implement this method to run your theme activation logic
-	}
+    public function onActivate(): void
+    {
+        // Implement this method to run your theme activation logic
+    }
 
-	protected function loadViews(): void
-	{
-		$viewPath = $this->getPluginPath('resources/views');
+    protected function loadViews(): void
+    {
+        $viewPath = $this->getPluginPath('resources/views');
 
-		$viewFinder = View::getFinder();
-		$viewFinder->prependLocation("{$viewPath}");
+        $viewFinder = View::getFinder();
+        $viewFinder->prependLocation("{$viewPath}");
 
-		Config::set('view.paths', array_merge([$viewPath], Arr::wrap(Config::get('view.paths'))));
+        Config::set('view.paths', array_merge([$viewPath], Arr::wrap(Config::get('view.paths'))));
 
-		$this->loadVendorViews();
-	}
+        $this->loadVendorViews();
+    }
 
-	protected function loadVendorViews(): void
-	{
-		$vendorViewsPath = $this->getPluginPath('views/vendor');
+    protected function loadVendorViews(): void
+    {
+        $vendorViewsPath = $this->getPluginPath('views/vendor');
 
-		if (file_exists($vendorViewsPath)) {
-			$directories = glob($vendorViewsPath . '/*', GLOB_ONLYDIR);
-			if ($directories) {
-				foreach ($directories as $path) {
-					View::prependNamespace(basename($path), $path);
-				}
-			}
-		}
-	}
+        if (file_exists($vendorViewsPath)) {
+            $directories = glob($vendorViewsPath.'/*', GLOB_ONLYDIR);
+            if ($directories) {
+                foreach ($directories as $path) {
+                    View::prependNamespace(basename($path), $path);
+                }
+            }
+        }
+    }
 
-	public function getFormSchema(): array
-	{
-		return [];
-	}
+    public function getFormSchema(): array
+    {
+        return [];
+    }
 
-	public function getFormData(): array
-	{
-		return [];
-	}
+    public function getFormData(): array
+    {
+        return [];
+    }
 
-	public function saveFormData(array $data) : void
-	{
-		foreach ($data as $key => $value) {
-			$this->updateSetting($key, $value);
-		}
-	}
+    public function saveFormData(array $data): void
+    {
+        foreach ($data as $key => $value) {
+            $this->updateSetting($key, $value);
+        }
+    }
 }

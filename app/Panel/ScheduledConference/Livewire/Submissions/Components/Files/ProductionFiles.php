@@ -17,7 +17,6 @@ class ProductionFiles extends SubmissionFilesTable
         $this->tableHeading = __('general.production_files');
     }
 
-
     public function isViewOnly(): bool
     {
         if ($this->viewOnly) {

@@ -18,7 +18,7 @@ class About extends BaseNavigationItemType
 
     public static function getUrl(NavigationMenuItem $navigationMenuItem): string
     {
-        if(app()->getCurrentScheduledConferenceId()){
+        if (app()->getCurrentScheduledConferenceId()) {
             return route('livewirePageGroup.scheduledConference.pages.about');
         }
 

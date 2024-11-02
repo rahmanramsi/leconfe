@@ -22,7 +22,7 @@ class RoleUpdateAction
                 // filter out protected permissions
                 $protectedPermissionContexts = Permission::getProtectedPermissionContexts();
                 $data['permissions'] = collect($data['permissions'])
-                    ->filter(fn ($value, $permission) => !in_array(explode(':', $permission)[0], $protectedPermissionContexts))
+                    ->filter(fn ($value, $permission) => ! in_array(explode(':', $permission)[0], $protectedPermissionContexts))
                     ->toArray();
 
                 $role->syncPermissions($data['permissions']);

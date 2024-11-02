@@ -25,12 +25,12 @@ class StaticPage extends Model
     {
         $routeName = 'livewirePageGroup.website.pages.static-page';
 
-        if(app()->getCurrentConference()){
-            $routeName = 'livewirePageGroup.conference.pages.static-page'; 
+        if (app()->getCurrentConference()) {
+            $routeName = 'livewirePageGroup.conference.pages.static-page';
         }
 
-        if(app()->getCurrentScheduledConferenceId()){
-            $routeName = 'livewirePageGroup.scheduledConference.pages.static-page'; 
+        if (app()->getCurrentScheduledConferenceId()) {
+            $routeName = 'livewirePageGroup.scheduledConference.pages.static-page';
         }
 
         return route($routeName, [
@@ -42,10 +42,10 @@ class StaticPage extends Model
     {
         $query = $this->resolveRouteBindingQuery($this, $value, $field);
 
-        if(!app()->getCurrentScheduledConferenceId()){
+        if (! app()->getCurrentScheduledConferenceId()) {
             $query->where('scheduled_conference_id', 0);
         }
-        
+
         return $query->firstOrFail();
     }
 }

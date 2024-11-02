@@ -14,9 +14,7 @@ class SubmissionWithdrawRequested extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public function __construct(public $submission)
-    {
-    }
+    public function __construct(public $submission) {}
 
     public function via($notifiable): array
     {

@@ -30,13 +30,12 @@ class UpgradeAction
         $installedVersion = app()->getInstalledVersion();
         $codeVersion = app()->getCodeVersion();
 
-
         table(['Name', 'Version'], [
             ['Installed version', $installedVersion],
             ['Upgrade version', $codeVersion],
         ]);
 
-        if(version_compare($installedVersion, $codeVersion, '>=')) {
+        if (version_compare($installedVersion, $codeVersion, '>=')) {
             info('Your application is already up to date!');
 
             return;

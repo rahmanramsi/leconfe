@@ -2,13 +2,15 @@
 
 namespace App\Panel\ScheduledConference\Resources;
 
-use App\Actions\Announcements\AnnouncementCreateAction;
 use App\Actions\Announcements\AnnouncementUpdateAction;
 use App\Facades\Setting;
+use App\Forms\Components\TinyEditor;
 use App\Models\Announcement;
+use App\Panel\ScheduledConference\Resources\AnnouncementResource\Pages;
+use App\Tables\Columns\IndexColumn;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -18,17 +20,12 @@ use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use App\Forms\Components\TinyEditor;
-use App\Panel\ScheduledConference\Resources\AnnouncementResource\Pages;
-use App\Tables\Columns\IndexColumn;
-use Filament\Forms\Components\Textarea;
 
 class AnnouncementResource extends Resource
 {
     protected static ?string $model = Announcement::class;
 
     protected static ?string $modelLabel = 'Announcement';
-
 
     public static function getNavigationGroup(): string
     {
@@ -39,8 +36,6 @@ class AnnouncementResource extends Resource
     {
         return __('general.announcement');
     }
-
-
 
     protected static ?string $navigationIcon = 'heroicon-o-speaker-wave';
 
@@ -95,7 +90,7 @@ class AnnouncementResource extends Resource
                 Action::make('view')
                     ->label(__('general.view'))
                     ->icon('heroicon-o-eye')
-                    ->url(fn ($record) =>  route('livewirePageGroup.scheduledConference.pages.announcement-page', [
+                    ->url(fn ($record) => route('livewirePageGroup.scheduledConference.pages.announcement-page', [
                         'announcement' => $record->id,
                     ]))
                     ->color('gray'),

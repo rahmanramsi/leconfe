@@ -10,10 +10,10 @@ class LanguageSwitcher extends Component
     public function switchLanguage($lang)
     {
         session()->put('locale', $lang);
-        
+
         return redirect(request()->header('Referer'));
     }
-    
+
     public function render()
     {
         $languageCodes = Setting::get('languages', ['en']);
@@ -22,12 +22,13 @@ class LanguageSwitcher extends Component
         $languages = [];
 
         foreach ($languageCodes as $code) {
-            if (!array_key_exists($code, $supportedLanguages)) {
+            if (! array_key_exists($code, $supportedLanguages)) {
                 continue;
             }
 
             $languages[$code] = $supportedLanguages[$code];
         }
+
         return view('livewire.language-switcher', [
             'languages' => $languages,
         ]);

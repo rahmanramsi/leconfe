@@ -18,11 +18,11 @@ class Profile extends BaseNavigationItemType
 
     public static function getUrl(NavigationMenuItem $navigationMenuItem): string
     {
-        if(app()->getCurrentScheduledConferenceId()){
+        if (app()->getCurrentScheduledConferenceId()) {
             return route('filament.scheduledConference.pages.profile');
         }
 
-        if(app()->getCurrentConferenceId()){
+        if (app()->getCurrentConferenceId()) {
             return route('filament.conference.pages.profile');
         }
 

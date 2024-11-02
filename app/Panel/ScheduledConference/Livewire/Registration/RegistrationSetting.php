@@ -2,19 +2,15 @@
 
 namespace App\Panel\ScheduledConference\Livewire\Registration;
 
-use Livewire\Component;
-use Filament\Forms\Form;
-use Filament\Forms\Components\Actions;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\TextInput;
 use App\Actions\ScheduledConferences\ScheduledConferenceUpdateAction;
-use Filament\Forms\Components\Actions\Action;
-use Filament\Forms\Concerns\InteractsWithForms;
 use App\Forms\Components\TinyEditor;
-use Filament\Forms\Components\Checkbox;
-use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\Actions;
+use Filament\Forms\Components\Actions\Action;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
+use Filament\Forms\Form;
+use Livewire\Component;
 
 class RegistrationSetting extends Component implements HasForms
 {
@@ -58,7 +54,7 @@ class RegistrationSetting extends Component implements HasForms
                             }
                         })
                         ->authorize('RegistrationSetting:update'),
-                ])->alignRight()
+                ])->alignRight(),
             ])->statePath('formData');
     }
 

@@ -3,15 +3,13 @@
 namespace App\Models;
 
 use App\Facades\Setting;
-use Carbon\Carbon;
-use App\Models\Timeline;
-use Illuminate\Support\Str;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use App\Models\Concerns\BelongsToScheduledConference;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Str;
 
 class Session extends Model
 {
@@ -33,15 +31,17 @@ class Session extends Model
     ];
 
     public const ATTENDANCE_STATUS_TIMELINE = 'timeline';
+
     public const ATTENDANCE_STATUS_REQUIRED = 'required';
+
     public const ATTENDANCE_STATUS_NOT_REQUIRED = 'not-required';
 
     protected function timeSpan(): Attribute
     {
         return Attribute::make(
-            get: fn() => Str::squish(
-                $this->getStartDate()->format(Setting::get('format_time')) .
-                ' - ' .
+            get: fn () => Str::squish(
+                $this->getStartDate()->format(Setting::get('format_time')).
+                ' - '.
                 $this->getEndDate()->format(Setting::get('format_time'))
             ),
         );
@@ -50,12 +50,14 @@ class Session extends Model
     public function getStartDate()
     {
         $timezone = app()->getCurrentScheduledConference()->getMeta('timezone');
+
         return $this->start_at->setTimezone($timezone);
     }
 
     public function getEndDate()
     {
         $timezone = app()->getCurrentScheduledConference()->getMeta('timezone');
+
         return $this->end_at->setTimezone($timezone);
     }
 
@@ -71,7 +73,7 @@ class Session extends Model
 
     public function isOngoing(): bool
     {
-        return !$this->isFuture() && !$this->isPast();
+        return ! $this->isFuture() && ! $this->isPast();
     }
 
     public function isRequireAttendance(): bool
@@ -85,11 +87,11 @@ class Session extends Model
 
     public function canAttend(): bool
     {
-        if (!$this->isRequireAttendance()) {
+        if (! $this->isRequireAttendance()) {
             return false;
         }
 
-        if (!$this->isOngoing()) {
+        if (! $this->isOngoing()) {
             return false;
         }
 
@@ -102,7 +104,7 @@ class Session extends Model
             return self::ATTENDANCE_STATUS_TIMELINE;
         }
 
-        if (!$this->require_attendance) {
+        if (! $this->require_attendance) {
             return self::ATTENDANCE_STATUS_NOT_REQUIRED;
         }
 

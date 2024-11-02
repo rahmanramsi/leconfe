@@ -4,14 +4,10 @@ namespace App\Panel\Conference\Livewire;
 
 use App\Actions\Conferences\ConferenceUpdateAction;
 use App\Facades\Citation;
-use App\Facades\Hook;
 use App\Models\AuthorRole;
-use App\Models\Conference;
 use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\Actions\Action;
-use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\CheckboxList;
-use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -40,8 +36,8 @@ class CitationSetting extends Component implements HasForms
 
     public function form(Form $form): Form
     {
-        $citationStyleOptions = collect(Citation::getCitationStyles())->mapWithKeys(fn($style) => [$style['id'] => $style['title']]);
-        $citationDownloadOptions = collect(Citation::getCitationDownloads())->mapWithKeys(fn($style) => [$style['id'] => $style['title']]);
+        $citationStyleOptions = collect(Citation::getCitationStyles())->mapWithKeys(fn ($style) => [$style['id'] => $style['title']]);
+        $citationDownloadOptions = collect(Citation::getCitationDownloads())->mapWithKeys(fn ($style) => [$style['id'] => $style['title']]);
 
         return $form
             ->model(app()->getCurrentConference())

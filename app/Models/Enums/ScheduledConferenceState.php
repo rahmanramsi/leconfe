@@ -10,11 +10,10 @@ enum ScheduledConferenceState: int implements HasColor, HasLabel
 {
     use UsefulEnums;
 
-    case Draft      = 1;
-    case Published  = 2;
-    case Current    = 3;
-    case Archived   = 4;
-
+    case Draft = 1;
+    case Published = 2;
+    case Current = 3;
+    case Archived = 4;
 
     public function getLabel(): ?string
     {

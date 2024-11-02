@@ -1,15 +1,14 @@
 <?php
 
-use App\Models\User;
-use App\Models\RegistrationType;
-use App\Models\ScheduledConference;
-use Illuminate\Support\Facades\Schema;
 use App\Models\Enums\RegistrationPaymentState;
 use App\Models\Registration;
+use App\Models\RegistrationType;
+use App\Models\ScheduledConference;
 use App\Models\Submission;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Support\Arr;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {

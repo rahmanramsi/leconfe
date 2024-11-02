@@ -3,12 +3,12 @@
 namespace App\Panel\ScheduledConference\Pages;
 
 use App\Facades\Hook;
-use Filament\Pages\Page;
-use Filament\Infolists\Infolist;
 use App\Infolists\Components\LivewireEntry;
 use App\Infolists\Components\VerticalTabs as InfolistsVerticalTabs;
 use App\Panel\ScheduledConference\Livewire\Payment\ManualPaymentSetting;
 use App\Panel\ScheduledConference\Livewire\Payment\PaymentSetting;
+use Filament\Infolists\Infolist;
+use Filament\Pages\Page;
 use Illuminate\Contracts\Support\Htmlable;
 
 class Payments extends Page
@@ -49,7 +49,7 @@ class Payments extends Page
                 ->icon('heroicon-o-cog')
                 ->schema([
                     LivewireEntry::make('settings')
-                        ->livewire(PaymentSetting::class)
+                        ->livewire(PaymentSetting::class),
                 ]),
             InfolistsVerticalTabs\Tab::make('Manual')
                 ->label(__('general.manual'))

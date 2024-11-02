@@ -3,12 +3,8 @@
 namespace App\Panel\ScheduledConference\Livewire\Submissions\Components;
 
 use App\Actions\Submissions\SubmissionUpdateAction;
-use App\Infolists\Components\BladeEntry;
 use App\Models\Proceeding;
 use App\Models\Submission;
-use Exception;
-use Filament\Forms\Components\Actions;
-use Filament\Forms\Components\Actions\Action as ActionsAction;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
@@ -59,7 +55,7 @@ class SubmissionProceeding extends \Livewire\Component implements HasForms, HasI
                     ->label(__('general.proceeding'))
                     ->html()
                     ->getStateUsing(function (Submission $record) {
-                        if ($record->proceeding){
+                        if ($record->proceeding) {
                             $proceedingTitle = $record->proceeding->title;
                             $proceedingRoute = route('filament.conference.resources.proceedings.view', ['record' => $record->proceeding]);
 
@@ -74,7 +70,7 @@ class SubmissionProceeding extends \Livewire\Component implements HasForms, HasI
                     ->suffixActions([
                         Action::make('assign_proceeding')
                             ->button()
-                            ->label(fn(Submission $record) => $record->proceeding ? __('general.change_proceeding') :  __('general.assign_to_proceeding'))
+                            ->label(fn (Submission $record) => $record->proceeding ? __('general.change_proceeding') : __('general.assign_to_proceeding'))
                             ->visible(fn (Submission $record) => auth()->user()->can('editing', $record))
                             ->modalWidth(MaxWidth::ExtraLarge)
                             ->form(fn (Submission $record) => static::getFormAssignProceeding($record))
@@ -103,7 +99,7 @@ class SubmissionProceeding extends \Livewire\Component implements HasForms, HasI
                             ->pluck('title', 'id')
                             ->toArray(),
                     ]
-                )
+                ),
         ];
     }
 

@@ -3,16 +3,13 @@
 namespace App\Frontend\ScheduledConference\Pages;
 
 use App\Frontend\Website\Pages\Page;
-use Livewire\Attributes\Title;
 use Illuminate\Contracts\Support\Htmlable;
 
 class About extends Page
 {
     protected static string $view = 'frontend.scheduledConference.pages.about';
 
-    public function mount()
-    {
-    }
+    public function mount() {}
 
     public function getTitle(): string|Htmlable
     {
@@ -33,7 +30,7 @@ class About extends Page
     protected function getViewData(): array
     {
         return [
-            'about' => app()->getCurrentScheduledConference()?->getMeta('about')
+            'about' => app()->getCurrentScheduledConference()?->getMeta('about'),
         ];
     }
 }

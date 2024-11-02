@@ -2,10 +2,10 @@
 
 namespace App\Models\States\Submission\Concerns;
 
+use App\Actions\Submissions\SubmissionUpdateAction;
 use App\Classes\Log;
 use App\Models\Enums\SubmissionStage;
 use App\Models\Enums\SubmissionStatus;
-use App\Actions\Submissions\SubmissionUpdateAction;
 
 trait CanDeclinePayment
 {

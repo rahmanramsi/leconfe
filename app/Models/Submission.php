@@ -2,45 +2,45 @@
 
 namespace App\Models;
 
-use Spatie\Tags\HasTags;
-use Plank\Metable\Metable;
-use App\Models\Enums\UserRole;
+use App\Frontend\Conference\Pages\Paper;
 use App\Models\Concerns\HasDOI;
-use Spatie\MediaLibrary\HasMedia;
 use App\Models\Concerns\HasTopics;
+use App\Models\Enums\SubmissionStage;
+use App\Models\Enums\SubmissionStatus;
+use App\Models\Enums\UserRole;
+use App\Models\States\Submission\BaseSubmissionState;
+use App\Models\States\Submission\DeclinedPaymentSubmissionState;
+use App\Models\States\Submission\DeclinedSubmissionState;
+use App\Models\States\Submission\EditingSubmissionState;
+use App\Models\States\Submission\IncompleteSubmissionState;
+use App\Models\States\Submission\OnPaymentSubmissionState;
+use App\Models\States\Submission\OnPresentationSubmissionState;
+use App\Models\States\Submission\OnReviewSubmissionState;
+use App\Models\States\Submission\PublishedSubmissionState;
+use App\Models\States\Submission\QueuedSubmissionState;
+use App\Models\States\Submission\WithdrawnSubmissionState;
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Enums\SubmissionStage;
-use Spatie\EloquentSortable\Sortable;
-use App\Models\Enums\SubmissionStatus;
-use Illuminate\Database\Eloquent\Model;
+use Plank\Metable\Metable;
 use Spatie\Activitylog\Models\Activity;
-use App\Frontend\Conference\Pages\Paper;
-use Illuminate\Database\Eloquent\Builder;
+use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
+use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
-use GeneaLabs\LaravelModelCaching\Traits\Cachable;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Models\States\Submission\BaseSubmissionState;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
-use App\Models\States\Submission\QueuedSubmissionState;
-use App\Models\States\Submission\EditingSubmissionState;
-use App\Models\States\Submission\DeclinedSubmissionState;
-use App\Models\States\Submission\OnReviewSubmissionState;
-use App\Models\States\Submission\OnPaymentSubmissionState;
-use App\Models\States\Submission\PublishedSubmissionState;
-use App\Models\States\Submission\WithdrawnSubmissionState;
-use App\Models\States\Submission\IncompleteSubmissionState;
-use App\Models\States\Submission\OnPresentationSubmissionState;
-use App\Models\States\Submission\DeclinedPaymentSubmissionState;
+use Spatie\Tags\HasTags;
 
 class Submission extends Model implements HasMedia, Sortable
 {
-    use Cachable, HasFactory, HasTags, HasTopics, InteractsWithMedia, Metable, SortableTrait, HasDOI;
+    use Cachable, HasDOI, HasFactory, HasTags, HasTopics, InteractsWithMedia, Metable, SortableTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -89,7 +89,7 @@ class Submission extends Model implements HasMedia, Sortable
             $submission->conference_id ??= app()->getCurrentConferenceId();
             $submission->scheduled_conference_id ??= app()->getCurrentScheduledConferenceId();
 
-            if (!$submission->track_id) {
+            if (! $submission->track_id) {
                 $submission->track_id = Track::withoutGlobalScopes()->where('scheduled_conference_id', $submission->scheduled_conference_id)->first()?->getKey();
             }
         });
@@ -221,7 +221,7 @@ class Submission extends Model implements HasMedia, Sortable
             ->limit(1)
             ->first();
 
-        if(!$isParticipantEditor) {
+        if (! $isParticipantEditor) {
             return false;
         }
 
@@ -238,7 +238,7 @@ class Submission extends Model implements HasMedia, Sortable
             ->limit(1)
             ->first();
 
-        if(!$isParticipantAuthor) {
+        if (! $isParticipantAuthor) {
             return false;
         }
 
@@ -312,11 +312,11 @@ class Submission extends Model implements HasMedia, Sortable
     {
         return route(Paper::getRouteName('conference'), [
             'submission' => $this,
-            'conference' => $this->conference
+            'conference' => $this->conference,
         ]);
     }
 
-    public function registerMediaConversions(Media $media = null): void
+    public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion('thumb')
             ->keepOriginalImageFormat()

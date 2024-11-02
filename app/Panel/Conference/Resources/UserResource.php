@@ -6,6 +6,7 @@ use App\Actions\User\UserDeleteAction;
 use App\Actions\User\UserMailAction;
 use App\Actions\User\UserUpdateAction;
 use App\Facades\Setting;
+use App\Forms\Components\TinyEditor;
 use App\Models\Enums\UserRole;
 use App\Models\Role;
 use App\Models\User;
@@ -30,15 +31,13 @@ use Filament\Tables\Columns\Layout\Split;
 use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use App\Forms\Components\TinyEditor;
-use Filament\Tables\Filters\Filter;
-use Filament\Tables\Filters\TernaryFilter;
 use STS\FilamentImpersonate\Tables\Actions\Impersonate;
 
 class UserResource extends Resource
@@ -46,7 +45,6 @@ class UserResource extends Resource
     protected static ?string $model = User::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-user-circle';
-
 
     public static function getNavigationLabel(): string
     {
@@ -58,12 +56,10 @@ class UserResource extends Resource
         return __('general.user');
     }
 
-
     public static function getNavigationGroup(): string
     {
         return __('general.settings');
     }
-
 
     protected static ?int $navigationSort = 5;
 
@@ -105,11 +101,11 @@ class UserResource extends Resource
                                     ->label(__('general.email'))
                                     ->columnSpan(['lg' => 2])
                                     ->disabled(fn (?User $record) => $record)
-                                    ->dehydrated(fn (?User $record) => !$record)
+                                    ->dehydrated(fn (?User $record) => ! $record)
                                     ->unique(ignoreRecord: true),
                                 Forms\Components\TextInput::make('password')
                                     ->label(__('general.password'))
-                                    ->required(fn (?User $record) => !$record)
+                                    ->required(fn (?User $record) => ! $record)
                                     ->password()
                                     ->dehydrateStateUsing(fn ($state) => Hash::make($state))
                                     ->dehydrated(fn ($state) => filled($state))
@@ -130,7 +126,7 @@ class UserResource extends Resource
                 Forms\Components\Grid::make()
                     ->schema([
                         Forms\Components\Section::make()
-                            ->visible(fn(?User $record) => $record?->isBanned())
+                            ->visible(fn (?User $record) => $record?->isBanned())
                             ->schema([
                                 Forms\Components\Placeholder::make('disabled_at')
                                     ->visible(fn (?User $record) => $record?->isBanned())
@@ -191,7 +187,7 @@ class UserResource extends Resource
                                 ->map(fn (string $segment): string => filled($segment) ? mb_substr($segment, 0, 1) : '')
                                 ->join(' ');
 
-                            return 'https://ui-avatars.com/api/?name=' . urlencode($name) . '&color=FFFFFF&background=111827&font-size=0.33';
+                            return 'https://ui-avatars.com/api/?name='.urlencode($name).'&color=FFFFFF&background=111827&font-size=0.33';
                         })
                         ->extraCellAttributes([
                             'style' => 'width: 1px',
@@ -226,7 +222,7 @@ class UserResource extends Resource
                             ->getStateUsing(fn (User $record) => $record->getMeta('affiliation')),
                         TextColumn::make('disabled')
                             ->getStateUsing(function (User $record) {
-                                if (!$record->isBanned()) {
+                                if (! $record->isBanned()) {
                                     return null;
                                 }
 
@@ -236,7 +232,7 @@ class UserResource extends Resource
 
                                 $bannedUntil = $ban->expired_at;
 
-                                return __('general.disabled') . ($bannedUntil ? __('general.until') . $bannedUntil->format(Setting::get('format_date')) : '');
+                                return __('general.disabled').($bannedUntil ? __('general.until').$bannedUntil->format(Setting::get('format_date')) : '');
                             })
                             ->color('danger')
                             ->badge(),
@@ -256,7 +252,7 @@ class UserResource extends Resource
                 Filter::make('hide_user_with_no_roles')
                     ->default()
                     ->label(__('general.hide_users_with_no_roles'))
-                    ->query(fn(array $data, Builder $query) => $query->whereHas('roles', fn ($query) => $query->where('name', '!=', UserRole::Admin)))
+                    ->query(fn (array $data, Builder $query) => $query->whereHas('roles', fn ($query) => $query->where('name', '!=', UserRole::Admin))),
             ])
             ->deferFilters()
             ->actions([
@@ -270,7 +266,7 @@ class UserResource extends Resource
                 ActionGroup::make([
                     Impersonate::make()
                         ->grouped()
-                        ->hidden(fn ($record) => !auth()->user()->can('loginAs', $record))
+                        ->hidden(fn ($record) => ! auth()->user()->can('loginAs', $record))
                         ->label(fn (User $record) => __('general.login_as_user', ['name' => $record->full_name]))
                         ->icon('heroicon-m-key')
                         ->color('primary')
@@ -308,7 +304,7 @@ class UserResource extends Resource
                         ->icon('heroicon-o-envelope')
                         ->modalWidth('3xl')
                         ->fillForm(fn ($record) => ['to' => $record->email])
-                        ->modalHeading(fn (User $record) => __('general.send_email_to') . $record->full_name)
+                        ->modalHeading(fn (User $record) => __('general.send_email_to').$record->full_name)
                         ->form([
                             Grid::make()
                                 ->schema([

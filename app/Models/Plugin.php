@@ -6,7 +6,6 @@ use App\Facades\Plugin as FacadesPlugin;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
 use Sushi\Sushi;
 
 class Plugin extends Model
@@ -21,17 +20,17 @@ class Plugin extends Model
     {
         return FacadesPlugin::getPlugins(false)
             ->map(function ($plugin) {
-                $data['id']             = $plugin->getInfo('folder');
-                $data['name']           = $plugin->getInfo('name');
-                $data['author']         = $plugin->getInfo('author');
-                $data['description']    = $plugin->getInfo('description');
-                $data['version']        = $plugin->getInfo('version');
-                $data['enabled']        = $plugin->isEnabled();
-                $data['path']           = $plugin->getPluginPath();
-                $data['type']           = $plugin->getInfo('type') ?? 'plugin';
-                $data['isHidden']       = $plugin->isHidden();
-                $data['canBeDisabled']  = $plugin->canBeDisabled();
-                $data['canBeEnabled']   = $plugin->canBeEnabled();
+                $data['id'] = $plugin->getInfo('folder');
+                $data['name'] = $plugin->getInfo('name');
+                $data['author'] = $plugin->getInfo('author');
+                $data['description'] = $plugin->getInfo('description');
+                $data['version'] = $plugin->getInfo('version');
+                $data['enabled'] = $plugin->isEnabled();
+                $data['path'] = $plugin->getPluginPath();
+                $data['type'] = $plugin->getInfo('type') ?? 'plugin';
+                $data['isHidden'] = $plugin->isHidden();
+                $data['canBeDisabled'] = $plugin->canBeDisabled();
+                $data['canBeEnabled'] = $plugin->canBeEnabled();
 
                 return $data;
             })
@@ -45,7 +44,6 @@ class Plugin extends Model
             get: fn () => FacadesPlugin::getPlugin($this->id),
         );
     }
-
 
     public function scopeEnabled($query): Builder
     {

@@ -2,39 +2,39 @@
 
 namespace App;
 
-use App\Models\Site;
-use App\Models\Topic;
-use App\Models\Track;
-use App\Models\Session;
-use App\Models\Version;
-use App\Models\Timeline;
-use App\Models\Committee;
-use App\Models\AuthorRole;
-use App\Models\Conference;
-use App\Models\Proceeding;
-use App\Models\StaticPage;
-use App\Models\Submission;
-use App\Models\SpeakerRole;
-use App\Models\Stakeholder;
-use App\Models\Announcement;
-use App\Models\MailTemplate;
-use App\Models\Registration;
-use App\Models\CommitteeRole;
-use App\Models\NavigationMenu;
-use App\Models\RegistrationType;
-use App\Models\StakeholderLevel;
-use App\Models\SubmissionFileType;
-use Illuminate\Support\Collection;
-use App\Models\RegistrationPayment;
-use App\Models\ScheduledConference;
 use App\Actions\Site\SiteCreateAction;
 use App\Classes\Theme;
 use App\Facades\Plugin;
+use App\Models\Announcement;
+use App\Models\AuthorRole;
+use App\Models\Committee;
+use App\Models\CommitteeRole;
+use App\Models\Conference;
+use App\Models\MailTemplate;
+use App\Models\NavigationMenu;
 use App\Models\PaymentManual;
+use App\Models\Proceeding;
+use App\Models\Registration;
 use App\Models\RegistrationAttendance;
+use App\Models\RegistrationPayment;
+use App\Models\RegistrationType;
+use App\Models\ScheduledConference;
 use App\Models\Scopes\ConferenceScope;
 use App\Models\Scopes\ScheduledConferenceScope;
+use App\Models\Session;
+use App\Models\Site;
+use App\Models\SpeakerRole;
+use App\Models\Stakeholder;
+use App\Models\StakeholderLevel;
+use App\Models\StaticPage;
+use App\Models\Submission;
+use App\Models\SubmissionFileType;
+use App\Models\Timeline;
+use App\Models\Topic;
+use App\Models\Track;
+use App\Models\Version;
 use Illuminate\Foundation\Application as LaravelApplication;
+use Illuminate\Support\Collection;
 
 class Application extends LaravelApplication
 {
@@ -70,7 +70,7 @@ class Application extends LaravelApplication
 
     public function getVersion()
     {
-        $version = new Version();
+        $version = new Version;
         $version->product_name = 'Leconfe';
         $version->product_folder = 'leconfe';
         $version->version = static::APP_VERSION;
@@ -80,7 +80,7 @@ class Application extends LaravelApplication
 
     public function getInstalledVersion(): string
     {
-        if(!$this->isInstalled()){
+        if (! $this->isInstalled()) {
             return throw new \Exception('Application is not installed');
         }
 
@@ -94,11 +94,11 @@ class Application extends LaravelApplication
 
     public function getCurrentConference(): ?Conference
     {
-        if ($this->currentConferenceId && !$this->currentConference) {
+        if ($this->currentConferenceId && ! $this->currentConference) {
             $this->currentConference = Conference::find($this->getCurrentConferenceId());
         }
-        
-        if($this->currentConference && $this->currentConference->getKey() !== $this->getCurrentConferenceId()){
+
+        if ($this->currentConference && $this->currentConference->getKey() !== $this->getCurrentConferenceId()) {
             $this->currentConference = Conference::find($this->getCurrentConferenceId());
         }
 
@@ -127,11 +127,11 @@ class Application extends LaravelApplication
 
     public function getCurrentScheduledConference(): ?ScheduledConference
     {
-        if ($this->currentScheduledConferenceId && !$this->currentScheduledConference) {
+        if ($this->currentScheduledConferenceId && ! $this->currentScheduledConference) {
             $this->currentScheduledConference = ScheduledConference::find($this->getCurrentScheduledConferenceId());
         }
 
-        if($this->currentScheduledConference && $this->currentScheduledConference->getKey() !== $this->getCurrentScheduledConferenceId()){
+        if ($this->currentScheduledConference && $this->currentScheduledConference->getKey() !== $this->getCurrentScheduledConferenceId()) {
             $this->currentScheduledConference = ScheduledConference::find($this->getCurrentScheduledConferenceId());
         }
 
@@ -206,7 +206,7 @@ class Application extends LaravelApplication
 
     public function getSite(): Site
     {
-        if (!$this->site) {
+        if (! $this->site) {
             $this->site = Site::getSite() ?? SiteCreateAction::run();
         }
 
@@ -216,7 +216,7 @@ class Application extends LaravelApplication
     public function isReportingErrors(): bool
     {
         try {
-            if ($this->isProduction() && !$this->hasDebugModeEnabled() && config('app.report_errors')) {
+            if ($this->isProduction() && ! $this->hasDebugModeEnabled() && config('app.report_errors')) {
                 return true;
             }
         } catch (\Throwable $th) {
@@ -228,11 +228,11 @@ class Application extends LaravelApplication
 
     public function getLoginUrl(): string
     {
-        if(app()->getCurrentScheduledConference()){
+        if (app()->getCurrentScheduledConference()) {
             return route('livewirePageGroup.scheduledConference.pages.login');
         }
 
-        if(app()->getCurrentConference()){
+        if (app()->getCurrentConference()) {
             return route('livewirePageGroup.conference.pages.login');
         }
 
@@ -248,15 +248,15 @@ class Application extends LaravelApplication
         }
     }
 
-    public function getCurrentTheme() : ?Theme
+    public function getCurrentTheme(): ?Theme
     {
         $theme ??= app()->getSite()->getMeta('theme') ?? 'default';
 
-        if($currentConference = app()->getCurrentConference()){
+        if ($currentConference = app()->getCurrentConference()) {
             $theme = $currentConference->getMeta('theme');
         }
 
-        if($currentScheduledConference = app()->getCurrentScheduledConference()){
+        if ($currentScheduledConference = app()->getCurrentScheduledConference()) {
             $theme = $currentScheduledConference->getMeta('theme');
         }
 
@@ -267,13 +267,15 @@ class Application extends LaravelApplication
 
     public function updateCurrentTheme(string $theme)
     {
-        if($currentScheduledConference = app()->getCurrentScheduledConference()){
+        if ($currentScheduledConference = app()->getCurrentScheduledConference()) {
             $currentScheduledConference->setMeta('theme', $theme);
+
             return;
         }
 
-        if($currentConference = app()->getCurrentConference()){
+        if ($currentConference = app()->getCurrentConference()) {
             $theme = $currentConference->setMeta('theme', $theme);
+
             return;
         }
 
@@ -285,7 +287,7 @@ class Application extends LaravelApplication
         $site = $this->getSite();
         $uniqueId = $site->getMeta('unique_identifier');
 
-        if (!$uniqueId) {
+        if (! $uniqueId) {
             $uniqueId = uniqid();
             $site->setMeta('unique_identifier', $uniqueId);
         }
@@ -295,6 +297,6 @@ class Application extends LaravelApplication
 
     public function getApiUrl(?string $path = null): string
     {
-        return static::API_URL . $path;
+        return static::API_URL.$path;
     }
 }

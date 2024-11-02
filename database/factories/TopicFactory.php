@@ -2,11 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\User;
 use App\Models\Topic;
-use App\Models\Conference;
-use App\Models\Submission;
-use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class TopicFactory extends Factory

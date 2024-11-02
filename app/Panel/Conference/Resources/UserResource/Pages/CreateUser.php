@@ -2,7 +2,6 @@
 
 namespace App\Panel\Conference\Resources\UserResource\Pages;
 
-use App\Actions\User\CreateParticipantFromUserAction;
 use App\Actions\User\UserCreateAction;
 use App\Panel\Conference\Resources\UserResource;
 use Filament\Resources\Pages\CreateRecord;

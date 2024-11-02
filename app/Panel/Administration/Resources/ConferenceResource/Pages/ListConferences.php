@@ -2,14 +2,11 @@
 
 namespace App\Panel\Administration\Resources\ConferenceResource\Pages;
 
-use Filament\Actions;
-use Illuminate\Support\Str;
-use Filament\Support\Enums\MaxWidth;
-use App\Actions\ScheduledConferences\ScheduledConferenceCreateAction;
-use Filament\Resources\Pages\ListRecords;
 use App\Actions\Conferences\ConferenceCreateAction;
-use App\Models\Enums\ScheduledConferenceState;
 use App\Panel\Administration\Resources\ConferenceResource;
+use Filament\Actions;
+use Filament\Resources\Pages\ListRecords;
+use Filament\Support\Enums\MaxWidth;
 
 class ListConferences extends ListRecords
 {
@@ -33,7 +30,7 @@ class ListConferences extends ListRecords
                     $record = ConferenceCreateAction::run($data);
 
                     return $record;
-                })
+                }),
         ];
     }
 }

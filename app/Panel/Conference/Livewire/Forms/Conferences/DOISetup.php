@@ -3,7 +3,6 @@
 namespace App\Panel\Conference\Livewire\Forms\Conferences;
 
 use App\Actions\Conferences\ConferenceUpdateAction;
-use App\Models\Conference;
 use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Checkbox;
@@ -49,7 +48,7 @@ class DOISetup extends Component implements HasForms
                         Fieldset::make('DOIs')
                             ->schema([
                                 Checkbox::make('meta.doi_enabled')
-                                    ->label(__('general.allow_digital_object_dois'))
+                                    ->label(__('general.allow_digital_object_dois')),
                             ])
                             ->columns(1),
                         Fieldset::make(__('general.items_with_DOIs'))
@@ -61,7 +60,7 @@ class DOISetup extends Component implements HasForms
                                     ->hiddenLabel()
                                     ->options([
                                         'articles' => __('general.articles'),
-                                    ])
+                                    ]),
                             ])
                             ->columns(1),
                         TextInput::make('meta.doi_prefix')
@@ -73,7 +72,7 @@ class DOISetup extends Component implements HasForms
                             ->requiredUnless('meta.doi_enabled', true)
                             ->validationMessages([
                                 'regex' => __('general.the_doi_format_validation'),
-                                'required_unless' =>  __('general.the_doi_required_enabled')
+                                'required_unless' => __('general.the_doi_required_enabled'),
                             ]),
                         Select::make('meta.doi_automatic_assignment')
                             ->label(__('general.automatic_doi_assignment'))
@@ -89,10 +88,10 @@ class DOISetup extends Component implements HasForms
                                     ->hiddenLabel()
                                     ->options([
                                         'default' => __('general.automatically_generate_unique_suffix'),
-                                        'none' =>  __('general.not_be_automatically_generate_unique_suffix')
-                                    ])
+                                        'none' => __('general.not_be_automatically_generate_unique_suffix'),
+                                    ]),
                             ])
-                            ->columns(1)
+                            ->columns(1),
                     ]),
                 Actions::make([
                     Action::make('save')

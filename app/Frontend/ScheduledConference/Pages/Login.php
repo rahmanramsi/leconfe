@@ -6,7 +6,7 @@ use App\Frontend\Website\Pages\Login as WebsiteLogin;
 
 class Login extends WebsiteLogin
 {
-    public function getViewData() : array 
+    public function getViewData(): array
     {
         return [
             'resetPasswordUrl' => route('livewirePageGroup.scheduledConference.pages.reset-password'),

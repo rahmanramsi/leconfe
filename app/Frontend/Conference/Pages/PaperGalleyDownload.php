@@ -2,17 +2,16 @@
 
 namespace App\Frontend\Conference\Pages;
 
-use App\Facades\Hook;
+use App\Frontend\Website\Pages\Page;
 use App\Models\Enums\SubmissionStatus;
 use App\Models\Media;
 use App\Models\Submission;
 use Illuminate\Support\Facades\Route;
 use Rahmanramsi\LivewirePageGroup\PageGroup;
-use App\Frontend\Website\Pages\Page;
 
 class PaperGalleyDownload extends Page
 {
-    function __invoke()
+    public function __invoke()
     {
         $currentRoute = Route::getCurrentRoute();
 
@@ -30,7 +29,7 @@ class PaperGalleyDownload extends Page
         $media = Media::findByUuid($galley->file->media->uuid);
 
         abort_if(! $media, 404);
-        
+
         return response()
             ->download($media->getPath(), $media->file_name);
     }
@@ -38,7 +37,7 @@ class PaperGalleyDownload extends Page
     public static function routes(PageGroup $pageGroup): void
     {
         $slug = static::getSlug();
-        Route::get("/paper/download/{submission}/{galley}", static::class)
+        Route::get('/paper/download/{submission}/{galley}', static::class)
             ->middleware(static::getRouteMiddleware($pageGroup))
             ->withoutMiddleware(static::getWithoutRouteMiddleware($pageGroup))
             ->name((string) str($slug)->replace('/', '.'));

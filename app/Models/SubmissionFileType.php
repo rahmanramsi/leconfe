@@ -10,7 +10,7 @@ use Spatie\EloquentSortable\SortableTrait;
 
 class SubmissionFileType extends Model
 {
-    use Cachable, HasFactory, SortableTrait, BelongsToScheduledConference;
+    use BelongsToScheduledConference, Cachable, HasFactory, SortableTrait;
 
     protected $fillable = [
         'name',

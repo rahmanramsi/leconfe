@@ -4,7 +4,6 @@ namespace Database\Seeders\Developments;
 
 use App\Models\Conference;
 use App\Models\Proceeding;
-use App\Models\Submission;
 use Illuminate\Database\Seeder;
 
 class ProceedingSeeder extends Seeder

@@ -6,47 +6,47 @@ use App\Application;
 use App\Mail\Templates\TemplateMailable;
 use Illuminate\Filesystem\Filesystem;
 use ReflectionClass;
-use Sushi\Sushi;
 use Spatie\MailTemplates\Models\MailTemplate as BaseMailTemplate;
-
+use Sushi\Sushi;
 
 class DefaultMailTemplate extends BaseMailTemplate
 {
-	use Sushi;
+    use Sushi;
 
-	protected $table = 'mail_templates';
+    protected $table = 'mail_templates';
 
-	public static $data = [];
+    public static $data = [];
 
-	protected $schema = [
+    protected $schema = [
         'id' => 'integer',
         'conference_id' => 'integer',
         'mailable' => 'string',
         'description' => 'string',
-		'subject' => 'string',
-		'html_template' => 'string',
-		'text_template' => 'string',
-		'custom' => 'boolean',
+        'subject' => 'string',
+        'html_template' => 'string',
+        'text_template' => 'string',
+        'custom' => 'boolean',
     ];
 
-	public function getRows()
+    public function getRows()
     {
-		return $this->getData(app()->getCurrentConference());
+        return $this->getData(app()->getCurrentConference());
     }
 
-	public function getData(Conference $conference)
-	{
-		if(empty($this->data)){
-			$this->data = $this->getDefaultData($conference);
-		}
-		return $this->data;
-	}
+    public function getData(Conference $conference)
+    {
+        if (empty($this->data)) {
+            $this->data = $this->getDefaultData($conference);
+        }
 
-	public function getDefaultData(Conference $conference)
-	{
-		$data = [];
+        return $this->data;
+    }
 
-		$directory = app_path('Mail/Templates');
+    public function getDefaultData(Conference $conference)
+    {
+        $data = [];
+
+        $directory = app_path('Mail/Templates');
         $namespace = 'App\\Mail\\Templates';
 
         $filesystem = app(Filesystem::class);
@@ -54,7 +54,7 @@ class DefaultMailTemplate extends BaseMailTemplate
             return;
         }
 
-		$customTemplates = MailTemplate::all();
+        $customTemplates = MailTemplate::all();
         $namespace = str($namespace);
         foreach ($filesystem->allFiles($directory) as $file) {
             $variableNamespace = $namespace->contains('*') ? str_ireplace(
@@ -83,28 +83,27 @@ class DefaultMailTemplate extends BaseMailTemplate
             }
 
             $defaultData = [
-				'conference_id' => $conference?->getKey() ?? Application::CONTEXT_WEBSITE,
-				'mailable' => $class,
+                'conference_id' => $conference?->getKey() ?? Application::CONTEXT_WEBSITE,
+                'mailable' => $class,
                 'description' => $class::getDefaultDescription(),
                 'subject' => $class::getDefaultSubject(),
                 'html_template' => $class::getDefaultHtmlTemplate(),
                 'text_template' => $class::getDefaultTextTemplate(),
-				'custom' => false
+                'custom' => false,
             ];
 
-			$customTemplate = $customTemplates->where('mailable', $class)->first();
-			if($customTemplate){
-				$defaultData['description'] = $customTemplate->description;
-				$defaultData['subject'] = $customTemplate->subject;
-				$defaultData['html_template'] = $customTemplate->html_template;
-				$defaultData['text_template'] = $customTemplate->text_template;
-				$defaultData['custom'] = true;
-			}
+            $customTemplate = $customTemplates->where('mailable', $class)->first();
+            if ($customTemplate) {
+                $defaultData['description'] = $customTemplate->description;
+                $defaultData['subject'] = $customTemplate->subject;
+                $defaultData['html_template'] = $customTemplate->html_template;
+                $defaultData['text_template'] = $customTemplate->text_template;
+                $defaultData['custom'] = true;
+            }
 
-			$data[] = $defaultData;
+            $data[] = $defaultData;
         }
 
-		return $data;
-	}
-
+        return $data;
+    }
 }

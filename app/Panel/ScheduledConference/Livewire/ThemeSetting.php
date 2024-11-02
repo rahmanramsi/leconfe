@@ -32,7 +32,7 @@ class ThemeSetting extends Component implements HasForms
         $activeTheme = app()->getCurrentTheme();
 
         $this->form->fill([
-            'meta'  => [
+            'meta' => [
                 'theme' => $activeTheme?->getInfo('folder'),
             ],
             'theme' => $activeTheme?->getFormData() ?? [],
@@ -53,9 +53,9 @@ class ThemeSetting extends Component implements HasForms
                     ->schema([
                         Select::make('meta.theme')
                             ->reactive()
-                            ->options(fn() => Plugin::theme()->enabled()->pluck('name', 'id'))
+                            ->options(fn () => Plugin::theme()->enabled()->pluck('name', 'id'))
                             ->afterStateUpdated(function (Get $get, &$livewire): void {
-                                if(!$get('meta.theme')) {
+                                if (! $get('meta.theme')) {
                                     return;
                                 }
 
@@ -63,7 +63,7 @@ class ThemeSetting extends Component implements HasForms
                             })
                             ->required(),
                         Grid::make(1)
-                            ->visible(fn(Get $get) => $get('meta.theme'))
+                            ->visible(fn (Get $get) => $get('meta.theme'))
                             ->statePath('theme')
                             ->schema(function (Get $get): array {
                                 return FacadesPlugin::getPlugin($get('meta.theme'))?->getFormSchema() ?? [];

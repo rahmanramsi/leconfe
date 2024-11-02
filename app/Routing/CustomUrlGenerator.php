@@ -2,8 +2,8 @@
 
 namespace App\Routing;
 
-use Illuminate\Support\Str;
 use Illuminate\Routing\UrlGenerator;
+use Illuminate\Support\Str;
 
 class CustomUrlGenerator extends UrlGenerator
 {
@@ -20,20 +20,19 @@ class CustomUrlGenerator extends UrlGenerator
     public function route($name, $parameters = [], $absolute = true)
     {
         $route = $this->routes->getByName($name);
-        
+
         /**
          * Handle the conference and serie parameters when the route needs them
          */
-        if($route) {
+        if ($route) {
             if (Str::contains($route->uri(), '{conference}') && $conference = app()->getCurrentConference()) {
                 $parameters['conference'] ??= $conference->path;
             }
-            
-            if(Str::contains($route->uri(), '{serie}') && $scheduledConference = app()->getCurrentScheduledConference()) {
+
+            if (Str::contains($route->uri(), '{serie}') && $scheduledConference = app()->getCurrentScheduledConference()) {
                 $parameters['serie'] ??= $scheduledConference->path;
             }
         }
-
 
         return parent::route($name, $parameters, $absolute);
     }
@@ -48,6 +47,7 @@ class CustomUrlGenerator extends UrlGenerator
         if (! $this->routeGenerator) {
             $this->routeGenerator = new CustomRouteUrlGenerator($this, $this->request);
         }
+
         return $this->routeGenerator;
     }
 }

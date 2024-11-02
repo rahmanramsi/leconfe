@@ -40,7 +40,7 @@ class Permission extends Model
 
     public static function getProtectedPermissionContexts()
     {
-        return !auth()->user()?->hasRole(UserRole::Admin) ? [
+        return ! auth()->user()?->hasRole(UserRole::Admin) ? [
             'Administration',
             'Plugin',
             'Panel',
@@ -56,5 +56,4 @@ class Permission extends Model
             app(PermissionRegistrar::class)->pivotRole
         )->withoutGlobalScopes();
     }
-
 }

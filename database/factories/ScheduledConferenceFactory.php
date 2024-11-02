@@ -20,6 +20,7 @@ class ScheduledConferenceFactory extends Factory
     public function definition(): array
     {
         $date = Carbon::parse(fake()->date());
+
         return [
             'title' => $date->year,
             'path' => Str::slug($date->year),

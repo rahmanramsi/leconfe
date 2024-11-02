@@ -2,11 +2,10 @@
 
 namespace App\Frontend\ScheduledConference\Pages;
 
+use App\Frontend\Website\Pages\Page;
 use App\Models\Announcement;
-use Livewire\Attributes\Title;
 use Illuminate\Support\Facades\Route;
 use Rahmanramsi\LivewirePageGroup\PageGroup;
-use App\Frontend\Website\Pages\Page;
 
 class Announcements extends Page
 {

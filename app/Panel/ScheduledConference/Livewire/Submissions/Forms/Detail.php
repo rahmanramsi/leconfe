@@ -4,17 +4,17 @@ namespace App\Panel\ScheduledConference\Livewire\Submissions\Forms;
 
 use App\Actions\Submissions\SubmissionUpdateAction;
 use App\Classes\Log;
+use App\Forms\Components\TinyEditor;
 use App\Models\Submission;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
-use Filament\Notifications\Notification;
-use App\Forms\Components\TinyEditor;
-use Filament\Forms\Components\Toggle;
 use Filament\Forms\Get;
+use Filament\Notifications\Notification;
 
 class Detail extends \Livewire\Component implements HasForms
 {

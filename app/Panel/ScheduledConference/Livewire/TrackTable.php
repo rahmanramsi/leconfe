@@ -2,12 +2,9 @@
 
 namespace App\Panel\ScheduledConference\Livewire;
 
-use App\Actions\Topics\TopicCreateAction;
 use App\Actions\Tracks\TrackCreateAction;
 use App\Actions\Tracks\TrackUpdateAction;
-use App\Actions\User\TopicUpdateAction;
 use App\Forms\Components\TinyEditor;
-use App\Models\Topic;
 use App\Models\Track;
 use App\Tables\Columns\IndexColumn;
 use Filament\Forms\Components\Grid;
@@ -18,7 +15,6 @@ use Filament\Forms\Form;
 use Filament\Support\Enums\MaxWidth;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
@@ -52,7 +48,7 @@ class TrackTable extends Component implements HasForms, HasTable
                     ->label(__('general.new_track'))
                     ->modalWidth(MaxWidth::ThreeExtraLarge)
                     ->form(fn (Form $form) => $this->form($form))
-                    ->using(fn (array $data) => TrackCreateAction::run($data))
+                    ->using(fn (array $data) => TrackCreateAction::run($data)),
             ])
             ->actions([
                 EditAction::make()
@@ -60,17 +56,19 @@ class TrackTable extends Component implements HasForms, HasTable
                     ->form(fn (Form $form) => $this->form($form))
                     ->mutateRecordDataUsing(function (array $data, Track $record) {
                         $data['meta'] = $record->getAllMeta();
+
                         return $data;
                     })
                     ->action(fn (Track $record, array $data) => TrackUpdateAction::run($record, $data)),
                 DeleteAction::make()
-                    ->using(function(Track $record, DeleteAction $action) {
+                    ->using(function (Track $record, DeleteAction $action) {
                         try {
                             $record->delete();
 
                         } catch (\Throwable $th) {
 
                             $action->failureNotificationTitle($th->getMessage());
+
                             return false;
                         }
 

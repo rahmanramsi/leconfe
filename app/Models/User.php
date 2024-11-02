@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Mail;
@@ -25,7 +24,6 @@ use Plank\Metable\Metable;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
-use Spatie\Permission\Exceptions\PermissionDoesNotExist;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Traits\HasRoles;
 use Squire\Models\Country;
@@ -80,7 +78,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasMedia,
     protected function fullName(): Attribute
     {
         return Attribute::make(
-            get: fn () => Str::squish($this->given_name . ' ' . $this->family_name),
+            get: fn () => Str::squish($this->given_name.' '.$this->family_name),
         );
     }
 
@@ -139,25 +137,25 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasMedia,
             ->where('user_id', $this->id)
             ->first();
 
-        if(!$userRegistration) {
-            return false;
-        }
-        
-        if(!($userRegistration->registrationPayment)) {
+        if (! $userRegistration) {
             return false;
         }
 
-        if($userRegistration->registrationPayment->state !== RegistrationPaymentState::Paid->value) {
+        if (! ($userRegistration->registrationPayment)) {
             return false;
         }
 
-        if($userRegistration->registrationPayment->level !== RegistrationType::LEVEL_AUTHOR) {
+        if ($userRegistration->registrationPayment->state !== RegistrationPaymentState::Paid->value) {
+            return false;
+        }
+
+        if ($userRegistration->registrationPayment->level !== RegistrationType::LEVEL_AUTHOR) {
             return false;
         }
 
         return true;
     }
-   
+
     public function getFilamentAvatarUrl(): ?string
     {
         if ($this->hasMedia('profile')) {
@@ -170,7 +168,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasMedia,
             ->map(fn (string $segment): string => filled($segment) ? mb_substr($segment, 0, 1) : '')
             ->join(' ');
 
-        return 'https://ui-avatars.com/api/?name=' . urlencode($name) . '&color=FFFFFF&background=111827&font-size=0.33';
+        return 'https://ui-avatars.com/api/?name='.urlencode($name).'&color=FFFFFF&background=111827&font-size=0.33';
     }
 
     public function registerMediaConversions(?Media $media = null): void
@@ -190,7 +188,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasMedia,
 
     public function hasVerifiedEmail()
     {
-        return !is_null($this->email_verified_at);
+        return ! is_null($this->email_verified_at);
     }
 
     public function authors()
@@ -208,7 +206,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasMedia,
         Mail::to($this->getEmailForVerification())->send(new VerifyUserEmail($this));
     }
 
-        /**
+    /**
      * Assign the given role to the model.
      *
      * @param  string|int|array|Role|Collection|\BackedEnum  ...$roles
@@ -222,14 +220,14 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasMedia,
 
         $conference = app()->getCurrentConference();
         $scheduledConference = app()->getCurrentScheduledConference();
-        
+
         $teamPivot = [];
-        
-        if($conference) {
+
+        if ($conference) {
             $teamPivot['conference_id'] = $conference->getKey();
         }
-        
-        if($scheduledConference) {
+
+        if ($scheduledConference) {
             $teamPivot['scheduled_conference_id'] = $scheduledConference->getKey();
         }
 

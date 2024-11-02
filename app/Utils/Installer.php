@@ -2,11 +2,8 @@
 
 namespace App\Utils;
 
-use App\Actions\Conferences\ConferenceCreateAction;
 use App\Actions\User\UserCreateAction;
-use App\Application;
 use App\Events\AppInstalled;
-use App\Models\Conference;
 use App\Models\Enums\UserRole;
 use App\Models\User;
 use App\Models\Version;
@@ -24,15 +21,14 @@ class Installer
     public function __construct(
         public array $params,
         public ?Command $command = null,
-    ) {
-    }
+    ) {}
 
     public function run()
     {
         try {
             $this->configureEnv();
             $this->configureMigration();
-            $this->configureAccount();    
+            $this->configureAccount();
             $this->configureApplication();
             $this->configureOptimization();
         } catch (\Throwable $th) {
@@ -53,7 +49,7 @@ class Installer
             ]);
         } catch (\Throwable $th) {
             Schema::dropAllTables();
-            
+
             throw $th;
         }
     }

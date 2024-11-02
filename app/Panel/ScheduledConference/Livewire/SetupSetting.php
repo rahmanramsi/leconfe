@@ -2,16 +2,16 @@
 
 namespace App\Panel\ScheduledConference\Livewire;
 
-use Livewire\Component;
-use Filament\Forms\Form;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Actions;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Components\Actions\Action;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Jackiedo\Timezonelist\Facades\Timezonelist;
 use App\Actions\ScheduledConferences\ScheduledConferenceUpdateAction;
+use Filament\Forms\Components\Actions;
+use Filament\Forms\Components\Actions\Action;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
+use Filament\Forms\Form;
+use Jackiedo\Timezonelist\Facades\Timezonelist;
+use Livewire\Component;
 
 class SetupSetting extends Component implements HasForms
 {
@@ -43,11 +43,11 @@ class SetupSetting extends Component implements HasForms
                     ->schema([
                         Select::make('meta.timezone')
                             ->options([
-                                ...Timezonelist::toArray(false)
+                                ...Timezonelist::toArray(false),
                             ])
                             ->selectablePlaceholder(false)
                             ->searchable()
-                            ->required()
+                            ->required(),
                     ]),
                 Actions::make([
                     Action::make('save')

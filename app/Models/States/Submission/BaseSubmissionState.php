@@ -7,9 +7,7 @@ use App\Models\Submission;
 
 class BaseSubmissionState implements SubmissionStateInterface
 {
-    public function __construct(public Submission $submission)
-    {
-    }
+    public function __construct(public Submission $submission) {}
 
     public function fulfill(): void
     {

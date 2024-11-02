@@ -6,16 +6,14 @@ use App\Facades\Hook;
 use App\Facades\MetaTag;
 use App\Http\Middleware\RedirectToConference;
 use App\Http\Middleware\SetLocale;
-use App\Utils\Installer;
-use Livewire\Attributes\Title;
-use App\Utils\PermissionChecker;
-use Illuminate\Support\Facades\App;
-use App\Livewire\Forms\InstallationForm;
 use App\Http\Middleware\SetupDefaultData;
 use App\Http\Middleware\ThemeActivator;
+use App\Livewire\Forms\InstallationForm;
+use App\Utils\Installer;
+use App\Utils\PermissionChecker;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Blade;
 use Jackiedo\Timezonelist\Facades\Timezonelist;
-use Livewire\Mechanisms\ComponentRegistry;
 
 class Installation extends Page
 {
@@ -39,12 +37,12 @@ class Installation extends Page
         if (App::isInstalled()) {
             return redirect('/');
         }
-        
+
         MetaTag::add('robots', 'noindex, nofollow');
 
-        Hook::add('Frontend::Views::Head', function ($hookName, &$output){
-			$output .= Blade::render("@vite(['resources/frontend/css/frontend.css'])");
-		});
+        Hook::add('Frontend::Views::Head', function ($hookName, &$output) {
+            $output .= Blade::render("@vite(['resources/frontend/css/frontend.css'])");
+        });
 
         $this->checkPermission();
     }
@@ -89,7 +87,7 @@ class Installation extends Page
         try {
             $installer = new Installer($this->form->all());
             $installer->run();
-    
+
             return redirect()->route('livewirePageGroup.website.pages.installation-successful');
         } catch (\Throwable $th) {
             $this->form->addError('error', $th->getMessage());

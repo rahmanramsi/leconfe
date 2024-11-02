@@ -2,12 +2,11 @@
 
 namespace App\Frontend\ScheduledConference\Pages;
 
+use App\Frontend\Website\Pages\Page;
 use App\Models\Announcement;
 use Illuminate\Contracts\Support\Htmlable;
-use Livewire\Attributes\Title;
 use Illuminate\Support\Facades\Route;
 use Rahmanramsi\LivewirePageGroup\PageGroup;
-use App\Frontend\Website\Pages\Page;
 
 class AnnouncementPage extends Page
 {
@@ -19,7 +18,6 @@ class AnnouncementPage extends Page
     {
         return $this->announcement->title;
     }
-
 
     public function getBreadcrumbs(): array
     {

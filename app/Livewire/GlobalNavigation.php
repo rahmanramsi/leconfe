@@ -2,7 +2,6 @@
 
 namespace App\Livewire;
 
-use App\Facades\Setting;
 use App\Models\Conference;
 use App\Models\Enums\ScheduledConferenceState;
 use App\Models\ScheduledConference;
@@ -37,14 +36,13 @@ class GlobalNavigation extends Component
         $conferences = $this->searchConferences($this->search);
         $scheduledConferences = $this->searchScheduledConferences($this->search);
 
-        if($conferences->isNotEmpty()){
+        if ($conferences->isNotEmpty()) {
             $searchResults['Conferences'] = $conferences;
         }
 
-        if($scheduledConferences->isNotEmpty()){
+        if ($scheduledConferences->isNotEmpty()) {
             $searchResults['Scheduled Conferences'] = $scheduledConferences;
         }
-
 
         return $searchResults;
     }
@@ -57,7 +55,7 @@ class GlobalNavigation extends Component
             ->orderBy('name')
             ->limit(10)
             ->get()
-            ->map(fn(Conference $conference) => view('livewire.global-navigation.conference-search-result', ['conference' => $conference])->render());
+            ->map(fn (Conference $conference) => view('livewire.global-navigation.conference-search-result', ['conference' => $conference])->render());
     }
 
     public function searchScheduledConferences(string $search): Collection
@@ -70,6 +68,6 @@ class GlobalNavigation extends Component
             ->orderBy('title')
             ->limit(10)
             ->get()
-            ->map(fn(ScheduledConference $scheduledConference) => view('livewire.global-navigation.scheduled-conference-search-result', ['scheduledConference' => $scheduledConference])->render());
+            ->map(fn (ScheduledConference $scheduledConference) => view('livewire.global-navigation.scheduled-conference-search-result', ['scheduledConference' => $scheduledConference])->render());
     }
 }

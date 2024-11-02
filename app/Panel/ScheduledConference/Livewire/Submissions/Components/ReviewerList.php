@@ -5,12 +5,13 @@ namespace App\Panel\ScheduledConference\Livewire\Submissions\Components;
 use App\Constants\ReviewerStatus;
 use App\Constants\SubmissionFileCategory;
 use App\Constants\SubmissionStatusRecommendation;
+use App\Forms\Components\TinyEditor;
 use App\Infolists\Components\LivewireEntry;
 use App\Mail\Templates\ReviewerCancelationMail;
 use App\Mail\Templates\ReviewerInvitationMail;
+use App\Models\DefaultMailTemplate;
 use App\Models\Enums\SubmissionStatus;
 use App\Models\Enums\UserRole;
-use App\Models\MailTemplate;
 use App\Models\Review;
 use App\Models\ReviewerAssignedFile;
 use App\Models\Role;
@@ -28,6 +29,7 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\Layout\Split;
@@ -43,9 +45,6 @@ use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\HtmlString;
 use Livewire\Component;
-use App\Forms\Components\TinyEditor;
-use App\Models\DefaultMailTemplate;
-use Filament\Support\Enums\FontWeight;
 use STS\FilamentImpersonate\Tables\Actions\Impersonate;
 
 class ReviewerList extends Component implements HasForms, HasTable
@@ -125,7 +124,7 @@ class ReviewerList extends Component implements HasForms, HasTable
                         ->toArray();
                 }),
             CheckboxList::make('papers')
-                ->label( __('general.files_be_to_reviewer'))
+                ->label(__('general.files_be_to_reviewer'))
                 ->hidden(
                     ! $component->record->getMedia(SubmissionFileCategory::PAPER_FILES)->count()
                 )
@@ -213,7 +212,7 @@ class ReviewerList extends Component implements HasForms, HasTable
                         ->label(__('general.recommendation'))
                         ->badge()
                         ->formatStateUsing(function ($state) {
-                            return  __('general.recommend').$state;
+                            return __('general.recommend').$state;
                         })
                         ->color(
                             fn (Review $record): string => match ($record->recommendation) {
@@ -240,7 +239,7 @@ class ReviewerList extends Component implements HasForms, HasTable
                             TextEntry::make('Reviewer')
                                 ->label(__('general.reviewer'))
                                 ->size('base')
-                                ->getStateUsing(fn (): string => $record->user->fullName . ' (' . $record->user->email . ')')
+                                ->getStateUsing(fn (): string => $record->user->fullName.' ('.$record->user->email.')')
                                 ->weight(FontWeight::Bold),
                             TextEntry::make('Recommendation')
                                 ->label(__('general.recommendation'))
@@ -271,7 +270,7 @@ class ReviewerList extends Component implements HasForms, HasTable
                                 ->getStateUsing(fn (): ?string => $record->review_editor ?? '-'),
                             LivewireEntry::make('reviewer-files')
                                 ->livewire(ReviewerFiles::class, [
-                                    'record' => $record
+                                    'record' => $record,
                                 ])
                                 ->lazy(),
                         ];
@@ -279,7 +278,7 @@ class ReviewerList extends Component implements HasForms, HasTable
                 ActionGroup::make([
                     Action::make('edit-reviewer')
                         ->visible(
-                            fn ($record): bool => $this->record->status == SubmissionStatus::OnReview && !$record->recommendation
+                            fn ($record): bool => $this->record->status == SubmissionStatus::OnReview && ! $record->recommendation
                         )
                         ->authorize(fn () => auth()->user()->can('editReviewer', $this->record))
                         ->modalWidth('2xl')
@@ -481,7 +480,7 @@ class ReviewerList extends Component implements HasForms, HasTable
                     ->form([
                         ...static::formReviewerSchema($this),
                         Fieldset::make('Notification')
-                        ->label(__('general.notification'))
+                            ->label(__('general.notification'))
                             ->schema([
                                 TextInput::make('subject')
                                     ->label(__('general.subject'))

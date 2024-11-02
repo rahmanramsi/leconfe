@@ -13,9 +13,8 @@ class MetaTagManager
     {
         $this->metas[] = [
             'name' => $name,
-            'content' => e($content)
+            'content' => e($content),
         ];
-
 
         return $this;
     }
@@ -29,10 +28,10 @@ class MetaTagManager
     {
         return new HtmlString(
             $this->all()
-                ->map(function ($meta){
+                ->map(function ($meta) {
                     $name = $meta['name'];
                     $content = $meta['content'];
-                    
+
                     return <<<HTML
                         <meta name="{$name}" content="$content">
                     HTML;

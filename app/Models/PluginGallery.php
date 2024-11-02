@@ -54,10 +54,10 @@ class PluginGallery extends Model
                 $releases = collect($plugin['releases']);
                 $currentVersion = app()->getInstalledVersion();
 
-                return $releases->contains(fn($release) => collect($release['compatibility'])->contains(fn($value) => Semver::satisfies($currentVersion, $value)));
+                return $releases->contains(fn ($release) => collect($release['compatibility'])->contains(fn ($value) => Semver::satisfies($currentVersion, $value)));
             })
             ->map(
-                fn($plugin) => [
+                fn ($plugin) => [
                     'id' => $plugin['id'],
                     'cover' => $plugin['cover'],
                     'name' => $plugin['name'],
@@ -83,7 +83,7 @@ class PluginGallery extends Model
     {
         $plugin = Plugin::getPlugin($this->folder);
 
-        if (!$plugin instanceof ClassesPlugin) {
+        if (! $plugin instanceof ClassesPlugin) {
             return false;
         }
 
@@ -97,26 +97,25 @@ class PluginGallery extends Model
         $releases = collect($this->releases);
         $currentVersion = app()->getInstalledVersion();
 
-        return collect($releases->first(fn($release) => collect($release['compatibility'])->contains(fn($value) => Semver::satisfies($currentVersion, $value))));
+        return collect($releases->first(fn ($release) => collect($release['compatibility'])->contains(fn ($value) => Semver::satisfies($currentVersion, $value))));
     }
 
     public function install()
     {
         $latestRelease = $this->getLatestCompatibleRelease();
-        if (!$latestRelease) {
+        if (! $latestRelease) {
             return false;
         }
 
-        $filename = uniqid() . '.zip';
+        $filename = uniqid().'.zip';
 
-        
         try {
-            if (!Plugin::getTempDisk()->put($filename, file_get_contents($latestRelease['download_url']))) {
+            if (! Plugin::getTempDisk()->put($filename, file_get_contents($latestRelease['download_url']))) {
                 throw new \Exception('The file could not be written to disk');
             }
-    
+
             Plugin::install(Plugin::getTempDisk()->path($filename));
-    
+
         } catch (\Throwable $th) {
             throw $th;
         } finally {

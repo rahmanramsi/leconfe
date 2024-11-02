@@ -3,6 +3,7 @@
 namespace App\Frontend\Conference\Pages;
 
 use App\Frontend\ScheduledConference\Pages as ScheduledConferencePages;
+use App\Frontend\Website\Pages\Page;
 use App\Models\Announcement;
 use App\Models\Enums\ScheduledConferenceState;
 use App\Models\Proceeding;
@@ -11,16 +12,15 @@ use App\Models\StaticPage;
 use App\Models\Submission;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
-use App\Frontend\Website\Pages\Page;
 use Spatie\Sitemap\Sitemap as SpatieSitemap;
 use Spatie\Sitemap\Tags\Url;
 
 class Sitemap extends Page
 {
-    function __invoke()
+    public function __invoke()
     {
         $sitemap = Cache::remember(
-            'sitemap_' . app()->getCurrentConferenceId(),
+            'sitemap_'.app()->getCurrentConferenceId(),
             Carbon::now()->addMinutes(30),
             fn () => $this->generateSitemap(),
         );
@@ -28,7 +28,7 @@ class Sitemap extends Page
         $sitemap = $this->generateSitemap();
 
         return response($sitemap->render(), 200, [
-            'Content-Type' => 'application/xml'
+            'Content-Type' => 'application/xml',
         ]);
     }
 
@@ -56,7 +56,7 @@ class Sitemap extends Page
             );
 
         Proceeding::query()
-            ->with(['conference', 'submissions' => fn($query) => $query->with(['galleys.file.media', 'conference'])->published()])
+            ->with(['conference', 'submissions' => fn ($query) => $query->with(['galleys.file.media', 'conference'])->published()])
             ->published()
             ->lazy()->each(function (Proceeding $proceeding) use ($sitemap) {
                 $sitemap->add(
@@ -66,9 +66,11 @@ class Sitemap extends Page
                         ->setPriority(1)
                 );
 
-                $proceeding->submissions->each(function (Submission $submission) use($sitemap) {
-                    if($submission->isPublishedOnExternal()) return;
-                    
+                $proceeding->submissions->each(function (Submission $submission) use ($sitemap) {
+                    if ($submission->isPublishedOnExternal()) {
+                        return;
+                    }
+
                     $sitemap->add(
                         Url::create($submission->getUrl())
                             ->setLastModificationDate($submission->updated_at)
@@ -77,7 +79,9 @@ class Sitemap extends Page
                     );
 
                     foreach ($submission->galleys as $galley) {
-                        if($galley->remote_url) continue;
+                        if ($galley->remote_url) {
+                            continue;
+                        }
 
                         $sitemap->add(
                             Url::create($galley->getUrl())
@@ -87,7 +91,6 @@ class Sitemap extends Page
                         );
                     }
 
-                    
                 });
             });
 
@@ -98,7 +101,6 @@ class Sitemap extends Page
                     ->setLastModificationDate($staticPage->updated_at)
                     ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
             ));
-
 
         ScheduledConference::query()
             ->with(['conference', 'announcements.scheduledConference', 'staticPages'])
@@ -123,7 +125,7 @@ class Sitemap extends Page
                         ->setLastModificationDate($scheduledConference->updated_at)
                         ->setChangeFrequency(Url::CHANGE_FREQUENCY_YEARLY)
                 );
-             
+
                 $sitemap->add(
                     Url::create(route(ScheduledConferencePages\EditorialTeam::getRouteName('scheduledConference'), ['serie' => $scheduledConference]))
                         ->setLastModificationDate($scheduledConference->updated_at)

@@ -42,10 +42,9 @@ class SubmissionResource extends Resource
         return __('general.submissions');
     }
 
-
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->with(['meta', 'user', 'reviews','participants'])->orderBy('updated_at', 'desc');
+        return parent::getEloquentQuery()->with(['meta', 'user', 'reviews', 'participants'])->orderBy('updated_at', 'desc');
     }
 
     public static function table(Table $table): Table
@@ -111,13 +110,13 @@ class SubmissionResource extends Resource
                             ->badge()
                             ->color('success')
                             // ->hidden(fn() => !auth()->user()->hasRole(UserRole::Reviewer))
-                            ->getStateUsing(function(Submission $record){
+                            ->getStateUsing(function (Submission $record) {
                                 $review = $record->reviews->where('user_id', auth()->id())->first();
-                                if(!$review){
-                                   return '';
+                                if (! $review) {
+                                    return '';
                                 }
 
-                                if($review->reviewSubmitted()){
+                                if ($review->reviewSubmitted()) {
                                     return __('general.reviewed');
                                 }
                             }),

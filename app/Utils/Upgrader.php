@@ -2,7 +2,6 @@
 
 namespace App\Utils;
 
-use App\Exceptions\Upgrade\NoUpgradeScript;
 use App\Utils\Enums\UpgradeActionPriority;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\App;
@@ -22,8 +21,7 @@ class Upgrader extends Installer
         $this->installedVersion = App::getInstalledVersion();
         $this->codeVersion = App::getCodeVersion();
 
-
-        if(version_compare($this->installedVersion, $this->codeVersion, '>=')){
+        if (version_compare($this->installedVersion, $this->codeVersion, '>=')) {
             throw new \Exception('Your application is already up to date!');
         }
     }

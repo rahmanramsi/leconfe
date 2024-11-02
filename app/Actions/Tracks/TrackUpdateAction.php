@@ -3,7 +3,6 @@
 namespace App\Actions\Tracks;
 
 use App\Models\Track;
-use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Lorisleiva\Actions\Concerns\AsAction;
 

@@ -2,12 +2,8 @@
 
 namespace App\Panel\Conference\Pages;
 
-use App\Models\Enums\UserRole;
 use App\Panel\Conference\Resources\ScheduledConferenceResource\Pages\ManageScheduledConferences;
-use App\Panel\ScheduledConference\Resources\SubmissionResource;
-use App\Panel\Conference\Widgets;
 use Filament\Pages\Dashboard as PagesDashboard;
-use Illuminate\Support\Facades\Auth;
 
 class Dashboard extends PagesDashboard
 {

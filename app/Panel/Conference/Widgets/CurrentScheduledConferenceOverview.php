@@ -2,7 +2,6 @@
 
 namespace App\Panel\Conference\Widgets;
 
-use App\Models\Enums\SubmissionStatus;
 use Filament\Widgets\Widget;
 
 class CurrentScheduledConferenceOverview extends Widget
@@ -18,7 +17,6 @@ class CurrentScheduledConferenceOverview extends Widget
     {
         $currentConference = app()->getCurrentConference();
         $currentScheduledConference = $currentConference->currentScheduledConference;
-
 
         return [
             'currentConference' => $currentConference,

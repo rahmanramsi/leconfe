@@ -2,10 +2,8 @@
 
 namespace App\Panel\ScheduledConference\Widgets;
 
-use App\Models\Submission;
 use App\Panel\ScheduledConference\Resources\SubmissionResource;
 use App\Panel\ScheduledConference\Resources\SubmissionResource\Pages\ManageSubmissions;
-use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
 

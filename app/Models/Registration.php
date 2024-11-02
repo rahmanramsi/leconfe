@@ -2,15 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\Enums\RegistrationPaymentState;
-use GeneaLabs\LaravelModelCaching\Traits\Cachable;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use App\Models\Concerns\BelongsToScheduledConference;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Registration extends Model
 {
@@ -26,24 +25,24 @@ class Registration extends Model
         return $this->registrationPayment->state;
     }
 
-    public function getAttendance(Timeline | Session $data): ?RegistrationAttendance
+    public function getAttendance(Timeline|Session $data): ?RegistrationAttendance
     {
         $attendance = RegistrationAttendance::where('registration_id', $this->id);
 
-        if($data instanceof Timeline) {
+        if ($data instanceof Timeline) {
             $attendance = $attendance->where('timeline_id', $data->id);
         }
 
-        if($data instanceof Session) {
+        if ($data instanceof Session) {
             $attendance = $attendance->where('session_id', $data->id);
         }
 
         return $attendance->first();
     }
 
-    public function isAttended(null | Timeline | Session $data): bool
+    public function isAttended(null|Timeline|Session $data): bool
     {
-        if(!$this->getAttendance($data)) {
+        if (! $this->getAttendance($data)) {
             return false;
         }
 

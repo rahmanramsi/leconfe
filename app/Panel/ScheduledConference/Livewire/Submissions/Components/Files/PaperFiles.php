@@ -16,7 +16,6 @@ class PaperFiles extends SubmissionFilesTable
         $this->tableHeading = __('general.papers');
     }
 
-
     public function isViewOnly(): bool
     {
         return ! auth()->user()->can('uploadPaper', $this->submission);

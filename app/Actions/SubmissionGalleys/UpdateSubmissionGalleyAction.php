@@ -2,11 +2,7 @@
 
 namespace App\Actions\SubmissionGalleys;
 
-use App\Constants\SubmissionFileCategory;
-use App\Models\Submission;
-use App\Models\SubmissionFile;
 use App\Models\SubmissionGalley;
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Illuminate\Support\Facades\DB;
 use Lorisleiva\Actions\Concerns\AsAction;
 
@@ -25,7 +21,7 @@ class UpdateSubmissionGalleyAction
 
             $submissionGalley->update($data);
             $submissionGalley->refresh();
-            
+
             if ($media = data_get($data, 'media')) {
                 $submissionFile = $submissionGalley->file;
                 $submissionFile->refresh();

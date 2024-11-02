@@ -2,22 +2,16 @@
 
 namespace App\Panel\ScheduledConference\Livewire\Payment;
 
-use Livewire\Component;
-use Filament\Forms\Form;
+use App\Actions\ScheduledConferences\ScheduledConferenceUpdateAction;
 use App\Forms\Components\TinyEditor;
 use Filament\Forms\Components\Actions;
-use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Components\Actions\Action;
-use Filament\Forms\Concerns\InteractsWithForms;
-use App\Actions\ScheduledConferences\ScheduledConferenceUpdateAction;
-use App\Models\Enums\SubmissionStage;
-use App\Models\Enums\SubmissionStatus;
-use App\Models\Submission;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Toggle;
-use Filament\Infolists\Components\TextEntry;
-use Illuminate\Support\HtmlString;
-use Illuminate\View\Compilers\BladeCompiler;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
+use Filament\Forms\Form;
+use Livewire\Component;
 
 class PaymentSetting extends Component implements HasForms
 {
@@ -46,7 +40,7 @@ class PaymentSetting extends Component implements HasForms
                             ->toolbar('undo redo removeformat | formatselect fontsizeselect | bold italic | rtl ltr | alignjustify alignright aligncenter alignleft | numlist bullist | forecolor backcolor | blockquote table hr | image link code')
                             ->minHeight(450),
                     ])
-                    ->disabled(fn () =>  auth()->user()->cannot('RegistrationSetting:update')),
+                    ->disabled(fn () => auth()->user()->cannot('RegistrationSetting:update')),
                 Actions::make([
                     Action::make('save_changes')
                         ->label(__('general.save_changes'))
@@ -63,7 +57,6 @@ class PaymentSetting extends Component implements HasForms
 
                                 $action->failure();
                                 throw $th;
-
                             }
 
                             $action->success();

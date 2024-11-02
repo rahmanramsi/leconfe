@@ -2,30 +2,17 @@
 
 namespace App\Frontend\Conference\Pages;
 
-use App\Actions\Conferences\ConferenceUpdateAction;
-use App\Models\Topic;
-use App\Models\Venue;
-use App\Models\Conference;
-use App\Models\Submission;
-use App\Models\SpeakerRole;
-use Illuminate\Support\Str;
-use App\Models\Announcement;
-use App\Models\CommitteeRole;
+use App\Frontend\Website\Pages\Page;
 use App\Models\Enums\ScheduledConferenceState;
 use App\Models\ScheduledConference;
-use Livewire\Attributes\Title;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\HtmlString;
 use Rahmanramsi\LivewirePageGroup\PageGroup;
-use App\Frontend\Website\Pages\Page;
 
 class Home extends Page
 {
     protected static string $view = 'frontend.conference.pages.home';
 
-    public function mount()
-    {
-    }
+    public function mount() {}
 
     protected function getViewData(): array
     {
@@ -54,7 +41,6 @@ class Home extends Page
             'nextScheduledConference' => $nextScheduledConference,
         ];
     }
-
 
     public static function routes(PageGroup $pageGroup): void
     {

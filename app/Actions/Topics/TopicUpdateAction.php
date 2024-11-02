@@ -3,7 +3,6 @@
 namespace App\Actions\Topics;
 
 use App\Models\Topic;
-use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Lorisleiva\Actions\Concerns\AsAction;
 

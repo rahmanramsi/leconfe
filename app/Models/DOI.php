@@ -11,7 +11,7 @@ use Plank\Metable\Metable;
 
 class DOI extends Model
 {
-    use HasFactory, BelongsToConference, Metable;
+    use BelongsToConference, HasFactory, Metable;
 
     protected $table = 'dois';
 
@@ -35,6 +35,6 @@ class DOI extends Model
 
     public function getUrl(): string
     {
-        return 'https://doi.org/' . $this->doi;
+        return 'https://doi.org/'.$this->doi;
     }
 }

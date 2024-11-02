@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\Proceeding;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class ProceedingPolicy
 {
@@ -13,7 +12,7 @@ class ProceedingPolicy
      */
     public function viewAny(User $user)
     {
-        if($user->can('Proceeding:viewAny')){
+        if ($user->can('Proceeding:viewAny')) {
             return true;
         }
     }
@@ -23,7 +22,7 @@ class ProceedingPolicy
      */
     public function view(User $user, Proceeding $proceeding)
     {
-        if($user->can('Proceeding:view')){
+        if ($user->can('Proceeding:view')) {
             return true;
         }
     }
@@ -33,7 +32,7 @@ class ProceedingPolicy
      */
     public function create(User $user)
     {
-        if($user->can('Proceeding:create')){
+        if ($user->can('Proceeding:create')) {
             return true;
         }
     }
@@ -43,7 +42,7 @@ class ProceedingPolicy
      */
     public function update(User $user, Proceeding $proceeding)
     {
-        if($user->can('Proceeding:update')){
+        if ($user->can('Proceeding:update')) {
             return true;
         }
     }
@@ -53,7 +52,7 @@ class ProceedingPolicy
      */
     public function delete(User $user, Proceeding $proceeding)
     {
-        if($user->can('Proceeding:delete')){
+        if ($user->can('Proceeding:delete')) {
             return true;
         }
     }

@@ -2,24 +2,24 @@
 
 namespace App\Models;
 
-use Plank\Metable\Metable;
-use Illuminate\Support\Str;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\EloquentSortable\Sortable;
-use Illuminate\Database\Eloquent\Model;
 use Filament\Models\Contracts\HasAvatar;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Builder;
-use Spatie\EloquentSortable\SortableTrait;
-use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
+use Plank\Metable\Metable;
+use Spatie\EloquentSortable\Sortable;
+use Spatie\EloquentSortable\SortableTrait;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Author extends Model implements HasAvatar, HasMedia, Sortable
 {
-    use Cachable, Metable, Notifiable, SortableTrait, InteractsWithMedia;
+    use Cachable, InteractsWithMedia, Metable, Notifiable, SortableTrait;
 
     protected $table = 'authors';
 

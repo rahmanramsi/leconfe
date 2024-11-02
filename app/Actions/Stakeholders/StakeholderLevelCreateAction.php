@@ -2,7 +2,6 @@
 
 namespace App\Actions\Stakeholders;
 
-use App\Models\Stakeholder;
 use App\Models\StakeholderLevel;
 use Illuminate\Support\Facades\DB;
 use Lorisleiva\Actions\Concerns\AsAction;

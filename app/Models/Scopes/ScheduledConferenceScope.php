@@ -2,10 +2,10 @@
 
 namespace App\Models\Scopes;
 
-use Illuminate\Support\Facades\App;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\App;
 
 class ScheduledConferenceScope implements Scope
 {
@@ -14,6 +14,6 @@ class ScheduledConferenceScope implements Scope
      */
     public function apply(Builder $builder, Model $model): void
     {
-        $builder->where($model->getTable() . '.scheduled_conference_id', App::getCurrentScheduledConferenceId());
+        $builder->where($model->getTable().'.scheduled_conference_id', App::getCurrentScheduledConferenceId());
     }
 }

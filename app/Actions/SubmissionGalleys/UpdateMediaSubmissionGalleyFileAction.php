@@ -17,7 +17,7 @@ class UpdateMediaSubmissionGalleyFileAction
             DB::beginTransaction();
 
             if ($media = $submissionGalley->media()->where('uuid', reset($fileUpload))->first()) {
-                $checkSubmissionFile = $submissionGalley->file 
+                $checkSubmissionFile = $submissionGalley->file
                 ? $submissionGalley->file->update(['media_id' => $media->id, 'submission_file_type_id' => $type])
                 : $submissionGalley->submission->submissionFiles()->create([
                     'media_id' => $media->id,

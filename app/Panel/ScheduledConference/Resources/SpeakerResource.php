@@ -2,22 +2,21 @@
 
 namespace App\Panel\ScheduledConference\Resources;
 
-use Filament\Forms;
-use App\Models\Speaker;
-use Filament\Forms\Form;
-use Filament\Tables\Table;
-use Filament\Resources\Resource;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
-use Filament\Tables\Actions\CreateAction;
-use Illuminate\Database\Eloquent\Builder;
 use App\Actions\Speakers\SpeakerCreateAction;
 use App\Actions\Speakers\SpeakerDeleteAction;
 use App\Actions\Speakers\SpeakerUpdateAction;
-use App\Models\Scopes\ConferenceScope;
-use Filament\Forms\Components\Actions\Action as FormAction;
+use App\Models\Speaker;
 use App\Panel\Conference\Livewire\Forms\Conferences\ContributorForm;
 use App\Panel\ScheduledConference\Resources\SpeakerResource\Pages;
+use Filament\Forms;
+use Filament\Forms\Components\Actions\Action as FormAction;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Form;
+use Filament\Resources\Resource;
+use Filament\Tables\Actions\CreateAction;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class SpeakerResource extends Resource
 {
@@ -92,8 +91,9 @@ class SpeakerResource extends Resource
                     'family_name' => $speaker->family_name,
                     'email' => $speaker->email,
                     'speaker_role_id' => $role->id ?? null,
-                    'meta' => $speaker->getAllMeta()
+                    'meta' => $speaker->getAllMeta(),
                 ];
+
                 return static::form($form)->fill($formData);
             })
             ->columnSpanFull();

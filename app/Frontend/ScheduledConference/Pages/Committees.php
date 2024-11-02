@@ -2,9 +2,8 @@
 
 namespace App\Frontend\ScheduledConference\Pages;
 
-use App\Models\CommitteeRole;
-use Livewire\Attributes\Title;
 use App\Frontend\Website\Pages\Page;
+use App\Models\CommitteeRole;
 
 class Committees extends Page
 {

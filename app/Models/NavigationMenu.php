@@ -17,7 +17,7 @@ class NavigationMenu extends Model
         'name',
         'handle',
         'conference_id',
-        'scheduled_conference_id'
+        'scheduled_conference_id',
     ];
 
     public function items(): HasMany

@@ -7,11 +7,6 @@ use App\Infolists\Components\BladeEntry;
 use App\Models\Enums\UserRole;
 use App\Models\User;
 use App\Panel\Conference\Livewire\Forms\Conferences\ContributorForm;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
-use Filament\Infolists\Components\Tabs;
-use Filament\Pages\Page;
 use Filament\Forms;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\CheckboxList;
@@ -19,10 +14,14 @@ use Filament\Forms\Components\Section;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
+use Filament\Forms\Form;
+use Filament\Infolists\Components\Tabs;
 use Filament\Infolists\Components\Tabs\Tab;
 use Filament\Infolists\Infolist;
 use Filament\Notifications\Notification;
-use Illuminate\Support\Facades\Blade;
+use Filament\Pages\Page;
 use Illuminate\Support\Facades\Hash;
 
 class Profile extends Page implements HasForms
@@ -36,7 +35,9 @@ class Profile extends Page implements HasForms
     protected static bool $shouldRegisterNavigation = false;
 
     public array $informationFormData = [];
+
     public array $rolesFormData = [];
+
     public array $notificationFormData = [];
 
     public function mount(): void
@@ -89,11 +90,11 @@ class Profile extends Page implements HasForms
                             ->label(__('general.email'))
                             ->columnSpan(['lg' => 2])
                             ->disabled(fn (?User $record) => $record)
-                            ->dehydrated(fn (?User $record) => !$record)
+                            ->dehydrated(fn (?User $record) => ! $record)
                             ->unique(ignoreRecord: true),
                         TextInput::make('password')
                             ->label(__('general.password'))
-                            ->required(fn (?User $record) => !$record)
+                            ->required(fn (?User $record) => ! $record)
                             ->password()
                             ->dehydrateStateUsing(fn ($state) => Hash::make($state))
                             ->dehydrated(fn ($state) => filled($state))
@@ -145,7 +146,6 @@ class Profile extends Page implements HasForms
                             ]),
                     ]),
 
-
             ])
             ->statePath('rolesFormData');
     }
@@ -160,13 +160,12 @@ class Profile extends Page implements HasForms
             UserUpdateAction::run($user, $data);
 
             foreach (UserRole::selfAssignedRoleValues() as $roleName) {
-                if ($user->hasRole($roleName) && !in_array($roleName, $data['roles'])) {
+                if ($user->hasRole($roleName) && ! in_array($roleName, $data['roles'])) {
                     $user->removeRole($roleName);
-                } elseif (!$user->hasRole($roleName) && in_array($roleName, $data['roles'])) {
+                } elseif (! $user->hasRole($roleName) && in_array($roleName, $data['roles'])) {
                     $user->assignRole($roleName);
                 }
             }
-
 
             Notification::make()
                 ->success()
@@ -230,7 +229,7 @@ class Profile extends Page implements HasForms
                             ->icon('heroicon-o-information-circle')
                             ->schema([
                                 BladeEntry::make('information-form')
-                                ->blade('
+                                    ->blade('
                                     <form wire:submit="submitInformationForm" class="space-y-4">
                                         {{ $this->informationForm }}
 
@@ -243,7 +242,7 @@ class Profile extends Page implements HasForms
                         Tab::make('Roles')
                             ->label(__('general.roles'))
                             ->icon('heroicon-o-shield-check')
-                            ->hidden(!app()->getCurrentConference())
+                            ->hidden(! app()->getCurrentConference())
                             ->schema([
                                 BladeEntry::make('roles-form')
                                     ->blade('
@@ -288,7 +287,7 @@ class Profile extends Page implements HasForms
                     ])
                     ->contained(false)
                     ->persistTab()
-                    ->persistTabInQueryString()
+                    ->persistTabInQueryString(),
             ]);
     }
 }

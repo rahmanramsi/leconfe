@@ -2,34 +2,33 @@
 
 namespace App\Panel\ScheduledConference\Livewire\Submissions\Components;
 
+use App\Actions\SubmissionGalleys\CreateSubmissionGalleyAction;
+use App\Actions\SubmissionGalleys\UpdateMediaSubmissionGalleyFileAction;
+use App\Actions\SubmissionGalleys\UpdateSubmissionGalleyAction;
+use App\Constants\SubmissionFileCategory;
+use App\Models\Submission;
+use App\Models\SubmissionFileType;
+use App\Models\SubmissionGalley;
+use Filament\Forms\Components\Actions\Action as FormAction;
+use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
-use App\Models\Submission;
-use Filament\Tables\Table;
-use GuzzleHttp\Psr7\MimeType;
-use App\Models\SubmissionGalley;
-use App\Models\SubmissionFileType;
-use Illuminate\Support\HtmlString;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Toggle;
-use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Components\Checkbox;
-use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Contracts\HasTable;
-use Filament\Forms\Components\TextInput;
-use App\Constants\SubmissionFileCategory;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\Layout\Split;
-use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
+use Filament\Tables\Contracts\HasTable;
+use Filament\Tables\Table;
 use Illuminate\Contracts\Database\Eloquent\Builder;
-use Filament\Forms\Components\Actions\Action as FormAction;
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
-use App\Actions\SubmissionGalleys\CreateSubmissionGalleyAction;
-use App\Actions\SubmissionGalleys\UpdateSubmissionGalleyAction;
-use App\Actions\SubmissionGalleys\UpdateMediaSubmissionGalleyFileAction;
+use Illuminate\Support\HtmlString;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 class GalleyList extends \Livewire\Component implements HasForms, HasTable
@@ -37,6 +36,7 @@ class GalleyList extends \Livewire\Component implements HasForms, HasTable
     use InteractsWithForms, InteractsWithTable;
 
     public Submission $submission;
+
     public bool $viewOnly = false;
 
     public function render()
@@ -90,7 +90,7 @@ class GalleyList extends \Livewire\Component implements HasForms, HasTable
                 ->createOptionUsing(function (array $data) {
                     SubmissionFileType::create($data);
                 })
-                ->visible(fn (Get $get) => !$get('is_remote_url'))
+                ->visible(fn (Get $get) => ! $get('is_remote_url'))
                 ->live(),
             SpatieMediaLibraryFileUpload::make('media.files')
                 ->label(__('general.file'))
@@ -103,7 +103,7 @@ class GalleyList extends \Livewire\Component implements HasForms, HasTable
                 ->live()
                 ->collection(SubmissionFileCategory::GALLEY_FILES)
                 ->visibility('private')
-                ->visible(fn (Get $get) => !$get('is_remote_url'))
+                ->visible(fn (Get $get) => ! $get('is_remote_url'))
                 ->saveRelationshipsUsing(static function (SpatieMediaLibraryFileUpload $component, $context, SubmissionGalley $record, Get $get) {
                     if ($context == 'edit') {
                         $component->saveUploadedFiles();
@@ -128,12 +128,12 @@ class GalleyList extends \Livewire\Component implements HasForms, HasTable
                     $hasFiles = $get('media.files');
                     $isCustomName = $get('media.is_custom_name', false);
 
-                    return !$isRemoteUrl && $hasFiles && ($context === 'create' ? $isCustomName : true);
+                    return ! $isRemoteUrl && $hasFiles && ($context === 'create' ? $isCustomName : true);
                 })
                 ->suffix(function (Get $get, $record) {
                     $mediaFile = $get('media.files');
 
-                    if (!$mediaFile) {
+                    if (! $mediaFile) {
                         return null;
                     }
 
@@ -161,7 +161,7 @@ class GalleyList extends \Livewire\Component implements HasForms, HasTable
                             fn (SubmissionGalley $galley) => $galley->getUrl(),
                             true
                         )
-                        ->openUrlInNewTab()
+                        ->openUrlInNewTab(),
                 ]),
             ])
             ->headerActions([

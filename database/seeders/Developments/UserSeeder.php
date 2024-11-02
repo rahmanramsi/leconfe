@@ -28,7 +28,6 @@ class UserSeeder extends Seeder
 
         $users = \App\Models\User::factory(100)->create();
 
-
         $conferences = Conference::all();
         $conferenceRoles = collect(UserRole::conferenceRoles());
         foreach ($conferences as $key => $conference) {

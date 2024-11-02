@@ -3,21 +3,12 @@
 namespace App\Panel\Conference\Livewire;
 
 use App\Actions\Conferences\ConferenceUpdateAction;
-use App\Facades\Citation;
-use App\Facades\Hook;
 use App\Facades\License;
 use App\Forms\Components\TinyEditor;
-use App\Models\AuthorRole;
-use App\Models\Conference;
 use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\Actions\Action;
-use Filament\Forms\Components\Checkbox;
-use Filament\Forms\Components\CheckboxList;
-use Filament\Forms\Components\Fieldset;
-use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -71,7 +62,7 @@ class LicenseSetting extends Component implements HasForms
                             ])
                             ->live(),
                         TextInput::make('meta.license_url_custom')
-                            ->visible(fn(Get $get) => $get('meta.license_url') === 'custom') 
+                            ->visible(fn (Get $get) => $get('meta.license_url') === 'custom')
                             ->label(__('general.submission_license_custom_url'))
                             ->url()
                             ->required(),

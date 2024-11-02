@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\Committee;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class CommitteePolicy
 {

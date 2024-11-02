@@ -6,7 +6,7 @@ use App\Frontend\Website\Pages\AboutSystem as Page;
 
 class AboutSystem extends Page
 {
-	public function getViewData(): array
+    public function getViewData(): array
     {
         return [
             'name' => app()->getCurrentScheduledConference()->title,

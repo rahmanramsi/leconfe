@@ -2,20 +2,14 @@
 
 namespace App\Panel\ScheduledConference\Resources\RegistrantResource\Pages;
 
-use Filament\Actions;
-use App\Models\Registration;
-use Filament\Actions\Action;
-use App\Models\RegistrationType;
-use Filament\Support\Colors\Color;
-use App\Models\RegistrationPayment;
-use Filament\Resources\Components\Tab;
-use Filament\Navigation\NavigationItem;
-use Filament\Resources\Pages\ListRecords;
-use Illuminate\Database\Eloquent\Builder;
 use App\Models\Enums\RegistrationPaymentState;
 use App\Panel\ScheduledConference\Pages\Registrations;
 use App\Panel\ScheduledConference\Resources\RegistrantResource;
-use App\Panel\ScheduledConference\Resources\RegistrantResource\Widgets\RegistrationTypeSummary;
+use Filament\Actions\Action;
+use Filament\Resources\Components\Tab;
+use Filament\Resources\Pages\ListRecords;
+use Filament\Support\Colors\Color;
+use Illuminate\Database\Eloquent\Builder;
 
 class ListRegistrants extends ListRecords
 {
@@ -30,7 +24,7 @@ class ListRegistrants extends ListRecords
                 ->color('gray')
                 ->icon('heroicon-o-cog-6-tooth')
                 ->outlined()
-                ->url(Registrations::getUrl())
+                ->url(Registrations::getUrl()),
         ];
     }
 
@@ -91,7 +85,7 @@ class ListRegistrants extends ListRecords
         ];
     }
 
-    public function getDefaultActiveTab(): string | int | null
+    public function getDefaultActiveTab(): string|int|null
     {
         return 'all';
     }

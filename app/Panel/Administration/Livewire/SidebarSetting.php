@@ -10,7 +10,7 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
 use Livewire\Component;
 
-class SidebarSetting extends Component implements HasForms, HasActions
+class SidebarSetting extends Component implements HasActions, HasForms
 {
     use InteractsWithActions;
     use InteractsWithForms;
@@ -26,7 +26,7 @@ class SidebarSetting extends Component implements HasForms, HasActions
     protected function getViewData(): array
     {
         return [
-            'sidebars' => SidebarFacade::get(false)->map(fn($sidebar) => [
+            'sidebars' => SidebarFacade::get(false)->map(fn ($sidebar) => [
                 'id' => $sidebar->getId(),
                 'name' => $sidebar->getName(),
                 'isActive' => SidebarFacade::isActiveSidebar($sidebar),
@@ -47,5 +47,4 @@ class SidebarSetting extends Component implements HasForms, HasActions
 
         return true;
     }
-
 }

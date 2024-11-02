@@ -2,9 +2,7 @@
 
 namespace App\Models\NavigationItemType;
 
-use App\Facades\Setting;
 use App\Models\NavigationMenuItem;
-use App\Models\Timeline;
 
 class Agenda extends BaseNavigationItemType
 {

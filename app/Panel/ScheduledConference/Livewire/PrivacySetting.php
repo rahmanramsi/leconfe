@@ -2,23 +2,15 @@
 
 namespace App\Panel\ScheduledConference\Livewire;
 
-
-use App\Actions\Conferences\ConferenceUpdateAction;
 use App\Actions\ScheduledConferences\ScheduledConferenceUpdateAction;
-use App\Forms\Components\CssFileUpload;
+use App\Forms\Components\TinyEditor;
 use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\Actions\Action;
-use Filament\Forms\Components\BaseFileUpload;
-use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\Section;
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
-use Illuminate\Support\Str;
 use Livewire\Component;
-use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
-use App\Forms\Components\TinyEditor;
 
 class PrivacySetting extends Component implements HasForms
 {

@@ -18,7 +18,7 @@ class QueuedSubmissionState extends BaseSubmissionState
 
         SubmissionUpdateAction::run([
             'stage' => $isPaymentRequired ? SubmissionStage::Payment : SubmissionStage::PeerReview,
-            'status' => $isPaymentRequired ? SubmissionStatus::OnPayment : SubmissionStatus::OnReview,    
+            'status' => $isPaymentRequired ? SubmissionStatus::OnPayment : SubmissionStatus::OnReview,
         ], $this->submission);
 
         Log::make(

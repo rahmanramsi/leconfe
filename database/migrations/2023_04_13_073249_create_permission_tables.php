@@ -2,9 +2,9 @@
 
 use App\Models\Conference;
 use App\Models\ScheduledConference;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -36,7 +36,7 @@ return new class extends Migration
             $table->unique(['name', 'guard_name']);
         });
 
-        Schema::create($tableNames['roles'], function (Blueprint $table) use ($teams, $columnNames) {
+        Schema::create($tableNames['roles'], function (Blueprint $table) {
             $table->bigIncrements('id'); // role id
             $table->foreignIdFor(Conference::class)->default(0);
             $table->foreignIdFor(ScheduledConference::class)->default(0);
@@ -44,11 +44,11 @@ return new class extends Migration
             $table->string('name');       // For MySQL 8.0 use string('name', 125);
             $table->string('guard_name'); // For MySQL 8.0 use string('guard_name', 125);
             $table->timestamps();
-            
+
             $table->unique(['name', 'guard_name', 'conference_id', 'scheduled_conference_id'], 'roles_keys_unique');
         });
 
-        Schema::create($tableNames['model_has_permissions'], function (Blueprint $table) use ($tableNames, $columnNames, $pivotPermission, $teams) {
+        Schema::create($tableNames['model_has_permissions'], function (Blueprint $table) use ($tableNames, $columnNames, $pivotPermission) {
             $table->unsignedBigInteger($pivotPermission);
             $table->foreignIdFor(Conference::class)->default(0);
             $table->foreignIdFor(ScheduledConference::class)->default(0);
@@ -67,11 +67,11 @@ return new class extends Migration
 
         });
 
-        Schema::create($tableNames['model_has_roles'], function (Blueprint $table) use ($tableNames, $columnNames, $pivotRole, $teams) {
+        Schema::create($tableNames['model_has_roles'], function (Blueprint $table) use ($tableNames, $columnNames, $pivotRole) {
             $table->unsignedBigInteger($pivotRole);
             $table->foreignIdFor(Conference::class)->default(0);
             $table->foreignIdFor(ScheduledConference::class)->default(0);
-            
+
             $table->string('model_type');
             $table->unsignedBigInteger($columnNames['model_morph_key']);
             $table->index([$columnNames['model_morph_key'], 'model_type'], 'model_has_roles_model_id_model_type_index');

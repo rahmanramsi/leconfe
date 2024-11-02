@@ -2,12 +2,12 @@
 
 namespace App\Panel\ScheduledConference\Livewire\Submissions;
 
+use App\Forms\Components\TinyEditor;
 use App\Mail\Templates\AcceptAbstractMail;
 use App\Mail\Templates\DeclineAbstractMail;
+use App\Models\DefaultMailTemplate;
 use App\Models\Enums\SubmissionStatus;
 use App\Models\Enums\UserRole;
-use App\Models\MailTemplate;
-use App\Models\Role;
 use App\Models\Submission;
 use App\Notifications\AbstractAccepted;
 use App\Notifications\AbstractDeclined;
@@ -23,8 +23,6 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
-use App\Forms\Components\TinyEditor;
-use App\Models\DefaultMailTemplate;
 
 class CallforAbstract extends Component implements HasActions, HasForms
 {
@@ -113,7 +111,7 @@ class CallforAbstract extends Component implements HasActions, HasForms
     public function acceptAction()
     {
         $isPaymentRequired = app()->getCurrentScheduledConference()->isSubmissionRequirePayment();
-        
+
         return Action::make('accept')
             ->modalHeading(__('general.confirmation'))
             ->modalSubmitActionLabel(fn () => $isPaymentRequired ? __('general.send_for_payment') : __('general.send_for_review'))
@@ -212,14 +210,14 @@ class CallforAbstract extends Component implements HasActions, HasForms
         $user = auth()->user();
 
         return view('panel.scheduledConference.livewire.submissions.call-for-abstract', [
-            'submissionDecision' => ($user->hasAnyRole([UserRole::ConferenceManager, UserRole::Admin]) || $this->submission->isParticipantEditor($user)) && 
+            'submissionDecision' => ($user->hasAnyRole([UserRole::ConferenceManager, UserRole::Admin]) || $this->submission->isParticipantEditor($user)) &&
             in_array($this->submission->status, [
-                SubmissionStatus::OnPayment, 
-                SubmissionStatus::OnReview, 
-                SubmissionStatus::Editing, 
-                SubmissionStatus::Declined, 
-                SubmissionStatus::PaymentDeclined, 
-                SubmissionStatus::OnPresentation
+                SubmissionStatus::OnPayment,
+                SubmissionStatus::OnReview,
+                SubmissionStatus::Editing,
+                SubmissionStatus::Declined,
+                SubmissionStatus::PaymentDeclined,
+                SubmissionStatus::OnPresentation,
             ]),
         ]);
     }

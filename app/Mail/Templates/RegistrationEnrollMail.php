@@ -2,7 +2,6 @@
 
 namespace App\Mail\Templates;
 
-use App\Classes\Log;
 use App\Models\Registration;
 
 class RegistrationEnrollMail extends TemplateMailable

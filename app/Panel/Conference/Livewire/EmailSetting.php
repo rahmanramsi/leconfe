@@ -2,16 +2,16 @@
 
 namespace App\Panel\Conference\Livewire;
 
-use App\Actions\Settings\SettingUpdateAction;
 use App\Facades\Setting;
+use App\Forms\Components\TinyEditor;
 use App\Infolists\Components\BladeEntry;
 use App\Infolists\Components\VerticalTabs;
 use App\Mail\Templates\TestMail;
+use App\Models\DefaultMailTemplate;
 use App\Models\MailTemplate;
 use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -23,7 +23,6 @@ use Filament\Notifications\Notification;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Actions\Action as TableAction;
 use Filament\Tables\Actions\ActionGroup;
-use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\Layout\Split;
 use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\TextColumn;
@@ -34,8 +33,6 @@ use Filament\Tables\Table;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Livewire\Component;
-use App\Forms\Components\TinyEditor;
-use App\Models\DefaultMailTemplate;
 
 class EmailSetting extends Component implements HasForms, HasInfolists, HasTable
 {
@@ -90,7 +87,7 @@ class EmailSetting extends Component implements HasForms, HasInfolists, HasTable
                     TableAction::make('edit')
                         ->color('primary')
                         ->icon('heroicon-m-pencil-square')
-                        ->fillForm(fn(DefaultMailTemplate $record) => $record->toArray())
+                        ->fillForm(fn (DefaultMailTemplate $record) => $record->toArray())
                         ->form([
                             TextInput::make('subject')
                                 ->label(__('general.subject'))
@@ -103,14 +100,14 @@ class EmailSetting extends Component implements HasForms, HasInfolists, HasTable
                                 ->profile('email')
                                 ->rules('required'),
                         ])
-                        ->action(function (DefaultMailTemplate $record, array $data){
+                        ->action(function (DefaultMailTemplate $record, array $data) {
                             $data['description'] = $record->description;
                             $data['text_template'] = preg_replace("/\n\s+/", "\n", rtrim(html_entity_decode(strip_tags($data['html_template']))));
 
                             MailTemplate::updateOrCreate(
                                 [
                                     'conference_id' => app()->getCurrentConference()->id,
-                                    'mailable' => $record->mailable
+                                    'mailable' => $record->mailable,
                                 ],
                                 $data
                             );

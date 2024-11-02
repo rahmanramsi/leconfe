@@ -2,31 +2,31 @@
 
 namespace App\Panel\ScheduledConference\Livewire\Submissions\Components;
 
-use App\Models\Author;
-use App\Models\Submission;
-use Filament\Tables\Table;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Contracts\HasForms;
-use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Contracts\HasTable;
-use Illuminate\Database\Eloquent\Model;
-use Filament\Tables\Actions\ActionGroup;
-use Filament\Tables\Actions\CreateAction;
-use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Columns\Layout\Split;
-use Filament\Tables\Columns\Layout\Stack;
 use App\Actions\Authors\AuthorCreateAction;
 use App\Actions\Authors\AuthorDeleteAction;
 use App\Actions\Authors\AuthorUpdateAction;
+use App\Models\Author;
+use App\Models\Submission;
 use App\Panel\Conference\Livewire\Forms\Conferences\ContributorForm;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Tables\Concerns\InteractsWithTable;
-use Illuminate\Contracts\Database\Eloquent\Builder;
-use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
-use Filament\Forms\Components\Actions\Action as FormAction;
 use App\Panel\Conference\Resources\Conferences\AuthorRoleResource;
+use Filament\Forms\Components\Actions\Action as FormAction;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
+use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\CreateAction;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\Layout\Split;
+use Filament\Tables\Columns\Layout\Stack;
+use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Concerns\InteractsWithTable;
+use Filament\Tables\Contracts\HasTable;
+use Filament\Tables\Table;
+use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
 class ContributorList extends \Livewire\Component implements HasForms, HasTable
 {
@@ -92,8 +92,9 @@ class ContributorList extends \Livewire\Component implements HasForms, HasTable
                     'family_name' => $author->family_name,
                     'email' => $author->email,
                     'author_role_id' => $role->id ?? null,
-                    'meta' => $author->getAllMeta()
+                    'meta' => $author->getAllMeta(),
                 ];
+
                 return $livewire->mountedTableActionsData[0] = $formData;
             })
             ->columnSpanFull();
@@ -143,6 +144,7 @@ class ContributorList extends \Livewire\Component implements HasForms, HasTable
                         ->modalWidth('3xl')
                         ->mutateRecordDataUsing(function (array $data, Model $record) {
                             $data['meta'] = $record->getAllMeta();
+
                             return $data;
                         })
                         ->form($this->getContributorFormSchema())
@@ -150,7 +152,7 @@ class ContributorList extends \Livewire\Component implements HasForms, HasTable
                     DeleteAction::make()
                         ->using(fn (array $data, Model $record) => AuthorDeleteAction::run($record, $data)),
                 ])
-                ->hidden($this->viewOnly),
+                    ->hidden($this->viewOnly),
             ])
             ->headerActions([
                 CreateAction::make()

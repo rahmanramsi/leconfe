@@ -2,7 +2,6 @@
 
 namespace App\Panel\Conference\Pages;
 
-use App\Models\Enums\DOIStatus;
 use Filament\Pages\Page;
 
 class DOIPage extends Page
@@ -17,12 +16,10 @@ class DOIPage extends Page
 
     public static function canAccess(): bool
     {
-        return app()->getCurrentConference()?->getMeta('doi_enabled') && !empty(app()->getCurrentConference()?->getMeta('doi_items', []));
+        return app()->getCurrentConference()?->getMeta('doi_enabled') && ! empty(app()->getCurrentConference()?->getMeta('doi_items', []));
     }
 
-    public function mount()
-    {
-    }
+    public function mount() {}
 
     public function getViewData(): array
     {
@@ -37,4 +34,3 @@ class DOIPage extends Page
         return '/dois';
     }
 }
-

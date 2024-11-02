@@ -44,7 +44,7 @@ class SponsorLevelTable extends Component implements HasForms, HasTable
                 IndexColumn::make('no.'),
                 TextColumn::make('name')
                     ->label(__('general.name'))
-                    ->description(fn(StakeholderLevel $record) => $record->description)
+                    ->description(fn (StakeholderLevel $record) => $record->description)
                     ->searchable(),
                 ToggleColumn::make('is_shown')
                     ->label(__('general.shown')),
@@ -56,7 +56,7 @@ class SponsorLevelTable extends Component implements HasForms, HasTable
                     ->modalHeading(__('general.create_sponsorship_level'))
                     ->modalWidth(MaxWidth::ExtraLarge)
                     ->form(fn (Form $form) => $this->form($form))
-                    ->using(fn (array $data) => StakeholderLevelCreateAction::run($data))
+                    ->using(fn (array $data) => StakeholderLevelCreateAction::run($data)),
             ])
             ->filters([
                 // ...

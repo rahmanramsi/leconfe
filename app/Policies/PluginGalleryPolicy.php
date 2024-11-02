@@ -2,7 +2,6 @@
 
 namespace App\Policies;
 
-use App\Models\Plugin;
 use App\Models\User;
 
 class PluginGalleryPolicy

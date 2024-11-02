@@ -42,7 +42,7 @@ class DiscussionTopic extends Model
 
     public function getLastSender()
     {
-        if (!$discussions = $this->getLastDiscussions()) {
+        if (! $discussions = $this->getLastDiscussions()) {
             return null;
         }
 
@@ -51,11 +51,11 @@ class DiscussionTopic extends Model
 
     public function getLastUpdate(): ?string
     {
-        if (!$discussions = $this->getLastDiscussions()) {
+        if (! $discussions = $this->getLastDiscussions()) {
             return null;
         }
 
-        return $discussions->updated_at->format(Setting::get('format_date') . ' ' . Setting::get('format_time'));
+        return $discussions->updated_at->format(Setting::get('format_date').' '.Setting::get('format_time'));
     }
 
     public function user()

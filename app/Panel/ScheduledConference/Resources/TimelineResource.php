@@ -2,38 +2,29 @@
 
 namespace App\Panel\ScheduledConference\Resources;
 
-use Carbon\Carbon;
-use App\Models\Role;
-use App\Models\Session;
 use App\Facades\Setting;
+use App\Models\Session;
 use App\Models\Timeline;
+use App\Panel\ScheduledConference\Resources\TimelineResource\Pages;
+use Carbon\Carbon;
+use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
-use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Support\Colors\Color;
-use App\Tables\Columns\IndexColumn;
-use Filament\Forms\Components\Grid;
-use Filament\Tables\Actions\Action;
-use App\Forms\Components\TinyEditor;
 use Filament\Support\Enums\MaxWidth;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Toggle;
-use Filament\Forms\Components\Checkbox;
-use Filament\Forms\Components\Textarea;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\Rules\Unique;
-use Filament\Forms\Components\TextInput;
-use Filament\Tables\Actions\ActionGroup;
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\TimePicker;
-use Filament\Tables\Actions\CreateAction;
-use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Columns\ToggleColumn;
-use Filament\Forms\Components\CheckboxList;
-use App\Panel\ScheduledConference\Resources\TimelineResource\Pages;
 
 class TimelineResource extends Resource
 {
@@ -71,8 +62,8 @@ class TimelineResource extends Resource
                     ->options(Timeline::getTypes())
                     ->helperText(__('general.type_integrates_with_workflow_process'))
                     ->unique(
-                        ignorable: fn() => $form->getRecord(),
-                        modifyRuleUsing: fn(Unique $rule) => $rule->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId()),
+                        ignorable: fn () => $form->getRecord(),
+                        modifyRuleUsing: fn (Unique $rule) => $rule->where('scheduled_conference_id', app()->getCurrentScheduledConferenceId()),
                     )
                     ->native(false),
             ])
@@ -89,7 +80,7 @@ class TimelineResource extends Resource
                 TextColumn::make('date')
                     ->label(__('general.date'))
                     ->dateTime(Setting::get('format_date'))
-                    ->description(fn (Model $record) => $record->getEarliestTime()->format(Setting::get('format_time')) . ' - ' . $record->getLatestTime()->format(Setting::get('format_time')))
+                    ->description(fn (Model $record) => $record->getEarliestTime()->format(Setting::get('format_time')).' - '.$record->getLatestTime()->format(Setting::get('format_time')))
                     ->sortable(),
                 TextColumn::make('name')
                     ->label(__('general.name')),
@@ -104,7 +95,7 @@ class TimelineResource extends Resource
                 ToggleColumn::make('hide')
                     ->label(__('general.hidden')),
             ])
-            ->recordUrl(fn(Model $record) => static::getUrl('session', ['record' => $record]))
+            ->recordUrl(fn (Model $record) => static::getUrl('session', ['record' => $record]))
             ->filters([
                 // ...
             ])
@@ -115,7 +106,7 @@ class TimelineResource extends Resource
                     ->after(function (Model $record, array $data) {
                         $date = Carbon::parse($data['date'], 'UTC');
                         $timezone = app()->getCurrentScheduledConference()->getMeta('timezone');
-                        foreach($record->sessions as $session) {
+                        foreach ($record->sessions as $session) {
                             $session->start_at = $session->start_at->copy()->setTimezone($timezone)->setDateFrom($date)->setTimezone('UTC');
                             $session->end_at = $session->end_at->copy()->setTimezone($timezone)->setDateFrom($date)->setTimezone('UTC');
                             $session->save();
@@ -126,8 +117,8 @@ class TimelineResource extends Resource
                         ->label(__('general.details'))
                         ->icon('heroicon-m-calendar-days')
                         ->color(Color::Blue)
-                        ->url(fn(Model $record) => static::getUrl('session', ['record' => $record]))
-                        ->authorize(fn(Model $record) => auth()->user()->can('view', $record) && auth()->user()->can('viewAny', Session::class)),
+                        ->url(fn (Model $record) => static::getUrl('session', ['record' => $record]))
+                        ->authorize(fn (Model $record) => auth()->user()->can('view', $record) && auth()->user()->can('viewAny', Session::class)),
                     DeleteAction::make(),
                 ]),
             ]);

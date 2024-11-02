@@ -9,7 +9,6 @@ use App\Actions\SubmissionFiles\FilesTypePopulateAction;
 use App\Actions\Tracks\TrackPopulateAction;
 use App\Models\NavigationMenu;
 use App\Models\NavigationMenuItem;
-use App\Models\Review;
 use App\Models\ScheduledConference;
 
 class ScheduledConferenceObserver

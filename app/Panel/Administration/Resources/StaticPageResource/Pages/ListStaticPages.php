@@ -3,7 +3,6 @@
 namespace App\Panel\Administration\Resources\StaticPageResource\Pages;
 
 use App\Actions\StaticPages\StaticPageCreateAction;
-use App\Models\StaticPage;
 use App\Panel\Administration\Resources\StaticPageResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
@@ -16,7 +15,7 @@ class ListStaticPages extends ListRecords
     {
         return [
             Actions\CreateAction::make()
-                ->using(fn(array $data) => StaticPageCreateAction::run($data)),
+                ->using(fn (array $data) => StaticPageCreateAction::run($data)),
         ];
     }
 }

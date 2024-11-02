@@ -3,6 +3,7 @@
 namespace App\Panel\Conference\Resources\Conferences;
 
 use App\Models\AuthorRole;
+use App\Panel\Conference\Resources\Conferences\AuthorRoleResource\Pages;
 use App\Tables\Columns\IndexColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -11,7 +12,6 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Validation\Rules\Unique;
-use App\Panel\Conference\Resources\Conferences\AuthorRoleResource\Pages;
 
 class AuthorRoleResource extends Resource
 {
@@ -77,7 +77,7 @@ class AuthorRoleResource extends Resource
                         try {
                             $authorCount = $record->authors()->count();
                             if ($authorCount > 0) {
-                                throw new \Exception(__('general.cannot_delete_role', ['variable' =>$record->name]));
+                                throw new \Exception(__('general.cannot_delete_role', ['variable' => $record->name]));
                             }
 
                             return $record->delete();

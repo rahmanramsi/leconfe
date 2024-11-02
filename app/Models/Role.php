@@ -2,13 +2,9 @@
 
 namespace App\Models;
 
-use App\Models\Concerns\BelongsToConference;
-use App\Models\Concerns\BelongsToScheduledConference;
 use App\Models\Enums\UserRole;
-use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role as Model;
 
 class Role extends Model
@@ -28,19 +24,19 @@ class Role extends Model
     protected static function booted(): void
     {
         static::addGlobalScope('conferences', function (Builder $builder) {
-            
-            $conferenceScopeColumn =  config('permission.table_names.roles', 'roles') . '.conference_id';
-            $scheduledConferenceScopeColumn =  config('permission.table_names.roles', 'roles') . '.scheduled_conference_id';
-            
+
+            $conferenceScopeColumn = config('permission.table_names.roles', 'roles').'.conference_id';
+            $scheduledConferenceScopeColumn = config('permission.table_names.roles', 'roles').'.scheduled_conference_id';
+
             $conferenceId = app()->getCurrentConferenceId();
             $builder->where($conferenceScopeColumn, 0);
-            if($conferenceId){
+            if ($conferenceId) {
                 $builder->orWhere($conferenceScopeColumn, app()->getCurrentConferenceId());
             }
-            
+
             $scheduledConferenceId = app()->getCurrentScheduledConferenceId();
             $builder->where($scheduledConferenceScopeColumn, 0);
-            if($scheduledConferenceId){
+            if ($scheduledConferenceId) {
                 $builder->orWhere($scheduledConferenceScopeColumn, app()->getCurrentScheduledConferenceId());
             }
         });
@@ -58,7 +54,7 @@ class Role extends Model
 
     public static function getDefaultPermissionsAttribute(): array
     {
-        if(empty(static::$defaultPermissions)){
+        if (empty(static::$defaultPermissions)) {
             static::$defaultPermissions = [
                 UserRole::Admin->value => [],
                 UserRole::ConferenceManager->value => [
@@ -303,7 +299,7 @@ class Role extends Model
     public function hasDefaultPermission($permission)
     {
         $permission = $this->filterPermission($permission);
-        
+
         return in_array($permission->name, static::getPermissionsForRole($this->name));
     }
 }

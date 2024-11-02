@@ -1,13 +1,13 @@
-<?php 
+<?php
 
 namespace App\Routing;
 
 use Illuminate\Routing\Exceptions\UrlGenerationException;
 use Illuminate\Routing\RouteUrlGenerator;
 
-class CustomRouteUrlGenerator extends RouteUrlGenerator 
+class CustomRouteUrlGenerator extends RouteUrlGenerator
 {
-	    /**
+    /**
      * Generate a URL for the given route.
      *
      * @param  \Illuminate\Routing\Route  $route

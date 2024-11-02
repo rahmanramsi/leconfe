@@ -2,8 +2,8 @@
 
 namespace App\Frontend\Website\Pages;
 
-use DanHarrin\LivewireRateLimiting\WithRateLimiting;
 use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
+use DanHarrin\LivewireRateLimiting\WithRateLimiting;
 
 class EmailVerification extends Page
 {

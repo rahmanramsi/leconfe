@@ -2,8 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use App\Classes\Setting;
-use App\Facades\Plugin;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +15,9 @@ class ThemeActivator
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(!app()->isInstalled()) return $next($request);
+        if (! app()->isInstalled()) {
+            return $next($request);
+        }
 
         // Do not load theme if API request or App is running in console
         if ($request->expectsJson() || app()->runningInConsole()) {

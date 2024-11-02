@@ -2,9 +2,8 @@
 
 namespace App\Frontend\ScheduledConference\Pages;
 
-use App\Models\Timeline;
-use Livewire\Attributes\Title;
 use App\Frontend\Website\Pages\Page;
+use App\Models\Timeline;
 
 class Timelines extends Page
 {

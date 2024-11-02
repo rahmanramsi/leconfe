@@ -18,8 +18,7 @@ class Log
         public string $name,
         public ?string $description = null,
         public ?string $event = null,
-    ) {
-    }
+    ) {}
 
     public static function make(
         Model $subject,

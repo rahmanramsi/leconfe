@@ -4,8 +4,8 @@ namespace App\Panel\ScheduledConference\Resources\SubmissionResource\Pages;
 
 use App\Constants\ReviewerStatus;
 use App\Constants\SubmissionStatusRecommendation;
+use App\Forms\Components\TinyEditor;
 use App\Mail\Templates\ReviewCompleteMail;
-use App\Models\Enums\UserRole;
 use App\Models\Review;
 use App\Models\Submission;
 use App\Models\User;
@@ -26,7 +26,6 @@ use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\Page;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Mail;
-use App\Forms\Components\TinyEditor;
 
 class ReviewSubmissionPage extends Page implements HasActions, HasInfolists
 {
@@ -94,7 +93,7 @@ class ReviewSubmissionPage extends Page implements HasActions, HasInfolists
                                 TextEntry::make('Keywords')
                                     ->color('gray')
                                     ->getStateUsing(
-                                        fn (Submission $record): string => $record->tagsWithType('submissionKeywords')->pluck('name')->join(', ')  ?: '-'
+                                        fn (Submission $record): string => $record->tagsWithType('submissionKeywords')->pluck('name')->join(', ') ?: '-'
                                     ),
                                 TextEntry::make('Abstract')
                                     ->color('gray')
@@ -203,7 +202,6 @@ class ReviewSubmissionPage extends Page implements HasActions, HasInfolists
                     $editors = $this->record->editors()
                         ->pluck('user_id')
                         ->toArray();
-
 
                     $editors = User::whereIn('id', $editors)->get();
                     if ($editors->count()) {

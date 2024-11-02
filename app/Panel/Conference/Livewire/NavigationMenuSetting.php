@@ -12,7 +12,6 @@ use Closure;
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
-use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -39,7 +38,7 @@ class NavigationMenuSetting extends Component implements HasActions, HasForms
     {
         return [
             'navigationMenus' => NavigationMenu::query()
-                ->when(!app()->getCurrentScheduledConferenceId(), function ($query) {
+                ->when(! app()->getCurrentScheduledConferenceId(), function ($query) {
                     $query->where('scheduled_conference_id', 0);
                 })
                 ->with([

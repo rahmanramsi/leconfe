@@ -43,7 +43,7 @@ class TopicTable extends Component implements HasForms, HasTable
                 CreateAction::make('createtopic')
                     ->modalWidth(MaxWidth::ExtraLarge)
                     ->form(fn (Form $form) => $this->form($form))
-                    ->using(fn (array $data) => TopicCreateAction::run($data))
+                    ->using(fn (array $data) => TopicCreateAction::run($data)),
             ])
             ->filters([
                 // ...

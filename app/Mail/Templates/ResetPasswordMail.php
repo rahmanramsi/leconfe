@@ -36,11 +36,11 @@ class ResetPasswordMail extends TemplateMailable
     {
         $routeName = 'livewirePageGroup.website.pages.reset-password-confirmation';
 
-        if(app()->getCurrentConference()){
+        if (app()->getCurrentConference()) {
             $routeName = 'livewirePageGroup.conference.pages.reset-password-confirmation';
         }
 
-        if(app()->getCurrentScheduledConference()){
+        if (app()->getCurrentScheduledConference()) {
             $routeName = 'livewirePageGroup.scheduledConference.pages.reset-password-confirmation';
         }
 
@@ -49,7 +49,7 @@ class ResetPasswordMail extends TemplateMailable
             Carbon::now()->addMinutes(Config::get('auth.verification.expire', 60)),
             [
                 'user' => $user->email,
-                'hash' => sha1($user->email . $user->password . $user->getMeta('last_login'))
+                'hash' => sha1($user->email.$user->password.$user->getMeta('last_login')),
             ]
         );
     }

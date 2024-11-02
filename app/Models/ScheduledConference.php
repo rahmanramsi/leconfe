@@ -2,27 +2,25 @@
 
 namespace App\Models;
 
-use App\Frontend\ScheduledConference\Pages\Home;
-use Carbon\Carbon;
+use App\Models\Concerns\BelongsToConference;
+use App\Models\Enums\ScheduledConferenceState;
+use App\Models\Enums\ScheduledConferenceType;
+use Filament\Models\Contracts\HasAvatar;
+use Filament\Models\Contracts\HasName;
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Vite;
 use Plank\Metable\Metable;
 use Spatie\MediaLibrary\HasMedia;
-use Illuminate\Support\Facades\Vite;
-use Filament\Models\Contracts\HasName;
-use Illuminate\Database\Eloquent\Model;
-use Filament\Models\Contracts\HasAvatar;
 use Spatie\MediaLibrary\InteractsWithMedia;
-use App\Models\Concerns\BelongsToConference;
-use App\Models\Enums\ScheduledConferenceType;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\Enums\ScheduledConferenceState;
-use GeneaLabs\LaravelModelCaching\Traits\Cachable;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class ScheduledConference extends Model implements HasMedia, HasAvatar, HasName
+class ScheduledConference extends Model implements HasAvatar, HasMedia, HasName
 {
-    use Cachable, BelongsToConference, HasFactory, InteractsWithMedia, Metable, SoftDeletes;
+    use BelongsToConference, Cachable, HasFactory, InteractsWithMedia, Metable, SoftDeletes;
 
     protected $fillable = [
         'conference_id',
@@ -64,7 +62,7 @@ class ScheduledConference extends Model implements HasMedia, HasAvatar, HasName
     {
         return [
             'timezone' => 'UTC',
-			'submission_payment' => false,
+            'submission_payment' => false,
             'before_you_begin' => __('general.before_you_begin_current_scheduled', ['title' => $this->title]),
             'submission_checklist' => __('general.submission_checklist_following_requirements'),
             'review_mode' => Review::MODE_DOUBLE_ANONYMOUS,
@@ -164,10 +162,10 @@ class ScheduledConference extends Model implements HasMedia, HasAvatar, HasName
 
     public function isSubmissionRequirePayment(): bool
     {
-        if(!$this->getMeta('submission_payment')) {
+        if (! $this->getMeta('submission_payment')) {
             return false;
         }
-        
+
         return $this->getMeta('submission_payment');
     }
 

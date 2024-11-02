@@ -31,6 +31,6 @@ class Login extends BaseNavigationItemType
 
     public static function getIsDisplayed(NavigationMenuItem $navigationMenuItem): bool
     {
-        return !auth()->check();
+        return ! auth()->check();
     }
 }

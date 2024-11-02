@@ -20,7 +20,7 @@ class ManageScheduledConferences extends ManageRecords
         return [
             Actions\CreateAction::make()
                 ->modalWidth(MaxWidth::ExtraLarge)
-                ->using(fn(array $data) => ScheduledConferenceCreateAction::run($data)),
+                ->using(fn (array $data) => ScheduledConferenceCreateAction::run($data)),
         ];
     }
 

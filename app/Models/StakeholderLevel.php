@@ -15,9 +15,10 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 
 class StakeholderLevel extends Model implements HasMedia, Sortable
 {
-    use HasFactory, InteractsWithMedia, BelongsToConference, BelongsToScheduledConference, SortableTrait, Cachable;
+    use BelongsToConference, BelongsToScheduledConference, Cachable, HasFactory, InteractsWithMedia, SortableTrait;
 
     public const TYPE_SPONSOR = 1;
+
     public const TYPE_PARTNER = 2;
 
     protected $fillable = [
@@ -42,7 +43,7 @@ class StakeholderLevel extends Model implements HasMedia, Sortable
         return $query->where('type', self::TYPE_PARTNER);
     }
 
-    public function stakeholders() : HasMany
+    public function stakeholders(): HasMany
     {
         return $this->hasMany(Stakeholder::class, 'level_id');
     }

@@ -13,7 +13,7 @@ interface SubmissionStateInterface
     public function declinePayment(): void;
 
     public function sendToEditing(): void;
-    
+
     public function sendToPresentation(): void;
 
     public function publish(): void;

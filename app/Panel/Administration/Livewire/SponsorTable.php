@@ -5,12 +5,9 @@ namespace App\Panel\Administration\Livewire;
 use App\Actions\Stakeholders\StakeholderCreateAction;
 use App\Actions\Stakeholders\StakeholderUpdateAction;
 use App\Models\Stakeholder;
-use App\Models\StakeholderLevel;
 use App\Tables\Columns\IndexColumn;
-use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -53,7 +50,7 @@ class SponsorTable extends Component implements HasForms, HasTable
                     ->collection('logo'),
                 TextColumn::make('name')
                     ->label(__('general.name'))
-                    ->description(fn(Stakeholder $record) => $record->description)
+                    ->description(fn (Stakeholder $record) => $record->description)
                     ->searchable(),
                 TextColumn::make('level.name')
                     ->label(__('general.level'))
@@ -75,7 +72,7 @@ class SponsorTable extends Component implements HasForms, HasTable
                     })
                     ->modalWidth(MaxWidth::ExtraLarge)
                     ->form(fn (Form $form) => $this->form($form))
-                    ->using(fn (array $data) => StakeholderCreateAction::run($data))
+                    ->using(fn (array $data) => StakeholderCreateAction::run($data)),
             ])
             ->filters([
                 // ...
@@ -113,7 +110,7 @@ class SponsorTable extends Component implements HasForms, HasTable
                     ->required(),
                 Select::make('level_id')
                     ->label(__('general.level'))
-                    ->relationship('level', 'name', fn($query) => $query->sponsors()->orderBy('order_column', 'asc')),
+                    ->relationship('level', 'name', fn ($query) => $query->sponsors()->orderBy('order_column', 'asc')),
             ]);
     }
 }

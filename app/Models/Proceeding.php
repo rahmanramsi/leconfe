@@ -17,7 +17,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Proceeding extends Model implements HasMedia, Sortable
 {
-    use Cachable, HasFactory, InteractsWithMedia, BelongsToConference, SortableTrait, HasDOI;
+    use BelongsToConference, Cachable, HasDOI, HasFactory, InteractsWithMedia, SortableTrait;
 
     protected $table = 'proceedings';
 
@@ -50,7 +50,7 @@ class Proceeding extends Model implements HasMedia, Sortable
         return $query->where('current', $current);
     }
 
-    public function isPublished() : bool
+    public function isPublished(): bool
     {
         return $this->published && $this->published_at !== null;
     }
@@ -70,7 +70,7 @@ class Proceeding extends Model implements HasMedia, Sortable
             ->width(800);
     }
 
-    public function publish($published = true) : self
+    public function publish($published = true): self
     {
         $this->published = $published;
         $this->published_at = $published ? now() : null;
@@ -81,12 +81,12 @@ class Proceeding extends Model implements HasMedia, Sortable
         return $this;
     }
 
-    public function unpublish() : self
+    public function unpublish(): self
     {
         return $this->publish(false);
     }
 
-    public function setAsCurrent() : self
+    public function setAsCurrent(): self
     {
         // Current only one for each conference
         $this->newQuery()->where('conference_id', $this->conference_id)->update(['current' => false]);
@@ -97,14 +97,14 @@ class Proceeding extends Model implements HasMedia, Sortable
         return $this;
     }
 
-    public function submissions() : HasMany
+    public function submissions(): HasMany
     {
         return $this->hasMany(Submission::class);
     }
 
-    public function seriesTitle() : string
+    public function seriesTitle(): string
     {
-        return 
+        return
             ($this->volume ? "Vol. {$this->volume}" : '').
             ($this->number ? " No. {$this->number}" : '').
             ($this->year ? " ({$this->year})" : '').
@@ -115,8 +115,7 @@ class Proceeding extends Model implements HasMedia, Sortable
     {
         return route(ProceedingDetail::getRouteName(), [
             'proceeding' => $this,
-            'conference' => $this->conference
+            'conference' => $this->conference,
         ]);
     }
-
 }

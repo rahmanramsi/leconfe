@@ -2,19 +2,18 @@
 
 namespace App\Models\States\Submission;
 
+use App\Actions\Submissions\SubmissionUpdateAction;
 use App\Classes\Log;
-use App\Events\Submissions\Accepted;
 use App\Events\Submissions\Published;
 use App\Models\Enums\SubmissionStage;
 use App\Models\Enums\SubmissionStatus;
-use App\Actions\Submissions\SubmissionUpdateAction;
-use App\Models\States\Submission\Concerns\CanWithdraw;
 use App\Models\States\Submission\Concerns\CanDeclinePayment;
+use App\Models\States\Submission\Concerns\CanWithdraw;
 
 class EditingSubmissionState extends BaseSubmissionState
 {
-    use CanWithdraw;
     use CanDeclinePayment;
+    use CanWithdraw;
 
     public function publish(): void
     {
@@ -27,15 +26,15 @@ class EditingSubmissionState extends BaseSubmissionState
 
         $conference = app()->getCurrentConference();
         //get authors name split by semicolon
-        if(!$this->submission->getMeta('copyright_holder')){
+        if (! $this->submission->getMeta('copyright_holder')) {
             $data['meta']['copyright_holder'] = $conference->getCopyrightHolderForSubmission($this->submission);
         }
 
-        if(!$this->submission->getMeta('copyright_year')){
+        if (! $this->submission->getMeta('copyright_year')) {
             $data['meta']['copyright_year'] = $conference->getCopyrightYearForSubmission($this->submission);
         }
 
-        if(!$this->submission->getMeta('license_url')){
+        if (! $this->submission->getMeta('license_url')) {
             $data['meta']['license_url'] = $conference->getLicenseUrl();
         }
 

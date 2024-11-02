@@ -2,14 +2,11 @@
 
 namespace App\Frontend\Website\Pages;
 
-use App\Facades\Hook;
 use App\Facades\MetaTag;
-use Illuminate\Support\Facades\Blade;
 
 class InstallationSuccessful extends Page
 {
     protected static string $view = 'frontend.website.pages.installation-successful';
-
 
     public function mount()
     {

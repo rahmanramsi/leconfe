@@ -2,7 +2,6 @@
 
 namespace App\Actions\ScheduledConferences;
 
-use App\Models\Conference;
 use App\Models\ScheduledConference;
 use Illuminate\Support\Facades\DB;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -17,7 +16,7 @@ class ScheduledConferenceCreateAction
             DB::beginTransaction();
 
             $scheduledConference = ScheduledConference::create($data);
-            
+
             if (data_get($data, 'meta')) {
                 $scheduledConference->setManyMeta($data['meta']);
             }

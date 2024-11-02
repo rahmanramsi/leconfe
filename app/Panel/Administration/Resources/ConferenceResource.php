@@ -29,7 +29,6 @@ class ConferenceResource extends Resource
         return __('general.conference');
     }
 
-
     protected static ?string $navigationIcon = 'heroicon-o-window';
 
     public static function form(Form $form): Form
@@ -46,7 +45,7 @@ class ConferenceResource extends Resource
                     ->required()
                     ->rule('alpha_dash')
                     ->unique(ignoreRecord: true)
-                    ->prefix(config('app.url') . '/'),
+                    ->prefix(config('app.url').'/'),
             ])
             ->columns(1);
     }

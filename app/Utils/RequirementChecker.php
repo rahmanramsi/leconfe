@@ -6,10 +6,7 @@ use Illuminate\Support\Arr;
 
 class RequirementChecker
 {
-    public function __construct()
-    {
-
-    }
+    public function __construct() {}
 
     public function php($phpVersion = PHP_VERSION): bool
     {

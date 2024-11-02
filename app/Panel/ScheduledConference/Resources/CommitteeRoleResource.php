@@ -4,7 +4,6 @@ namespace App\Panel\ScheduledConference\Resources;
 
 use App\Models\CommitteeRole;
 use App\Tables\Columns\IndexColumn;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -75,7 +74,7 @@ class CommitteeRoleResource extends Resource
                         try {
                             $speakerCount = $record->committees()->count();
                             if ($speakerCount > 0) {
-                                throw new \Exception(__('general.cannot_delete_role_commites',['name' => $record->name,'roleType' => static::$roleType]));
+                                throw new \Exception(__('general.cannot_delete_role_commites', ['name' => $record->name, 'roleType' => static::$roleType]));
                             }
 
                             return $record->delete();

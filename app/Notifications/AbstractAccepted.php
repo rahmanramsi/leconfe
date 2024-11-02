@@ -15,9 +15,7 @@ class AbstractAccepted extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public function __construct(public Submission $submission, public string $message = '', public string $subject = '', public array $channels = [])
-    {
-    }
+    public function __construct(public Submission $submission, public string $message = '', public string $subject = '', public array $channels = []) {}
 
     public function via($notifiable): array
     {

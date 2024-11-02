@@ -2,21 +2,21 @@
 
 namespace App\Panel\Conference\Resources;
 
-use Filament\Tables;
-use Livewire\Component;
-use Filament\Forms\Form;
 use App\Facades\Setting;
 use App\Models\Proceeding;
-use Filament\Tables\Table;
-use Filament\Resources\Resource;
+use App\Panel\Conference\Resources\ProceedingResource\Pages;
 use App\Tables\Columns\IndexColumn;
 use Filament\Forms\Components\Fieldset;
-use Filament\Forms\Components\Textarea;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
-use App\Panel\Conference\Resources\ProceedingResource\Pages;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Form;
+use Filament\Resources\Resource;
+use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Livewire\Component;
 
 class ProceedingResource extends Resource
 {
@@ -77,7 +77,7 @@ class ProceedingResource extends Resource
                     ->collection('cover')
                     ->imageResizeUpscale(false)
                     ->image()
-                    ->conversion('thumb')
+                    ->conversion('thumb'),
             ]);
     }
 
@@ -96,14 +96,14 @@ class ProceedingResource extends Resource
                     ->counts('submissions'),
                 TextColumn::make('current')
                     ->label(__('general.current'))
-                    ->hidden(fn(Component $livewire) => $livewire->activeTab === 'future')
-                    ->state(fn(Proceeding $record) => $record->published && $record->current ? __('general.current') : '')
+                    ->hidden(fn (Component $livewire) => $livewire->activeTab === 'future')
+                    ->state(fn (Proceeding $record) => $record->published && $record->current ? __('general.current') : '')
                     ->badge(),
                 TextColumn::make('published_at')
                     ->label(__('general.published_at'))
                     ->sortable()
-                    ->hidden(fn(Component $livewire) => $livewire->activeTab === 'future')
-                    ->date(Setting::get('format_date'))
+                    ->hidden(fn (Component $livewire) => $livewire->activeTab === 'future')
+                    ->date(Setting::get('format_date')),
             ])
             ->filters([
                 //
@@ -115,7 +115,7 @@ class ProceedingResource extends Resource
                     Tables\Actions\Action::make('preview')
                         ->label(__('general.preview'))
                         ->icon('heroicon-o-eye')
-                        ->hidden(fn (Proceeding $record) => !$record->published)
+                        ->hidden(fn (Proceeding $record) => ! $record->published)
                         ->url(fn (Proceeding $record) => route('livewirePageGroup.conference.pages.proceeding-detail', [$record->id]), true),
                     Tables\Actions\Action::make('publish')
                         ->label(__('general.publish'))
@@ -129,13 +129,13 @@ class ProceedingResource extends Resource
                         ->requiresConfirmation()
                         ->color('danger')
                         ->icon('heroicon-o-arrow-down-tray')
-                        ->hidden(fn (Proceeding $record) => !$record->published)
+                        ->hidden(fn (Proceeding $record) => ! $record->published)
                         ->action(fn (Proceeding $record) => $record->unpublish()),
                     Tables\Actions\Action::make('set_as_current')
                         ->label(__('general.set_as_current'))
                         ->requiresConfirmation()
                         ->icon('heroicon-s-arrow-up-circle')
-                        ->visible(fn (Proceeding $record) => $record->published && !$record->current)
+                        ->visible(fn (Proceeding $record) => $record->published && ! $record->current)
                         ->action(fn (Proceeding $record) => $record->setAsCurrent()),
                     Tables\Actions\DeleteAction::make(),
                 ]),

@@ -2,9 +2,9 @@
 
 namespace App\Frontend\Website\Pages;
 
+use App\Models\StaticPage as StaticPageModel;
 use Illuminate\Support\Facades\Route;
 use Rahmanramsi\LivewirePageGroup\PageGroup;
-use App\Models\StaticPage as StaticPageModel;
 
 class StaticPage extends Page
 {
@@ -12,15 +12,13 @@ class StaticPage extends Page
 
     public StaticPageModel $staticPage;
 
-    public function mount()
-    {
-    }
+    public function mount() {}
 
     protected function getViewData(): array
     {
         return [
             'title' => $this->staticPage->title,
-            'content' => $this->staticPage->getMeta('content')
+            'content' => $this->staticPage->getMeta('content'),
         ];
     }
 

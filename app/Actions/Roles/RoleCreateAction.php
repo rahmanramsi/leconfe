@@ -22,10 +22,10 @@ class RoleCreateAction
             if (isset($data['permissions'])) {
                 $protectedPermissionContexts = Permission::getProtectedPermissionContexts();
                 $data['permissions'] = collect($data['permissions'])
-                    ->filter(fn ($value, $permission) => !in_array(explode(':', $permission)[0], $protectedPermissionContexts))
+                    ->filter(fn ($value, $permission) => ! in_array(explode(':', $permission)[0], $protectedPermissionContexts))
                     ->keys()
                     ->toArray();
-                    
+
                 $role->syncPermissions($data['permissions']);
             }
 

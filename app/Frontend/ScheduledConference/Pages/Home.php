@@ -2,19 +2,17 @@
 
 namespace App\Frontend\ScheduledConference\Pages;
 
+use App\Frontend\Website\Pages\Page;
 use App\Models\Stakeholder;
 use App\Models\StakeholderLevel;
 use Illuminate\Support\Facades\Route;
 use Rahmanramsi\LivewirePageGroup\PageGroup;
-use App\Frontend\Website\Pages\Page;
 
 class Home extends Page
 {
     protected static string $view = 'frontend.scheduledConference.pages.home';
 
-    public function mount()
-    {
-    }
+    public function mount() {}
 
     protected function getViewData(): array
     {
@@ -33,7 +31,7 @@ class Home extends Page
             ->whereNull('level_id')
             ->orderBy('order_column', 'asc')
             ->get();
-        
+
         $partners = Stakeholder::partners()
             ->where('is_shown', true)
             ->orderBy('order_column', 'asc')
@@ -46,7 +44,6 @@ class Home extends Page
             'currentScheduledConference' => $currentScheduledConference,
         ];
     }
-
 
     public static function routes(PageGroup $pageGroup): void
     {

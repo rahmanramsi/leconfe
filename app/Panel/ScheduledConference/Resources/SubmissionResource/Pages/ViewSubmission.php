@@ -2,56 +2,55 @@
 
 namespace App\Panel\ScheduledConference\Resources\SubmissionResource\Pages;
 
-use App\Models\User;
-use Filament\Forms\Form;
-use App\Models\MailTemplate;
-use Filament\Actions\Action;
-use App\Models\Enums\UserRole;
-use Filament\Infolists\Infolist;
-use Filament\Resources\Pages\Page;
-use Illuminate\Support\HtmlString;
-use Illuminate\Support\Facades\Mail;
-use App\Models\Enums\SubmissionStage;
-use App\Models\Enums\SubmissionStatus;
-use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Components\Checkbox;
-use Filament\Forms\Components\Fieldset;
-use Filament\Forms\Components\Textarea;
-use Awcodes\Shout\Components\ShoutEntry;
-use Filament\Forms\Components\TextInput;
-use App\Notifications\SubmissionWithdrawn;
-use Illuminate\Contracts\Support\Htmlable;
-use App\Infolists\Components\LivewireEntry;
-use Illuminate\View\Compilers\BladeCompiler;
-use App\Mail\Templates\PublishSubmissionMail;
-use Filament\Infolists\Contracts\HasInfolists;
-use Filament\Forms\Concerns\InteractsWithForms;
-use App\Notifications\SubmissionWithdrawRequested;
 use App\Actions\Submissions\AcceptWithdrawalAction;
 use App\Actions\Submissions\CancelWithdrawalAction;
 use App\Actions\Submissions\RequestWithdrawalAction;
-use App\Infolists\Components\VerticalTabs\Tab as Tab;
-use App\Panel\ScheduledConference\Livewire\Submissions\Editing;
-use App\Panel\ScheduledConference\Resources\SubmissionResource;
-use App\Infolists\Components\VerticalTabs\Tabs as Tabs;
-use Filament\Infolists\Concerns\InteractsWithInfolists;
-use App\Panel\ScheduledConference\Livewire\Submissions\PeerReview;
-use Filament\Infolists\Components\Tabs as HorizontalTabs;
-use Filament\Resources\Pages\Concerns\InteractsWithRecord;
-use App\Panel\ScheduledConference\Livewire\Submissions\Forms\Detail;
-use Filament\Infolists\Components\Tabs\Tab as HorizontalTab;
-use App\Panel\ScheduledConference\Livewire\Submissions\CallforAbstract;
-use App\Panel\ScheduledConference\Livewire\Submissions\Forms\References;
 use App\Forms\Components\TinyEditor;
+use App\Infolists\Components\LivewireEntry;
+use App\Infolists\Components\VerticalTabs\Tab as Tab;
+use App\Infolists\Components\VerticalTabs\Tabs as Tabs;
+use App\Mail\Templates\PublishSubmissionMail;
 use App\Models\DefaultMailTemplate;
-use App\Panel\ScheduledConference\Livewire\Submissions\Components\GalleyList;
+use App\Models\Enums\SubmissionStage;
+use App\Models\Enums\SubmissionStatus;
+use App\Models\Enums\UserRole;
+use App\Models\User;
+use App\Notifications\SubmissionWithdrawn;
+use App\Notifications\SubmissionWithdrawRequested;
+use App\Panel\ScheduledConference\Livewire\Submissions\CallforAbstract;
 use App\Panel\ScheduledConference\Livewire\Submissions\Components\ActivityLogList;
 use App\Panel\ScheduledConference\Livewire\Submissions\Components\ContributorList;
+use App\Panel\ScheduledConference\Livewire\Submissions\Components\GalleyList;
 use App\Panel\ScheduledConference\Livewire\Submissions\Components\PermissionsAndDisclosure;
 use App\Panel\ScheduledConference\Livewire\Submissions\Components\SubmissionProceeding;
+use App\Panel\ScheduledConference\Livewire\Submissions\Editing;
+use App\Panel\ScheduledConference\Livewire\Submissions\Forms\Detail;
+use App\Panel\ScheduledConference\Livewire\Submissions\Forms\References;
 use App\Panel\ScheduledConference\Livewire\Submissions\Payment;
+use App\Panel\ScheduledConference\Livewire\Submissions\PeerReview;
 use App\Panel\ScheduledConference\Livewire\Submissions\Presentation;
+use App\Panel\ScheduledConference\Resources\SubmissionResource;
+use Awcodes\Shout\Components\ShoutEntry;
+use Filament\Actions\Action;
+use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
+use Filament\Forms\Form;
+use Filament\Infolists\Components\Tabs as HorizontalTabs;
+use Filament\Infolists\Components\Tabs\Tab as HorizontalTab;
+use Filament\Infolists\Concerns\InteractsWithInfolists;
+use Filament\Infolists\Contracts\HasInfolists;
+use Filament\Infolists\Infolist;
+use Filament\Resources\Pages\Concerns\InteractsWithRecord;
+use Filament\Resources\Pages\Page;
 use Filament\Support\Enums\MaxWidth;
+use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\HtmlString;
+use Illuminate\View\Compilers\BladeCompiler;
 
 class ViewSubmission extends Page implements HasForms, HasInfolists
 {
@@ -103,13 +102,13 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                     }
                 })
                 ->visible(
-                    fn(): bool => ($this->record->isPublished() || auth()->user()->can('editing', $this->record)) && $this->record->proceeding
+                    fn (): bool => ($this->record->isPublished() || auth()->user()->can('editing', $this->record)) && $this->record->proceeding
                 ),
             Action::make('assign_proceeding')
                 ->label(__('general.publication'))
                 ->authorize('publish', $this->record)
                 ->modalHeading(__('general.assign_proceeding_for_publication'))
-                ->visible(fn() => !$this->record->proceeding && $this->record->stage == SubmissionStage::Editing)
+                ->visible(fn () => ! $this->record->proceeding && $this->record->stage == SubmissionStage::Editing)
                 ->modalWidth(MaxWidth::ExtraLarge)
                 ->form(SubmissionProceeding::getFormAssignProceeding($this->record))
                 ->action(function (array $data) {
@@ -122,7 +121,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                 ->color('primary')
                 ->label(__('general.publish_now'))
                 ->visible(
-                    fn(): bool => $this->record->proceeding ? true : false
+                    fn (): bool => $this->record->proceeding ? true : false
                 )
                 ->authorize('publish', $this->record)
                 ->successNotificationTitle(__('general.assign_proceeding_for_publication'))
@@ -157,7 +156,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                 ->action(function (Action $action, array $data) {
                     $this->record->state()->publish();
 
-                    if (!$data['do-not-notify-author']) {
+                    if (! $data['do-not-notify-author']) {
                         try {
                             Mail::to($this->record->user->email)
                                 ->send(
@@ -178,7 +177,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                     $action->success();
                 }),
             Action::make('unpublish')
-                ->label(fn() => $this->record->proceeding?->isPublished() ? __('general.unpublish') : __('general.unschedule'))
+                ->label(fn () => $this->record->proceeding?->isPublished() ? __('general.unpublish') : __('general.unschedule'))
                 ->icon('lineawesome-calendar-times-solid')
                 ->color('danger')
                 ->authorize('unpublish', $this->record)
@@ -219,11 +218,11 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                         // Currently using admin, next is admin removed only managers
                         User::whereHas(
                             'roles',
-                            fn($query) => $query->whereIn('name', [UserRole::Admin->value, UserRole::ConferenceManager->value])
+                            fn ($query) => $query->whereIn('name', [UserRole::Admin->value, UserRole::ConferenceManager->value])
                         )
                             ->get()
                             ->each(
-                                fn($manager) => $manager->notify(new SubmissionWithdrawRequested($this->record))
+                                fn ($manager) => $manager->notify(new SubmissionWithdrawRequested($this->record))
                             );
 
                         $this
@@ -250,7 +249,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                 ->color('danger')
                 ->extraAttributes(function (Action $action) {
                     if (filled($this->record->withdrawn_reason)) {
-                        $attributeValue = '$nextTick(() => { $wire.mountAction(\'' . $action->getName() . '\') })';
+                        $attributeValue = '$nextTick(() => { $wire.mountAction(\''.$action->getName().'\') })';
 
                         return [
                             'x-init' => new HtmlString($attributeValue),
@@ -273,7 +272,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                 ])
                 ->requiresConfirmation()
                 ->modalHeading(function () {
-                    return $this->record->user->fullName . __('general.requested_withdraw_this_submission');
+                    return $this->record->user->fullName.__('general.requested_withdraw_this_submission');
                 })
                 ->modalDescription(__('general.either_reject_request_or_accept'))
                 ->modalCancelActionLabel(__('general.ignore'))
@@ -315,7 +314,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
             Action::make('activity-log')
                 ->label(__('general.activity_log'))
                 ->hidden(
-                    fn(): bool => $this->record->stage == SubmissionStage::Wizard
+                    fn (): bool => $this->record->stage == SubmissionStage::Wizard
                 )
                 ->outlined()
                 ->icon('lineawesome-history-solid')
@@ -340,17 +339,16 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
     {
         $badgeHtml = '<div class="flex items-center gap-x-2">';
 
-
         $badgeHtml .= match ($this->record->status) {
-            SubmissionStatus::Incomplete => '<x-filament::badge color="gray" class="w-fit">' . __("general.incomplete") . '</x-filament::badge>',
-            SubmissionStatus::Queued => '<x-filament::badge color="primary" class="w-fit">' . __("general.queued") . '</x-filament::badge>',
-            SubmissionStatus::OnPayment => '<x-filament::badge color="warning" class="w-fit">' . __("general.on_payment") . '</x-filament::badge>',
-            SubmissionStatus::OnReview => '<x-filament::badge color="warning" class="w-fit">' . __("general.on_review") . '</x-filament::badge>',
-            SubmissionStatus::Published => $this->record->proceeding->isPublished() ? '<x-filament::badge color="success" class="w-fit">' . __("general.published") . '</x-filament::badge>' : '<x-filament::badge color="primary" class="w-fit">' . __("general.scheduled") . '</x-filament::badge>',
-            SubmissionStatus::Editing => '<x-filament::badge color="info" class="w-fit">' . __("general.editing") . '</x-filament::badge>',
-            SubmissionStatus::Declined => '<x-filament::badge color="danger" class="w-fit">' . __("general.declined") . '</x-filament::badge>',
-            SubmissionStatus::PaymentDeclined => '<x-filament::badge color="danger" class="w-fit">' . __("general.payment_declined") . '</x-filament::badge>',
-            SubmissionStatus::Withdrawn => '<x-filament::badge color="danger" class="w-fit">' . __("general.withdrawn") . '</x-filament::badge>',
+            SubmissionStatus::Incomplete => '<x-filament::badge color="gray" class="w-fit">'.__('general.incomplete').'</x-filament::badge>',
+            SubmissionStatus::Queued => '<x-filament::badge color="primary" class="w-fit">'.__('general.queued').'</x-filament::badge>',
+            SubmissionStatus::OnPayment => '<x-filament::badge color="warning" class="w-fit">'.__('general.on_payment').'</x-filament::badge>',
+            SubmissionStatus::OnReview => '<x-filament::badge color="warning" class="w-fit">'.__('general.on_review').'</x-filament::badge>',
+            SubmissionStatus::Published => $this->record->proceeding->isPublished() ? '<x-filament::badge color="success" class="w-fit">'.__('general.published').'</x-filament::badge>' : '<x-filament::badge color="primary" class="w-fit">'.__('general.scheduled').'</x-filament::badge>',
+            SubmissionStatus::Editing => '<x-filament::badge color="info" class="w-fit">'.__('general.editing').'</x-filament::badge>',
+            SubmissionStatus::Declined => '<x-filament::badge color="danger" class="w-fit">'.__('general.declined').'</x-filament::badge>',
+            SubmissionStatus::PaymentDeclined => '<x-filament::badge color="danger" class="w-fit">'.__('general.payment_declined').'</x-filament::badge>',
+            SubmissionStatus::Withdrawn => '<x-filament::badge color="danger" class="w-fit">'.__('general.withdrawn').'</x-filament::badge>',
             default => null,
         };
 
@@ -380,7 +378,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                             ->label(__('general.workflow'))
                             ->schema([
                                 Tabs::make()
-                                    ->activeTab(function () use($isPaymentRequired) {
+                                    ->activeTab(function () use ($isPaymentRequired) {
                                         return match ($this->record->stage) {
                                             SubmissionStage::CallforAbstract => 1,
                                             SubmissionStage::Payment => 2,
@@ -410,7 +408,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                                                         'submission' => $this->record,
                                                     ]),
                                             ])
-                                            ->hidden(fn () => !$isPaymentRequired),
+                                            ->hidden(fn () => ! $isPaymentRequired),
                                         Tab::make('Peer Review')
                                             ->label(__('general.peer_review'))
                                             ->icon('iconpark-checklist-o')
@@ -451,7 +449,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                                     ->type('warning')
                                     ->color('warning')
                                     ->visible(
-                                        fn(): bool => $this->record->isPublished()
+                                        fn (): bool => $this->record->isPublished()
                                     )
                                     ->content(__('general.cant_edit_submission_because_already_published')),
                                 Tabs::make()
@@ -473,7 +471,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                                                 LivewireEntry::make('contributors')
                                                     ->livewire(ContributorList::class, [
                                                         'submission' => $this->record,
-                                                        'viewOnly' => !auth()->user()->can('editing', $this->record),
+                                                        'viewOnly' => ! auth()->user()->can('editing', $this->record),
                                                     ]),
                                             ]),
                                         Tab::make('Galleys')
@@ -483,7 +481,7 @@ class ViewSubmission extends Page implements HasForms, HasInfolists
                                                 LivewireEntry::make('galleys')
                                                     ->livewire(GalleyList::class, [
                                                         'submission' => $this->record,
-                                                        'viewOnly' => !auth()->user()->can('editing', $this->record),
+                                                        'viewOnly' => ! auth()->user()->can('editing', $this->record),
                                                     ]),
                                             ]),
                                         Tab::make('Proceeding')

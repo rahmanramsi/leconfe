@@ -12,7 +12,7 @@ use Spatie\EloquentSortable\SortableTrait;
 
 class Track extends Model implements Sortable
 {
-    use BelongsToScheduledConference, Metable, Cachable, SortableTrait;
+    use BelongsToScheduledConference, Cachable, Metable, SortableTrait;
 
     protected $fillable = [
         'title',
@@ -23,7 +23,7 @@ class Track extends Model implements Sortable
     protected static function booted(): void
     {
         static::deleting(function (Track $track) {
-            if($track->submissions()->exists()) {
+            if ($track->submissions()->exists()) {
                 throw new \Exception('Before this track can be deleted, you must move paper submitted to it into other track');
             }
         });

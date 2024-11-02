@@ -19,6 +19,7 @@ class RegistrationTypeFactory extends Factory
     public function definition(): array
     {
         $closedDate = Carbon::parse(now())->addDays(rand(15, 60)); // 15 days to 2 month
+
         return [
             'cost' => rand(10000000, 50000000),
             'quota' => rand(5, 50),

@@ -39,11 +39,10 @@ class CreateSubmission extends Page implements HasForms
         $this->form->fill([]);
     }
 
-    public function getHeading(): string | Htmlable
+    public function getHeading(): string|Htmlable
     {
         return '';
     }
-
 
     protected function getViewData(): array
     {
@@ -66,25 +65,31 @@ class CreateSubmission extends Page implements HasForms
                 Radio::make('track_id')
                     ->label(__('general.track'))
                     ->required()
-                    ->visible(fn() => Track::count() > 1)
-                    ->options(fn() => Track::active()->get()->pluck('title', 'id'))
+                    ->visible(fn () => Track::count() > 1)
+                    ->options(fn () => Track::active()->get()->pluck('title', 'id'))
                     ->reactive(),
                 Placeholder::make('track_policy')
                     ->extraAttributes(['class' => 'prose prose-sm max-w-none'])
-                    ->visible(function (Get $get){
-                        if(!$get('track_id')) return false;
+                    ->visible(function (Get $get) {
+                        if (! $get('track_id')) {
+                            return false;
+                        }
 
                         $track = Track::find($get('track_id'));
-                        if($track->getMeta('policy') === null) return false;
+                        if ($track->getMeta('policy') === null) {
+                            return false;
+                        }
 
                         return true;
                     })
-                    ->label(function(Get $get){
-                        if(!$get('track_id')) return '';
+                    ->label(function (Get $get) {
+                        if (! $get('track_id')) {
+                            return '';
+                        }
 
                         return Track::find($get('track_id'))->title;
                     })
-                    ->content(fn(Get $get) => $get('track_id') ? new HtmlString(Track::find($get('track_id'))->getMeta('policy')) : ''),
+                    ->content(fn (Get $get) => $get('track_id') ? new HtmlString(Track::find($get('track_id'))->getMeta('policy')) : ''),
                 Fieldset::make(__('general.submission_checklist'))
                     ->columns(1)
                     ->schema([
@@ -95,7 +100,7 @@ class CreateSubmission extends Page implements HasForms
                             ->content(fn () => new HtmlString(app()->getCurrentScheduledConference()->getMeta('submission_checklist'))),
                         Checkbox::make('submissionRequirements')
                             ->required()
-                            ->label(__('general.submission_meets_all_of_requirements'))
+                            ->label(__('general.submission_meets_all_of_requirements')),
                     ]),
                 Section::make(__('general.privacy_consent'))
                     ->schema([
@@ -113,7 +118,7 @@ class CreateSubmission extends Page implements HasForms
     {
         $data = $this->form->getState();
 
-        if(!auth()->user()->roles->isEmpty()){
+        if (! auth()->user()->roles->isEmpty()) {
             auth()->user()->assignRole(UserRole::Author);
         }
 

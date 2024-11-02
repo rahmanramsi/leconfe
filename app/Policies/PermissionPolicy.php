@@ -63,10 +63,9 @@ class PermissionPolicy
     public function assign(User $user, Permission $permission)
     {
         $protectedPermissionContexts = Permission::getProtectedPermissionContexts();
-        if (in_array($permission->context, $protectedPermissionContexts) && !$user->hasRole('Admin')) {
+        if (in_array($permission->context, $protectedPermissionContexts) && ! $user->hasRole('Admin')) {
             return false;
         }
-
 
         if ($user->can('Permission:assign')) {
             return true;

@@ -15,7 +15,7 @@ class IdentifyScheduledConference
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(!app()->getCurrentScheduledConferenceId()){
+        if (! app()->getCurrentScheduledConferenceId()) {
             return abort(404);
         }
 

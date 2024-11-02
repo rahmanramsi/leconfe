@@ -2,15 +2,14 @@
 
 namespace App\Panel\ScheduledConference\Pages;
 
-use Filament\Forms\Form;
-use Filament\Pages\Page;
-use Filament\Infolists\Infolist;
 use App\Infolists\Components\LivewireEntry;
 use App\Infolists\Components\VerticalTabs as InfolistsVerticalTabs;
 use App\Panel\ScheduledConference\Livewire\Registration\RegistrationSetting;
 use App\Panel\ScheduledConference\Livewire\Registration\RegistrationTypeTable;
 use App\Panel\ScheduledConference\Resources\RegistrantResource;
 use Filament\Actions\Action;
+use Filament\Infolists\Infolist;
+use Filament\Pages\Page;
 use Illuminate\Contracts\Support\Htmlable;
 
 class Registrations extends Page
@@ -42,7 +41,7 @@ class Registrations extends Page
                 ->color('gray')
                 ->icon('heroicon-o-user-plus')
                 ->outlined()
-                ->url(RegistrantResource::getUrl('index'))
+                ->url(RegistrantResource::getUrl('index')),
         ];
     }
 
@@ -56,6 +55,7 @@ class Registrations extends Page
         if ($user->can('RegistrationSetting:viewAny')) {
             return true;
         }
+
         return false;
     }
 
@@ -70,14 +70,14 @@ class Registrations extends Page
                             ->icon('heroicon-o-list-bullet')
                             ->schema([
                                 LivewireEntry::make('registrationType')
-                                    ->livewire(RegistrationTypeTable::class)
+                                    ->livewire(RegistrationTypeTable::class),
                             ]),
                         InfolistsVerticalTabs\Tab::make('Settings')
                             ->label(__('general.settings'))
                             ->icon('heroicon-o-cog-6-tooth')
                             ->schema([
                                 LivewireEntry::make('registrationPolicy')
-                                    ->livewire(RegistrationSetting::class)
+                                    ->livewire(RegistrationSetting::class),
                             ]),
                     ]),
             ]);

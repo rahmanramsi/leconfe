@@ -2,16 +2,16 @@
 
 namespace App\Panel\ScheduledConference\Livewire\Payment;
 
-use Livewire\Component;
-use Filament\Forms\Form;
+use App\Actions\ScheduledConferences\ScheduledConferenceUpdateAction;
 use App\Forms\Components\TinyEditor;
 use Filament\Forms\Components\Actions;
-use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Components\Actions\Action;
-use Filament\Forms\Concerns\InteractsWithForms;
-use App\Actions\ScheduledConferences\ScheduledConferenceUpdateAction;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
+use Filament\Forms\Form;
+use Livewire\Component;
 
 class ManualPaymentSetting extends Component implements HasForms
 {
@@ -41,7 +41,7 @@ class ManualPaymentSetting extends Component implements HasForms
                             ->helperText(__('general.add_instruction_here'))
                             ->required(),
                     ])
-                    ->disabled(fn () =>  auth()->user()->cannot('RegistrationSetting:update')),
+                    ->disabled(fn () => auth()->user()->cannot('RegistrationSetting:update')),
                 Actions::make([
                     Action::make('save_changes')
                         ->label(__('general.save_changes'))
@@ -58,7 +58,6 @@ class ManualPaymentSetting extends Component implements HasForms
 
                                 $action->failure();
                                 throw $th;
-
                             }
 
                             $action->success();

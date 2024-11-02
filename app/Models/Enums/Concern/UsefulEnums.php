@@ -28,6 +28,7 @@ trait UsefulEnums
     {
         return array_combine(self::values(), self::names());
     }
+
     public function isOneOf(mixed ...$values): bool
     {
         return in_array($this, $values);

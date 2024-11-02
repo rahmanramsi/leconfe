@@ -19,9 +19,7 @@ class ActivityLogList extends \Livewire\Component implements HasForms, HasTable
 
     public Submission $submission;
 
-    public function mount(Submission $submission)
-    {
-    }
+    public function mount(Submission $submission) {}
 
     public function table(Table $table)
     {
@@ -35,14 +33,14 @@ class ActivityLogList extends \Livewire\Component implements HasForms, HasTable
                 TextColumn::make('created_at')
                     ->label(__('general.date'))
                     ->formatStateUsing(function ($state) {
-                        return $state->format(Setting::get('format_date')) . ' ' . $state->format(Setting::get('format_time'));
+                        return $state->format(Setting::get('format_date')).' '.$state->format(Setting::get('format_time'));
                     })
                     ->description(function ($record) {
                         return $record->created_at->diffForHumans();
                     }),
                 TextColumn::make('causer.fullName')
                     ->getStateUsing(function (Model $record) {
-                        if (!$record->causer_type) {
+                        if (! $record->causer_type) {
                             return 'System';
                         }
 

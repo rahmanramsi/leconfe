@@ -2,16 +2,15 @@
 
 namespace App\Frontend\Website\Pages;
 
-use App\Models\Conference;
-use Squire\Models\Country;
-use Illuminate\Support\Arr;
-use App\Models\Enums\UserRole;
-use Filament\Facades\Filament;
 use App\Actions\User\UserCreateAction;
 use App\Facades\Setting;
+use App\Models\Enums\UserRole;
 use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
 use DanHarrin\LivewireRateLimiting\WithRateLimiting;
+use Filament\Facades\Filament;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Arr;
+use Squire\Models\Country;
 
 class Register extends Page
 {
@@ -55,7 +54,7 @@ class Register extends Page
 
     public function rules()
     {
-        $rules =  [
+        $rules = [
             'given_name' => [
                 'required',
             ],
@@ -72,7 +71,7 @@ class Register extends Page
                 'required',
                 'email',
                 'indisposable',
-                'unique:users,email'
+                'unique:users,email',
             ],
             'password' => [
                 'required',
@@ -84,7 +83,7 @@ class Register extends Page
             ],
         ];
 
-        if (app()->getCurrentConference()){
+        if (app()->getCurrentConference()) {
             $rules['selfAssignRoles'] = [
                 'required',
             ];
@@ -141,7 +140,7 @@ class Register extends Page
             'meta' => Arr::only($data, ['affiliation', 'country']),
         ]);
 
-        if (app()->getCurrentConference()){
+        if (app()->getCurrentConference()) {
             $user->assignRole($data['selfAssignRoles']);
         } else {
             foreach ($data['selfAssignRoles'] as $conferenceId => $roles) {

@@ -32,9 +32,7 @@ trait CanCustomizeTemplate
         if ($this->customizedContent) {
             return new class($this->customizedContent, $this->customizedSubject) implements MailTemplateInterface
             {
-                public function __construct(public ?string $content, public ?string $subject)
-                {
-                }
+                public function __construct(public ?string $content, public ?string $subject) {}
 
                 public function getSubject(): string
                 {

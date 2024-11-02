@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\App;
 
 class LicenseManager
 {
-	/**
+    /**
      * Get a mapping of license URL to license locale key for common
      * creative commons licenses.
      *
@@ -24,18 +24,17 @@ class LicenseManager
         ];
     }
 
-	    /**
+    /**
      * Get the Creative Commons license badge associated with a given
      * license URL.
      *
-     * @param ?string $ccLicenseURL URL to creative commons license
-     * @param ?string $locale Optional locale to return badge in
-     *
+     * @param  ?string  $ccLicenseURL  URL to creative commons license
+     * @param  ?string  $locale  Optional locale to return badge in
      * @return ?string HTML code for CC license
      */
     public function getCCLicenseBadge($ccLicenseURL, $locale = null)
     {
-        if (!$ccLicenseURL) {
+        if (! $ccLicenseURL) {
             return null;
         }
 
@@ -54,6 +53,7 @@ class LicenseManager
                 return __($key, [], $locale);
             }
         }
+
         return null;
     }
 }

@@ -3,9 +3,12 @@
 namespace App\Panel\Administration\Livewire;
 
 use App\Actions\Site\SiteUpdateAction;
+use App\Forms\Components\TinyEditor;
+use App\Models\Conference;
 use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -13,9 +16,6 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Livewire\Component;
-use App\Forms\Components\TinyEditor;
-use App\Models\Conference;
-use Filament\Forms\Components\Select;
 use Squire\Models\Country;
 use Stevebauman\Purify\Facades\Purify;
 
@@ -59,7 +59,7 @@ class SetupSetting extends Component implements HasForms
                             ->conversion('thumb'),
                         SpatieMediaLibraryFileUpload::make('favicon')
                             ->collection('favicon')
-                            ->label("Favicon")
+                            ->label('Favicon')
                             ->model(app()->getSite())
                             ->image()
                             ->imageResizeUpscale(false)
@@ -77,16 +77,16 @@ class SetupSetting extends Component implements HasForms
                                     ->label(__('general.country'))
                                     ->placeholder(__('general.select_a_country'))
                                     ->searchable()
-                                    ->options(fn () => Country::all()->mapWithKeys(fn ($country) => [$country->name => $country->flag . ' ' . $country->name]))
+                                    ->options(fn () => Country::all()->mapWithKeys(fn ($country) => [$country->name => $country->flag.' '.$country->name]))
                                     ->optionsLimit(250),
                                 TextInput::make('meta.publisher_name')
                                     ->label(__('general.publisher')),
                                 TextInput::make('meta.publisher_url')
                                     ->url()
                                     ->validationMessages([
-                                        'url' => __('general.url_must_be_valid')
+                                        'url' => __('general.url_must_be_valid'),
                                     ])
-                                    ->label(__('general.url'))
+                                    ->label(__('general.url')),
                             ]),
                         TinyEditor::make('meta.about')
                             ->label(__('general.about_site'))

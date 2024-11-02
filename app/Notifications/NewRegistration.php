@@ -6,11 +6,10 @@ use App\Mail\Templates\NewRegistrationMail;
 use App\Models\Registration;
 use App\Panel\ScheduledConference\Resources\RegistrantResource;
 use App\Providers\PanelProvider;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Notification;
 use Filament\Notifications\Actions\Action;
 use Filament\Notifications\Notification as FilamentNotification;
+use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Notification;
 
 class NewRegistration extends Notification
 {
@@ -59,7 +58,7 @@ class NewRegistration extends Notification
             ->actions([
                 Action::make('new-registrant')
                     ->label('Go to registrant list')
-                    ->url(fn() => RegistrantResource::getUrl('index', panel: PanelProvider::PANEL_SCHEDULED_CONFERENCE)),
+                    ->url(fn () => RegistrantResource::getUrl('index', panel: PanelProvider::PANEL_SCHEDULED_CONFERENCE)),
             ])
             ->getDatabaseMessage();
     }

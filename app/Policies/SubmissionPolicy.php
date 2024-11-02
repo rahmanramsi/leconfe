@@ -51,7 +51,7 @@ class SubmissionPolicy
     public function delete(User $user, Submission $submission)
     {
         // Only submission with status: withdrawn or declined can be deleted.
-        if (!in_array($submission->status, [SubmissionStatus::Declined, SubmissionStatus::Withdrawn, SubmissionStatus::Incomplete])) {
+        if (! in_array($submission->status, [SubmissionStatus::Declined, SubmissionStatus::Withdrawn, SubmissionStatus::Incomplete])) {
             return false;
         }
 
@@ -185,7 +185,7 @@ class SubmissionPolicy
             return false;
         }
 
-        if($submission->user_id !== $user->getKey()) {
+        if ($submission->user_id !== $user->getKey()) {
             return false;
         }
 
@@ -249,7 +249,7 @@ class SubmissionPolicy
             return false;
         }
 
-        if(!$submission->registration) {
+        if (! $submission->registration) {
             return false;
         }
 
@@ -290,11 +290,11 @@ class SubmissionPolicy
 
     public function review(User $user, Submission $submission)
     {
-        if (!in_array($submission->stage, [SubmissionStage::PeerReview, SubmissionStage::Presentation, SubmissionStage::Editing, SubmissionStage::Proceeding])) {
+        if (! in_array($submission->stage, [SubmissionStage::PeerReview, SubmissionStage::Presentation, SubmissionStage::Editing, SubmissionStage::Proceeding])) {
             return false;
         }
 
-        if(!$submission->reviews->where('user_id', $user->getKey())->first()){
+        if (! $submission->reviews->where('user_id', $user->getKey())->first()) {
             return false;
         }
 
@@ -381,7 +381,7 @@ class SubmissionPolicy
         }
 
         // Editors cannot withdraw submissions; they must wait for the author to request it..
-        if (!filled($submission->withdrawn_reason)) {
+        if (! filled($submission->withdrawn_reason)) {
             return false;
         }
 
@@ -482,11 +482,10 @@ class SubmissionPolicy
     public function preview(User $user, Submission $submission)
     {
         $editorIds = $submission->participants()
-            ->whereHas('role', fn(Builder $query) => $query->withoutGlobalScopes()->whereIn('name', [UserRole::ScheduledConferenceEditor]))
+            ->whereHas('role', fn (Builder $query) => $query->withoutGlobalScopes()->whereIn('name', [UserRole::ScheduledConferenceEditor]))
             ->pluck('user_id');
-        
 
-        if(in_array($user->getKey(), $editorIds->toArray())) {
+        if (in_array($user->getKey(), $editorIds->toArray())) {
             return true;
         }
 

@@ -5,15 +5,12 @@ namespace App\Frontend\Conference\Pages;
 use App\Facades\Hook;
 use App\Facades\License;
 use App\Facades\MetaTag;
+use App\Frontend\Website\Pages\Page;
 use App\Models\Submission;
 use Illuminate\Contracts\Support\Htmlable;
-use Livewire\Attributes\Title;
 use Illuminate\Support\Facades\Route;
-use Rahmanramsi\LivewirePageGroup\PageGroup;
-use App\Frontend\Website\Pages\Page;
 use Illuminate\Support\Str;
-use Seboettg\CiteProc\CiteProc;
-use Seboettg\CiteProc\StyleSheet;
+use Rahmanramsi\LivewirePageGroup\PageGroup;
 
 class Paper extends Page
 {
@@ -28,29 +25,28 @@ class Paper extends Page
             ->with(['proceeding', 'track', 'media', 'meta', 'galleys.file.media', 'authors' => fn ($query) => $query->with(['role', 'meta'])])
             ->first();
 
-        if (!$this->paper) {
+        if (! $this->paper) {
             return abort(404);
         }
 
-        if($this->paper->isPublishedOnExternal()){
+        if ($this->paper->isPublishedOnExternal()) {
             return redirect($this->paper->getPublicUrl());
         }
 
-        if (!$this->canAccess()) {
+        if (! $this->canAccess()) {
             abort(404);
         }
 
         $this->addMetadata();
     }
 
-    public function getViewData() : array 
+    public function getViewData(): array
     {
         return [
             'ccLicenseBadge' => License::getCCLicenseBadge($this->paper->getMeta('license_url'), app()->getLocale()),
         ];
     }
 
- 
     public function getTitle(): string|Htmlable
     {
         return $this->paper->getMeta('title');
@@ -76,23 +72,23 @@ class Paper extends Page
             MetaTag::add('citation_date', $this->paper->published_at?->format('Y/m/d'));
         }
 
-        if($this->paper->doi?->doi){
+        if ($this->paper->doi?->doi) {
             MetaTag::add('citation_doi', $this->paper->doi->doi);
         }
 
-        if($scheduledConference->getMeta('publisher_name')){
+        if ($scheduledConference->getMeta('publisher_name')) {
             MetaTag::add('citation_publisher', e($scheduledConference->getMeta('publisher_name')));
         }
 
         $proceeding = $this->paper->proceeding;
 
         MetaTag::add('citation_conference_title', e($conference->name));
-        if($conference->getMeta('issn')){
+        if ($conference->getMeta('issn')) {
             MetaTag::add('citation_issn', e($conference->getMeta('issn')));
         }
         MetaTag::add('citation_volume', e($proceeding->volume));
         MetaTag::add('citation_issue', e($proceeding->number));
-        if($this->paper){
+        if ($this->paper) {
             MetaTag::add('citation_section', e($this->paper->track->title));
         }
 
@@ -117,7 +113,7 @@ class Paper extends Page
         });
 
         collect($this->paper->getMeta('keywords'))
-            ->each(fn($keyword) => MetaTag::add('citation_keywords', $keyword));
+            ->each(fn ($keyword) => MetaTag::add('citation_keywords', $keyword));
 
         collect(explode(PHP_EOL, $this->paper->getMeta('references')))
             ->filter()
@@ -136,7 +132,7 @@ class Paper extends Page
 
     public function canAccess(): bool
     {
-        if (!$this->paper->proceeding) {
+        if (! $this->paper->proceeding) {
             return false;
         }
 
@@ -160,14 +156,14 @@ class Paper extends Page
                 $this->paper->proceeding->seriesTitle(),
                 70
             ),
-            'Paper'
+            'Paper',
         ];
     }
 
     public static function routes(PageGroup $pageGroup): void
     {
         $slug = static::getSlug();
-        Route::get("/paper/view/{submission}", static::class)
+        Route::get('/paper/view/{submission}', static::class)
             ->middleware(static::getRouteMiddleware($pageGroup))
             ->withoutMiddleware(static::getWithoutRouteMiddleware($pageGroup))
             ->name((string) str($slug)->replace('/', '.'));

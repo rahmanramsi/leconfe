@@ -2,27 +2,15 @@
 
 namespace App\Panel\ScheduledConference\Livewire;
 
-
-use App\Actions\Conferences\ConferenceUpdateAction;
 use App\Actions\ScheduledConferences\ScheduledConferenceUpdateAction;
-use App\Models\Enums\ScheduledConferenceType;
+use App\Forms\Components\TinyEditor;
 use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\Actions\Action;
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
-use Filament\Forms\Get;
-use Illuminate\Support\HtmlString;
 use Livewire\Component;
-use App\Forms\Components\TinyEditor;
 
 class AuthorGuidance extends Component implements HasForms
 {

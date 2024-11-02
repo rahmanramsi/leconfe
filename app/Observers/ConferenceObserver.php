@@ -4,9 +4,7 @@ namespace App\Observers;
 
 use App\Actions\Authors\AuthorRolePopulateDefaultDataAction;
 use App\Actions\Roles\RolePopulateConferenceAction;
-use App\Facades\Plugin;
 use App\Models\Conference;
-use App\Models\Enums\UserRole;
 use App\Models\NavigationMenu;
 use App\Models\NavigationMenuItem;
 
@@ -132,10 +130,7 @@ class ConferenceObserver
     /**
      * Handle the Conference "deleted" event.
      */
-    public function deleting(Conference $conference): void
-    {
-
-    }
+    public function deleting(Conference $conference): void {}
 
     /**
      * Handle the Conference "restored" event.

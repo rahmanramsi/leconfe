@@ -5,26 +5,20 @@ namespace App\Panel\Conference\Resources;
 use App\Actions\ScheduledConferences\ScheduledConferenceUpdateAction;
 use App\Facades\Setting;
 use App\Models\Enums\ScheduledConferenceState;
-use App\Models\Enums\ScheduledConferenceType;
 use App\Models\ScheduledConference;
 use App\Panel\Conference\Resources\ScheduledConferenceResource\Pages;
 use App\Tables\Columns\IndexColumn;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Radio;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
-use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Support\Enums\MaxWidth;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Str;
 
 class ScheduledConferenceResource extends Resource
 {
@@ -42,7 +36,6 @@ class ScheduledConferenceResource extends Resource
         return __('general.scheduled_conference');
     }
 
-
     public static function form(Form $form): Form
     {
         return $form
@@ -55,7 +48,7 @@ class ScheduledConferenceResource extends Resource
                     ->required()
                     ->placeholder(__('general.enter_the_title_of_the_serie')),
                 TextInput::make('path')
-                    ->prefix(fn () => route('livewirePageGroup.conference.pages.home', ['conference' => app()->getCurrentConference()->path]) . '/scheduled/')
+                    ->prefix(fn () => route('livewirePageGroup.conference.pages.home', ['conference' => app()->getCurrentConference()->path]).'/scheduled/')
                     ->label(__('general.path'))
                     ->rule('alpha_dash')
                     ->required(),
@@ -125,14 +118,14 @@ class ScheduledConferenceResource extends Resource
                         ->color('success')
                         ->hidden(fn (ScheduledConference $record) => $record->isCurrent() || $record->isDraft() || $record->trashed())
                         ->action(fn (ScheduledConference $record, Tables\Actions\Action $action) => $record->update(['state' => ScheduledConferenceState::Current]) && $action->success())
-                        ->successNotificationTitle(fn (ScheduledConference $scheduledConference) => $scheduledConference->title . ' is set as current'),
+                        ->successNotificationTitle(fn (ScheduledConference $scheduledConference) => $scheduledConference->title.' is set as current'),
                     Tables\Actions\Action::make('set_as_draft')
                         ->label(__('general.set_as_draft'))
                         ->requiresConfirmation()
                         ->icon('heroicon-o-pencil-square')
                         ->hidden(fn (ScheduledConference $record) => $record->isDraft() || $record->trashed())
                         ->action(fn (ScheduledConference $record, Tables\Actions\Action $action) => $record->update(['state' => ScheduledConferenceState::Draft]) && $action->success())
-                        ->successNotificationTitle(fn (ScheduledConference $scheduledConference) => $scheduledConference->title . ' is set as current'),
+                        ->successNotificationTitle(fn (ScheduledConference $scheduledConference) => $scheduledConference->title.' is set as current'),
                     Tables\Actions\Action::make('move_to_archive')
                         ->label(__('general.move_to_archive'))
                         ->requiresConfirmation()
@@ -140,7 +133,7 @@ class ScheduledConferenceResource extends Resource
                         ->color('warning')
                         ->hidden(fn (ScheduledConference $record) => $record->isArchived() || $record->isDraft() || $record->trashed())
                         ->action(fn (ScheduledConference $record, Tables\Actions\Action $action) => $record->update(['state' => ScheduledConferenceState::Archived]) && $action->success())
-                        ->successNotificationTitle(fn (ScheduledConference $scheduledConference) => $scheduledConference->title . ' is moved to archive'),
+                        ->successNotificationTitle(fn (ScheduledConference $scheduledConference) => $scheduledConference->title.' is moved to archive'),
                     Tables\Actions\EditAction::make()
                         ->modalWidth(MaxWidth::ExtraLarge)
                         ->hidden(fn (ScheduledConference $record) => $record->isArchived() || $record->trashed())

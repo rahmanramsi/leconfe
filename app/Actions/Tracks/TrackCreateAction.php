@@ -10,7 +10,7 @@ class TrackCreateAction
 {
     use AsAction;
 
-    public function handle($data) : Track
+    public function handle($data): Track
     {
         try {
             DB::beginTransaction();

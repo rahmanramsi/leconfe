@@ -2,15 +2,12 @@
 
 namespace Database\Factories;
 
-use App\Actions\SubmissionFiles\UploadSubmissionFileAction;
-use App\Models\Conference;
 use App\Models\Enums\SubmissionStatus;
 use App\Models\Enums\UserRole;
 use App\Models\Role;
 use App\Models\Submission;
 use App\Models\SubmissionFile;
 use App\Models\SubmissionFileType;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Arr;
 
@@ -57,7 +54,7 @@ class SubmissionFactory extends Factory
 
             $state = Arr::random($states);
 
-            if($state){
+            if ($state) {
                 $submission->state()->fulfill();
             }
 
@@ -66,7 +63,6 @@ class SubmissionFactory extends Factory
                     ->where('scheduled_conference_id', $submission->scheduled_conference_id)
                     ->whereIn('name', [UserRole::ScheduledConferenceEditor, UserRole::TrackEditor])->first();
                 $userConferenceEditor = $conferenceEditorRole->users->first();
-
 
                 $submission->participants()->create([
                     'user_id' => $userConferenceEditor->getKey(),

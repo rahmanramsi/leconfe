@@ -4,21 +4,16 @@ namespace App\Panel\Conference\Livewire\Forms\Conferences;
 
 use App\Actions\Conferences\ConferenceUpdateAction;
 use App\Facades\DOIRegistrationFacade;
-use App\Managers\DOIRegistrationManager;
 use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\Actions\Action;
-use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Illuminate\Support\Arr;
-use Illuminate\Support\HtmlString;
 use Livewire\Component;
 
 class DOIRegistration extends Component implements HasForms
@@ -52,9 +47,11 @@ class DOIRegistration extends Component implements HasForms
                             ->reactive()
                             ->options(DOIRegistrationFacade::getAllDriverNames()),
                         Grid::make(1)
-                            ->hidden(fn (Get $get) => !$get('meta.doi_registration_agency'))
+                            ->hidden(fn (Get $get) => ! $get('meta.doi_registration_agency'))
                             ->schema(function (Get $get) {
-                                if (!$get('meta.doi_registration_agency')) return [];
+                                if (! $get('meta.doi_registration_agency')) {
+                                    return [];
+                                }
 
                                 return DOIRegistrationFacade::driver($get('meta.doi_registration_agency'))?->getSettingFormSchema() ?? [];
                             }),

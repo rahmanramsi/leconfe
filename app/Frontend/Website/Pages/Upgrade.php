@@ -19,10 +19,10 @@ class Upgrade extends Page
     ];
 
     public function mount()
-    {       
+    {
         MetaTag::add('robots', 'noindex, nofollow');
 
-        if(version_compare(app()->getInstalledVersion(), app()->getCodeVersion(), '>=')){
+        if (version_compare(app()->getInstalledVersion(), app()->getCodeVersion(), '>=')) {
             return redirect('/');
         }
     }
@@ -44,7 +44,7 @@ class Upgrade extends Page
     {
         try {
             UpgradeAction::run();
-    
+
             return redirect()->route('livewirePageGroup.website.pages.installation-successful');
         } catch (\Throwable $th) {
             $this->addError('upgrade', $th->getMessage());

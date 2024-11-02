@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\Conference;
-use App\Models\Enums\DOIStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;

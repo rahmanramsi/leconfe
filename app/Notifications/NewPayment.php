@@ -15,9 +15,7 @@ class NewPayment extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public function __construct(public Submission $submission, public array $channels = [])
-    {
-    }
+    public function __construct(public Submission $submission, public array $channels = []) {}
 
     public function via($notifiable): array
     {

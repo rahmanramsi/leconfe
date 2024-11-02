@@ -2,51 +2,43 @@
 
 namespace App\Panel\ScheduledConference\Resources;
 
-use Filament\Forms;
-use App\Models\User;
-use Filament\Tables;
-use Filament\Forms\Get;
 use App\Facades\Setting;
-use App\Models\Timeline;
-use Filament\Forms\Form;
-use Filament\Tables\Table;
-use Illuminate\Support\Str;
+use App\Models\Enums\RegistrationPaymentState;
+use App\Models\Enums\RegistrationPaymentType;
 use App\Models\Registration;
+use App\Models\RegistrationAttendance;
+use App\Models\RegistrationType;
+use App\Panel\ScheduledConference\Resources\RegistrantResource\Pages;
 use Filament\Facades\Filament;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Form;
+use Filament\Forms\Get;
+use Filament\Infolists\Components\Fieldset;
+use Filament\Infolists\Components\Grid as InfolistGrid;
+use Filament\Infolists\Components\Split;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\View;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Support\Colors\Color;
-use Filament\Forms\Components\Grid;
 use Filament\Tables\Actions\Action;
-use Filament\Tables\Grouping\Group;
-use Filament\Forms\Components\Select;
-use App\Models\RegistrationAttendance;
-use Filament\Infolists\Components\View;
-use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Columns\TextColumn;
-use Illuminate\Database\Eloquent\Model;
-use Filament\Infolists\Components\Split;
 use Filament\Tables\Actions\ActionGroup;
-use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Filters\SelectFilter;
-use Illuminate\Database\Eloquent\Builder;
-use Filament\Infolists\Components\Section;
-use Filament\Tables\Actions\RestoreAction;
-use Filament\Infolists\Components\Fieldset;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
-use Filament\Infolists\Components\TextEntry;
-use App\Models\Enums\RegistrationPaymentType;
 use Filament\Tables\Actions\DeleteBulkAction;
-use App\Models\Enums\RegistrationPaymentState;
-use App\Models\RegistrationType;
-use App\Models\Submission;
+use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ForceDeleteAction;
-use App\Notifications\RegistrationPaymentDecision;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Infolists\Components\Grid as InfolistGrid;
+use Filament\Tables\Actions\RestoreAction;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
-use App\Panel\ScheduledConference\Resources\RegistrantResource\Pages;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Grouping\Group;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Str;
 
 class RegistrantResource extends Resource
 {
@@ -86,8 +78,8 @@ class RegistrantResource extends Resource
                             ->label(__('general.paid_date'))
                             ->placeholder('Select registration paid date..')
                             ->prefixIcon('heroicon-m-calendar')
-                            ->formatStateUsing(fn() => now())
-                            ->visible(fn(Get $get): bool => $get('state') === RegistrationPaymentState::Paid->value)
+                            ->formatStateUsing(fn () => now())
+                            ->visible(fn (Get $get): bool => $get('state') === RegistrationPaymentState::Paid->value)
                             ->required(),
                     ])
                     ->mutateRelationshipDataBeforeSaveUsing(function (?Model $record, ?array $data) {
@@ -99,7 +91,7 @@ class RegistrantResource extends Resource
                         }
 
                         return $data;
-                    })
+                    }),
             ])
             ->columns(1);
     }
@@ -133,7 +125,7 @@ class RegistrantResource extends Resource
                                             TextEntry::make('title')
                                                 ->label(__('general.title')),
                                             TextEntry::make('description')
-                                                ->getStateUsing(fn(Model $record) => $record->getMeta('description'))
+                                                ->getStateUsing(fn (Model $record) => $record->getMeta('description'))
                                                 ->placeholder(__('general.description_empty'))
                                                 ->lineClamp(8),
                                             InfolistGrid::make(2)
@@ -145,14 +137,14 @@ class RegistrantResource extends Resource
                                                 ]),
                                         ])
                                         ->columns(1),
-                                ])
+                                ]),
                             ])
                             ->columns(1);
                     }),
                 Action::make(__('general.enroll_user'))
                     ->label('Enroll User')
-                    ->url(fn() => RegistrantResource::getUrl('enroll'))
-                    ->authorize('enroll', Registration::class)
+                    ->url(fn () => RegistrantResource::getUrl('enroll'))
+                    ->authorize('enroll', Registration::class),
             ])
             ->columns([
                 SpatieMediaLibraryImageColumn::make('user.profile')
@@ -166,10 +158,10 @@ class RegistrantResource extends Resource
                         $name = Str::of(Filament::getUserName($record->user))
                             ->trim()
                             ->explode(' ')
-                            ->map(fn(string $segment): string => filled($segment) ? mb_substr($segment, 0, 1) : '')
+                            ->map(fn (string $segment): string => filled($segment) ? mb_substr($segment, 0, 1) : '')
                             ->join(' ');
 
-                        return 'https://ui-avatars.com/api/?name=' . urlencode($name) . '&color=FFFFFF&background=111827&font-size=0.33';
+                        return 'https://ui-avatars.com/api/?name='.urlencode($name).'&color=FFFFFF&background=111827&font-size=0.33';
                     })
                     ->extraCellAttributes([
                         'style' => 'width: 1px',
@@ -199,7 +191,7 @@ class RegistrantResource extends Resource
                 TextColumn::make('registrationPayment.state')
                     ->label(__('general.state'))
                     ->badge()
-                    ->color(fn(Model $record) => RegistrationPaymentState::from($record->getState())->getColor()),
+                    ->color(fn (Model $record) => RegistrationPaymentState::from($record->getState())->getColor()),
                 TextColumn::make('created_at')
                     ->label(__('general.registration_date'))
                     ->date(Setting::get('format_date'))
@@ -208,7 +200,7 @@ class RegistrantResource extends Resource
             ->emptyStateHeading(__('general.no_registrant'))
             ->filters([
                 SelectFilter::make('type')
-                    ->relationship('RegistrationType', 'type', modifyQueryUsing: fn($query) => $query->where('active', '!=', false))
+                    ->relationship('RegistrationType', 'type', modifyQueryUsing: fn ($query) => $query->where('active', '!=', false))
                     ->multiple()
                     ->preload(),
             ])
@@ -217,31 +209,31 @@ class RegistrantResource extends Resource
                     ->label(__('general.decision'))
                     ->modalHeading(__('general.paid_status_decision'))
                     ->modalWidth('lg')
-                    ->hidden(fn(Model $record) => $record->trashed())
-                    ->authorize(fn(Model $record) => auth()->user()->can('update', $record)),
+                    ->hidden(fn (Model $record) => $record->trashed())
+                    ->authorize(fn (Model $record) => auth()->user()->can('update', $record)),
                 ActionGroup::make([
                     Action::make('submission')
                         ->label(__('general.submission'))
                         ->icon('heroicon-m-document-text')
                         ->color('primary')
-                        ->url(fn(Model $record) => SubmissionResource::getUrl('view', ['record' => $record->submission]))
-                        ->visible(fn(Model $record) => ($record->submission !== null)),
+                        ->url(fn (Model $record) => SubmissionResource::getUrl('view', ['record' => $record->submission]))
+                        ->visible(fn (Model $record) => ($record->submission !== null)),
                     Action::make('attendance')
                         ->label(__('general.attendance'))
                         ->icon('heroicon-m-calendar-days')
                         ->color('primary')
-                        ->url(fn(Model $record) => static::getUrl('attendance', ['record' => $record]))
-                        ->visible(fn(Model $record) => ($record->registrationPayment->state === RegistrationPaymentState::Paid->value) && !$record->trashed())
-                        ->authorize(fn() => auth()->user()->can('viewAny', RegistrationAttendance::class)),
+                        ->url(fn (Model $record) => static::getUrl('attendance', ['record' => $record]))
+                        ->visible(fn (Model $record) => ($record->registrationPayment->state === RegistrationPaymentState::Paid->value) && ! $record->trashed())
+                        ->authorize(fn () => auth()->user()->can('viewAny', RegistrationAttendance::class)),
                     DeleteAction::make()
                         ->label(__('general.trash'))
-                        ->authorize(fn(Model $record) => auth()->user()->can('delete', $record)),
+                        ->authorize(fn (Model $record) => auth()->user()->can('delete', $record)),
                     RestoreAction::make()
                         ->color(Color::Green)
-                        ->authorize(fn(Model $record) => auth()->user()->can('delete', $record)),
+                        ->authorize(fn (Model $record) => auth()->user()->can('delete', $record)),
                     ForceDeleteAction::make()
                         ->label(__('general.delete'))
-                        ->authorize(fn(Model $record) => auth()->user()->can('delete', $record)),
+                        ->authorize(fn (Model $record) => auth()->user()->can('delete', $record)),
                 ]),
             ])
             ->bulkActions([
@@ -250,7 +242,7 @@ class RegistrantResource extends Resource
             ])
             ->groups([
                 Group::make('registrationPayment.name')
-                    ->label('')
+                    ->label(''),
             ])
             ->groupingSettingsHidden()
             ->defaultGroup('registrationPayment.name');

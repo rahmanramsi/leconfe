@@ -19,6 +19,7 @@ class SpeakerFactory extends Factory
     public function definition(): array
     {
         $randomSerie = ScheduledConference::pluck('id')->random();
+
         return [
             'scheduled_conference_id' => $randomSerie,
             'speaker_role_id' => SpeakerRole::withoutGlobalScopes()->where('scheduled_conference_id', $randomSerie)->pluck('id')->random(),

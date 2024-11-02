@@ -11,7 +11,6 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Symfony\Component\Yaml\Yaml;
@@ -30,12 +29,12 @@ class PluginManager
 
     public function initialize()
     {
-        // TODO Add support for plugin in console 
+        // TODO Add support for plugin in console
         if (app()->runningInConsole()) {
             return;
         }
 
-        if (!app()->isInstalled()) {
+        if (! app()->isInstalled()) {
             return;
         }
 
@@ -48,11 +47,11 @@ class PluginManager
                         throw new Exception("Plugin folder name ({$pluginDir}) cannot contain spaces");
                     }
 
-                    if (!$disk->exists($pluginDir . DIRECTORY_SEPARATOR . 'index.yaml')) {
+                    if (! $disk->exists($pluginDir.DIRECTORY_SEPARATOR.'index.yaml')) {
                         throw new Exception("Plugin ({$pluginDir}) is missing index.yaml file");
                     }
 
-                    if (!$disk->exists($pluginDir . DIRECTORY_SEPARATOR . 'index.php')) {
+                    if (! $disk->exists($pluginDir.DIRECTORY_SEPARATOR.'index.php')) {
                         throw new Exception("Plugin ({$pluginDir}) is missing index.php file");
                     }
                 } catch (\Throwable $th) {
@@ -63,7 +62,7 @@ class PluginManager
             })
             ->each(function ($pluginPath) use ($disk) {
                 $plugin = $this->initiatePlugin($disk->path($pluginPath));
-          
+
                 $this->register($pluginPath, $plugin, $this->getSetting($pluginPath, 'enabled', false));
             });
 
@@ -108,11 +107,11 @@ class PluginManager
     protected function initiatePlugin(string $pluginPath): ?ClassesPlugin
     {
         try {
-            $plugin = include $pluginPath . DIRECTORY_SEPARATOR . 'index.php';
+            $plugin = include $pluginPath.DIRECTORY_SEPARATOR.'index.php';
 
             $plugin->setPluginPath($pluginPath);
-            if (!$plugin instanceof ClassesPlugin) {
-                throw new Exception('Plugin must return an instance of ' . ClassesPlugin::class);
+            if (! $plugin instanceof ClassesPlugin) {
+                throw new Exception('Plugin must return an instance of '.ClassesPlugin::class);
             }
         } catch (\Throwable $th) {
             throw $th;
@@ -123,7 +122,7 @@ class PluginManager
 
     public function getPlugins(bool $onlyEnabled = true)
     {
-        return $this->plugins->when($onlyEnabled, fn($plugins) => $plugins->filter(fn($plugin) => $plugin->isEnabled()));
+        return $this->plugins->when($onlyEnabled, fn ($plugins) => $plugins->filter(fn ($plugin) => $plugin->isEnabled()));
     }
 
     public function getPlugin(?string $path, bool $onlyEnabled = false): ?ClassesPlugin
@@ -192,16 +191,15 @@ class PluginManager
     {
         $pluginTempDisk = $this->getTempDisk();
 
-        if (!$folderName = $this->extractToTempPlugin($file)) {
+        if (! $folderName = $this->extractToTempPlugin($file)) {
             throw new Exception('Cannot extract the plugin, please check the zip file');
         }
 
         $this->validatePlugin($pluginTempDisk->path($folderName));
 
-        
-        $fileSystem = new Filesystem();
+        $fileSystem = new Filesystem;
         $fileSystem->moveDirectory($pluginTempDisk->path($folderName), $this->getDisk()->path($folderName), true);
-      
+
         try {
             $plugin = $this->initiatePlugin($this->getDisk()->path($folderName), true);
         } catch (\Throwable $th) {
@@ -219,7 +217,7 @@ class PluginManager
 
     public function validatePlugin(string $pluginPath)
     {
-        if (!file_exists($pluginPath)) {
+        if (! file_exists($pluginPath)) {
             throw new Exception("Plugin {$pluginPath} not found");
         }
 
@@ -229,11 +227,11 @@ class PluginManager
             throw new Exception("Plugin folder name ({$pluginName}) cannot contain spaces");
         }
 
-        if (!file_exists($pluginPath . DIRECTORY_SEPARATOR . 'index.yaml')) {
+        if (! file_exists($pluginPath.DIRECTORY_SEPARATOR.'index.yaml')) {
             throw new Exception("Plugin ({$pluginName}) is missing index.yaml file");
         }
 
-        if (!file_exists($pluginPath . DIRECTORY_SEPARATOR . 'index.php')) {
+        if (! file_exists($pluginPath.DIRECTORY_SEPARATOR.'index.php')) {
             throw new Exception("Plugin ({$pluginName}) is missing index.php file");
         }
     }
@@ -241,11 +239,11 @@ class PluginManager
     protected function extractToTempPlugin(string $filePath): string
     {
         try {
-            if (!class_exists('ZipArchive')) {
+            if (! class_exists('ZipArchive')) {
                 throw new Exception('Please Install PHP Zip Extension');
             }
 
-            if (!file_exists($filePath)) {
+            if (! file_exists($filePath)) {
                 throw new Exception("File {$filePath} not found");
             }
 
@@ -253,7 +251,7 @@ class PluginManager
                 throw new Exception('Plugin extension must be .zip');
             }
 
-            $zip = new ZipArchive();
+            $zip = new ZipArchive;
             if ($zip->open($filePath) !== true) {
                 throw new Exception('Cannot open the zip, please check the zip file');
             }
@@ -262,32 +260,32 @@ class PluginManager
 
             for ($i = 0; $i < $zip->numFiles; $i++) {
                 $filename = $zip->getNameIndex($i);
-                if (!Str::contains($filename, 'index.yaml')) {
+                if (! Str::contains($filename, 'index.yaml')) {
                     continue;
                 }
 
                 $pluginInfo = Yaml::parse($zip->getFromIndex($i));
             }
 
-            if (!$pluginInfo) {
+            if (! $pluginInfo) {
                 throw new Exception('Plugin does not contain index.yaml file');
             }
 
-            if (!isset($pluginInfo['name'])) {
+            if (! isset($pluginInfo['name'])) {
                 throw new Exception('Plugin must contain a name information in the index.yaml file');
             }
 
-            if (!isset($pluginInfo['folder'])) {
+            if (! isset($pluginInfo['folder'])) {
                 throw new Exception('Plugin must contain a `folder` information with the same name as the plugin folder name');
             }
 
-            if (!$zip->extractTo($this->getTempDisk()->path(''))) {
+            if (! $zip->extractTo($this->getTempDisk()->path(''))) {
                 throw new Exception('Cannot extract the zip, please check the zip file');
             }
 
             $zip->close();
 
-            if (!file_exists($this->getTempDisk()->path($pluginInfo['folder']))) {
+            if (! file_exists($this->getTempDisk()->path($pluginInfo['folder']))) {
                 throw new Exception('Plugin must contain a folder with the same name as the plugin folder name');
             }
         } catch (\Throwable $th) {
@@ -300,7 +298,7 @@ class PluginManager
     public function uninstall(string $pluginPath): void
     {
         // Delete the plugin after response is sent
-        app()->terminating(fn() =>  $this->getDisk()->deleteDirectory($pluginPath));
+        app()->terminating(fn () => $this->getDisk()->deleteDirectory($pluginPath));
     }
 
     /**
@@ -341,7 +339,7 @@ class PluginManager
                 break;
             case 'date':
                 if ($value !== null) {
-                    if (!is_numeric($value)) {
+                    if (! is_numeric($value)) {
                         $value = strtotime($value);
                     }
                     $value = date('Y-m-d H:i:s', $value);
@@ -381,7 +379,7 @@ class PluginManager
             case 'array':
                 $decodedValue = json_decode($value, true);
 
-                return !is_null($decodedValue) ? $decodedValue : [];
+                return ! is_null($decodedValue) ? $decodedValue : [];
             case 'date':
                 return strtotime($value);
             case 'string':

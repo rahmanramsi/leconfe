@@ -4,19 +4,14 @@ namespace App\Panel\ScheduledConference\Resources\SubmissionResource\Pages;
 
 use App\Models\Enums\SubmissionStatus;
 use App\Models\Enums\UserRole;
-use App\Models\Submission;
 use App\Models\Timeline;
-use App\Panel\ScheduledConference\Pages\Workflow;
 use App\Panel\ScheduledConference\Pages\WorkflowSetting;
 use App\Panel\ScheduledConference\Resources\SubmissionResource;
-use Awcodes\Shout\Components\ShoutEntry;
 use Filament\Actions\Action;
-use Filament\Infolists\Infolist;
 use Filament\Resources\Components\Tab;
 use Filament\Resources\Pages\ManageRecords;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\HtmlString;
 
 class ManageSubmissions extends ManageRecords
 {
@@ -48,7 +43,7 @@ class ManageSubmissions extends ManageRecords
                 ->label(__('general.create'))
                 ->button()
                 ->disabled(
-                    fn (): bool => !Timeline::isSubmissionOpen()
+                    fn (): bool => ! Timeline::isSubmissionOpen()
                 )
                 ->url(static::$resource::getUrl('create'))
                 ->icon('heroicon-o-plus')
@@ -75,11 +70,11 @@ class ManageSubmissions extends ManageRecords
             UserRole::Admin,
         ])) {
             return $query
-            ->when($tab == static::TAB_MYQUEUE, fn ($query) =>  $query->whereIn('status', [
+                ->when($tab == static::TAB_MYQUEUE, fn ($query) => $query->whereIn('status', [
                     SubmissionStatus::Queued,
                     SubmissionStatus::Incomplete,
                 ]))
-                ->when($tab == static::TAB_PRESENTATION, fn ($query) =>  $query->whereIn('status', [
+                ->when($tab == static::TAB_PRESENTATION, fn ($query) => $query->whereIn('status', [
                     SubmissionStatus::OnPresentation,
                     SubmissionStatus::Editing,
                 ]))
@@ -98,13 +93,13 @@ class ManageSubmissions extends ManageRecords
         }
 
         if ($user->hasRole(UserRole::Reviewer)) {
-            
+
             $query->orWhere(fn ($query) => $query->whereHas('reviews', fn (Builder $query) => $query->where('user_id', Auth::id())))
-                ->when($tab == static::TAB_PRESENTATION, fn ($query) =>  $query->whereIn('status', [
+                ->when($tab == static::TAB_PRESENTATION, fn ($query) => $query->whereIn('status', [
                     SubmissionStatus::OnPresentation,
                     SubmissionStatus::Editing,
                 ]))
-                ->when($tab == static::TAB_MYQUEUE, fn ($query) =>  $query->whereIn('status', [
+                ->when($tab == static::TAB_MYQUEUE, fn ($query) => $query->whereIn('status', [
                     SubmissionStatus::OnReview,
                     SubmissionStatus::Editing,
                     SubmissionStatus::OnPresentation,
@@ -118,14 +113,13 @@ class ManageSubmissions extends ManageRecords
                 ]));
         }
 
-
         if ($user->hasAnyRole([UserRole::Author, UserRole::Reader]) || $user->roles->isEmpty()) {
             $query->orWhere(fn ($query) => $query->where('user_id', $user->id)
-                ->when($tab == static::TAB_PRESENTATION, fn ($query) =>  $query->whereIn('status', [
+                ->when($tab == static::TAB_PRESENTATION, fn ($query) => $query->whereIn('status', [
                     SubmissionStatus::OnPresentation,
                     SubmissionStatus::Editing,
                 ]))
-                ->when($tab == static::TAB_MYQUEUE, fn ($query) =>  $query->whereIn('status', [
+                ->when($tab == static::TAB_MYQUEUE, fn ($query) => $query->whereIn('status', [
                     SubmissionStatus::Queued,
                     SubmissionStatus::Incomplete,
                     SubmissionStatus::OnReview,
@@ -185,4 +179,3 @@ class ManageSubmissions extends ManageRecords
             ->badgeColor(fn (): string => $count > 0 ? 'primary' : 'gray');
     }
 }
- 

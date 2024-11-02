@@ -6,7 +6,6 @@ use App\Models\Conference;
 use App\Models\ScheduledConference;
 use App\Models\Submission;
 use App\Tables\Columns\IndexColumn;
-use Livewire\Component;
 use Filament\Forms;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\DeleteAction;
@@ -15,6 +14,7 @@ use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\Rules\Unique;
+use Livewire\Component;
 use Squire\Models\Country;
 
 class ContributorForm extends Component
@@ -149,6 +149,7 @@ class ContributorForm extends Component
                     ->modalWidth('2xl')
                     ->mutateRecordDataUsing(function (array $data, Model $record) {
                         $data['meta'] = $record->getAllMeta();
+
                         return $data;
                     })
                     ->using(fn (array $data, Model $record) => $updateAction::run($record, $data)),

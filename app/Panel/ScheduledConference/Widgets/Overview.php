@@ -2,20 +2,19 @@
 
 namespace App\Panel\ScheduledConference\Widgets;
 
-use App\Models\User;
-use App\Models\AuthorRole;
 use App\Models\Enums\RegistrationPaymentState;
 use App\Models\Enums\SubmissionStage;
-use App\Models\Submission;
-use App\Models\Registration;
-use App\Models\Enums\UserRole;
-use App\Models\RegistrationType;
-use Illuminate\Support\HtmlString;
 use App\Models\Enums\SubmissionStatus;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\View\Compilers\BladeCompiler;
-use Filament\Widgets\StatsOverviewWidget\Stat;
+use App\Models\Enums\UserRole;
+use App\Models\Registration;
+use App\Models\RegistrationType;
+use App\Models\Submission;
+use App\Models\User;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
+use Filament\Widgets\StatsOverviewWidget\Stat;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\HtmlString;
+use Illuminate\View\Compilers\BladeCompiler;
 
 class Overview extends BaseWidget
 {
@@ -41,7 +40,7 @@ class Overview extends BaseWidget
                 ->description(__('general.accepted_paper_in_the_last_30_days')),
             Stat::make(__('general.new_authors'), User::query()
                 ->where('created_at', '>=', now()->subMonth())
-                ->whereHas('roles', fn($query) => $query->where('name', UserRole::Author->value))
+                ->whereHas('roles', fn ($query) => $query->where('name', UserRole::Author->value))
                 ->count())
                 ->icon('heroicon-o-user-group')
                 ->description(__('general.new_authors_in_the_last_30_days')),

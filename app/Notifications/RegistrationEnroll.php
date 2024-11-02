@@ -4,10 +4,10 @@ namespace App\Notifications;
 
 use App\Mail\Templates\RegistrationEnrollMail;
 use App\Models\Registration;
-use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
 use Filament\Notifications\Actions\Action;
 use Filament\Notifications\Notification as FilamentNotification;
+use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Notification;
 
 class RegistrationEnroll extends Notification
 {
@@ -55,7 +55,7 @@ class RegistrationEnroll extends Notification
             ->actions([
                 Action::make('registration-status')
                     ->label('Registration Status')
-                    ->url(fn() => route('livewirePageGroup.scheduledConference.pages.registration-status', [
+                    ->url(fn () => route('livewirePageGroup.scheduledConference.pages.registration-status', [
                         'conference' => $this->registration->scheduledConference->conference,
                         'serie' => $this->registration->scheduledConference->path,
                     ])),

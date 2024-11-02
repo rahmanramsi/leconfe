@@ -94,7 +94,7 @@ return [
      */
     'locales' => [
         'en' => 'English',
-        'id' =>  'Indonesia',
+        'id' => 'Indonesia',
         'sq' => 'Albania',
         'ar' => 'Arabic',
     ],

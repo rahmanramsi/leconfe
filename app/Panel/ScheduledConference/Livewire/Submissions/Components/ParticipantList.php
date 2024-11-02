@@ -2,53 +2,44 @@
 
 namespace App\Panel\ScheduledConference\Livewire\Submissions\Components;
 
-use Closure;
 use App\Classes\Log;
-use App\Models\Role;
-use App\Models\User;
-use Filament\Forms\Get;
-use Livewire\Component;
-use Filament\Forms\Form;
-use App\Models\Submission;
-use Filament\Tables\Table;
-use App\Models\MailTemplate;
-use Illuminate\Mail\Message;
-use App\Models\Enums\UserRole;
-use App\Models\RegistrationType;
-use Illuminate\Support\HtmlString;
-use Filament\Forms\Components\Grid;
-use Filament\Tables\Actions\Action;
 use App\Forms\Components\TinyEditor;
-use Illuminate\Support\Facades\Mail;
-use App\Models\SubmissionParticipant;
-use Filament\Forms\Components\Select;
-use App\Models\Enums\SubmissionStatus;
-use App\Notifications\NewRegistration;
-use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Components\Checkbox;
-use Filament\Forms\Components\Fieldset;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Contracts\HasTable;
-use Illuminate\Database\Eloquent\Model;
-use Filament\Forms\Components\TextInput;
-use Filament\Tables\Actions\ActionGroup;
-use Filament\Forms\Components\DatePicker;
-use Filament\Tables\Actions\CreateAction;
-use Filament\Tables\Columns\Layout\Split;
-use Illuminate\Database\Eloquent\Builder;
-use App\Notifications\ParticipantAssigned;
-use Filament\Forms\Components\Placeholder;
-use Illuminate\View\Compilers\BladeCompiler;
-use App\Models\Enums\RegistrationPaymentState;
 use App\Mail\Templates\ParticipantAssignedMail;
 use App\Models\DefaultMailTemplate;
-use App\Models\Enums\SubmissionStage;
+use App\Models\Enums\SubmissionStatus;
+use App\Models\Enums\UserRole;
+use App\Models\RegistrationType;
+use App\Models\Submission;
+use App\Models\SubmissionParticipant;
+use App\Models\User;
+use App\Notifications\NewRegistration;
+use App\Notifications\ParticipantAssigned;
 use App\Panel\ScheduledConference\Resources\RegistrantResource\Pages\EnrollUser;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Tables\Concerns\InteractsWithTable;
-use STS\FilamentImpersonate\Tables\Actions\Impersonate;
-use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use App\Panel\ScheduledConference\Resources\SubmissionResource;
+use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
+use Filament\Forms\Form;
+use Filament\Forms\Get;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\CreateAction;
+use Filament\Tables\Columns\Layout\Split;
+use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Concerns\InteractsWithTable;
+use Filament\Tables\Contracts\HasTable;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Mail\Message;
+use Illuminate\Support\Facades\Mail;
+use Livewire\Component;
+use STS\FilamentImpersonate\Tables\Actions\Impersonate;
 
 class ParticipantList extends Component implements HasForms, HasTable
 {
@@ -247,7 +238,7 @@ class ParticipantList extends Component implements HasForms, HasTable
             ])
             ->actions([
                 ActionGroup::make([
-                    Action::make('notify-participant') 
+                    Action::make('notify-participant')
                         ->authorize('SubmissionParticipant:notify')
                         ->color('primary')
                         ->modalHeading(__('general.notify_participant'))
@@ -319,15 +310,14 @@ class ParticipantList extends Component implements HasForms, HasTable
                         ->icon('heroicon-o-user-plus')
                         ->label(__('general.enroll_user'))
                         ->visible(
-                            fn (SubmissionParticipant $record): bool =>
-                                $this->enrollment &&
-                                !$this->submission->registration &&
+                            fn (SubmissionParticipant $record): bool => $this->enrollment &&
+                                ! $this->submission->registration &&
                                 $this->submission->isParticipantAuthor($record->user)
                         )
                         ->successNotificationTitle(__('general.saved'))
                         ->form(fn (SubmissionParticipant $record) => EnrollUser::enrollForm($record->user, RegistrationType::LEVEL_AUTHOR))
                         ->action(function (Action $action, SubmissionParticipant $record, array $data) {
-                            
+
                             try {
                                 $registrationType = RegistrationType::find($data['registration_type_id'])->first();
 
@@ -335,7 +325,7 @@ class ParticipantList extends Component implements HasForms, HasTable
                                     'user_id' => $record->user->getKey(),
                                     'registration_type_id' => $registrationType->getKey(),
                                 ]);
-                        
+
                                 $registration->registrationPayment()->create([
                                     'name' => $registrationType->type,
                                     'level' => $registrationType->level,
@@ -345,12 +335,12 @@ class ParticipantList extends Component implements HasForms, HasTable
                                     'state' => $data['registrationPayment']['state'],
                                     'paid_at' => $data['registrationPayment']['paid_at'] ?? null,
                                 ]);
-                        
+
                                 User::whereHas('roles', function ($query) {
                                     $query->whereHas('permissions', function ($query) {
                                         $query->where('name', 'Registration:notified');
                                     });
-                                })->get()->each(function ($user) use($registration) {
+                                })->get()->each(function ($user) use ($registration) {
                                     $user->notify(
                                         new NewRegistration(
                                             registration: $registration,
@@ -364,7 +354,7 @@ class ParticipantList extends Component implements HasForms, HasTable
 
                             $action->successRedirectUrl(
                                 SubmissionResource::getUrl('view', [
-                                    'record' => $this->submission->getKey()
+                                    'record' => $this->submission->getKey(),
                                 ])
                             );
 
@@ -375,8 +365,7 @@ class ParticipantList extends Component implements HasForms, HasTable
                         ->color('danger')
                         ->icon('iconpark-deletethree-o')
                         ->visible(
-                            fn (SubmissionParticipant $record): bool =>
-                                $record->user->email !== $this->submission->user->email &&
+                            fn (SubmissionParticipant $record): bool => $record->user->email !== $this->submission->user->email &&
                                 ! in_array($this->submission->status, [SubmissionStatus::Published, SubmissionStatus::Declined, SubmissionStatus::Withdrawn]) &&
                                 $record->user->getKey() !== auth()->user()->getKey()
                         )

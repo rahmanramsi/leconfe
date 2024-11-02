@@ -14,13 +14,12 @@ class DOIGenerator
         $prefix = app()->getCurrentConference()->getMeta('doi_prefix');
         $suffix = static::encodeSuffix();
 
-        return $prefix . '/' . $suffix;
+        return $prefix.'/'.$suffix;
     }
 
     /**
      * Constructs a DOI with an 8-character suffix, using a Crockford Base 32 algorithm
      * to generate the suffix.
-     *
      */
     public static function encodeSuffix(): string
     {
@@ -53,7 +52,7 @@ class DOIGenerator
      *
      * E.g. DDDDDDYY where 'D' is a base32 encoded character and 'YY' is the checksum.
      *
-     * @param int $number A random number between 1 and 1073741823 (UPPER_LIMIT). Used as seed for encoding suffix.
+     * @param  int  $number  A random number between 1 and 1073741823 (UPPER_LIMIT). Used as seed for encoding suffix.
      */
     protected static function base32EncodeSuffix(int $number): string
     {
@@ -62,19 +61,18 @@ class DOIGenerator
 
         // Add checksum at end of string, calculated as modulo 97-10 (ISO 7064)
         $remainder = static::calculateChecksum($number);
-        $payload = $encodedNumber . sprintf('%02d', $remainder);
+        $payload = $encodedNumber.sprintf('%02d', $remainder);
 
         return str_pad($payload, 8, '0', STR_PAD_LEFT);
     }
 
-
     /**
      * Verifies the provided checksum was generated from the number provided.
      *
-     * @param int $number The integer decoded form the base 32 suffix. Original number used to generate suffix.
-     * @param int $checksum The two-digit checksum (last two digits of suffix)
+     * @param  int  $number  The integer decoded form the base 32 suffix. Original number used to generate suffix.
+     * @param  int  $checksum  The two-digit checksum (last two digits of suffix)
      */
-    protected  static function verifySuffixChecksum(int $number, int $checksum): bool
+    protected static function verifySuffixChecksum(int $number, int $checksum): bool
     {
         return $checksum === static::calculateChecksum($number);
     }

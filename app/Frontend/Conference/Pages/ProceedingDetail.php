@@ -3,14 +3,14 @@
 namespace App\Frontend\Conference\Pages;
 
 use App\Frontend\Conference\Pages\Proceedings as PagesProceedings;
+use App\Frontend\Website\Pages\Page;
 use App\Models\Enums\SubmissionStatus;
 use App\Models\Proceeding;
 use App\Models\Track;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Route;
-use Rahmanramsi\LivewirePageGroup\PageGroup;
-use App\Frontend\Website\Pages\Page;
 use Illuminate\Support\Str;
+use Rahmanramsi\LivewirePageGroup\PageGroup;
 
 class ProceedingDetail extends Page
 {
@@ -30,7 +30,6 @@ class ProceedingDetail extends Page
 
     public function canAccess(): bool
     {
-        
 
         return $this->proceeding->isPublished();
     }
@@ -47,7 +46,7 @@ class ProceedingDetail extends Page
     public static function routes(PageGroup $pageGroup): void
     {
         $slug = static::getSlug();
-        Route::get("/proceedings/view/{proceeding}", static::class)
+        Route::get('/proceedings/view/{proceeding}', static::class)
             ->middleware(static::getRouteMiddleware($pageGroup))
             ->withoutMiddleware(static::getWithoutRouteMiddleware($pageGroup))
             ->name((string) str($slug)->replace('/', '.'));

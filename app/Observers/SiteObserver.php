@@ -3,7 +3,6 @@
 namespace App\Observers;
 
 use App\Application;
-use App\Facades\Plugin;
 use App\Models\Enums\UserRole;
 use App\Models\NavigationMenu;
 use App\Models\NavigationMenuItem;
@@ -113,9 +112,7 @@ class SiteObserver
     /**
      * Handle the Site "deleted" event.
      */
-    public function deleting(Site $site): void
-    {
-    }
+    public function deleting(Site $site): void {}
 
     /**
      * Handle the Site "restored" event.

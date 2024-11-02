@@ -12,13 +12,13 @@ use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Stakeholder extends Model implements HasMedia, Sortable
 {
-    use HasFactory, InteractsWithMedia, BelongsToConference, BelongsToScheduledConference, SortableTrait, Cachable;
+    use BelongsToConference, BelongsToScheduledConference, Cachable, HasFactory, InteractsWithMedia, SortableTrait;
 
     public const TYPE_SPONSOR = 1;
+
     public const TYPE_PARTNER = 2;
 
     protected $fillable = [
@@ -44,7 +44,7 @@ class Stakeholder extends Model implements HasMedia, Sortable
         return $query->where('type', self::TYPE_PARTNER);
     }
 
-    public function level() : BelongsTo
+    public function level(): BelongsTo
     {
         return $this->belongsTo(StakeholderLevel::class);
     }

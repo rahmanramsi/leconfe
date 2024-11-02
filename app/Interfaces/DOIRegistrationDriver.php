@@ -14,7 +14,7 @@ interface DOIRegistrationDriver
 
     public function updateSettings(array $settings);
 
-	public function exportXml(Submission $submission);
+    public function exportXml(Submission $submission);
 
-	public function depositXml(Submission $submission);
+    public function depositXml(Submission $submission);
 }

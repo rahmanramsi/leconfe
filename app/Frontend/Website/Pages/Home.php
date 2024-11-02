@@ -2,29 +2,30 @@
 
 namespace App\Frontend\Website\Pages;
 
-use App\Models\Topic;
 use App\Models\Conference;
 use App\Models\Enums\ScheduledConferenceState;
 use App\Models\Meta;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
-use Livewire\Attributes\On;
-use Livewire\WithPagination;
-use Livewire\WithoutUrlPagination;
 use App\Models\ScheduledConference;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Contracts\Support\Htmlable;
-use Rahmanramsi\LivewirePageGroup\PageGroup;
+use App\Models\Topic;
 use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
+use Livewire\WithoutUrlPagination;
+use Livewire\WithPagination;
+use Rahmanramsi\LivewirePageGroup\PageGroup;
 
 class Home extends Page
 {
-    use WithPagination, WithoutUrlPagination;
+    use WithoutUrlPagination, WithPagination;
 
     protected static string $view = 'frontend.website.pages.home';
 
     public const STATE_CURRENT = 'current';
+
     public const STATE_INCOMING = 'incoming';
+
     public const STATE_ARCHIVED = 'archived';
 
     public array $filter = [
@@ -47,18 +48,18 @@ class Home extends Page
         ],
     ];
 
-    public function getTitle(): string | Htmlable
+    public function getTitle(): string|Htmlable
     {
         return __('general.home');
     }
 
     public function resetFilter(string $filterName): void
     {
-        if(is_string($this->filter[$filterName]['value'])) {
+        if (is_string($this->filter[$filterName]['value'])) {
 
             $this->filter[$filterName]['value'] = '';
 
-        } else if(is_array($this->filter[$filterName]['value'])) {
+        } elseif (is_array($this->filter[$filterName]['value'])) {
 
             $this->filter[$filterName]['value'] = [];
 
@@ -103,11 +104,11 @@ class Home extends Page
 
         // data filter
 
-        if(($search = $this->filter['search']['value']) > 0) {
+        if (($search = $this->filter['search']['value']) > 0) {
             $conferences->where('name', 'LIKE', "%{$search}%");
         }
 
-        if($scope = $this->filter['scope']['value']) {
+        if ($scope = $this->filter['scope']['value']) {
             $conferences
                 ->whereHas('meta', function ($query) use ($scope) {
                     $query
@@ -116,7 +117,7 @@ class Home extends Page
                 });
         }
 
-        if($states = $this->filter['state']['value']) {
+        if ($states = $this->filter['state']['value']) {
             $stateOption = Arr::map($states, function ($value) {
                 return match (Str::lower($value)) {
                     self::STATE_CURRENT => ScheduledConferenceState::Current,
@@ -135,7 +136,7 @@ class Home extends Page
 
         }
 
-        if(!empty($topics = $this->filter['topic']['value'])) {
+        if (! empty($topics = $this->filter['topic']['value'])) {
             $conferences
                 ->whereHas('topics', function ($query) use ($topics) {
                     $query
@@ -144,13 +145,13 @@ class Home extends Page
                 });
         }
 
-        if(!empty($coordinators = $this->filter['coordinator']['value'])) {
+        if (! empty($coordinators = $this->filter['coordinator']['value'])) {
             $conferences
                 ->whereHas('scheduledConferences', function ($query) use ($coordinators) {
                     $query
                         ->withTrashed()
                         ->withoutGlobalScopes()
-                        ->whereHas('meta', function ($query) use($coordinators) {
+                        ->whereHas('meta', function ($query) use ($coordinators) {
                             $query
                                 ->where('key', 'coordinator')
                                 ->whereIn('value', $coordinators);

@@ -32,12 +32,12 @@ class ScheduledConferenceSeeder extends Seeder
                             $state = ScheduledConferenceState::Archived;
                         }
 
-                        if($date->isSameYear($now)) {
+                        if ($date->isSameYear($now)) {
                             $state = ScheduledConferenceState::Current;
                         }
 
                         return [
-                            'title' => $conference->name . ' ' . $date->year,
+                            'title' => $conference->name.' '.$date->year,
                             'path' => $date->year,
                             'date_start' => $date->copy(),
                             'date_end' => $date->copy()->addMonth(3),

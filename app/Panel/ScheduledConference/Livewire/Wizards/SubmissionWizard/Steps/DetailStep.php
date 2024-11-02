@@ -3,6 +3,7 @@
 namespace App\Panel\ScheduledConference\Livewire\Wizards\SubmissionWizard\Steps;
 
 use App\Actions\Submissions\SubmissionUpdateAction;
+use App\Forms\Components\TinyEditor;
 use App\Models\Submission;
 use App\Panel\ScheduledConference\Livewire\Wizards\SubmissionWizard\Contracts\HasWizardStep;
 use Filament\Actions\Action;
@@ -16,7 +17,6 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Livewire\Component;
-use App\Forms\Components\TinyEditor;
 
 class DetailStep extends Component implements HasActions, HasForms, HasWizardStep
 {

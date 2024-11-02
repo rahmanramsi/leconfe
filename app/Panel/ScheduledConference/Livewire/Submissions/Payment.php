@@ -2,39 +2,36 @@
 
 namespace App\Panel\ScheduledConference\Livewire\Submissions;
 
-use Filament\Forms\Get;
-use Livewire\Component;
-use App\Models\Timeline;
-use Filament\Forms\Form;
-use App\Models\Submission;
-use Illuminate\Support\Arr;
-use App\Models\MailTemplate;
-use Filament\Actions\Action;
-use App\Models\Enums\UserRole;
-use Illuminate\Support\HtmlString;
-use Filament\Forms\Components\Grid;
 use App\Forms\Components\TinyEditor;
-use Illuminate\Support\Facades\Mail;
-use Filament\Forms\Components\Select;
-use App\Models\Enums\SubmissionStatus;
-use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Components\Checkbox;
-use Filament\Forms\Components\Fieldset;
-use Illuminate\Database\Eloquent\Model;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\DatePicker;
-use Illuminate\Database\Eloquent\Builder;
 use App\Mail\Templates\ApprovePaymentMail;
 use App\Mail\Templates\DeclinePaymentMail;
 use App\Models\DefaultMailTemplate;
-use Filament\Actions\Contracts\HasActions;
-use Filament\Infolists\Components\TextEntry;
-use App\Models\Enums\RegistrationPaymentType;
 use App\Models\Enums\RegistrationPaymentState;
-use Filament\Forms\Concerns\InteractsWithForms;
+use App\Models\Enums\RegistrationPaymentType;
+use App\Models\Enums\SubmissionStatus;
+use App\Models\Enums\UserRole;
+use App\Models\Submission;
+use App\Models\Timeline;
 use App\Notifications\RegistrationPaymentDecision;
-use Filament\Actions\Concerns\InteractsWithActions;
 use App\Panel\ScheduledConference\Resources\SubmissionResource;
+use Filament\Actions\Action;
+use Filament\Actions\Concerns\InteractsWithActions;
+use Filament\Actions\Contracts\HasActions;
+use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
+use Filament\Forms\Form;
+use Filament\Forms\Get;
+use Filament\Infolists\Components\TextEntry;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\HtmlString;
+use Livewire\Component;
 
 class Payment extends Component implements HasActions, HasForms
 {
@@ -47,9 +44,7 @@ class Payment extends Component implements HasActions, HasForms
         'refreshSubmission' => '$refresh',
     ];
 
-    public function mount(Submission $submission) 
-    {
-    }
+    public function mount(Submission $submission) {}
 
     public function registrationPolicyAction()
     {
@@ -68,7 +63,7 @@ class Payment extends Component implements HasActions, HasForms
                         </div>
                     HTML))
                     ->label('')
-                    ->html()
+                    ->html(),
             ])
             ->modalSubmitAction(false);
     }
@@ -90,7 +85,7 @@ class Payment extends Component implements HasActions, HasForms
                     'registrationPayment' => [
                         'state' => $registrationPayment->state,
                         'paid_at' => $registrationPayment->paid_at,
-                    ]
+                    ],
                 ]);
             })
             ->form([
@@ -106,10 +101,10 @@ class Payment extends Component implements HasActions, HasForms
                             ->label(__('general.paid_date'))
                             ->placeholder('Select registration paid date..')
                             ->prefixIcon('heroicon-m-calendar')
-                            ->formatStateUsing(fn() => now())
-                            ->visible(fn(Get $get): bool => $get('registrationPayment.state') === RegistrationPaymentState::Paid->value)
+                            ->formatStateUsing(fn () => now())
+                            ->visible(fn (Get $get): bool => $get('registrationPayment.state') === RegistrationPaymentState::Paid->value)
                             ->required(),
-                    ])
+                    ]),
             ])
             ->action(function (Action $action, array $data) {
                 $registration = $this->submission->registration;
@@ -337,7 +332,7 @@ class Payment extends Component implements HasActions, HasForms
 
                 $action->success();
             })
-            ->disabled(fn () => !$this->submission->registration);
+            ->disabled(fn () => ! $this->submission->registration);
     }
 
     public function render()
@@ -350,12 +345,12 @@ class Payment extends Component implements HasActions, HasForms
             'submissionRegistrant' => $this->submission->registration->user ?? null,
             'isSubmissionAuthor' => $this->submission->isParticipantAuthor($user),
             'isRegistrationOpen' => Timeline::isRegistrationOpen(),
-            'submissionDecision' => ($user->hasAnyRole([UserRole::ConferenceManager, UserRole::Admin]) || $this->submission->isParticipantEditor($user)) && 
+            'submissionDecision' => ($user->hasAnyRole([UserRole::ConferenceManager, UserRole::Admin]) || $this->submission->isParticipantEditor($user)) &&
                 in_array($this->submission->status, [
-                    SubmissionStatus::OnReview, 
-                    SubmissionStatus::PaymentDeclined, 
-                    SubmissionStatus::OnPresentation, 
-                    SubmissionStatus::Editing
+                    SubmissionStatus::OnReview,
+                    SubmissionStatus::PaymentDeclined,
+                    SubmissionStatus::OnPresentation,
+                    SubmissionStatus::Editing,
                 ]),
         ]);
     }

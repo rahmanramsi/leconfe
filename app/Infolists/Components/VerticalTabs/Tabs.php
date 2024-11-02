@@ -35,7 +35,7 @@ class Tabs extends ComponentsTabs
     public function verticalSpace(string $verticalSpace): static
     {
         $verticalSpace = $this->evaluate($verticalSpace);
-        if (str_starts_with($verticalSpace, 'space-y-')){
+        if (str_starts_with($verticalSpace, 'space-y-')) {
             $this->verticalSpace = $verticalSpace;
         } else {
             throw new \Exception('Invalid verticalSpace provided. Only "space-y-" are allowed.');

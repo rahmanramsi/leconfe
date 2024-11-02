@@ -2,9 +2,7 @@
 
 namespace Database\Factories;
 
-use Carbon\Carbon;
 use App\Models\User;
-use Squire\Models\Currency;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,6 +18,7 @@ class RegistrationFactory extends Factory
     public function definition(): array
     {
         $randomUser = User::pluck('id')->random();
+
         return [
             'user_id' => $randomUser,
             'is_trashed' => false,

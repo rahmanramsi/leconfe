@@ -3,11 +3,11 @@
 namespace App\Frontend\Website\Pages;
 
 use App\Events\UserLoggedIn;
-use Livewire\Attributes\Rule;
-use Illuminate\Validation\ValidationException;
-use DanHarrin\LivewireRateLimiting\WithRateLimiting;
 use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
+use DanHarrin\LivewireRateLimiting\WithRateLimiting;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Validation\ValidationException;
+use Livewire\Attributes\Rule;
 
 class Login extends Page
 {
@@ -41,7 +41,7 @@ class Login extends Page
         return route('filament.administration.home');
     }
 
-    public function getViewData() : array
+    public function getViewData(): array
     {
         return [
             'registerUrl' => null,

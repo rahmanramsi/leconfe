@@ -2,20 +2,13 @@
 
 namespace App\Notifications;
 
-use App\Models\User;
-use Illuminate\Support\Str;
-use App\Models\Registration;
-use Illuminate\Bus\Queueable;
-use App\Providers\PanelProvider;
-use Filament\Notifications\Actions\Action;
-use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use App\Models\Enums\RegistrationPaymentState;
-use Illuminate\Notifications\Messages\MailMessage;
 use App\Mail\Templates\RegistrationPaymentDecisionMail;
 use App\Mail\Templates\SubmissionPaymentDecisionMail;
-use App\Panel\ScheduledConference\Resources\RegistrantResource;
+use App\Models\Enums\RegistrationPaymentState;
+use App\Models\Registration;
 use Filament\Notifications\Notification as FilamentNotification;
+use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Notification;
 
 class RegistrationPaymentDecision extends Notification
 {
@@ -38,7 +31,7 @@ class RegistrationPaymentDecision extends Notification
     {
         return ['database', 'mail'];
     }
-    
+
     /**
      * Get the mail representation of the notification.
      */
@@ -46,7 +39,7 @@ class RegistrationPaymentDecision extends Notification
     {
         $submission = $this->registration->submission;
 
-        if($submission) {
+        if ($submission) {
             return (new SubmissionPaymentDecisionMail($submission, $this->registration, $this->state))
                 ->to($notifiable);
         }
@@ -61,14 +54,14 @@ class RegistrationPaymentDecision extends Notification
 
         $body = "Dear {$this->registration->user->full_name}, <br>";
 
-        if($submission) {
-            $body .= "Your payment to <strong>{$submission->getMeta('title')}</strong> submission status now are " . ($this->state === RegistrationPaymentState::Paid->value ?
-            "<strong>paid</strong>." : "<strong>unpaid</strong>, please finish the payment to continue your submission process.");
+        if ($submission) {
+            $body .= "Your payment to <strong>{$submission->getMeta('title')}</strong> submission status now are ".($this->state === RegistrationPaymentState::Paid->value ?
+            '<strong>paid</strong>.' : '<strong>unpaid</strong>, please finish the payment to continue your submission process.');
         } else {
-            $body .= "Your registration ({$this->registration->registrationPayment->name}) payment status now are " . ($this->state === RegistrationPaymentState::Paid->value ?
-            "<strong>paid</strong>." : "<strong>unpaid</strong>, please finish the payment to finish your registration.");
+            $body .= "Your registration ({$this->registration->registrationPayment->name}) payment status now are ".($this->state === RegistrationPaymentState::Paid->value ?
+            '<strong>paid</strong>.' : '<strong>unpaid</strong>, please finish the payment to finish your registration.');
         }
-        
+
         return FilamentNotification::make()
             ->title('Participant Registration')
             ->body($body)

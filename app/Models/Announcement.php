@@ -12,7 +12,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Announcement extends Model implements HasMedia
 {
-    use Cachable, Metable, BelongsToScheduledConference, InteractsWithMedia;
+    use BelongsToScheduledConference, Cachable, InteractsWithMedia, Metable;
 
     protected $fillable = [
         'title',

@@ -3,7 +3,6 @@
 namespace App\Actions\Tracks;
 
 use App\Models\ScheduledConference;
-use App\Models\SubmissionFileType;
 use App\Models\Track;
 use Lorisleiva\Actions\Concerns\AsAction;
 

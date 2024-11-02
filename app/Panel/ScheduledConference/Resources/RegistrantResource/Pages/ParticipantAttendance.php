@@ -2,22 +2,20 @@
 
 namespace App\Panel\ScheduledConference\Resources\RegistrantResource\Pages;
 
-use App\Models\Timeline;
+use App\Infolists\Components\LivewireEntry;
+use App\Infolists\Components\VerticalTabs\Tab;
+use App\Infolists\Components\VerticalTabs\Tabs;
 use App\Models\Registration;
+use App\Models\Timeline;
+use App\Panel\ScheduledConference\Livewire\RegistrantAttendance;
+use App\Panel\ScheduledConference\Resources\RegistrantResource;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
+use Filament\Infolists\Concerns\InteractsWithInfolists;
+use Filament\Infolists\Contracts\HasInfolists;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\Page;
-use Filament\Support\Colors\Color;
-use Filament\Forms\Contracts\HasForms;
 use Illuminate\Contracts\Support\Htmlable;
-use App\Infolists\Components\LivewireEntry;
-use Filament\Infolists\Components\TextEntry;
-use App\Infolists\Components\VerticalTabs\Tab;
-use Filament\Infolists\Contracts\HasInfolists;
-use App\Infolists\Components\VerticalTabs\Tabs;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Infolists\Concerns\InteractsWithInfolists;
-use App\Panel\ScheduledConference\Resources\RegistrantResource;
-use App\Panel\ScheduledConference\Livewire\RegistrantAttendance;
 
 class ParticipantAttendance extends Page implements HasForms, HasInfolists
 {
@@ -34,7 +32,7 @@ class ParticipantAttendance extends Page implements HasForms, HasInfolists
         $this->registration = $record;
     }
 
-    public function getTitle(): string | Htmlable
+    public function getTitle(): string|Htmlable
     {
         return $this->registration->user->full_name;
     }
@@ -50,8 +48,8 @@ class ParticipantAttendance extends Page implements HasForms, HasInfolists
 
         return $breadcrumbs;
     }
-    
-    public function infolist(Infolist $infolist) : Infolist
+
+    public function infolist(Infolist $infolist): Infolist
     {
         return $infolist
             ->schema([
@@ -63,7 +61,7 @@ class ParticipantAttendance extends Page implements HasForms, HasInfolists
                             ->orWhere('require_attendance', true)
                             ->with(['sessions'])
                             ->get();
-                        
+
                         foreach ($timelines as $timeline) {
                             $components[] = Tab::make($timeline->name)
                                 ->badge(fn () => $timeline->sessions->count())
@@ -72,10 +70,10 @@ class ParticipantAttendance extends Page implements HasForms, HasInfolists
                                         ->livewire(RegistrantAttendance::class, [
                                             'registration' => $this->registration,
                                             'timeline' => $timeline,
-                                        ])
+                                        ]),
                                 ]);
                         }
-                
+
                         return $components;
                     }),
             ]);

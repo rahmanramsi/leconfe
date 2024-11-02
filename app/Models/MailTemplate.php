@@ -4,9 +4,7 @@ namespace App\Models;
 
 use App\Facades\Setting;
 use App\Models\Concerns\BelongsToConference;
-use Exception;
 use Illuminate\Contracts\Mail\Mailable;
-use Illuminate\Support\HtmlString;
 use Spatie\MailTemplates\Interfaces\MailTemplateInterface;
 use Spatie\MailTemplates\Models\MailTemplate as BaseMailTemplate;
 
@@ -33,7 +31,7 @@ class MailTemplate extends BaseMailTemplate implements MailTemplateInterface
     public static function findForMailable(Mailable $mailable): self
     {
         $mailTemplate = static::forMailable($mailable)->first();
-        if (!$mailTemplate) {
+        if (! $mailTemplate) {
             $mailTemplate = new static([
                 'mailable' => get_class($mailable),
                 'subject' => $mailable::getDefaultSubject(),
@@ -44,6 +42,7 @@ class MailTemplate extends BaseMailTemplate implements MailTemplateInterface
 
         return $mailTemplate;
     }
+
     public static function getDefaultHeader(): string
     {
         return '';

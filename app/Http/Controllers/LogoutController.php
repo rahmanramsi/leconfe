@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 class LogoutController extends Controller
 {
     public function __invoke()
@@ -13,11 +11,11 @@ class LogoutController extends Controller
         session()->invalidate();
         session()->regenerateToken();
 
-        if(app()->getCurrentScheduledConference()){
+        if (app()->getCurrentScheduledConference()) {
             return redirect()->route('livewirePageGroup.scheduledConference.pages.login');
         }
 
-        if(app()->getCurrentConference()){
+        if (app()->getCurrentConference()) {
             return redirect()->route('livewirePageGroup.conference.pages.login');
         }
 

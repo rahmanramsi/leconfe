@@ -15,7 +15,7 @@ class PluginServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->scoped('plugin', function (): PluginManager {
-            return new PluginManager();
+            return new PluginManager;
         });
 
     }
@@ -25,7 +25,7 @@ class PluginServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Plugin::register('DefaultTheme', new DefaultTheme(), true);
+        Plugin::register('DefaultTheme', new DefaultTheme, true);
         Plugin::initialize();
     }
 }

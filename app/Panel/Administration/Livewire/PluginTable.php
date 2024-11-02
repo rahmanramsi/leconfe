@@ -45,10 +45,10 @@ class PluginTable extends Component implements HasForms, HasTable
                     ->wrap()
                     ->sortable()
                     ->searchable()
-                    ->description(fn(Plugin $record) => $record->description)
-                    ->weight(fn(Plugin $record) => $record->plugin->isEnabled() ? FontWeight::SemiBold : FontWeight::Light)
-                    ->url(fn(Plugin $record) => $record->plugin->isEnabled() ? $record->plugin?->getPluginPage() : null)
-                    ->color(fn(Plugin $record) => ($record->plugin->isEnabled() && $record->plugin?->getPluginPage()) ? 'primary' : null),
+                    ->description(fn (Plugin $record) => $record->description)
+                    ->weight(fn (Plugin $record) => $record->plugin->isEnabled() ? FontWeight::SemiBold : FontWeight::Light)
+                    ->url(fn (Plugin $record) => $record->plugin->isEnabled() ? $record->plugin?->getPluginPage() : null)
+                    ->color(fn (Plugin $record) => ($record->plugin->isEnabled() && $record->plugin?->getPluginPage()) ? 'primary' : null),
                 TextColumn::make('version')
                     ->label(__('general.version')),
                 TextColumn::make('author')
@@ -56,7 +56,7 @@ class PluginTable extends Component implements HasForms, HasTable
                 ToggleColumn::make('enabled')
                     ->label(__('general.enabled'))
                     ->visible(auth()->user()->can('Plugin:update'))
-                    ->getStateUsing(fn(Plugin $record) => $record->plugin->isEnabled())
+                    ->getStateUsing(fn (Plugin $record) => $record->plugin->isEnabled())
                     ->updateStateUsing(function (Plugin $record, $state) {
                         $record->plugin->enable($state);
 
@@ -66,7 +66,7 @@ class PluginTable extends Component implements HasForms, HasTable
             ->actions([
                 ActionGroup::make([
                     DeleteAction::make()
-                        ->authorize(fn(Plugin $record) => auth()->user()->can('delete', $record))
+                        ->authorize(fn (Plugin $record) => auth()->user()->can('delete', $record))
                         ->action(function (Plugin $record, $action) {
                             FacadesPlugin::uninstall($record->id);
 
@@ -74,7 +74,7 @@ class PluginTable extends Component implements HasForms, HasTable
 
                             $action->success();
                         })
-                        ->successNotificationTitle(fn(Plugin $record) => $record->name . ' uninstalled.'),
+                        ->successNotificationTitle(fn (Plugin $record) => $record->name.' uninstalled.'),
                 ]),
                 // TODO : Add actions based on plugin. Currently there's no way to create a dinamically action
 

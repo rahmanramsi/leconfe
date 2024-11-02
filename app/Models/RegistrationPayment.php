@@ -2,17 +2,17 @@
 
 namespace App\Models;
 
-use Plank\Metable\Metable;
-use Illuminate\Database\Eloquent\Model;
-use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use App\Models\Concerns\BelongsToScheduledConference;
 use App\Models\Enums\RegistrationPaymentState;
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Plank\Metable\Metable;
 
 class RegistrationPayment extends Model
 {
-    use BelongsToScheduledConference, Cachable, Metable, HasFactory;
+    use BelongsToScheduledConference, Cachable, HasFactory, Metable;
 
     protected $fillable = [
         'type',

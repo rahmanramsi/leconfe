@@ -3,12 +3,9 @@
 namespace App\Models;
 
 use App\Models\Enums\ScheduledConferenceState;
-use App\Models\Enums\ScheduledConferenceType;
-use App\Models\Meta\ConferenceMeta;
 use Filament\Models\Contracts\HasAvatar;
 use Filament\Models\Contracts\HasName;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -26,6 +23,7 @@ class Conference extends Model implements HasAvatar, HasMedia, HasName
     use Cachable, HasFactory, HasSlug, InteractsWithMedia, Metable;
 
     public const SCOPE_INTERNATIONAL = 'international';
+
     public const SCOPE_NATIONAL = 'national';
 
     /**
@@ -144,7 +142,7 @@ class Conference extends Model implements HasAvatar, HasMedia, HasName
         return SlugOptions::create()
             ->generateSlugsFrom('name')
             ->saveSlugsTo('path')
-            ->skipGenerateWhen(fn() => $this->path !== null);
+            ->skipGenerateWhen(fn () => $this->path !== null);
     }
 
     public function getPanelUrl(): string
@@ -170,16 +168,19 @@ class Conference extends Model implements HasAvatar, HasMedia, HasName
     public function getLicenseUrl(): string
     {
         $licenseUrl = $this->getMeta('license_url');
-        if($licenseUrl == 'custom'){
+        if ($licenseUrl == 'custom') {
             return $this->getMeta('license_url_custom');
         }
+
         return $licenseUrl;
     }
 
-    public function getCopyrightHolderForSubmission(Submission $submission){
-        return match($this->getMeta('copyright_holder')){
-            'author' => $submission->authors->reduce(function ($carry, $author){
-                $carry .= $author->fullName . '; ';
+    public function getCopyrightHolderForSubmission(Submission $submission)
+    {
+        return match ($this->getMeta('copyright_holder')) {
+            'author' => $submission->authors->reduce(function ($carry, $author) {
+                $carry .= $author->fullName.'; ';
+
                 return $carry;
             }),
             'conference' => $this->name,
@@ -189,7 +190,7 @@ class Conference extends Model implements HasAvatar, HasMedia, HasName
 
     public function getCopyrightYearForSubmission(Submission $submission)
     {
-        return match($this->getMeta('copyright_year')){
+        return match ($this->getMeta('copyright_year')) {
             'proceeding' => $submission->proceeding?->published_at?->format('Y') ?? now()->format('Y'),
             'paper' => $submission->published_at?->format('Y') ?? now()->format('Y'),
         };
@@ -209,24 +210,24 @@ class Conference extends Model implements HasAvatar, HasMedia, HasName
             'languages' => ['en'],
             'primary_citation_format' => 'apa',
             'enabled_citation_styles' => [
-                "harvard-cite-them-right",
-                "ieee",
-                "modern-language-association",
-                "turabian-fullnote-bibliography",
-                "vancouver",
-                "ama",
-                "chicago-author-date",
-                "associacao-brasileira-de-normas-tecnicas",
-                "apa",
-                "acs-nano",
-                "acm-sig-proceedings"
+                'harvard-cite-them-right',
+                'ieee',
+                'modern-language-association',
+                'turabian-fullnote-bibliography',
+                'vancouver',
+                'ama',
+                'chicago-author-date',
+                'associacao-brasileira-de-normas-tecnicas',
+                'apa',
+                'acs-nano',
+                'acm-sig-proceedings',
             ],
             'downloadable_citation_formats' => [
                 'ris',
                 'bibtex',
             ],
             'copyright_holder' => 'conference',
-            'license_url' => "https://creativecommons.org/licenses/by-nc-nd/4.0",
+            'license_url' => 'https://creativecommons.org/licenses/by-nc-nd/4.0',
             'copyright_year' => 'paper',
             'theme' => 'DefaultTheme',
         ];

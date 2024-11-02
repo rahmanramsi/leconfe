@@ -3,20 +3,18 @@
 namespace App\Panel\Conference\Livewire;
 
 use App\Actions\Conferences\ConferenceUpdateAction;
+use App\Forms\Components\TinyEditor;
+use App\Models\Conference;
 use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Livewire\Component;
-use App\Forms\Components\TinyEditor;
-use App\Models\Conference;
-use Filament\Forms\Components\Textarea;
-use PhpParser\Node\Stmt\Label;
-use Squire\Models\Country;
 
 class MastHeadSetting extends Component implements HasForms
 {
@@ -87,7 +85,7 @@ class MastHeadSetting extends Component implements HasForms
                                 TinyEditor::make('meta.about')
                                     ->label(__('general.about_the_conference'))
                                     ->profile('basic'),
-                            ])
+                            ]),
                     ]),
                 Actions::make([
                     Action::make('save')

@@ -4,18 +4,18 @@ namespace App\Frontend\Website\Pages;
 
 class Logout extends Page
 {
-    function __invoke()
+    public function __invoke()
     {
-		auth()->logout();
+        auth()->logout();
 
         session()->invalidate();
         session()->regenerateToken();
 
-        if(app()->getCurrentScheduledConference()){
+        if (app()->getCurrentScheduledConference()) {
             return redirect()->route('livewirePageGroup.scheduledConference.pages.login');
         }
 
-        if(app()->getCurrentConference()){
+        if (app()->getCurrentConference()) {
             return redirect()->route('livewirePageGroup.conference.pages.login');
         }
 

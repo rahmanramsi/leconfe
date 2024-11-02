@@ -20,10 +20,9 @@ class RevisionFiles extends SubmissionFilesTable
         $this->tableDescription = __('general.upload_your_reviews_files_here');
     }
 
-
     public function isViewOnly(): bool
     {
-        if($this->submission->stage !== SubmissionStage::PeerReview) {
+        if ($this->submission->stage !== SubmissionStage::PeerReview) {
             return true;
         }
 

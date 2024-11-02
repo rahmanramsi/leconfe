@@ -22,7 +22,7 @@ class SidebarManager
         }
     }
 
-    public function register(Sidebar | array $sidebars): void
+    public function register(Sidebar|array $sidebars): void
     {
         if ($sidebars instanceof Sidebar) {
             $sidebars = [$sidebars];
@@ -43,17 +43,17 @@ class SidebarManager
         return collect($this->sidebars)
             ->reject(function (Sidebar $sidebar) use ($activeOnly) {
                 if ($activeOnly) {
-                    return !$this->isActiveSidebar($sidebar);
+                    return ! $this->isActiveSidebar($sidebar);
                 }
 
                 return false;
             })
-            ->sortBy(function (Sidebar $sidebar){
+            ->sortBy(function (Sidebar $sidebar) {
                 // Sort by the order of the block in the active block list if it exists.
                 // start from 1 to avoid 0 index
                 // if the block is not in the active block list, it will be placed at the end
                 $index = array_search($sidebar->getId(), $this->getActiveList());
-                
+
                 return ($index === false) ? count($this->getActiveList()) + 1 : $index + 1;
             })
             ->values();
@@ -64,9 +64,10 @@ class SidebarManager
         return in_array($sidebar->getId(), $this->getActiveList());
     }
 
-    public function getActiveList(): array 
+    public function getActiveList(): array
     {
         $context = app()->getCurrentScheduledConference() ?? app()->getCurrentConference() ?? app()->getSite();
+
         return $context->getMeta('sidebars') ?? [];
     }
 

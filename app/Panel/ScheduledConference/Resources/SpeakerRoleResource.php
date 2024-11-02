@@ -2,15 +2,15 @@
 
 namespace App\Panel\ScheduledConference\Resources;
 
-use Filament\Tables;
-use Filament\Forms\Form;
-use Filament\Tables\Table;
 use App\Models\SpeakerRole;
-use Filament\Resources\Resource;
 use App\Tables\Columns\IndexColumn;
-use Illuminate\Validation\Rules\Unique;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Form;
+use Filament\Resources\Resource;
+use Filament\Tables;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Validation\Rules\Unique;
 
 class SpeakerRoleResource extends Resource
 {
@@ -69,7 +69,7 @@ class SpeakerRoleResource extends Resource
                         try {
                             $speakerCount = $record->speakers()->count();
                             if ($speakerCount > 0) {
-                                throw new \Exception(__('general.cannot_delete_speakers_role',['variable' => $record->name]));
+                                throw new \Exception(__('general.cannot_delete_speakers_role', ['variable' => $record->name]));
                             }
 
                             return $record->delete();

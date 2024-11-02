@@ -2,29 +2,19 @@
 
 namespace App\Panel\ScheduledConference\Livewire;
 
-
-use App\Actions\Conferences\ConferenceUpdateAction;
 use App\Actions\ScheduledConferences\ScheduledConferenceUpdateAction;
-use App\Forms\Components\CssFileUpload;
+use App\Forms\Components\TinyEditor;
 use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\Actions\Action;
-use Filament\Forms\Components\BaseFileUpload;
-use Filament\Forms\Components\ColorPicker;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
-use Illuminate\Support\Str;
 use Livewire\Component;
-use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
-use App\Forms\Components\TinyEditor;
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Textarea;
-use Squire\Models\Country;
 
 class MastHeadSetting extends Component implements HasForms
 {
@@ -96,7 +86,7 @@ class MastHeadSetting extends Component implements HasForms
                                     ->columnSpanFull(),
                                 TextInput::make('meta.location')
                                     ->label(__('general.location'))
-                                    ->helperText(__('general.location_description'))
+                                    ->helperText(__('general.location_description')),
                             ]),
                         Section::make(__('general.key_information'))
                             ->description(__('general.key_information_pricide_a_short_description'))
@@ -117,7 +107,7 @@ class MastHeadSetting extends Component implements HasForms
                                 TinyEditor::make('meta.about')
                                     ->label(__('general.about_the_scheduled_conference'))
                                     ->profile('advanced'),
-                            ])
+                            ]),
                     ]),
                 Actions::make([
                     Action::make('save')

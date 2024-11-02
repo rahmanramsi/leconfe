@@ -2,40 +2,34 @@
 
 namespace App\Panel\ScheduledConference\Livewire\Submissions\Components;
 
-use App\Models\User;
 use App\Facades\Setting;
-use App\Models\Submission;
-use Filament\Tables\Table;
-use Illuminate\Support\Str;
-use App\Models\Registration;
-use App\Models\PaymentManual;
-use App\Models\RegistrationType;
-use Filament\Support\Colors\Color;
-use Illuminate\Support\HtmlString;
-use Filament\Tables\Actions\Action;
-use Filament\Tables\Grouping\Group;
-use App\Notifications\NewRegistration;
-use Filament\Forms\Contracts\HasForms;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Contracts\HasTable;
-use Illuminate\Database\Eloquent\Model;
-use Filament\Tables\Columns\Layout\Split;
-use Filament\Infolists\Components\TextEntry;
-use Illuminate\View\Compilers\BladeCompiler;
 use App\Models\Enums\RegistrationPaymentState;
 use App\Models\Enums\SubmissionStage;
 use App\Models\Enums\SubmissionStatus;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Tables\Concerns\InteractsWithTable;
-use Illuminate\Contracts\Database\Eloquent\Builder;
+use App\Models\RegistrationType;
+use App\Models\Submission;
+use App\Models\User;
+use App\Notifications\NewRegistration;
 use App\Panel\ScheduledConference\Resources\SubmissionResource;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
+use Filament\Support\Colors\Color;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Concerns\InteractsWithTable;
+use Filament\Tables\Contracts\HasTable;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\HtmlString;
+use Illuminate\Support\Str;
+use Illuminate\View\Compilers\BladeCompiler;
 
 class AuthorRegistration extends \Livewire\Component implements HasForms, HasTable
 {
     use InteractsWithForms, InteractsWithTable;
 
     public Submission $submission;
-    
+
     public function table(Table $table): Table
     {
         return $table
@@ -44,7 +38,7 @@ class AuthorRegistration extends \Livewire\Component implements HasForms, HasTab
                     ->where('level', RegistrationType::LEVEL_AUTHOR)
                     ->where('active', true)
             )
-            ->heading(new HtmlString(BladeCompiler::render(<<<BLADE
+            ->heading(new HtmlString(BladeCompiler::render(<<<'BLADE'
                 <strong class="font-semibold">{{ __('general.author_registration') }}</strong>
                 <p class="text-sm font-normal mt-1 text-gray-500">You have to register to one of these registration type below to finish your submission payment.</p>
             BLADE)))
@@ -56,7 +50,7 @@ class AuthorRegistration extends \Livewire\Component implements HasForms, HasTab
                     ->label(__('general.registration_type'))
                     ->description(fn (Model $record) => $record->getMeta('description')),
                 TextColumn::make('quota')
-                    ->formatStateUsing(fn (Model $record) => $record->getPaidParticipantCount() . "/" . $record->quota)
+                    ->formatStateUsing(fn (Model $record) => $record->getPaidParticipantCount().'/'.$record->quota)
                     ->badge()
                     ->color(fn (Model $record) => $record->isQuotaFull() ? Color::Red : null),
                 TextColumn::make('status')
@@ -133,11 +127,11 @@ class AuthorRegistration extends \Livewire\Component implements HasForms, HasTab
                         BLADE));
                     })
                     ->action(function (Model $record, Action $action) {
-                        if($this->submission->registration) {
+                        if ($this->submission->registration) {
                             return $action->sendFailureNotification();
                         }
 
-                        if(!$record->isOpen()) {
+                        if (! $record->isOpen()) {
                             return $action->sendFailureNotification();
                         }
 
@@ -148,7 +142,7 @@ class AuthorRegistration extends \Livewire\Component implements HasForms, HasTab
                                 'user_id' => auth()->user()->id,
                                 'registration_type_id' => $record->id,
                             ]);
-                    
+
                             $registration->registrationPayment()->create([
                                 'name' => $record->type,
                                 'level' => $record->level,
@@ -157,12 +151,12 @@ class AuthorRegistration extends \Livewire\Component implements HasForms, HasTab
                                 'currency' => $record->currency,
                                 'state' => $isFree ? RegistrationPaymentState::Paid : RegistrationPaymentState::Unpaid,
                             ]);
-                    
+
                             User::whereHas('roles', function ($query) {
                                 $query->whereHas('permissions', function ($query) {
                                     $query->where('name', 'Registration:notified');
                                 });
-                            })->get()->each(function ($user) use($registration) {
+                            })->get()->each(function ($user) use ($registration) {
                                 $user->notify(
                                     new NewRegistration(
                                         registration: $registration,
@@ -176,7 +170,7 @@ class AuthorRegistration extends \Livewire\Component implements HasForms, HasTab
 
                         $action->successRedirectUrl(
                             SubmissionResource::getUrl('view', [
-                                'record' => $this->submission->getKey()
+                                'record' => $this->submission->getKey(),
                             ])
                         );
 
@@ -187,7 +181,7 @@ class AuthorRegistration extends \Livewire\Component implements HasForms, HasTab
             ->recordAction(fn (Model $record) => ($record->isOpen() && ($this->submission->status === SubmissionStatus::OnPayment || $this->submission->stage === SubmissionStage::Payment)) ? 'author-registration' : null)
             ->paginated(false);
     }
-    
+
     public function render()
     {
         return view('tables.table');

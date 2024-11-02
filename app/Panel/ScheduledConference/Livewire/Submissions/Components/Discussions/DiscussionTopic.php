@@ -35,9 +35,7 @@ class DiscussionTopic extends \Livewire\Component implements HasForms, HasTable
 
     public SubmissionStage $stage;
 
-    public function mount(Submission $submission, SubmissionStage $stage)
-    {
-    }
+    public function mount(Submission $submission, SubmissionStage $stage) {}
 
     protected function getFormSchema(): array
     {
@@ -124,7 +122,7 @@ class DiscussionTopic extends \Livewire\Component implements HasForms, HasTable
                                 'user_id' => $record->participants()->pluck('user_id')->toArray(),
                             ]);
                         })
-                        ->authorize(fn($record) => auth()->user()->can('update', $record))
+                        ->authorize(fn ($record) => auth()->user()->can('update', $record))
                         ->form($this->getFormSchema())
                         ->successNotificationTitle(__('general.topic_updated_successfully'))
                         ->action(function (Action $action, array $data, Model $record) {
@@ -136,7 +134,7 @@ class DiscussionTopic extends \Livewire\Component implements HasForms, HasTable
                             $action->success();
                         }),
                     Action::make('close')
-                        ->authorize(fn($record) => auth()->user()->can('close', $record))
+                        ->authorize(fn ($record) => auth()->user()->can('close', $record))
                         ->label(fn ($record): string => $record->open ? __('general.close') : __('general.open'))
                         ->color(fn ($record): string => $record->open ? 'warning' : 'success')
                         ->icon(fn ($record): string => $record->open ? 'lineawesome-lock-solid' : 'lineawesome-unlock-solid')
