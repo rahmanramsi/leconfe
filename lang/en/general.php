@@ -963,4 +963,6 @@ return [
     'past_conference' => 'Past Conference',
     'upcoming_conference' => 'Upcoming Conference',
     'view_current_event' => 'View Current Event',
+    'fix_broken_public_storage_plugins' => 'Fix broken public storage/plugins',
+    'successfully_relinked' => 'Successfully relinked public storage/plugins',
 ];
