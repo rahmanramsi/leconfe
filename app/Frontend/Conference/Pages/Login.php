@@ -18,4 +18,12 @@ class Login extends WebsiteLogin
     {
         return route('filament.conference.pages.dashboard');
     }
+
+    public function getBreadcrumbs(): array
+    {
+        return [
+            route(Home::getRouteName()) => __('general.home'),
+            __('general.login'),
+        ];
+    }
 }

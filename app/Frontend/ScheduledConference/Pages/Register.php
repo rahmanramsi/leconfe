@@ -15,4 +15,12 @@ class Register extends WebsiteRegister
 
         return $data;
     }
+
+    public function getBreadcrumbs(): array
+    {
+        return [
+            route(Home::getRouteName()) => __('general.home'),
+            $this->getTitle(),
+        ];
+    }
 }

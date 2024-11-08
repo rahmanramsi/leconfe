@@ -14,6 +14,14 @@ class Login extends WebsiteLogin
         ];
     }
 
+    public function getBreadcrumbs(): array
+    {
+        return [
+            route(Home::getRouteName()) => __('general.home'),
+            __('general.login'),
+        ];
+    }
+
     public function getRedirectUrl(): string
     {
         return route('filament.scheduledConference.pages.dashboard');
