@@ -20,7 +20,7 @@ class StorageLinkValidate
             }
 
             if (! file_exists($link)) {
-                File::link(storage_path('app/public'), $link);
+                File::relativeLink(storage_path('app/public'), $link);
             }
         } catch (\Throwable $th) {
             Log::warning($th->getMessage());
