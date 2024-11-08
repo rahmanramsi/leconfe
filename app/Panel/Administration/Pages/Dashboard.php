@@ -2,9 +2,11 @@
 
 namespace App\Panel\Administration\Pages;
 
+use App\Actions\Leconfe\Relink;
 use Filament\Facades\Filament;
 use Filament\Infolists\Components\Actions;
 use Filament\Infolists\Components\Actions\Action;
+use Filament\Infolists\Components\Grid;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Concerns\InteractsWithInfolists;
 use Filament\Infolists\Contracts\HasInfolists;
@@ -44,58 +46,79 @@ class Dashboard extends Page implements HasInfolists
         return $infolist
             ->schema([
                 Section::make('')
+                    ->columns(2)
                     ->schema([
-                        Actions::make([
-                            Action::make(__('general.expire_user_session'))
-                                ->icon('heroicon-m-user')
-                                ->color('primary')
-                                ->requiresConfirmation()
-                                ->outlined()
-                                ->successNotification(
-                                    Notification::make()
-                                        ->success()
-                                        ->title(__('general.session_cleared'))
-                                        ->body(__('general.notification_successfully_cleared')),
-                                )
-                                ->extraAttributes(['class' => 'w-64'])
-                                ->action(fn (Action $action) => $this->expireUserSession($action)),
-                        ]),
-                        Actions::make([
-                            Action::make(__('general.clear_data_caches'))
-                                ->icon('heroicon-m-circle-stack')
-                                ->color('primary')
-                                ->requiresConfirmation()
-                                ->outlined()
-                                ->successNotification(
-                                    Notification::make()
-                                        ->success()
-                                        ->title(__('general.successfully_cleared'))
-                                        ->body(__('general.data_caches_cleared_successfully')),
-                                )
-                                ->extraAttributes(['class' => 'w-64'])
-                                ->action(function (Action $action) {
-                                    $this->runArtisanCommand('cache:clear', $action);
-                                    $this->runArtisanCommand('optimize:clear', $action);
-                                }),
-                        ]),
-                        Actions::make([
-                            Action::make(__('general.clear_view_caches'))
-                                ->icon('heroicon-m-trash')
-                                ->color('primary')
-                                ->requiresConfirmation()
-                                ->outlined()
-                                ->successNotification(
-                                    Notification::make()
-                                        ->success()
-                                        ->title(__('general.successfully_cleared'))
-                                        ->body(__('general.view_caches_cleared_successfully')),
-                                )
-                                ->extraAttributes(['class' => 'w-64'])
-                                ->action(function (Action $action) {
-                                    $this->runArtisanCommand('view:clear', $action);
-                                    $this->runArtisanCommand('icons:cache', $action);
-                                }),
-                        ]),
+                        Grid::make(1)
+                            ->columnSpan(1)
+                            ->schema([
+                                Actions::make([
+                                    Action::make(__('general.expire_user_session'))
+                                        ->icon('heroicon-m-user')
+                                        ->color('primary')
+                                        ->requiresConfirmation()
+                                        ->outlined()
+                                        ->successNotification(
+                                            Notification::make()
+                                                ->success()
+                                                ->title(__('general.session_cleared'))
+                                                ->body(__('general.notification_successfully_cleared')),
+                                        )
+                                        ->extraAttributes(['class' => 'w-full'])
+                                        ->action(fn(Action $action) => $this->expireUserSession($action)),
+                                ]),
+                                Actions::make([
+                                    Action::make(__('general.clear_data_caches'))
+                                        ->icon('heroicon-m-circle-stack')
+                                        ->color('primary')
+                                        ->requiresConfirmation()
+                                        ->outlined()
+                                        ->successNotification(
+                                            Notification::make()
+                                                ->success()
+                                                ->title(__('general.successfully_cleared'))
+                                                ->body(__('general.data_caches_cleared_successfully')),
+                                        )
+                                        ->extraAttributes(['class' => 'w-full'])
+                                        ->action(function (Action $action) {
+                                            $this->runArtisanCommand('cache:clear', $action);
+                                            $this->runArtisanCommand('optimize:clear', $action);
+                                        }),
+                                ]),
+                                Actions::make([
+                                    Action::make(__('general.clear_view_caches'))
+                                        ->icon('heroicon-m-trash')
+                                        ->color('primary')
+                                        ->requiresConfirmation()
+                                        ->outlined()
+                                        ->successNotification(
+                                            Notification::make()
+                                                ->success()
+                                                ->title(__('general.successfully_cleared'))
+                                                ->body(__('general.view_caches_cleared_successfully')),
+                                        )
+                                        ->extraAttributes(['class' => 'w-full'])
+                                        ->action(function (Action $action) {
+                                            $this->runArtisanCommand('view:clear', $action);
+                                            $this->runArtisanCommand('icons:cache', $action);
+                                        }),
+                                ]),
+                                Actions::make([
+                                    Action::make('relink')
+                                        ->label(__('general.fix_broken_public_storage_plugins'))
+                                        ->icon('heroicon-m-folder')
+                                        ->color('primary')
+                                        ->requiresConfirmation()
+                                        ->successNotificationTitle(__('general.successfully_relinked'))
+                                        ->outlined()
+                                        ->extraAttributes(['class' => 'w-full'])
+                                        ->action(function (Action $action) {
+                                            Relink::run();
+
+                                            $action->sendSuccessNotification();
+                                        }),
+                                ]),
+                            ])
+                     
                     ]),
             ]);
     }
