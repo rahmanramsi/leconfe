@@ -2,6 +2,7 @@
 
 namespace App\Actions\System;
 
+use App\Actions\Leconfe\Relink;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -16,11 +17,9 @@ class StorageLinkValidate
             $link = public_path('storage');
 
             if (file_exists($link) && ! is_link($link)) {
-                File::deleteDirectory($link);
-            }
+                Relink::run();
 
-            if (! file_exists($link)) {
-                File::relativeLink(storage_path('app/public'), $link);
+                Log::info('Storage link has been relinked.');
             }
         } catch (\Throwable $th) {
             Log::warning($th->getMessage());
