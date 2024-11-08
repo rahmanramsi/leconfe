@@ -47,7 +47,7 @@ return [
             'CSS.AllowTricky' => true,
             'AutoFormat.AutoParagraph' => true,
             'AutoFormat.RemoveEmpty' => true,
-            
+
         ],
 
     ],

@@ -64,7 +64,7 @@ class Dashboard extends Page implements HasInfolists
                                                 ->body(__('general.notification_successfully_cleared')),
                                         )
                                         ->extraAttributes(['class' => 'w-full'])
-                                        ->action(fn(Action $action) => $this->expireUserSession($action)),
+                                        ->action(fn (Action $action) => $this->expireUserSession($action)),
                                 ]),
                                 Actions::make([
                                     Action::make(__('general.clear_data_caches'))
@@ -117,8 +117,8 @@ class Dashboard extends Page implements HasInfolists
                                             $action->sendSuccessNotification();
                                         }),
                                 ]),
-                            ])
-                     
+                            ]),
+
                     ]),
             ]);
     }
