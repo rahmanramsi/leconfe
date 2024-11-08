@@ -21,6 +21,7 @@ class Kernel extends ConsoleKernel
         Actions\Leconfe\CheckVersionAction::class,
         Actions\Leconfe\CheckLatestVersion::class,
         Actions\Leconfe\GetUpgradeActionHistory::class,
+        Actions\Leconfe\Relink::class,
     ];
 
     /**
