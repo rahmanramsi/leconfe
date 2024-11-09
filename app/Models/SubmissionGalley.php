@@ -41,11 +41,11 @@ class SubmissionGalley extends Model implements HasMedia, Sortable
 
     public function isPdf()
     {
-        if ($this->file->media->mime_type === 'application/pdf') {
+        if ($this->file?->media->mime_type === 'application/pdf') {
             return true;
         }
 
-        if ($this->remove_url && Str::endsWith($this->remote_url, '.pdf')) {
+        if ($this->remote_url && Str::endsWith($this->remote_url, '.pdf')) {
             return true;
         }
 
