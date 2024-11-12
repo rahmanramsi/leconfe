@@ -66,7 +66,6 @@ class UserResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return static::getModel()::query()
-
             ->where('id', '!=', auth()->id())
             ->with(['meta', 'media', 'bans']);
     }
