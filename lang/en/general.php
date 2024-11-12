@@ -47,7 +47,7 @@ return [
     'register_as' => 'Register as',
     'which_conference_interested_for' => 'Which conferences listed on this website are you interested in registering for?',
     'privacy_statement_agree' => 'I accept and approve according to <a class="link link-primary link-hover" href=":url">Privacy Statement.</a>',
-    'registration_closed' => 'This conference is currently closing user registrations',
+    'registration_closed' => 'Conference user registration is closed.',
     'registration_complete_message' => 'Thank you for completing the registration! What would you like to proceed with next?',
     'edit_my_profile' => 'Edit My Profile',
     'continue_browsing' => 'Continue Browsing',
@@ -965,4 +965,6 @@ return [
     'view_current_event' => 'View Current Event',
     'fix_broken_public_storage_plugins' => 'Fix broken public storage/plugins',
     'successfully_relinked' => 'Successfully relinked public storage/plugins',
+    'allow_registration' => 'Allow Registration',
+    'allow_registration_helper' => 'Allow public to register on the conference.',
 ];

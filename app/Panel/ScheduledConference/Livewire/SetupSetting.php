@@ -3,8 +3,11 @@
 namespace App\Panel\ScheduledConference\Livewire;
 
 use App\Actions\ScheduledConferences\ScheduledConferenceUpdateAction;
+use App\Models\Enums\UserRole;
 use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\Actions\Action;
+use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -41,10 +44,14 @@ class SetupSetting extends Component implements HasForms
             ->schema([
                 Section::make()
                     ->schema([
+                        Checkbox::make('meta.allow_registration')
+                            ->label(__('general.allow_registration'))
+                            ->helperText(__('general.allow_registration_helper')),
+                        CheckboxList::make('meta.allowed_self_assign_roles')
+                            ->label('Allow User to self register as role')
+                            ->options(UserRole::selfAssignedRoleNames()),
                         Select::make('meta.timezone')
-                            ->options([
-                                ...Timezonelist::toArray(false),
-                            ])
+                            ->options(Timezonelist::toArray(false))
                             ->selectablePlaceholder(false)
                             ->searchable()
                             ->required(),
