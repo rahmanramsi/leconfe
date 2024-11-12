@@ -78,7 +78,13 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasMedia,
     protected function fullName(): Attribute
     {
         return Attribute::make(
-            get: fn () => Str::squish($this->given_name.' '.$this->family_name),
+            get: function(){
+                if($publicName = $this->getMeta('public_name')){
+                    return $publicName;
+                }
+
+                return Str::squish($this->given_name.' '.$this->family_name);
+            },
         );
     }
 

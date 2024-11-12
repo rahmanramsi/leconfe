@@ -965,4 +965,8 @@ return [
     'view_current_event' => 'View Current Event',
     'fix_broken_public_storage_plugins' => 'Fix broken public storage/plugins',
     'successfully_relinked' => 'Successfully relinked public storage/plugins',
+    'allow_registration' => 'Allow Registration',
+    'allow_registration_helper' => 'Allow public to register on the conference.',
+    'public_name' => 'Public Name',
+    'public_name_helper' => 'Specify how you’d like to be addressed. You may also add salutations, middle names, and suffixes if desired.',
 ];
