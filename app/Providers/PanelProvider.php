@@ -271,7 +271,7 @@ class PanelProvider extends ServiceProvider
 
         Table::configureUsing(function (Table $table): void {
             $table
-                ->defaultPaginationPageOption(5)
+                ->defaultPaginationPageOption(10)
                 ->paginationPageOptions([5, 10, 25, 50]);
             Table::$defaultDateDisplayFormat = Setting::get('format_date');
         });
