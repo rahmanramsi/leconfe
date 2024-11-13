@@ -161,7 +161,7 @@ class SpeakerResource extends Resource
 
     public static function renderSelectSpeaker(Speaker $speaker): string
     {
-        return view('forms.select-contributor-serie', ['contributor' => $speaker])->render();
+        return view('forms.select-contributor', ['contributor' => $speaker])->render();
     }
 
     public static function getPages(): array
