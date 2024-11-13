@@ -745,7 +745,7 @@ return [
     'presentation_files' => 'File të Prezantimeve',
     'payment_processing' => 'Përpunimi i Pagesës',
     'payment_waived' => 'Pagesa e Anuluar',
-    'causer_name' => 'Emri i Shkaktar',
+    'causer_name' => 'Nga',
 
     'switch_scheduled_conference' => 'Ndrysho Konferencën e Planifikuar',
     'back_to_conference' => 'Kthehu në Konferencë',

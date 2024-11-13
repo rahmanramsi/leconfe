@@ -745,7 +745,7 @@ return [
     'presentation_files' => 'ملفات العرض',
     'payment_processing' => 'معالجة الدفع',
     'payment_waived' => 'تم إعفاء الدفع',
-    'causer_name' => 'اسم المستخدم',
+    'causer_name' => 'بواسطة',
 
     'switch_scheduled_conference' => 'تبديل المؤتمر المجدول',
     'back_to_conference' => 'العودة إلى المؤتمر',
