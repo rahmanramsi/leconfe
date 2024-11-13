@@ -151,7 +151,7 @@ class CommitteeResource extends Resource
     {
         $committee->load(['serie' => fn ($query) => $query->withoutGlobalScopes([ConferenceScope::class])]);
 
-        return view('forms.select-contributor-serie', ['contributor' => $committee])->render();
+        return view('forms.select-contributor', ['contributor' => $committee])->render();
     }
 
     public static function getPages(): array
