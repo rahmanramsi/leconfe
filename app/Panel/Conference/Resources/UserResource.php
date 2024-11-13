@@ -66,7 +66,6 @@ class UserResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return static::getModel()::query()
-
             ->where('id', '!=', auth()->id())
             ->with(['meta', 'media', 'bans']);
     }
@@ -96,6 +95,10 @@ class UserResource extends Resource
                                     ->required(),
                                 Forms\Components\TextInput::make('family_name')
                                     ->label(__('general.family_name')),
+                                Forms\Components\TextInput::make('meta.public_name')
+                                    ->label(__('general.public_name'))
+                                    ->helperText(__('general.public_name_helper'))
+                                    ->columnSpan(['lg' => 2]),
                                 Forms\Components\TextInput::make('email')
                                     ->required()
                                     ->label(__('general.email'))
@@ -198,13 +201,9 @@ class UserResource extends Resource
                             ->weight(FontWeight::Medium)
                             ->searchable(
                                 query: fn ($query, $search) => $query
-                                    ->where('given_name', 'LIKE', "%{$search}%")
+                                    ->whereMeta('public_name', 'LIKE', "%{$search}%")
+                                    ->orWhere('given_name', 'LIKE', "%{$search}%")
                                     ->orWhere('family_name', 'LIKE', "%{$search}%")
-                            )
-                            ->sortable(
-                                query: fn ($query, $direction) => $query
-                                    ->orderBy('given_name', $direction)
-                                    ->orderBy('family_name', $direction)
                             ),
                         TextColumn::make('email')
                             ->wrap()
@@ -214,11 +213,14 @@ class UserResource extends Resource
                             ->sortable()
                             ->icon('heroicon-m-envelope'),
                         TextColumn::make('affiliation')
-                            // ->color(Color::hex('#A6CE39'))
                             ->size('sm')
                             ->wrap()
                             ->color('gray')
                             ->icon('heroicon-s-building-library')
+                            ->searchable(
+                                query: fn ($query, $search) => $query
+                                    ->whereMeta('affiliation', 'LIKE', "%{$search}%")
+                            )
                             ->getStateUsing(fn (User $record) => $record->getMeta('affiliation')),
                         TextColumn::make('disabled')
                             ->getStateUsing(function (User $record) {
