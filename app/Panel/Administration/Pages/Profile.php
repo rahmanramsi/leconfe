@@ -51,7 +51,7 @@ class Profile extends Page implements HasForms
         ]);
 
         $this->rolesForm->fill([
-            'roles' => $user->roles->filter(fn ($role) => in_array($role->name, UserRole::selfAssignedRoleValues()))->pluck('name')->toArray(),
+            'roles' => $user->roles->filter(fn ($role) => in_array($role->name, UserRole::getAllowedSelfAssignRoleNames()))->pluck('name')->toArray(),
             'meta' => $meta,
         ]);
 
@@ -117,9 +117,9 @@ class Profile extends Page implements HasForms
 
     public function submitInformationForm()
     {
-        $this->skipRender();
+        $data = $this->informationForm->getState();
         try {
-            UserUpdateAction::run(auth()->user(), $this->informationForm->getState());
+            UserUpdateAction::run(auth()->user(), $data);
             Notification::make()
                 ->success()
                 ->title(__('general.saved'))
@@ -141,7 +141,7 @@ class Profile extends Page implements HasForms
                     ->schema([
                         CheckboxList::make('roles')
                             ->label(__('general.roles'))
-                            ->options(UserRole::selfAssignedRoleValues()),
+                            ->options(UserRole::getAllowedSelfAssignRoleNames()),
                         TagsInput::make('meta.reviewing_interests')
                             ->label(__('general.reviewing_interests'))
                             ->placeholder('')
@@ -156,9 +156,8 @@ class Profile extends Page implements HasForms
 
     public function submitRolesForm()
     {
-        $this->skipRender();
+        $data = $this->rolesForm->getState();
         try {
-            $data = $this->rolesForm->getState();
             $user = auth()->user();
 
             UserUpdateAction::run($user, $data);
@@ -201,10 +200,9 @@ class Profile extends Page implements HasForms
 
     public function submitNotificationsForm()
     {
-        $this->skipRender();
+        $data = $this->notificationForm->getState();
+        
         try {
-            $data = $this->notificationForm->getState();
-
             $user = auth()->user();
 
             UserUpdateAction::run($user, $data);
@@ -246,7 +244,7 @@ class Profile extends Page implements HasForms
                         Tab::make('Roles')
                             ->label(__('general.roles'))
                             ->icon('heroicon-o-shield-check')
-                            ->hidden(! app()->getCurrentConference())
+                            ->hidden(!app()->getCurrentScheduledConference())
                             ->schema([
                                 BladeEntry::make('roles-form')
                                     ->blade('

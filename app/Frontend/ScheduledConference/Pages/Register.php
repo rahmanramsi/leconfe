@@ -133,7 +133,7 @@ class Register extends Page
     {
         $data = [
             'countries' => Country::all(),
-            'roles' => UserRole::getAllowedSelfAssignRoles(),
+            'roles' => UserRole::getAllowedSelfAssignRoleNames(),
             'loginUrl' => app()->getLoginUrl(),
             'allowRegistration' => app()->getCurrentScheduledConference()->getMeta('allow_registration'),
             'scheduledConference' => app()->getCurrentScheduledConference(),
