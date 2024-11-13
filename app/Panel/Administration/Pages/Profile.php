@@ -201,7 +201,7 @@ class Profile extends Page implements HasForms
     public function submitNotificationsForm()
     {
         $data = $this->notificationForm->getState();
-        
+
         try {
             $user = auth()->user();
 
@@ -244,7 +244,7 @@ class Profile extends Page implements HasForms
                         Tab::make('Roles')
                             ->label(__('general.roles'))
                             ->icon('heroicon-o-shield-check')
-                            ->hidden(!app()->getCurrentScheduledConference())
+                            ->hidden(! app()->getCurrentScheduledConference())
                             ->schema([
                                 BladeEntry::make('roles-form')
                                     ->blade('
