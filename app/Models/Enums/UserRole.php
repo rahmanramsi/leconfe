@@ -68,15 +68,15 @@ enum UserRole: string implements HasLabel
         ];
     }
 
-    public static function getAllowedSelfAssignRoles(): array
+    public static function getAllowedSelfAssignRoleNames(): array
     {
         $scheduledConference = app()->getCurrentScheduledConference();
 
         $setting = $scheduledConference?->getMeta('allowed_self_assign_roles') ?? ['Author', 'Reviewer', 'Reader'];
 
-        return collect(self::selfAssignedRoles())
-            ->filter(fn (UserRole $role) => in_array($role->value, $setting))
-            ->values()
+
+        return collect(self::selfAssignedRoleNames())
+            ->filter(fn ($role) => in_array($role, $setting))
             ->toArray();
     }
 }
