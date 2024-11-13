@@ -70,6 +70,8 @@ class ScheduledConference extends Model implements HasAvatar, HasMedia, HasName
             'review_completion_deadline' => 30,
             'timezone' => 'UTC',
             'theme' => 'DefaultTheme',
+            'allowed_self_assign_roles' => ['Author', 'Reader'],
+            'allow_registration' => true,
         ];
     }
 

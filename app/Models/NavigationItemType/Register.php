@@ -19,7 +19,7 @@ class Register extends BaseNavigationItemType
 
     public static function getIsDisplayed(NavigationMenuItem $navigationMenuItem): bool
     {
-        return app()->getCurrentScheduledConferenceId() && Setting::get('allow_registration') && ! auth()->check();
+        return app()->getCurrentScheduledConferenceId() && app()->getCurrentScheduledConference()?->getMeta('allow_registration') && ! auth()->check();
     }
 
     public static function getUrl(NavigationMenuItem $navigationMenuItem): string
@@ -28,12 +28,6 @@ class Register extends BaseNavigationItemType
             return route('livewirePageGroup.scheduledConference.pages.register');
         }
 
-        if (app()->getCurrentConferenceId()) {
-            $currentScheduledConference = app()->getCurrentConference()->currentScheduledConference;
-
-            return route('livewirePageGroup.scheduledConference.pages.register', ['serie' => $currentScheduledConference]);
-        }
-
-        return route('livewirePageGroup.website.pages.register');
+        return '#';
     }
 }

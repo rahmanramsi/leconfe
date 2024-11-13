@@ -39,7 +39,6 @@ class Site extends Model implements HasMedia
     {
         return [
             'name' => 'Leconfe',
-            'settings_allow_registration' => true,
             'settings_select_format_date' => 'j F Y',
             'settings_format_date' => 'j F Y',
             'settings_select_format_time' => 'H:i',

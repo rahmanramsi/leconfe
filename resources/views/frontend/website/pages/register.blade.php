@@ -8,7 +8,7 @@
             <hr class="w-full h-px my-auto bg-gray-200 border-0 dark:bg-gray-700">
         </div>
         @if (!$registerComplete)
-            @if (Setting::get('allow_registration'))
+            @if ($allowRegistration)
                 <form wire:submit='register' class="space-y-4">
                     @error('throttle')
                         <div class="text-sm text-red-600">
@@ -100,7 +100,7 @@
                             @enderror
                         </div>
 
-                        @if (isset($scheduledConference) && $scheduledConference)
+                        @if (isset($scheduledConference) && $scheduledConference && !empty($roles))
                             <div class="gap-2 form-control sm:col-span-6">
                                 <label class="label-text">{{ __('general.register_as') }} <span class="text-red-500">*</span></label>
                                 @foreach ($roles as $role)

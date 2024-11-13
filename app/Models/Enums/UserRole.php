@@ -2,6 +2,7 @@
 
 namespace App\Models\Enums;
 
+use App\Facades\Setting;
 use App\Models\Enums\Concern\UsefulEnums;
 use Filament\Support\Contracts\HasLabel;
 
@@ -66,5 +67,17 @@ enum UserRole: string implements HasLabel
             self::ConferenceManager,
             self::ScheduledConferenceEditor,
         ];
+    }
+
+    public static function getAllowedSelfAssignRoles(): array
+    {
+        $scheduledConference = app()->getCurrentScheduledConference();
+
+        $setting = $scheduledConference?->getMeta('allowed_self_assign_roles') ?? ['Author', 'Reviewer', 'Reader'];
+
+        return collect(static::selfAssignedRoles())
+            ->filter(fn (UserRole $role) => in_array($role->value, $setting))
+            ->values()
+            ->toArray();
     }
 }

@@ -199,7 +199,6 @@ class Conference extends Model implements HasAvatar, HasMedia, HasName
     protected function getAllDefaultMeta(): array
     {
         return [
-            'settings_allow_registration' => true,
             'settings_select_format_date' => 'j F Y',
             'settings_format_date' => 'j F Y',
             'settings_select_format_time' => 'H:i',
