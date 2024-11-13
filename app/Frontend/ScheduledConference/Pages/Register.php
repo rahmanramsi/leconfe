@@ -11,6 +11,7 @@ use Filament\Facades\Filament;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Arr;
 use Squire\Models\Country;
+
 class Register extends Page
 {
     use WithRateLimiting;
@@ -84,7 +85,6 @@ class Register extends Page
             'array',
         ];
 
-
         return $rules;
     }
 
@@ -135,7 +135,7 @@ class Register extends Page
             'countries' => Country::all(),
             'roles' => UserRole::getAllowedSelfAssignRoles(),
             'loginUrl' => app()->getLoginUrl(),
-            'allowRegistration' => app()->getCurrentScheduledConference()->getMeta('allow_registration'), 
+            'allowRegistration' => app()->getCurrentScheduledConference()->getMeta('allow_registration'),
             'scheduledConference' => app()->getCurrentScheduledConference(),
             'privacyStatementUrl' => route(PrivacyStatement::getRouteName()),
         ];

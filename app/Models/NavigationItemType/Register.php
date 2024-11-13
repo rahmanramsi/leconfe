@@ -2,7 +2,6 @@
 
 namespace App\Models\NavigationItemType;
 
-use App\Facades\Setting;
 use App\Models\NavigationMenuItem;
 
 class Register extends BaseNavigationItemType
