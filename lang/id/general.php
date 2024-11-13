@@ -731,7 +731,7 @@ return [
     'presentation_files' => 'File Presentasi',
     'payment_processing' => 'Pemrosesan Pembayaran',
     'payment_waived' => 'Pembayaran Dikecualikan',
-    'causer_name' => 'Nama Penyebab',
+    'causer_name' => 'Oleh',
     'switch_scheduled_conference' => 'Ganti Konferensi yang Dijadwalkan',
     'back_to_conference' => 'Kembali ke Konferensi',
     'view_current_event' => 'Lihat Acara Saat Ini',

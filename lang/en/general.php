@@ -759,7 +759,7 @@ return [
     'presentation_files' => 'Presentation Files',
     'payment_processing' => 'Payment Processing',
     'payment_waived' => 'Payment Waived',
-    'causer_name' => 'Causer Name',
+    'causer_name' => 'By',
 
     'switch_scheduled_conference' => 'Switch Scheduled Conference',
     'back_to_conference' => 'Back to Conference',

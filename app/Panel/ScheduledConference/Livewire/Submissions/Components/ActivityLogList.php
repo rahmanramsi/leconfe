@@ -25,10 +25,10 @@ class ActivityLogList extends \Livewire\Component implements HasForms, HasTable
     {
         return $table
             ->query(
-                fn (): Builder => $this->submission->activities()->with('causer')->orderBy('created_at', 'asc')->getQuery()
+                fn (): Builder => $this->submission->activities()->with('causer')->orderBy('created_at', 'desc')->getQuery()
             )
             ->paginationPageOptions([20, 50, 100])
-            ->defaultPaginationPageOption(20)
+            ->defaultPaginationPageOption(50)
             ->columns([
                 TextColumn::make('created_at')
                     ->label(__('general.date'))
