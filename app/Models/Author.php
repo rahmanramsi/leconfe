@@ -39,7 +39,7 @@ class Author extends Model implements HasAvatar, HasMedia, Sortable
                     return $publicName;
                 }
 
-                return Str::squish($this->given_name . ' ' . $this->family_name);
+                return Str::squish($this->given_name.' '.$this->family_name);
             },
         );
     }
@@ -73,10 +73,10 @@ class Author extends Model implements HasAvatar, HasMedia, Sortable
         $name = Str::of($this->fullName)
             ->trim()
             ->explode(' ')
-            ->map(fn(string $segment): string => filled($segment) ? mb_substr($segment, 0, 1) : '')
+            ->map(fn (string $segment): string => filled($segment) ? mb_substr($segment, 0, 1) : '')
             ->join(' ');
 
-        return 'https://ui-avatars.com/api/?name=' . urlencode($name) . '&color=FFFFFF&background=111827&font-size=0.33';
+        return 'https://ui-avatars.com/api/?name='.urlencode($name).'&color=FFFFFF&background=111827&font-size=0.33';
     }
 
     public function role(): BelongsTo

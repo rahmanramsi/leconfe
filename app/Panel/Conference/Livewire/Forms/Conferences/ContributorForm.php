@@ -44,9 +44,9 @@ class ContributorForm extends Component
                     ignoreRecord: true,
                     modifyRuleUsing: function (Unique $rule) use ($modelType) {
                         return $rule
-                            ->when($modelType instanceof Conference, fn($rule) => $rule->where('conference_id', $modelType->getKey()))
-                            ->when($modelType instanceof ScheduledConference, fn($rule) => $rule->where('scheduled_conference_id', $modelType->getKey()))
-                            ->when($modelType instanceof Submission, fn($rule) => $rule->where('submission_id', $modelType->getKey()));
+                            ->when($modelType instanceof Conference, fn ($rule) => $rule->where('conference_id', $modelType->getKey()))
+                            ->when($modelType instanceof ScheduledConference, fn ($rule) => $rule->where('scheduled_conference_id', $modelType->getKey()))
+                            ->when($modelType instanceof Submission, fn ($rule) => $rule->where('submission_id', $modelType->getKey()));
                     }
                 )
                 ->columnSpan([
@@ -79,7 +79,7 @@ class ContributorForm extends Component
                 ->label(__('general.country'))
                 ->placeholder(__('general.select_a_country'))
                 ->searchable()
-                ->options(fn() => Country::all()->mapWithKeys(fn($country) => [$country->id => $country->flag . ' ' . $country->name]))
+                ->options(fn () => Country::all()->mapWithKeys(fn ($country) => [$country->id => $country->flag.' '.$country->name]))
                 ->optionsLimit(250),
             Forms\Components\TextInput::make('meta.phone')
                 ->label(__('general.phone'))
@@ -123,7 +123,7 @@ class ContributorForm extends Component
                     'style' => 'width: 1px',
                 ])
                 ->circular()
-                ->defaultImageUrl(fn(Model $record): string => $record->getFilamentAvatarUrl())
+                ->defaultImageUrl(fn (Model $record): string => $record->getFilamentAvatarUrl())
                 ->toggleable(),
             TextColumn::make('email')
                 ->label(__('general.email'))
@@ -132,7 +132,7 @@ class ContributorForm extends Component
             TextColumn::make('full_name')
                 ->label(__('general.full_name'))
                 ->searchable(
-                    query: fn($query, $search) => $query
+                    query: fn ($query, $search) => $query
                         ->where('given_name', 'LIKE', "%{$search}%")
                         ->orWhere('family_name', 'LIKE', "%{$search}%")
                 )
@@ -156,10 +156,10 @@ class ContributorForm extends Component
 
                         return $data;
                     })
-                    ->using(fn(array $data, Model $record) => $updateAction::run($record, $data)),
+                    ->using(fn (array $data, Model $record) => $updateAction::run($record, $data)),
                 DeleteAction::make()
                     ->using(
-                        fn(Model $record) => $deleteAction::run($record)
+                        fn (Model $record) => $deleteAction::run($record)
                     ),
             ]),
         ];
