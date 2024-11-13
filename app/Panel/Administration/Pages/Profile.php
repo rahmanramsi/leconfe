@@ -86,6 +86,10 @@ class Profile extends Page implements HasForms
                             ->required(),
                         TextInput::make('family_name')
                             ->label(__('general.family_name')),
+                        TextInput::make('meta.public_name')
+                            ->label(__('general.public_name'))
+                            ->helperText(__('general.public_name_helper'))
+                            ->columnSpan(['lg' => 2]),
                         TextInput::make('email')
                             ->label(__('general.email'))
                             ->columnSpan(['lg' => 2])
@@ -115,7 +119,7 @@ class Profile extends Page implements HasForms
     {
         $this->skipRender();
         try {
-            $user = UserUpdateAction::run(auth()->user(), $this->informationForm->getState());
+            UserUpdateAction::run(auth()->user(), $this->informationForm->getState());
             Notification::make()
                 ->success()
                 ->title(__('general.saved'))
