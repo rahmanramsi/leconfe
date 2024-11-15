@@ -9,7 +9,7 @@ FROM serversideup/php:8.1-fpm-nginx-alpine as base
 # Switch to root so we can do root things
 USER root
 
-COPY ./entrypoint.d /etc/entrypoint.d
+COPY ./.dockerdata/entrypoint.d /etc/entrypoint.d
 
 # Install the intl extension with root permissions
 RUN install-php-extensions intl bcmath gd exif
